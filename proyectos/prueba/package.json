@@ -1,0 +1,22 @@
+{
+  "name": "mochachai",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "caso 1 UD2",
+  "main": "script.js",
+  "scripts": {
+    "test": "mocha script_test.mjs"
+  },
+  "keywords": [
+    "mocha",
+    "chai",
+    "javascript"
+  ],
+  "author": "Ana",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "jsdom": "^25.0.1",
+    "mocha": "^10.8.2"
+  }
+}
