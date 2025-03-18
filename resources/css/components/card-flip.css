@@ -1,0 +1,28 @@
+/*
+* Styles for card-flip component
+*/
+.flip-card {
+    perspective: 1000px;
+    position: relative;
+}
+
+.flip-card-inner{
+    transition: tranform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    backface-visibility: hidden;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+
