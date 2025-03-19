@@ -103,11 +103,15 @@ return [
         ],
         'per_page' => 'Por página',
         'no_results' => 'No hay resultados',
+        'basic' => 'Información Básica',
+        'roles' => 'Roles y Permisos',
     ],
     'users' => [
         'title' => 'Usuarios',
         'create' => 'Crear Usuario',
+        'create_new' => 'Crear Nuevo Usuario',
         'edit' => 'Editar Usuario',
+        'information' => 'Ingresa la información para crear un nuevo usuario en el sistema',
         'fields' => [
             'name' => 'Nombre',
             'email' => 'Email',
@@ -116,6 +120,7 @@ return [
             'created_at' => 'Fecha de creación',
             'actions' => 'Acciones',
         ],
+        'password_footer' => 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números',
         'columns' => [
             'name' => 'Nombre',
             'email' => 'Email',
@@ -128,9 +133,9 @@ return [
             'email' => 'Email del usuario',
         ],
         'placeholders' => [
-            'name' => 'Nombre del usuario',
-            'email' => 'Email del usuario',
-            'password' => 'Contraseña del usuario',
+            'name' => 'Nombre completo del usuario',
+            'email' => 'correo@ejemplo.com',
+            'password' => 'Contraseña segura',
             'search' => 'Buscar usuarios...',
         ],
         'buttons' => [
@@ -161,5 +166,10 @@ return [
             'previous' => 'Anterior',
             'next' => 'Siguiente',
         ],
+        'roles_permissions' => [
+            'role_title' => 'Rol Principal',
+            'roles_selector' => 'Selecciona un rol',
+            'roles_footer' => 'El rol determina el nivel de acceso general del usuario',
+        ]
     ],
 ];

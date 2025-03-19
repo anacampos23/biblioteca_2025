@@ -7,6 +7,9 @@ import { toast } from "sonner";
 import { useTranslations } from "@/hooks/use-translations";
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
+import { User, Mail, Lock, X, Save, Eye } from 'lucide-react';
+import { Separator } from "@/components/ui/separator"
+
 
 interface UserFormProps {
     initialData?: {
@@ -107,7 +110,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>{t("ui.users.fields.name")}</Label>
+                            <Label htmlFor={field.name} className="flex items-center"><User className="h-4 w-4 mr-2 my-2" />{t("ui.users.fields.name")}</Label>
                             <Input
                                 id={field.name}
                                 name={field.name}
@@ -142,7 +145,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>{t("ui.users.fields.email")}</Label>
+                            <Label htmlFor={field.name} className="flex items-center"><Mail className="h-4 w-4 mr-2 my-2" />{t("ui.users.fields.email")}</Label>
                             <Input
                                 id={field.name}
                                 name={field.name}
@@ -180,7 +183,8 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>
+                            <Label htmlFor={field.name} className="flex items-center">
+                            <Lock  className="h-4 w-4 mr-2 my-2" />
                                 {initialData
                                     ? t("ui.users.fields.password_optional")
                                     : t("ui.users.fields.password")}
@@ -197,14 +201,18 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                                 autoComplete="off"
                                 required={false}
                             />
+
                             <FieldInfo field={field} />
+                            <div className="text-xs mt-2 text-gray-700">{t("ui.users.password_footer")}</div>
                         </>
                     )}
                 </form.Field>
             </div>
 
+            <Separator className="my-4 w-full" /> {/* Línea de separación*/}
+
             {/* Form buttons */}
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-between gap-4">
                 <Button
                     type="button"
                     variant="outline"
@@ -220,14 +228,15 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     }}
                     disabled={form.state.isSubmitting}
                 >
-                    {t("ui.users.buttons.cancel")}
+                    <X className="h-4 w-4 mr-2 my-2" />{t("ui.users.buttons.cancel")}
                 </Button>
 
                 <form.Subscribe
                     selector={(state) => [state.canSubmit, state.isSubmitting]}
                 >
                     {([canSubmit, isSubmitting]) => (
-                        <Button type="submit" disabled={!canSubmit}>
+                        <Button type="submit" disabled={!canSubmit} className="text-white bg-blue-500 hover:bg-blue-900">
+                            <Save className="h-4 w-4 mr-2 my-2 text-white" />
                             {isSubmitting
                                 ? t("ui.users.buttons.saving")
                                 : initialData

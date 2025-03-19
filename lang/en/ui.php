@@ -102,11 +102,15 @@ return [
         ],
         'per_page' => 'Per page',
         'no_results' => 'No results',
+        'basic' => 'Basic Information',
+        'roles' => 'Roles and Permissions',
     ],
     'users' => [
         'title' => 'Users',
         'create' => 'Create User',
+        'create_new' => 'Create New User',
         'edit' => 'Edit User',
+        'information' => 'Enter the information to create a new user in the system',
         'fields' => [
             'name' => 'Name',
             'email' => 'Email',
@@ -115,6 +119,7 @@ return [
             'created_at' => 'Created at',
             'actions' => 'Actions',
         ],
+        'password_footer' => 'The password must be at least 8 characters, including letters and numbers',
         'columns' => [
             'name' => 'Name',
             'email' => 'Email',
@@ -123,13 +128,13 @@ return [
         ],
         'filters' => [
             'search' => 'Search',
-            'name' => 'User name',
+            'name' => 'Full user name',
             'email' => 'User email',
         ],
         'placeholders' => [
             'name' => 'User name',
-            'email' => 'User email',
-            'password' => 'User password',
+            'email' => 'email@example.com',
+            'password' => 'Secure password',
             'search' => 'Search users...',
         ],
         'buttons' => [
@@ -160,5 +165,10 @@ return [
             'previous' => 'Previous',
             'next' => 'Next',
         ],
+        'roles_permissions' => [
+            'role_title' => 'Main Role',
+            'roles_selector' => 'Select one role',
+            'roles_footer' => 'The role determines the general access level of the user',
+        ]
     ],
 ];
