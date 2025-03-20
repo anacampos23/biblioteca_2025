@@ -169,6 +169,8 @@ return [
             'role_title' => 'Main Role',
             'roles_selector' => 'Select one role',
             'roles_footer' => 'The role determines the general access level of the user',
+            'user' => 'User',
+            'admin' => 'Administrator',
         ]
     ],
 ];

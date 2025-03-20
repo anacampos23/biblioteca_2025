@@ -170,6 +170,8 @@ return [
             'role_title' => 'Rol Principal',
             'roles_selector' => 'Selecciona un rol',
             'roles_footer' => 'El rol determina el nivel de acceso general del usuario',
+            'user' => 'Usuario',
+            'admin' => 'Administrador',
         ]
     ],
 ];

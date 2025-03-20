@@ -46,7 +46,7 @@ export interface CreateDateColumnOptions<TData>
 }
 
 /**
- * Opciones para crear una columna de acciones
+ * Opciones para crear una columna de acciones 
  */
 export interface CreateActionsColumnOptions<TData>
   extends Omit<CreateColumnOptions<TData, void>, 'accessorKey' | 'cell'> {

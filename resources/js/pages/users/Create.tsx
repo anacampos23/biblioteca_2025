@@ -1,21 +1,17 @@
 import { UserForm } from "@/pages/users/components/UserForm";
+import { PermissionsForm } from "./components/PermissionsForm";
 import { UserLayout } from "@/layouts/users/UserLayout";
 import { useTranslations } from "@/hooks/use-translations";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { User, Shield } from 'lucide-react';
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+
 
 
 export default function CreateUser() {
   const { t } = useTranslations();
+  
 
   return (
     <UserLayout title={t("ui.users.create")}>
@@ -37,35 +33,14 @@ export default function CreateUser() {
 
           <Separator className="mt-0" />
 
+          {/* Información básica */}
           <TabsContent value="account">
-      
             <UserForm /> 
-
           </TabsContent>
-          <TabsContent value="password">
+
           {/* Roles y permisos */}
-          <div>
-            <div className="text-s font-bold mt-2 text-gray-700 flex items-center">
-              <Shield  className="h-4 w-4 mr-2 my-2" />{t("ui.users.roles_permissions.role_title")}</div>
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder={t("ui.users.roles_permissions.roles_selector")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <div className="text-sm mt-2 text-gray-700">{t("ui.users.roles_permissions.roles_footer")}</div>
-            <Separator className="my-4 w-full" /> {/* Línea de separación*/}
-          </div>  
-
-
-
-
-
+          <TabsContent value="password">
+            <PermissionsForm />
           </TabsContent>
         </Tabs>
           

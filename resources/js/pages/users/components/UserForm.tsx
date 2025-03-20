@@ -7,8 +7,10 @@ import { toast } from "sonner";
 import { useTranslations } from "@/hooks/use-translations";
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
-import { User, Mail, Lock, X, Save, Eye } from 'lucide-react';
+import { User, Mail, Lock, X, Save, Eye, EyeOff  } from 'lucide-react';
 import { Separator } from "@/components/ui/separator"
+import { useState } from "react";
+
 
 
 interface UserFormProps {
@@ -90,6 +92,8 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
         e.stopPropagation();
         form.handleSubmit();
     };
+
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -183,27 +187,36 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
+                            
                             <Label htmlFor={field.name} className="flex items-center">
                             <Lock  className="h-4 w-4 mr-2 my-2" />
                                 {initialData
                                     ? t("ui.users.fields.password_optional")
                                     : t("ui.users.fields.password")}
                             </Label>
-                            <Input
-                                id={field.name}
-                                name={field.name}
-                                type="password"
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                onBlur={field.handleBlur}
-                                placeholder={t("ui.users.placeholders.password")}
-                                disabled={form.state.isSubmitting}
-                                autoComplete="off"
-                                required={false}
-                            />
+                            <div className="flex justify-between items-center relative max-w-full">
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type={showPassword ? "text" : "password"}
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t("ui.users.placeholders.password")}
+                                    disabled={form.state.isSubmitting}
+                                    autoComplete="off"
+                                    required={false}
+                                ></Input>
+                                <div className="p-2 right-2 absolute " onClick={() => setShowPassword(!showPassword)}>
+                                        {
+                                            showPassword ? <Eye className="h-4 w-4 mr-2 my-2" /> : <EyeOff className="h-4 w-4 mr-2 my-2" />
 
+                                        }
+                                </div>
+                            </div>
                             <FieldInfo field={field} />
                             <div className="text-xs mt-2 text-gray-700">{t("ui.users.password_footer")}</div>
+                           
                         </>
                     )}
                 </form.Field>
