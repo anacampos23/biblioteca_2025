@@ -1,8 +1,7 @@
-import { UserForm } from "@/pages/users/components/UserForm";
-import { PermissionsForm } from "@/pages/users/components/RolesPermissionsForm";
+import { UserForm } from "@/pages/users/components/UserFormUniq";
 import { UserLayout } from "@/layouts/users/UserLayout";
 import { useTranslations } from "@/hooks/use-translations";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Shield } from 'lucide-react';
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator"
@@ -25,25 +24,8 @@ export default function CreateUser() {
 
         <div>
 
-        <Tabs defaultValue="account" >
-          <TabsList className="flex justify-center w-full"> 
-            <TabsTrigger value="account">{t("ui.common.basic")}</TabsTrigger>
-            <TabsTrigger value="password">{t("ui.common.roles")}</TabsTrigger>
-          </TabsList>
-
-          <Separator className="mt-0" />
-
-          {/* Información básica */}
-          <TabsContent value="account">
             <UserForm /> 
-          </TabsContent>
-
-          {/* Roles y permisos */}
-          <TabsContent value="password">
-            
-            <PermissionsForm />
-          </TabsContent>
-        </Tabs>
+        
           
         </div>
       </div>

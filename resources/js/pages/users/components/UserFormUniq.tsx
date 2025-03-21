@@ -8,8 +8,16 @@ import { useTranslations } from "@/hooks/use-translations";
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
 import { User, Mail, Lock, X, Save, Eye, EyeOff  } from 'lucide-react';
-import { Separator } from "@/components/ui/separator"
-import { useState } from "react";
+import { useState } from "react"; // Asegúrate de importar Controller de react-hook-form
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Shield } from 'lucide-react'; // Icono para el rol
+import { Separator } from "@radix-ui/react-select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PermissionsForm } from "@/pages/users/components/RolesPermissionsForm";
+
+
 
 
 
@@ -38,6 +46,36 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
         </>
     );
 }
+
+
+const permissionsGroup = {
+    users: [
+      { id: "users.view", label: "Ver usuarios" },
+      { id: "users.create", label: "Crear usuarios" },
+      { id: "users.edit", label: "Editar usuarios" },
+      { id: "users.delete", label: "Eliminar usuarios" },
+    ],
+    products: [
+      { id: "products.view", label: "Ver productos" },
+      { id: "products.create", label: "Crear productos" },
+      { id: "products.edit", label: "Editar productos" },
+      { id: "products.delete", label: "Eliminar productos" },
+    ],
+    reports: [
+      { id: "reports.view", label: "Ver reportes" },
+      { id: "reports.export", label: "Exportar reportes" },
+      { id: "reports.import", label: "Importar reportes" },
+    ],
+    settings: [
+      { id: "settings.view", label: "Ver configuración" },
+      { id: "settings.export", label: "Acceso a configuración" },
+    ]
+  };
+  
+  type FormValues = {
+    selector: string;
+    permissions: string[]; // Definir explícitamente que 'permissions' es un array de strings
+  };
 
 export function UserForm({ initialData, page, perPage}: UserFormProps) {
     const { t } = useTranslations();
@@ -95,10 +133,24 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
 
     const [showPassword, setShowPassword] = useState(false);
 
+
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            {/* Name field */}
+            {/* Tabs */}
             <div>
+
+        <Tabs defaultValue="account" >
+          <TabsList className="flex justify-center w-full"> 
+            <TabsTrigger value="account">{t("ui.common.basic")}</TabsTrigger>
+            <TabsTrigger value="password">{t("ui.common.roles")}</TabsTrigger>
+          </TabsList>
+
+          <Separator className="mt-0" />
+
+          {/* Información básica */}
+          <TabsContent value="account">
+            
+          <div>
                 <form.Field
                     name="name"
                     validators={{
@@ -221,7 +273,17 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
                     )}
                 </form.Field>
             </div>
+          </TabsContent>
 
+          {/* Roles y permisos */}
+          <TabsContent value="password">
+            
+            < PermissionsForm />     
+
+          </TabsContent>
+        </Tabs>
+</div>
+            
             <Separator className="my-4 w-full" /> {/* Línea de separación*/}
 
             {/* Form buttons */}
@@ -262,5 +324,4 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
         </form>
     );
 }
-
 
