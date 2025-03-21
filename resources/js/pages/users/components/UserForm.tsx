@@ -207,12 +207,12 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                                     autoComplete="off"
                                     required={false}
                                 ></Input>
-                                <div className="p-2 right-2 absolute " onClick={() => setShowPassword(!showPassword)}>
+                                <button className="p-2 right-2 absolute " onClick={() => setShowPassword(!showPassword)}>
                                         {
                                             showPassword ? <Eye className="h-4 w-4 mr-2 my-2" /> : <EyeOff className="h-4 w-4 mr-2 my-2" />
 
                                         }
-                                </div>
+                                </button>
                             </div>
                             <FieldInfo field={field} />
                             <div className="text-xs mt-2 text-gray-700">{t("ui.users.password_footer")}</div>
@@ -262,3 +262,5 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
         </form>
     );
 }
+
+

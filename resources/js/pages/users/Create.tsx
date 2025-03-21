@@ -1,5 +1,5 @@
 import { UserForm } from "@/pages/users/components/UserForm";
-import { PermissionsForm } from "./components/PermissionsForm";
+import { PermissionsForm } from "@/pages/users/components/RolesPermissionsForm";
 import { UserLayout } from "@/layouts/users/UserLayout";
 import { useTranslations } from "@/hooks/use-translations";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -40,6 +40,7 @@ export default function CreateUser() {
 
           {/* Roles y permisos */}
           <TabsContent value="password">
+            
             <PermissionsForm />
           </TabsContent>
         </Tabs>
