@@ -28,33 +28,33 @@ export function PermissionsForm() {
     console.log("Formulario enviado:", data);
   };
 
-  const categories = [
-    { id: "users", label: t("ui.users.roles_permissions.users_permissions") },
-    { id: "products", label: t("ui.users.roles_permissions.products_permissions") },
-    { id: "reports", label: t("ui.users.roles_permissions.reports_permissions") },
-    { id: "settings", label: t("ui.users.roles_permissions.settings_permissions") },
-  ];
+  // const categories = [
+  //   { id: "users", label: t("ui.users.roles_permissions.users_permissions") },
+  //   { id: "products", label: t("ui.users.roles_permissions.products_permissions") },
+  //   { id: "reports", label: t("ui.users.roles_permissions.reports_permissions") },
+  //   { id: "settings", label: t("ui.users.roles_permissions.settings_permissions") },
+  // ];
 
   
   const permissionsGroup = {
-    users: [
+    [t("ui.users.roles_permissions.users_permissions")]: [
       { id: "users.view", label: t("ui.users.roles_permissions.users_view") },
       { id: "users.create", label: t("ui.users.roles_permissions.users_create") },
       { id: "users.edit", label: t("ui.users.roles_permissions.users_edit") },
       { id: "users.delete", label: t("ui.users.roles_permissions.users_delete") },
     ],
-    products: [
+    [t("ui.users.roles_permissions.products_permissions")]: [
       { id: "products.view", label: t("ui.users.roles_permissions.products_view") },
       { id: "products.create", label: t("ui.users.roles_permissions.products_create") },
       { id: "products.edit", label: t("ui.users.roles_permissions.products_edit") },
       { id: "products.delete", label: t("ui.users.roles_permissions.products_delete") },
     ],
-    reports: [
+    [t("ui.users.roles_permissions.reports_permissions")]: [
       { id: "reports.view", label: t("ui.users.roles_permissions.reports_view") },
       { id: "reports.export", label: t("ui.users.roles_permissions.reports_export") },
       { id: "reports.print", label: t("ui.users.roles_permissions.reports_print")  },
     ],
-    settings: [
+    [t("ui.users.roles_permissions.settings_permissions")]: [
       { id: "settings.view", label: t("ui.users.roles_permissions.settings_access")  },
       { id: "settings.export", label: t("ui.users.roles_permissions.settings_modification")  },
     ]
@@ -110,13 +110,14 @@ export function PermissionsForm() {
               </CardHeader>
               <CardContent>
                 {permissions.map(({ id, label }) => (
-                  <div key={id} className="flex items-center space-x-2">
+                  <div key={id} className="flex items-center space-x-2 m-1">
                     <Controller
                       name="permissions" // Asegúrate de que sea "permissions" para que se guarde correctamente en el formulario
                       control={control}
                       render={({ field }) => (
                         <Checkbox
-                          checked={field.value.includes(id)} // Ahora 'field.value' es un array de strings
+                        className="border-blue-500"  
+                        checked={field.value.includes(id)} // Ahora 'field.value' es un array de strings
                           onCheckedChange={(checked) => {
                             if (checked) {
                               // Añadir permiso al array si está seleccionado
