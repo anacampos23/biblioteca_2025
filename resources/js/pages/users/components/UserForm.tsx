@@ -8,11 +8,15 @@ import { useTranslations } from "@/hooks/use-translations";
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
 import { User, Mail, Lock, X, Save, Eye, EyeOff  } from 'lucide-react';
+import { useState } from "react"; // Asegúrate de importar Controller de react-hook-form
 import { Separator } from "@/components/ui/separator"
-import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PermissionsForm } from "@/pages/users/components/RolesPermissionsForm";
 
 
 
+
+//BASIC INFORMATION
 interface UserFormProps {
     initialData?: {
         id: string;
@@ -39,10 +43,12 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
+
 export function UserForm({ initialData, page, perPage}: UserFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
 
+    //BASIC INFORMATION
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
@@ -95,10 +101,29 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
 
     const [showPassword, setShowPassword] = useState(false);
 
+    //
+
+
     return (
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            {/* Name field */}
+        <form onSubmit={handleSubmit} className="space-y-4 p-6" noValidate>
+            {/* Tabs */}
             <div>
+
+        <Tabs defaultValue="account" >
+
+          <div className="mx-6">
+          <TabsList className="flex justify-center max-w-full"> 
+            <TabsTrigger value="account">{t("ui.common.basic")}</TabsTrigger>
+            <TabsTrigger value="password">{t("ui.common.roles")}</TabsTrigger>
+          </TabsList>
+          </div>
+
+          <Separator className=" w-full" /> {/* Línea de separación*/}
+
+          {/* Información básica */}
+          <TabsContent value="account">
+            
+          <div className="my-2">
                 <form.Field
                     name="name"
                     validators={{
@@ -133,7 +158,7 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
             </div>
 
             {/* Email field */}
-            <div>
+            <div className="my-2">
                 <form.Field
                     name="email"
                     validators={{
@@ -169,7 +194,7 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
             </div>
 
             {/* Password field */}
-            <div>
+            <div className="my-2">
                 <form.Field
                     name="password"
                     validators={{
@@ -221,46 +246,55 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
                     )}
                 </form.Field>
             </div>
+          </TabsContent>
 
-            <Separator className="my-4 w-full" /> {/* Línea de separación*/}
+          {/* Roles y permisos */}
+          <TabsContent value="password">
+            
+            < PermissionsForm />     
 
-            {/* Form buttons */}
-            <div className="flex justify-between gap-4">
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                        let url = "/users";
-                        if (page) {
-                            url += `?page=${page}`;
-                            if (perPage) {
-                                url += `&per_page=${perPage}`;
+          </TabsContent>
+        </Tabs>
+</div>
+            <div>
+                <Separator className=" w-full" /> {/* Línea de separación*/}        
+
+                {/* Form buttons */}
+                <div className="flex justify-between gap-4 mt-3">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                            let url = "/users";
+                            if (page) {
+                                url += `?page=${page}`;
+                                if (perPage) {
+                                    url += `&per_page=${perPage}`;
+                                }
                             }
-                        }
-                        router.visit(url);
-                    }}
-                    disabled={form.state.isSubmitting}
-                >
-                    <X className="h-4 w-4 mr-2 my-2" />{t("ui.users.buttons.cancel")}
-                </Button>
+                            router.visit(url);
+                        }}
+                        disabled={form.state.isSubmitting}
+                    >
+                        <X className="h-4 w-4 mr-2 my-2" />{t("ui.users.buttons.cancel")}
+                    </Button>
 
-                <form.Subscribe
-                    selector={(state) => [state.canSubmit, state.isSubmitting]}
-                >
-                    {([canSubmit, isSubmitting]) => (
-                        <Button type="submit" disabled={!canSubmit} className="text-white bg-blue-500 hover:bg-blue-900">
-                            <Save className="h-4 w-4 mr-2 my-2 text-white" />
-                            {isSubmitting
-                                ? t("ui.users.buttons.saving")
-                                : initialData
-                                    ? t("ui.users.buttons.update")
-                                    : t("ui.users.buttons.save")}
-                        </Button>
-                    )}
-                </form.Subscribe>
+                    <form.Subscribe
+                        selector={(state) => [state.canSubmit, state.isSubmitting]}
+                    >
+                        {([canSubmit, isSubmitting]) => (
+                            <Button type="submit" disabled={!canSubmit} className="text-white bg-blue-500 hover:bg-blue-900">
+                                <Save className="h-4 w-4 mr-2 my-2 text-white" />
+                                {isSubmitting
+                                    ? t("ui.users.buttons.saving")
+                                    : initialData
+                                        ? t("ui.users.buttons.update")
+                                        : t("ui.users.buttons.save")}
+                            </Button>
+                        )}
+                    </form.Subscribe>
+                </div>
             </div>
         </form>
     );
 }
-
-
