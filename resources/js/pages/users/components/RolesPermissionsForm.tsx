@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Shield, Users } from 'lucide-react'; // Icono para el rol
+import { Shield, Users, PackageOpen, FileText, Settings } from 'lucide-react'; // Icono para el rol
 import { Separator } from "@/components/ui/separator"
 import { FormField } from "@/components/ui/form";
 import { useTranslations } from "@/hooks/use-translations";
@@ -28,48 +28,51 @@ export function PermissionsForm() {
     console.log("Formulario enviado:", data);
   };
 
-  // const categories = [
-  //   { id: "users", label: t("ui.users.roles_permissions.users_permissions") },
-  //   { id: "products", label: t("ui.users.roles_permissions.products_permissions") },
-  //   { id: "reports", label: t("ui.users.roles_permissions.reports_permissions") },
-  //   { id: "settings", label: t("ui.users.roles_permissions.settings_permissions") },
-  // ];
-
   
   const permissionsGroup = {
-    [t("ui.users.roles_permissions.users_permissions")]: [
+    [t("ui.users.roles_permissions.users_permissions")]: {
+      icon: <Users size={18} className="text-blue-500" />, // Icono de usuarios
+      permissions:  [
       { id: "users.view", label: t("ui.users.roles_permissions.users_view") },
       { id: "users.create", label: t("ui.users.roles_permissions.users_create") },
       { id: "users.edit", label: t("ui.users.roles_permissions.users_edit") },
       { id: "users.delete", label: t("ui.users.roles_permissions.users_delete") },
     ],
-    [t("ui.users.roles_permissions.products_permissions")]: [
+  },
+    [t("ui.users.roles_permissions.products_permissions")]: {
+      icon: <PackageOpen  size={18} className="text-blue-500" />, // Icono de usuarios
+      permissions:  [
       { id: "products.view", label: t("ui.users.roles_permissions.products_view") },
       { id: "products.create", label: t("ui.users.roles_permissions.products_create") },
       { id: "products.edit", label: t("ui.users.roles_permissions.products_edit") },
       { id: "products.delete", label: t("ui.users.roles_permissions.products_delete") },
     ],
-    [t("ui.users.roles_permissions.reports_permissions")]: [
+  },
+    [t("ui.users.roles_permissions.reports_permissions")]: {
+      icon: <FileText  size={18} className="text-blue-500" />, // Icono de usuarios
+      permissions:  [
       { id: "reports.view", label: t("ui.users.roles_permissions.reports_view") },
       { id: "reports.export", label: t("ui.users.roles_permissions.reports_export") },
       { id: "reports.print", label: t("ui.users.roles_permissions.reports_print")  },
     ],
-    [t("ui.users.roles_permissions.settings_permissions")]: [
+  },
+    [t("ui.users.roles_permissions.settings_permissions")]: {
+      icon: <Settings  size={18} className="text-blue-500" />, // Icono de usuarios
+      permissions:  [
       { id: "settings.view", label: t("ui.users.roles_permissions.settings_access")  },
       { id: "settings.export", label: t("ui.users.roles_permissions.settings_modification")  },
     ]
-  };
+  },
+}
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full mx-auto rounded-lg">
-      
-      {/* Selección de rol */}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mx-6 rounded-lg">
       <FormField
         name="selector"
         control={control}
         render={({ field }) => (
           <div>
-            <Label htmlFor="selector" className="flex items-center my-4">
+            <Label htmlFor="selector" className="flex items-center my-4 font-semibold">
               <Shield size={18} className="mr-2" />
               {t("ui.users.roles_permissions.role_title")}
             </Label>
@@ -97,15 +100,16 @@ export function PermissionsForm() {
       {/* Permisos */}
       <div>
         <div>
-        <Label className="flex items-center my-4">
+        <Label className="flex items-center my-4 font-semibold">
                 <Shield size={18} className="mr-2 text-blue-500" />
                 {t("ui.users.roles_permissions.specific_permissions")}
               </Label>
         </div>  
         <div className="grid grid-cols-2 gap-4">
-          {Object.entries(permissionsGroup).map(([category, permissions]) => (
-            <Card key={category} className= "bg-gray-50">
-              <CardHeader>
+          {Object.entries(permissionsGroup).map(([category, {icon, permissions}]) => (
+            <Card key={category} className= "bg-gray-50 font-semibold">
+              <CardHeader className="flex-row space-x-2">
+              {icon} 
                 <h2>{category}</h2>
               </CardHeader>
               <CardContent>

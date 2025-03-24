@@ -105,13 +105,13 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
 
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 p-6" noValidate>
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* Tabs */}
             <div>
 
         <Tabs defaultValue="account" >
 
-          <div className="mx-6">
+          <div className="mx-6 mt-3">
           <TabsList className="flex justify-center max-w-full"> 
             <TabsTrigger value="account">{t("ui.common.basic")}</TabsTrigger>
             <TabsTrigger value="password">{t("ui.common.roles")}</TabsTrigger>
@@ -123,7 +123,7 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
           {/* Información básica */}
           <TabsContent value="account">
             
-          <div className="my-2">
+          <div className="m-6">
                 <form.Field
                     name="name"
                     validators={{
@@ -158,7 +158,7 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
             </div>
 
             {/* Email field */}
-            <div className="my-2">
+            <div className="m-6">
                 <form.Field
                     name="email"
                     validators={{
@@ -194,7 +194,7 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
             </div>
 
             {/* Password field */}
-            <div className="my-2">
+            <div className="m-6">
                 <form.Field
                     name="password"
                     validators={{
@@ -251,7 +251,7 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
           {/* Roles y permisos */}
           <TabsContent value="password">
             
-            < PermissionsForm />     
+            <PermissionsForm />
 
           </TabsContent>
         </Tabs>
@@ -260,7 +260,7 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
                 <Separator className=" w-full" /> {/* Línea de separación*/}        
 
                 {/* Form buttons */}
-                <div className="flex justify-between gap-4 mt-3">
+                <div className="flex justify-between gap-4 bg-gray-50 p-6">
                     <Button
                         type="button"
                         variant="outline"
