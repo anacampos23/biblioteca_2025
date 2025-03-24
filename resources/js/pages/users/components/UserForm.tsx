@@ -232,12 +232,12 @@ export function UserForm({ initialData, page, perPage}: UserFormProps) {
                                     autoComplete="off"
                                     required={false}
                                 ></Input>
-                                <button className="p-2 right-2 absolute " onClick={() => setShowPassword(!showPassword)}>
+                                <div className="p-2 right-2 absolute " onClick={() => setShowPassword(!showPassword)}>
                                         {
                                             showPassword ? <Eye className="h-4 w-4 mr-2 my-2" /> : <EyeOff className="h-4 w-4 mr-2 my-2" />
 
                                         }
-                                </button>
+                                </div>
                             </div>
                             <FieldInfo field={field} />
                             <div className="text-xs mt-2 text-gray-700">{t("ui.users.password_footer")}</div>
