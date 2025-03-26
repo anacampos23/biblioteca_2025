@@ -1,14 +1,12 @@
 <?php
 
-namespace Domain\Floor\Models;
-
-
+namespace Domain\Zone\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class Floor extends Model
+class Zone extends Model
 {
     use HasFactory, HasUuids;
 
@@ -19,7 +17,6 @@ class Floor extends Model
      */
     protected $fillable = [
         'name',
+        'zone_numbers',
     ];
-
-
 }
