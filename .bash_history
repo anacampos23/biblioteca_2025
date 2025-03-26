@@ -76,3 +76,109 @@ cd develop
 cd pgsql
 sudo rm -r data
 cd ..
+git --version
+git config --list
+cd \\wsl.localhost\Ubuntu\home\anacampos\proyectos\prueba
+git init
+git add .
+git commit -m "Primer commit"
+cd \\wsl.localhost\Ubuntu\home\anacampos\prueba
+git init
+\\wsl.localhost\Ubuntu\home\anacampos\proyectos\biblioteca_2025
+cd \\wsl.localhost\Ubuntu\home\anacampos\proyectos\biblioteca_2025
+git init
+git add .
+git commit -m "Primer commit"
+git remote add origin https://github.com/anacampos23/biblioteca_2025_.git
+git push -u origin main
+git remote -v
+cd \\wsl.localhost\Ubuntu\home\anacampos\proyectos
+cd  cd //wsl.localhost/Ubuntu/home/anacampos/proyectos
+cd proyectos
+cd biblioteca_2025/
+git remote -v
+git fetch origin
+git status
+git push origin main
+cd \\wsl.localhost\Ubuntu\home\anacampos
+cd..
+cd ..
+cd \\wsl.localhost\Ubuntu\home\anacampos\prueba
+cd //wsl.localhost/Ubuntu/home/anacampos/prueba
+cd anacampos/prueba
+cd prueba
+git init
+git add .
+git commit -m "Primer commit para el proyecto X"
+git remote add origin https://github.com/anacampos23/prueba.git
+git push -u origin main
+git pull origin main
+git push origin main
+git config --global credential.helper cache
+git init
+git add .
+git commit -m "Primer commit para el proyecto X"
+git remote add origin https://github.com/anacampos23/prueba
+git push -u origin main
+git status
+git add .
+git commit -m "Mensaje describiendo los cambios"
+git push origin main
+cs ..
+cd proyectos
+cd ..
+cd proyectos
+cd biblioteca_2025/
+git status
+git add .
+git commit -m "Mensaje describiendo los cambios"
+git push origin main
+sudo chown -R $(whoami):$(whoami) /var/www/html/docker/develop/pgsql/data
+ls -l /var/www/html/docker/develop/pgsql/
+find / -type d -name "data" 2>/dev/null
+sudo chown -R $(whoami):$(whoami) /var/www/html/docker/develop/pgsql/data
+docker compose -f docker-compose-develop.yml down
+cd proyectos/biblioteca_2025/
+docker compose -f docker-compose-develop.yml down
+docker compose -f docker-compose-develop.yml up -d
+npm install -g npm@11.2.0
+sudo chown -R $(whoami):$(whoami) /var/www/html/docker/develop/pgsql/data
+find /var/www/html -name data
+find / -name "docker-compose.yml" 2>/dev/null
+cd proyectos
+cd biblioteca_2025/
+git status
+git add .
+git commit -m "añadir tabs"
+git push origin main
+cd proyectos
+cd biblioteca_2025/
+git status
+git add .
+git commit -m "usuario interfaz"
+git push origin main
+cd proyectos
+biblioteca_2025/
+git status
+git add .
+git commit -m "permissionform"
+git push origin main
+git status
+git add .
+git commit -m "permissionform"
+git push origin main
+cd biblioteca_2025/
+git status
+git add .
+git commit -m "permissionform"
+git push origin main
+cd proyectos
+cd biblioteca_2025/
+git status
+git add .
+git commit -m "RolesPermissionForm"
+git push origin main
+git status
+git add .
+git commit -m "RolesPermissionForm"
+git push origin main

@@ -13,6 +13,7 @@ if (typeof window !== "undefined") {
 
 
 /**
+ * ESTO ES UNA PRUEBAAAAA
  * Prueba unitaria para verificar que la función 'mostrarMensaje' funcione correctamente.
  * Usamos Jest para la prueba.
  

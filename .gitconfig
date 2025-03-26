@@ -3,3 +3,5 @@
 [user]
 	email = acamposaguilar23@gmail.com
 	name = anacampos
+[credential]
+	helper = cache
