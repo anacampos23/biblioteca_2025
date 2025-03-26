@@ -1,0 +1,255 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/develop/Dockerfile
+    container_name: biblioteca-php
+    image: biblioteca-back
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - .:/var/www/html
+      - ./docker/develop/php/develop.ini:/usr/local/etc/php/php.ini
+    ports:
+      - "9001:9000"
+    networks:
+      - biblioteca-back
+  vite:
+    container_name: biblioteca-vite
+    image: biblioteca-back
+    user: laravel
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "5173:5173"
+    command: npm run dev
+    working_dir: /var/www/html
+    networks:
+      - biblioteca-back
+  nginx:
+    image: nginx:latest
+    container_name: biblioteca-nginx
+    restart: unless-stopped
+    expose:
+      - 80
+    environment:
+      VIRTUAL_HOST: "biblioteca.test"
+    volumes:
+      - .:/var/www/html
+      - ./docker/develop/nginx/develop.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - redis
+    networks:
+      - nginx-proxy
+      - biblioteca-back
+  pgsql:
+    image: 'postgres:17'
+    container_name: biblioteca-pgsql
+    ports:
+      - '${FORWARD_DB_PORT:-5432}:5432'
+    environment:
+      PGPASSWORD: '${DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - './docker/develop/pgsql/data:/var/lib/postgresql/data'
+      - './docker/develop/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+    networks:
+      - biblioteca-back
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - '-q'
+        - '-d'
+        - '${DB_DATABASE}'
+        - '-U'
+        - '${DB_USERNAME}'
+      retries: 3
+      timeout: 5s
+  redis:
+    image: redis:latest
+    container_name: biblioteca-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - biblioteca-back
+  mailpit:
+    image: axllent/mailpit
+    container_name: biblioteca-mailpit
+    volumes:
+      - ./docker/develop/mailpit/data:/data
+    ports:
+      - 8025:8025
+      - 1025:1025
+    networks:
+      - biblioteca-back
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+  cron:
+    container_name: biblioteca-cron
+    image: biblioteca-back
+    volumes:
+      - .:/var/www/html
+      - ./docker/develop/cron/laravel:/var/spool/cron/crontabs/laravel
+    command: [ "crond", "-f" ]
+    restart: always
+    user: root
+    depends_on:
+      - php
+      - redis
+    networks:
+      - biblioteca-back
+  horizon:
+    container_name: biblioteca-horizon
+    image: biblioteca-back
+    volumes:
+      - .:/var/www/html
+    command: [ "php", "artisan", "horizon" ]
+    user: laravel
+    depends_on:
+      - php
+      - redis
+    networks:
+      - biblioteca-back
+  pulse:
+    container_name: biblioteca-pulse
+    image: biblioteca-back
+    volumes:
+      - .:/var/www/html
+    command: [ "php", "artisan", "pulse:check" ]
+    user: laravel
+    depends_on:
+      - php
+      - redis
+    networks:
+      - biblioteca-back
+  reverb:
+    container_name: biblioteca-reverb
+    image: biblioteca-back
+    volumes:
+      - .:/var/www/html
+    command: ["php", "artisan", "reverb:start", "--debug"]
+    user: laravel
+    expose:
+      - "8080"
+    environment:
+        VIRTUAL_HOST: reverb.biblioteca.test
+        VIRTUAL_PORT: 8080
+    depends_on:
+      - php
+      - redis
+    networks:
+      - nginx-proxy
+      - biblioteca-back
+  typesense:
+    image: 'typesense/typesense:0.25.2'
+    container_name: biblioteca-typesense
+    ports:
+      - '${FORWARD_TYPESENSE_PORT:-8108}:8108'
+    environment:
+      TYPESENSE_DATA_DIR: '${TYPESENSE_DATA_DIR:-/typesense-data}'
+      TYPESENSE_API_KEY: '${TYPESENSE_API_KEY:-xyz}'
+      TYPESENSE_ENABLE_CORS: '${TYPESENSE_ENABLE_CORS:-true}'
+    volumes:
+      - 'sail-typesense:/typesense-data'
+    networks:
+      - nginx-proxy
+      - biblioteca-back
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - '--no-verbose'
+        - '--spider'
+        - 'http://biblioteca.test:8108/health'
+      retries: 5
+      timeout: 7s
+  selenium:
+    image: 'seleniarm/standalone-chromium'
+    container_name: biblioteca-selenium
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+      - 'biblioteca.test:host-gateway'
+    volumes:
+      - '/dev/shm:/dev/shm'
+    networks:
+      - nginx-proxy
+      - biblioteca-back
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: biblioteca-pgadmin
+    restart: unless-stopped
+    expose:
+      - 80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      VIRTUAL_HOST: pgadmin.biblioteca.test
+      VIRTUAL_PORT: 80
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+      PGADMIN_SERVER_JSON_FILE: /pgadmin4/servers.json
+    volumes:
+      - './docker/develop/pgadmin:/var/lib/pgadmin'
+      - ./docker/develop/pgadmin/servers/servers.json:/pgadmin4/servers.json
+    depends_on:
+      - pgsql
+    networks:
+      - nginx-proxy
+      - biblioteca-back
+
+#  mysql:
+#    image: 'mysql:8.0'
+#    container_name: biblioteca-mysql
+#    ports:
+#      - '3306:3306'
+#    environment:
+#      MYSQL_DATABASE: '${DB_DATABASE:-biblioteca}'
+#      MYSQL_USER: '${DB_USERNAME:-biblioteca}'
+#      MYSQL_PASSWORD: '${DB_PASSWORD:-password}'
+#      MYSQL_ROOT_PASSWORD: 'root_password'
+#    volumes:
+#      - './docker/develop/mysql/data:/var/lib/mysql'
+#    networks:
+#      - biblioteca-back
+#    healthcheck:
+#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+#      retries: 3
+#      timeout: 5s
+#
+#  phpmyadmin:
+#    image: phpmyadmin:latest
+#    container_name: biblioteca-phpmyadmin
+#    restart: unless-stopped
+#    expose:
+#      - 80
+#    environment:
+#      PMA_HOST: mysql
+#      PMA_PORT: 3306
+#      VIRTUAL_HOST: phpmyadmin.biblioteca.test
+#      VIRTUAL_PORT: 80
+#    depends_on:
+#      - mysql
+#    networks:
+#      - nginx-proxy
+#      - biblioteca-back
+
+networks:
+  nginx-proxy:
+    external: true
+  biblioteca-back:
+    name: biblioteca-back
+
+volumes:
+  sail-typesense:
+    driver: local
+  pgadmin-data:
+    driver: local
+  mysql-data:
+    driver: local
