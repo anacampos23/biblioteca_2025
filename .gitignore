@@ -30,3 +30,5 @@ yarn-error.log
 /docker/staging/pgsql/data/*
 /docker/develop/pgadmin
 /docker/staging/pgadmin
+docker/develop/pgsql/data/
+

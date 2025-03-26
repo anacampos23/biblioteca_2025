@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //Columns: id, name, created_at, updated_at, zones_number
         Schema::create('floors', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary()->unique();
             $table->timestamps();
+            $table->string('name') -> unique();
+            $table->integer('zone_numbers')->default(0);
+
         });
     }
 
