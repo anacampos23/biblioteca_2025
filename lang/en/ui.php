@@ -240,5 +240,24 @@ return [
                 'saving' => 'Saving...',
                 'retry' => 'Retry',
             ],
+            'delete' => [
+                'title' => 'Are you sure?',
+                'description' => 'This action cannot be undone. The user will be permanently deleted from the system.',
+            ],
+            'columns' => [
+                'name' => 'Name',
+                'capacity_zones' => 'Capacity of zones',
+                'actions' => 'Actions',
+            ],
+            'filters' => [
+                'search' => 'Search',
+                'name' => 'Floor name',
+                'capacity_zones' => "Zone's capacity",
+            ],
+            'placeholders' => [
+                'name' => 'Complete floor name',
+                'search' => 'Search floors...',
+                'capacity_zones' => "Zone's capacity...",
+            ],
         ],
 ];

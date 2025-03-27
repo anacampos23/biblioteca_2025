@@ -21,9 +21,9 @@ return new class extends Migration
 
         // Intermediate table (N:M) for floors and zones
         Schema::create('floor_zone', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique();
             $table->foreignUuid('floors_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('zones_id')->constrained()->onDelete('cascade');
+            $table->primary(['floors_id', 'zones_id'], 'id');
             $table->timestamps();
         });
     }

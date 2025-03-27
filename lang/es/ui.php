@@ -234,5 +234,24 @@ return [
                 'saving' => 'Guardando...',
                 'retry' => 'Reintentar',
             ],
+            'delete' => [
+                'title' => '¿Estás seguro?',
+                'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
+            ],
+            'columns' => [
+                'name' => 'Nombre',
+                'capacity_zones' => 'Capacidad de zonas',
+                'actions' => 'Acciones',
+            ],
+            'filters' => [
+                'search' => 'Buscar',
+                'name' => 'Nombre del piso',
+                'capacity_zones' => 'Capacidad de zonas',
+            ],
+            'placeholders' => [
+                'name' => 'Nombre completo del piso',
+                'search' => 'Buscar pisos...',
+                'capacity_zones' => 'Capacidad de zonas...'
+            ],
         ],
 ];
