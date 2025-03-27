@@ -105,6 +105,7 @@ return [
     ],
     'users' => [
         'title' => 'Users',
+        'description' => 'Manage the system users',
         'create' => 'Create User',
         'edit' => 'Edit User',
         'fields' => [
@@ -225,4 +226,19 @@ return [
             'next' => 'Next',
         ],
     ],
+    'floors' => [
+            'title' => 'Floors',
+            'description' => 'Manage the building floors',
+            'buttons' => [
+                'new' => 'New Floor',
+                'edit' => 'Edit',
+                'save' => 'Save',
+                'update' => 'Update',
+                'cancel' => 'Cancel',
+                'delete' => 'Delete',
+                'deleting' => 'Deleting...',
+                'saving' => 'Saving...',
+                'retry' => 'Retry',
+            ],
+        ],
 ];
