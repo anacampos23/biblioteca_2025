@@ -107,6 +107,7 @@ return [
     'users' => [
         'title' => 'Usuarios',
         'create' => 'Crear Usuario',
+        'description' => 'Gestiona los usuarios del sistema',
         'edit' => 'Editar Usuario',
         'fields' => [
             'name' => 'Nombre',
@@ -219,4 +220,19 @@ return [
             'next' => 'Siguiente',
         ],
     ],
+    'floors' => [
+            'title' => 'Pisos',
+            'description' => 'Gestiona los pisos del edificio',
+            'buttons' => [
+                'new' => 'Nuevo Piso',
+                'edit' => 'Editar',
+                'save' => 'Guardar',
+                'update' => 'Actualizar',
+                'cancel' => 'Cancelar',
+                'delete' => 'Eliminar',
+                'deleting' => 'Eliminando...',
+                'saving' => 'Guardando...',
+                'retry' => 'Reintentar',
+            ],
+        ],
 ];
