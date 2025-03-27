@@ -259,5 +259,9 @@ return [
                 'search' => 'Search floors...',
                 'capacity_zones' => "Zone's capacity...",
             ],
+            'cards' => [
+                'title' => 'Create New Floor',
+                'description' => 'Input the information to create a new floor in the system.'
+            ],
         ],
 ];

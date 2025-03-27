@@ -253,5 +253,9 @@ return [
                 'search' => 'Buscar pisos...',
                 'capacity_zones' => 'Capacidad de zonas...'
             ],
+            'cards' => [
+                'title' => 'Crear Nuevo Piso',
+                'description' => 'Ingresa la información para crear un nuevo piso en el sistema'
+            ],
         ],
 ];
