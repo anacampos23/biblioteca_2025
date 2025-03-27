@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Domain\Floor\Models\Floor;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class Zone extends Model
 {
@@ -19,15 +20,15 @@ class Zone extends Model
      */
     protected $fillable = [
         'name',
-        //ALGO MÁS???
+        'description',
     ];
 
 
       /**
      * Get the floors associated with the zones.
      */
-    public function floor(): HasMany
+    public function floor(): BelongsToMany
     {
-        return $this->hasMany(Floor::class);
+        return $this->belongsToMany(Floor::class);
     }
 }

@@ -11,8 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //Zone table
         Schema::create('zones', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary()->unique();
+            $table->string('name') -> unique();
+            $table->string('description');
+            $table->timestamps();
+        });
+
+        // Intermediate table (N:M) for floors and zones
+        Schema::create('floor_zone', function (Blueprint $table) {
+            $table->uuid('id')->primary()->unique();
+            $table->foreignUuid('floors_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('zones_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -23,5 +34,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('zones');
+        Schema::dropIfExists('floor_zone');
     }
 };
