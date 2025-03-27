@@ -1,5 +1,5 @@
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
-import { Users, User } from 'lucide-react';
+import { Users, User, Building2  } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -24,6 +24,12 @@ export default function Dashboard() {
                     description="Gestiona los usuarios del sistema"
                     href="/users"
                     icon={Users}
+                />
+                <DashboardCard
+                    title="Floors"
+                    description="Manage floors of the building"
+                    href="/floors" //AQUI LA URL A DONDE QUIERO QUE LLEGUE
+                    icon={Building2 }
                 />
 
                 <CardFlip

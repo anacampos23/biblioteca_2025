@@ -15,14 +15,7 @@ return new class extends Migration
         Schema::create('floors', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
             $table->string('name') -> unique();
-            $table->timestamps();
-        });
-
-        // Intermediate table (N:M) for floors and zones
-        Schema::create('floor_zone', function (Blueprint $table) {
-            $table->id();
-            $table->foreignUuid('floor_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('zone_id')->constrained()->onDelete('cascade');
+            $table->integer('capacity_zones');
             $table->timestamps();
         });
     }
@@ -33,6 +26,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('floors');
-        Schema::dropIfExists('floor_zone');
     }
 };
