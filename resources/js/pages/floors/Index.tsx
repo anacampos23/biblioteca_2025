@@ -71,26 +71,21 @@ export default function FloorsIndex() {
       header: t("ui.floors.columns.capacity_zones") || "Capacity Zones",
       accessorKey: "capacity_zones",
     }),
-    createDateColumn<Floor>({
-      id: "created_at",
-      header: t("ui.users.columns.created_at") || "Created At",
-      accessorKey: "created_at",
-    }),
     createActionsColumn<Floor>({
       id: "actions",
       header: t("ui.users.columns.actions") || "Actions",
       renderActions: (floor) => (
         <>
           <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.users.buttons.edit") || "Edit user"}>
+            <Button variant="outline" size="icon" title={t("ui.floors.buttons.edit") || "Edit user"}>
               <PencilIcon className="h-4 w-4" />
             </Button>
           </Link>
           <DeleteDialog
             id={floor.id}
             onDelete={handleDeleteFloor}
-            title={t("ui.users.delete.title") || "Delete user"}
-            description={t("ui.users.delete.description") || "Are you sure you want to delete this user? This action cannot be undone."}
+            title={t("ui.floors.delete.title") || "Delete floor"}
+            description={t("ui.floors.delete.description") || "Are you sure you want to delete this floor? This action cannot be undone."}
             trigger={
               <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.users.buttons.delete") || "Delete user"}>
                 <TrashIcon className="h-4 w-4" />
@@ -123,15 +118,15 @@ export default function FloorsIndex() {
                               [
                                   {
                                       id: 'search',
-                                      label: t('ui.users.filters.search') || 'Buscar',
+                                      label: t('ui.floors.filters.search') || 'Buscar',
                                       type: 'text',
-                                      placeholder: t('ui.users.placeholders.search') || 'Buscar...',
+                                      placeholder: t('ui.floors.placeholders.search') || 'Buscar...',
                                   },
                                   {
                                       id: 'name',
-                                      label: t('ui.users.filters.name') || 'Nombre',
+                                      label: t('ui.floors.filters.name') || 'Nombre',
                                       type: 'text',
-                                      placeholder: t('ui.users.placeholders.name') || 'Nombre...',
+                                      placeholder: t('ui.floors.placeholders.name') || 'Nombre...',
                                   },
                                   {
                                       id: 'capacity_zones',
