@@ -10,6 +10,7 @@ use Domain\Floors\Requests\FloorRequest;
 use Inertia\Response;
 
 
+
 class FloorController extends Controller
 {
     /**
