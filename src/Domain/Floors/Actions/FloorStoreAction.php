@@ -10,6 +10,7 @@ class FloorStoreAction
 {
     public function __invoke(array $data): FloorResource
     {
+        
         $floor = Floor::create([
             'name' => $data['name'],
             'capacity_zones' => $data['capacity_zones'],

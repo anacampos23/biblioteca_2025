@@ -79,6 +79,8 @@ return [
             ],
             'unique' => 'The :attribute has already been taken.',
             'confirmed' => 'The :attribute confirmation does not match.',
+            'must_be_numeric' => 'The :attribute must be numeric.',
+            'capacity_zones' => 'The floor capacity should be from 0 to 20 zones.',
     ],
     'common' => [
         'buttons' => [
@@ -262,6 +264,12 @@ return [
             'cards' => [
                 'title' => 'Create New Floor',
                 'description' => 'Input the information to create a new floor in the system.'
+            ],
+            'fields' => [
+                'name' => 'Floor',
+                'capacity_zones' => [
+                    'name'=> 'Zone capacity',
+                ]
             ],
         ],
 ];

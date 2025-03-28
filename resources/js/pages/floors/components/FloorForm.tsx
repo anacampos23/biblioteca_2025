@@ -9,13 +9,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
 import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { Bolt, Eye, EyeOff, FileText, Lock, Mail, PackageOpen, Save, Shield, User, Users, X } from 'lucide-react';
+import { Bolt, Eye, EyeOff, FileText, Lock, Mail, PackageOpen, Save, Shield, Building2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -23,15 +22,10 @@ interface FloorFormProps {
     initialData?: {
         id: string;
         name: string;
-        email: string;
+        capacity_zones: number;
     };
     page?: string;
     perPage?: string;
-    roles?: string[];
-    rolesConPermisos: Record<string, string[]>;
-    permisos?: string[];
-    permisosAgrupados: Record<string, string[]>;
-    permisosDelUsuario?: string[];
 }
 
 // Field error display component
@@ -46,59 +40,30 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-const iconComponents = {
-    Users: Users,
-    Products: PackageOpen,
-    Reports: FileText,
-    Config: Bolt,
-};
-
-const categorias = [
-    { id: 1, icon: 'Users', label: 'users', perms: 'users' },
-    { id: 2, icon: 'Products', label: 'products', perms: 'products' },
-    { id: 3, icon: 'Reports', label: 'reports', perms: 'reports' },
-    { id: 4, icon: 'Config', label: 'configurations', perms: 'config' },
-];
-
-var permisosUsuarioFinal: string[] = [];
-
-export function FloorForm({ initialData, page, perPage, roles, rolesConPermisos, permisosAgrupados, permisosDelUsuario }: UserFormProps) {
+export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    const [arrayPermisosState, setArrayPermisosState] = useState(permisosUsuarioFinal);
-
-    useEffect(() => {
-        if (permisosDelUsuario && initialData) {
-            permisosUsuarioFinal = permisosDelUsuario;
-            setArrayPermisosState(permisosDelUsuario);
-        } else {
-            permisosUsuarioFinal = [];
-            setArrayPermisosState(permisosUsuarioFinal);
-        }
-    }, [permisosDelUsuario]);
 
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
-            email: initialData?.email ?? '',
-            password: '',
+            capacity_zones: initialData?.capacity_zones ?? 0,
         },
         onSubmit: async ({ value }) => {
-            const userData = {
+            const floorData = {
                 ...value,
-                permisos: arrayPermisosState,
             };
 
             const options = {
                 // preserveState:true,
                 onSuccess: () => {
-                    console.log('Usuario creado con éxito.');
+                    console.log('Piso creado con éxito.');
 
-                    queryClient.invalidateQueries({ queryKey: ['users'] });
+                    queryClient.invalidateQueries({ queryKey: ['floors'] });
 
                     // Construct URL with page parameters
-                    let url = '/users';
+                    let url = '/floors';
                     if (page) {
                         url += `?page=${page}`;
                         if (perPage) {
@@ -117,65 +82,13 @@ export function FloorForm({ initialData, page, perPage, roles, rolesConPermisos,
 
             // Submit with Inertia
             if (initialData) {
-                router.put(`/users/${initialData.id}`, userData, options);
+                router.put(`/floors/${initialData.id}`, floorData, options);
             } else {
-                router.post('/users', userData, options);
+                router.post('/floors', floorData, options);
             }
         },
     });
 
-    // Manejador de dependencias
-
-    function comprobadorDependencias(permiso: string, parent: string) {
-        if (permiso == 'users.view' || permiso == 'products.view' || permiso == 'reports.view' || permiso == 'config.access') {
-            return false;
-        } else {
-            return !permisosUsuarioFinal.includes(parent);
-        }
-    }
-
-    // Manejador de checkboxes
-
-    function togglePermiso(permiso: string) {
-        if (permisosUsuarioFinal.includes(permiso)) {
-            switch (permiso) {
-                case 'users.view':
-                    permisosUsuarioFinal = permisosUsuarioFinal.filter(
-                        (permiso) => !['users.edit', 'users.delete', 'users.create'].includes(permiso),
-                    );
-                    break;
-                case 'products.view':
-                    permisosUsuarioFinal = permisosUsuarioFinal.filter(
-                        (permiso) => !['products.edit', 'products.delete', 'products.create'].includes(permiso),
-                    );
-                    break;
-                case 'reports.view':
-                    permisosUsuarioFinal = permisosUsuarioFinal.filter((permiso) => !['reports.print', 'reports.export'].includes(permiso));
-                    break;
-                case 'config.access':
-                    permisosUsuarioFinal = permisosUsuarioFinal.filter((permiso) => !['config.modify'].includes(permiso));
-                    break;
-            }
-            permisosUsuarioFinal = permisosUsuarioFinal.filter((element) => element !== permiso);
-            setArrayPermisosState(permisosUsuarioFinal);
-        } else {
-            permisosUsuarioFinal = [...permisosUsuarioFinal, permiso];
-            setArrayPermisosState(permisosUsuarioFinal);
-        }
-    }
-
-    // Manejador del select
-
-    function roleSelector(role: string) {
-        const permisosDelRol = rolesConPermisos[role];
-
-        permisosUsuarioFinal = [];
-        setArrayPermisosState(permisosUsuarioFinal);
-
-        permisosDelRol.forEach((permiso) => {
-            togglePermiso(permiso);
-        });
-    }
 
     // Form submission handler
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -184,24 +97,12 @@ export function FloorForm({ initialData, page, perPage, roles, rolesConPermisos,
         form.handleSubmit();
     };
 
-    const [showPassword, setShowPassword] = useState(false);
-
+    
     const accesoPermisos = false;
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
-                <Tabs defaultValue="userForm">
-                    <TabsList className="w-full">
-                        <TabsTrigger value="userForm" className="w-1/2">
-                            {t('ui.users.tabs.userForm')}
-                        </TabsTrigger>
-                        <TabsTrigger value="permissionsForm" className="w-1/2" disabled={accesoPermisos}>
-                            {t('ui.users.tabs.permissionsForm')}
-                        </TabsTrigger>
-                    </TabsList>
-                    <Separator />
-                    <TabsContent value="userForm" className="w-full">
                         {/* Name field */}
                         <div>
                             <form.Field
@@ -221,8 +122,7 @@ export function FloorForm({ initialData, page, perPage, roles, rolesConPermisos,
                                     <>
                                         <Label htmlFor={field.name}>
                                             <div className="mb-1 flex items-center gap-1">
-                                                <User color="grey" size={18} />
-                                                {t('ui.users.fields.name')}
+                                                {t('ui.floors.fields.name')}
                                             </div>
                                         </Label>
                                         <Input
@@ -230,6 +130,46 @@ export function FloorForm({ initialData, page, perPage, roles, rolesConPermisos,
                                             name={field.name}
                                             value={field.state.value}
                                             onChange={(e) => field.handleChange(e.target.value)}
+                                            onBlur={field.handleBlur}
+                                            placeholder={t('ui.floors.placeholders.name')}
+                                            disabled={form.state.isSubmitting}
+                                            required={false}
+                                            autoComplete="off"
+                                        />
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
+                        {/* Capacity_zones field */}
+                        <div className= 'mt-5'>
+                            <form.Field
+                                name="capacity_zones"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        return !value
+                                            ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name')})
+                                            : value < 0 || value > 20
+                                              ? t('ui.validation.capacity_zones', { attribute: t('ui.floors.fields.capacity_zones') })
+                                              : undefined;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <Label htmlFor={field.name}>
+                                            <div className="mb-1 flex items-center gap-1">
+                                                {t('ui.floors.fields.capacity_zones.name')}
+                                            </div>
+                                        </Label>
+                                        
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type='number'
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(Number(e.target.value))}
                                             onBlur={field.handleBlur}
                                             placeholder={t('ui.users.placeholders.name')}
                                             disabled={form.state.isSubmitting}
@@ -241,192 +181,6 @@ export function FloorForm({ initialData, page, perPage, roles, rolesConPermisos,
                                 )}
                             </form.Field>
                         </div>
-                        {/* Email field */}
-                        <div>
-                            <form.Field
-                                name="email"
-                                validators={{
-                                    onChangeAsync: async ({ value }) => {
-                                        await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.users.fields.email').toLowerCase() })
-                                            : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-                                              ? t('ui.validation.email', { attribute: t('ui.users.fields.email').toLowerCase() })
-                                              : undefined;
-                                    },
-                                }}
-                            >
-                                {(field) => (
-                                    <>
-                                        <Label htmlFor={field.name}>
-                                            <div className="mb-1 flex items-center gap-1">
-                                                <Mail color="grey" size={18} />
-                                                {t('ui.users.fields.email')}
-                                            </div>
-                                        </Label>
-                                        <Input
-                                            id={field.name}
-                                            name={field.name}
-                                            type="text"
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            onBlur={field.handleBlur}
-                                            placeholder={t('ui.users.placeholders.email')}
-                                            disabled={form.state.isSubmitting}
-                                            required={false}
-                                            autoComplete="off"
-                                        />
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            </form.Field>
-                        </div>
-
-                        {/* Password field */}
-                        <div>
-                            <form.Field
-                                name="password"
-                                validators={{
-                                    onChangeAsync: async ({ value }) => {
-                                        await new Promise((resolve) => setTimeout(resolve, 500));
-                                        if (!initialData && (!value || value.length === 0)) {
-                                            return t('ui.validation.required', { attribute: t('ui.users.fields.password').toLowerCase() });
-                                        }
-                                        if (value && value.length > 0 && value.length < 8) {
-                                            return t('ui.validation.min.string', {
-                                                attribute: t('ui.users.fields.password').toLowerCase(),
-                                                min: '8',
-                                            });
-                                        }
-                                        return undefined;
-                                    },
-                                }}
-                            >
-                                {(field) => {
-                                    return (
-                                        <>
-                                            <Label htmlFor={field.name}>
-                                                <div className="mb-1 flex items-center gap-1">
-                                                    <Lock color="grey" size={18} />
-                                                    {initialData ? t('ui.users.fields.password_optional') : t('ui.users.fields.password')}
-                                                </div>
-                                            </Label>
-
-                                            {/* Input and Toggle Wrapper */}
-                                            <div className="relative w-full">
-                                                <Input
-                                                    id={field.name}
-                                                    name={field.name}
-                                                    type={showPassword ? 'text' : 'password'}
-                                                    value={field.state.value}
-                                                    onChange={(e) => field.handleChange(e.target.value)}
-                                                    onBlur={field.handleBlur}
-                                                    placeholder={t('ui.users.placeholders.password')}
-                                                    disabled={form.state.isSubmitting}
-                                                    autoComplete="off"
-                                                    required={false}
-                                                    className="pr-10"
-                                                />
-
-                                                {/* Visibility Toggle Button */}
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowPassword(!showPassword)}
-                                                    className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
-                                                >
-                                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                                </button>
-                                            </div>
-
-                                            <p className="text-muted-foreground mt-1 text-xs">{t('ui.users.placeholders.passRulings')}</p>
-
-                                            <FieldInfo field={field} />
-                                        </>
-                                    );
-                                }}
-                            </form.Field>
-                        </div>
-                    </TabsContent>
-                    <TabsContent value="permissionsForm" className="w-full">
-                        {/* Pre-selections field */}
-                        <div>
-                            <Label>
-                                <div className="mb-1 flex items-center gap-1">
-                                    <Shield color="grey" size={18} />
-                                    {t('ui.users.fields.rolPpal')}
-                                </div>
-                            </Label>
-                            <Select onValueChange={(value) => roleSelector(value)}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder={t('ui.users.roles.default')} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {/* <SelectItem value="default">{t('ui.users.roles.default')}</SelectItem> */}
-                                    {roles?.map((role) => (
-                                        <SelectItem key={String(role)} value={String(role)}>
-                                            {t('ui.users.roles.' + role)}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <div className="mt-3 mb-3">
-                                <Separator />
-                            </div>
-
-                            {/* Permisos Especificos */}
-
-                            <div className="mt-3 mb-1 flex items-center gap-1">
-                                <Shield color="#2762c2" size={18} />
-                                {t('ui.users.fields.permisos')}
-                            </div>
-                            <div className="mt-2 flex grid grid-cols-2 gap-4">
-                                {categorias.map((categoria) => {
-                                    const permisosCat = permisosAgrupados[categoria.perms];
-                                    const permisoPadre = permisosCat[0];
-
-                                    const catKey = categoria.icon;
-
-                                    const Icono = iconComponents[catKey as keyof typeof iconComponents];
-
-                                    return (
-                                        <Card className="grow" key={categoria.id}>
-                                            <CardHeader>
-                                                <div className="flex gap-1">
-                                                    <Icono size={18} color="blue" />
-                                                    <CardTitle>{t('ui.users.gridelements.' + categoria.label)}</CardTitle>
-                                                </div>
-                                            </CardHeader>
-                                            <CardContent>
-                                                {permisosCat.map((permiso) => (
-                                                    <div className="items-top flex space-x-2" key={String(permiso)}>
-                                                        <Checkbox
-                                                            className="border-blue-500"
-                                                            id={String(permiso)}
-                                                            value={String(permiso)}
-                                                            checked={arrayPermisosState.includes(permiso)}
-                                                            onCheckedChange={() => {
-                                                                togglePermiso(permiso);
-                                                            }}
-                                                            disabled={comprobadorDependencias(permiso, permisoPadre)}
-                                                        />
-                                                        <div className="m-1 grid gap-1.5 leading-none">
-                                                            <label
-                                                                htmlFor={String(permiso)}
-                                                                className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                            >
-                                                                {t('ui.users.permisos.' + categoria.icon + '.' + permiso)}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </CardContent>
-                                        </Card>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </TabsContent>
-                </Tabs>
                 <Separator className="mt-3" />
                 {/* Form buttons */}
                 <div className="mt-3 mt-4 flex justify-center gap-100">
@@ -434,7 +188,7 @@ export function FloorForm({ initialData, page, perPage, roles, rolesConPermisos,
                         type="button"
                         variant="outline"
                         onClick={() => {
-                            let url = '/users';
+                            let url = '/floors';
                             if (page) {
                                 url += `?page=${page}`;
                                 if (perPage) {

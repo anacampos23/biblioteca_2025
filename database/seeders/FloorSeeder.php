@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Domain\Floor\Models\Floor;
+use Domain\Floors\Models\Floor;
 
 class FloorSeeder extends Seeder
 {

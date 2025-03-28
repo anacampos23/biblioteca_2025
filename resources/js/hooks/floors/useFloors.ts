@@ -84,10 +84,10 @@ export function useFloors({ search, page = 1, perPage = 10 }: UseFloorsParams = 
   });
 }
 
-export function useCreateUser() {
+export function useCreateFloor() {
   return useMutation({
     mutationFn: async (data: { name: string; email: string; password: string }) => {
-      const response = await axios.post("/api/users", data, {
+      const response = await axios.post("/api/floors", data, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
@@ -98,10 +98,10 @@ export function useCreateUser() {
   });
 }
 
-export function useUpdateUser(userId: string) {
+export function useUpdateFloor(floorId: string) {
   return useMutation({
     mutationFn: async (data: { name: string; email: string; password?: string }) => {
-      const response = await axios.put(`/api/users/${userId}`, data, {
+      const response = await axios.put(`/api/floors/${floorId}`, data, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
@@ -114,8 +114,8 @@ export function useUpdateUser(userId: string) {
 
 export function useDeleteFloor() {
   return useMutation({
-    mutationFn: async (userId: string) => {
-      await axios.delete(`/api/floors/${userId}`, {
+    mutationFn: async (floorId: string) => {
+      await axios.delete(`/api/floors/${floorId}`, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
