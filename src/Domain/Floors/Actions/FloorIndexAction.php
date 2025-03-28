@@ -13,7 +13,7 @@ class FloorIndexAction
     {
         $floors = Floor::query()
             ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+                $query->where('floor_number', 'like', "%{$search}%");
                 $query->orWhere('capacity_zones', 'like', "%{$search}%");
             })
             ->latest()

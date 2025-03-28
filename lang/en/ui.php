@@ -246,19 +246,13 @@ return [
                 'title' => 'Are you sure?',
                 'description' => 'This action cannot be undone. The user will be permanently deleted from the system.',
             ],
-            'columns' => [
-                'name' => 'Name',
-                'capacity_zones' => 'Capacity of zones',
-                'actions' => 'Actions',
-            ],
             'filters' => [
                 'search' => 'Search',
-                'name' => 'Floor name',
+                'floor_number' => 'Floor number',
                 'capacity_zones' => "Zone's capacity",
             ],
             'placeholders' => [
-                'name' => 'Complete floor name',
-                'search' => 'Search floors...',
+                'floor_number' => 'Floor No. ...',
                 'capacity_zones' => "Zone's capacity...",
             ],
             'cards' => [
@@ -266,10 +260,16 @@ return [
                 'description' => 'Input the information to create a new floor in the system.'
             ],
             'fields' => [
-                'name' => 'Floor',
+                'floor_number' =>'Floor No. :', 
                 'capacity_zones' => [
-                    'name'=> 'Zone capacity',
+                    'name'=> 'zone capacity',
+                    'title'=> 'Zone capacity',
                 ]
             ],
+            'columns' => [
+                'floor_number' =>'Floor No. :', 
+                'capacity_zones' => 'Zone capacity',
+                'actions' => 'Actions',
+            ]
         ],
 ];

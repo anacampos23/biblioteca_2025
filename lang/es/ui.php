@@ -240,18 +240,13 @@ return [
                 'title' => '¿Estás seguro?',
                 'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente el usuario del sistema.',
             ],
-            'columns' => [
-                'name' => 'Nombre',
-                'capacity_zones' => 'Capacidad de zonas',
-                'actions' => 'Acciones',
-            ],
             'filters' => [
                 'search' => 'Buscar',
-                'name' => 'Nombre del piso',
+                'floor_number' => 'Número del piso',
                 'capacity_zones' => 'Capacidad de zonas',
             ],
             'placeholders' => [
-                'name' => 'Nombre completo del piso',
+                'floor_number' => 'Piso número...',
                 'search' => 'Buscar pisos...',
                 'capacity_zones' => 'Capacidad de zonas...'
             ],
@@ -260,10 +255,16 @@ return [
                 'description' => 'Ingresa la información para crear un nuevo piso en el sistema'
             ],
             'fields' => [
-                'name' => 'Piso',
+                'floor_number' => 'Piso número:',
                 'capacity_zones' => [
-                    'name'=> 'Capacidad de zonas',
+                    'name'=> 'capacidad de zonas',
+                    'title'=> 'Capacidad de zonas',
                 ]
             ],
+            'columns' => [
+                'floor_number' =>'Piso número:', 
+                'capacity_zones' => 'Capacidad de zonas',
+                'actions' => 'Acciones',
+            ]
         ],
 ];

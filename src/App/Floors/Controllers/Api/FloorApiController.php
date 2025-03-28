@@ -27,8 +27,8 @@ class FloorApiController extends Controller
     public function store(Request $request, FloorStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'capacity_zones' => ['required', 'number', 'max:255'],
+            'floor_number' => ['required', 'Nnumber'],
+            'capacity_zones' => ['required', 'number'],
         ]);
 
         if ($validator->fails()) {
@@ -46,7 +46,7 @@ class FloorApiController extends Controller
     public function update(Request $request, Floor $floor, FloorUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
+            'floor_number' => ['required', 'number',],
         ]);
 
         if ($validator->fails()) {
