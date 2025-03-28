@@ -14,18 +14,18 @@ class FloorSeeder extends Seeder
     public function run(): void
     {
         Floor::create([
-            'name' => 'Floor 1',
+            'floor_number' => '1',
             'capacity_zones' => 5,
         ]);
         Floor::create([
-            'name' => 'Floor 2',
+            'floor_number' => '2',
             'capacity_zones' => 2,
         ]);
         Floor::create([
-            'name' => 'Floor 3',
+            'floor_number' => '3',
             'capacity_zones' => 4,
         ]); Floor::create([
-            'name' => 'Floor 4',
+            'floor_number' => '4',
             'capacity_zones' => 6,
         ]);
 

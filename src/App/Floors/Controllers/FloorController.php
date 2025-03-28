@@ -37,7 +37,7 @@ class FloorController extends Controller
     public function store(Request $request, FloorStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
+            'floor_number' => ['required', 'numeric', 'max:255'],
             'capacity_zones' => [ 'numeric', 'min:0', 'max:20'],
         ]);
 

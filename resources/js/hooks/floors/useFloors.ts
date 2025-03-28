@@ -3,7 +3,7 @@ import axios from "../../lib/axios";
 
 export interface Floor {
   id: string;
-  name: string;
+  floor_number: number;
   capacity_zones: number;
   created_at: string;
   updated_at: string;
@@ -86,7 +86,7 @@ export function useFloors({ search, page = 1, perPage = 10 }: UseFloorsParams = 
 
 export function useCreateFloor() {
   return useMutation({
-    mutationFn: async (data: { name: string; email: string; password: string }) => {
+    mutationFn: async (data: { floor_number: number; capacity_zones: number }) => {
       const response = await axios.post("/api/floors", data, {
         headers: {
           'Accept': 'application/json',
@@ -100,7 +100,7 @@ export function useCreateFloor() {
 
 export function useUpdateFloor(floorId: string) {
   return useMutation({
-    mutationFn: async (data: { name: string; email: string; password?: string }) => {
+    mutationFn: async (data: {floor_number: number; capacity_zones: number}) => {
       const response = await axios.put(`/api/floors/${floorId}`, data, {
         headers: {
           'Accept': 'application/json',

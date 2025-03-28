@@ -11,7 +11,7 @@ class FloorUpdateAction
     public function __invoke(Floor $floor, array $data): FloorResource
     {
         $updateData = [
-            'name' => $data['name'],
+            'floor_number' => $data['floor_number'],
             'capacity_zones' => $data['capacity_zones'],
         ];
 

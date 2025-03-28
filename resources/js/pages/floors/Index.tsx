@@ -28,14 +28,8 @@ export default function FloorsIndex() {
   const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
   const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
   const [filters, setFilters] = useState<Record<string, any>>({});
-  // Combine name and email filters into a single search string if they exist
-  const combinedSearch = [
-    filters.search,
-    filters.name ? `name:${filters.name}` : null,
-  ].filter(Boolean).join(' ');
 
   const { data: floors, isLoading, isError, refetch } = useFloors({
-    search: combinedSearch,
     page: currentPage,
     perPage: perPage,
   });
@@ -62,9 +56,9 @@ export default function FloorsIndex() {
 
   const columns = useMemo(() => ([
     createTextColumn<Floor>({
-      id: "name",
-      header: t("ui.users.columns.name") || "Name",
-      accessorKey: "name",
+      id: "floor_number",
+      header: t("ui.floors.columns.floor_number") || "Floor number",
+      accessorKey: "floor_number",
     }),
     createTextColumn<Floor>({
       id: "capacity_zones",
@@ -117,22 +111,10 @@ export default function FloorsIndex() {
                           filters={
                               [
                                   {
-                                      id: 'search',
-                                      label: t('ui.floors.filters.search') || 'Buscar',
+                                      id: 'floor_number',
+                                      label: t('ui.floors.filters.floor_number'), 
                                       type: 'text',
-                                      placeholder: t('ui.floors.placeholders.search') || 'Buscar...',
-                                  },
-                                  {
-                                      id: 'name',
-                                      label: t('ui.floors.filters.name') || 'Nombre',
-                                      type: 'text',
-                                      placeholder: t('ui.floors.placeholders.name') || 'Nombre...',
-                                  },
-                                  {
-                                      id: 'capacity_zones',
-                                      label: t('ui.floors.filters.capacity_zones') || 'Capacity Zones',
-                                      type: 'text',
-                                      placeholder: t('ui.floors.placeholders.capacity_zones') || 'Capacity Zones...',
+                                      placeholder: t('ui.floors.placeholders.floor_number'), 
                                   }
                               ] as FilterConfig[]
                           }

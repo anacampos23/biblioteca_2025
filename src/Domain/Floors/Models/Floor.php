@@ -29,7 +29,7 @@ class Floor extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'floor_number',
         'capacity_zones'
     ];
     

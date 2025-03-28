@@ -21,7 +21,7 @@ import { toast } from 'sonner';
 interface FloorFormProps {
     initialData?: {
         id: string;
-        name: string;
+        floor_number: number;
         capacity_zones: number;
     };
     page?: string;
@@ -47,7 +47,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
-            name: initialData?.name ?? '',
+            floor_number: initialData?.floor_number ?? '',
             capacity_zones: initialData?.capacity_zones ?? 0,
         },
         onSubmit: async ({ value }) => {
@@ -103,17 +103,15 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
-                        {/* Name field */}
-                        <div>
+                        {/* Floor Number field */}
+                        <div className= 'mt-5'>
                             <form.Field
-                                name="name"
+                                name="floor_number"
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.users.fields.name').toLowerCase() })
-                                            : value.length < 2
-                                              ? t('ui.validation.min.string', { attribute: t('ui.users.fields.name').toLowerCase(), min: '2' })
+                                        return value === undefined || value === null 
+                                            ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name')})
                                               : undefined;
                                     },
                                 }}
@@ -122,16 +120,18 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                     <>
                                         <Label htmlFor={field.name}>
                                             <div className="mb-1 flex items-center gap-1">
-                                                {t('ui.floors.fields.name')}
+                                                {t('ui.floors.fields.floor_number')}
                                             </div>
                                         </Label>
+                                        
                                         <Input
                                             id={field.name}
                                             name={field.name}
+                                            type='number'
                                             value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            onChange={(e) => field.handleChange(Number(e.target.value))}
                                             onBlur={field.handleBlur}
-                                            placeholder={t('ui.floors.placeholders.name')}
+                                            placeholder={t('ui.floors.placeholders.floor_number')}
                                             disabled={form.state.isSubmitting}
                                             required={false}
                                             autoComplete="off"
@@ -148,7 +148,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value
+                                        return value === undefined || value === null 
                                             ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name')})
                                             : value < 0 || value > 20
                                               ? t('ui.validation.capacity_zones', { attribute: t('ui.floors.fields.capacity_zones') })
@@ -160,7 +160,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                     <>
                                         <Label htmlFor={field.name}>
                                             <div className="mb-1 flex items-center gap-1">
-                                                {t('ui.floors.fields.capacity_zones.name')}
+                                                {t('ui.floors.fields.capacity_zones.title')}
                                             </div>
                                         </Label>
                                         
@@ -171,7 +171,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                             value={field.state.value}
                                             onChange={(e) => field.handleChange(Number(e.target.value))}
                                             onBlur={field.handleBlur}
-                                            placeholder={t('ui.users.placeholders.name')}
+                                            placeholder={t('ui.floors.placeholders.capacity_zones')}
                                             disabled={form.state.isSubmitting}
                                             required={false}
                                             autoComplete="off"

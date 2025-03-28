@@ -14,7 +14,7 @@ return new class extends Migration
         //Floor table
         Schema::create('floors', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('name') -> unique();
+            $table->integer('floor_number') -> unique();
             $table->integer('capacity_zones');
             $table->timestamps();
         });
