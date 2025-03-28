@@ -13,7 +13,7 @@ import { DeleteDialog } from "@/components/stack-table/DeleteDialog";
 import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTable";
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { FloorLayout } from "@/layouts/floors/FloorLayaout";
+import { FloorLayout } from "@/layouts/floors/FloorLayout";
 
 export default function FloorsIndex() {
   const { t } = useTranslations();

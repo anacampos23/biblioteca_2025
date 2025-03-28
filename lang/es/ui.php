@@ -80,6 +80,8 @@ return [
             ],
             'unique' => 'El campo :attribute ya ha sido tomado.',
             'confirmed' => 'El campo :attribute no coincide.',
+            'must_be_numeric' => 'El campo :attribute debe ser numérico.',
+            'capacity_zones' => 'La capacidad de un piso es de 0 a 20 zonas.',
     ],
     'common' => [
         'buttons' => [
@@ -256,6 +258,12 @@ return [
             'cards' => [
                 'title' => 'Crear Nuevo Piso',
                 'description' => 'Ingresa la información para crear un nuevo piso en el sistema'
+            ],
+            'fields' => [
+                'name' => 'Piso',
+                'capacity_zones' => [
+                    'name'=> 'Capacidad de zonas',
+                ]
             ],
         ],
 ];

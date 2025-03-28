@@ -30,7 +30,7 @@ class Floor extends Model
      */
     protected $fillable = [
         'name',
-        'capacity_zone'
+        'capacity_zones'
     ];
     
 

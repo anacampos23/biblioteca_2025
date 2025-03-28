@@ -31,7 +31,7 @@ export default function Dashboard() {
                     title={t('ui.floors.title')}
                     description= {t('ui.floors.description')}
                     href="/floors"
-                    icon={Building2 }
+                    icon={Building2}
                 />
 
                 <CardFlip

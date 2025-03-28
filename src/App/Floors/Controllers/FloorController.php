@@ -5,9 +5,11 @@ namespace App\Floors\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
-use Domain\Floor\Models\Floor;
+use Domain\Floors\Models\Floor;
 use Domain\Floors\Requests\FloorRequest;
 use Inertia\Response;
+use Domain\Floors\Actions\FloorStoreAction;
+use Illuminate\Support\Facades\Validator;
 
 
 
@@ -26,15 +28,27 @@ class FloorController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('floors/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, FloorStoreAction $action)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'capacity_zones' => [ 'numeric', 'min:0', 'max:20'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+        
+        $action($validator->validated());
+
+        return redirect()->route('users.index')
+            ->with('success', __('messages.users.created'));
     }
 
     /**
