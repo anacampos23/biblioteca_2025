@@ -46,7 +46,8 @@ class FloorApiController extends Controller
     public function update(Request $request, Floor $floor, FloorUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'floor_number' => ['required', 'number',],
+            'floor_number' => ['required', 'number'],
+            'capacity_zones' => ['required', 'number'],
         ]);
 
         if ($validator->fails()) {
