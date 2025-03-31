@@ -290,5 +290,14 @@ return [
                 'saving' => 'Guardando...',
                 'retry' => 'Reintentar',
             ],
+            'filters' => [
+                'search' => 'Buscar',
+                'name' => 'Zona',
+                'description' => 'Descripción',
+            ],
+            'placeholders' => [
+               'name' => 'Nombre de la zona',
+                'description' => 'Descripción',
+            ],
         ],
 ];

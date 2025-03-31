@@ -1,5 +1,3 @@
-//HAY QUE MODIFICARLO 
-
 
 
 import { Button } from '@/components/ui/button';

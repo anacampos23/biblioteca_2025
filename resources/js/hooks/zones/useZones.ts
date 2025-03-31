@@ -54,7 +54,7 @@ interface UseZonesParams {
 
 export function useZones({ search, page = 1, perPage = 10 }: UseZonesParams = {}) {
   return useQuery({
-    queryKey: ["floors", { search, page, perPage }],
+    queryKey: ["zones", { search, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Zone>>("/api/zones", {
         params: {

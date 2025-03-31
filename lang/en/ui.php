@@ -295,6 +295,15 @@ return [
                 'saving' => 'Saving...',
                 'retry' => 'Retry',
             ],
+            'filters' => [
+                'search' => 'Search',
+                'name' => 'Zone',
+                'description' => "Description",
+            ],
+            'placeholders' => [
+               'name' => "Zone's name",
+                'description' => "Description",
+            ],
         ],
         
 ];

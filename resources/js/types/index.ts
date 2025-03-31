@@ -7,6 +7,20 @@ export interface User {
   email_verified_at: string | null;
   avatar?: string;
 }
+export interface Floor {
+  uuid: string;
+  floor_number: number;
+  capactiy_zones: number;
+  verified_at: string | null;
+  avatar?: string;
+}
+export interface Zone {
+  uuid: string;
+  name: string;
+  description: string;
+  verified_at: string | null;
+  avatar?: string;
+}
 
 export interface NavItem {
   title: string;
