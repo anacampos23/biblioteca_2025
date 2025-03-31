@@ -13,7 +13,7 @@ import { DeleteDialog } from "@/components/stack-table/DeleteDialog";
 import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTable";
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { ZoneLayout } from "@/layouts/zones/ZoneLayoutLayout";
+import { ZoneLayout } from "@/layouts/zones/ZoneLayout";
 
 export default function ZonesIndex() {
   const { t } = useTranslations();
@@ -64,6 +64,7 @@ export default function ZonesIndex() {
       id: "description",
       header: t("ui.zones.columns.description") || "Description",
       accessorKey: "description",
+      enableSorting: false, // Desactiva la ordenación 
     }),
     createActionsColumn<Zone>({
       id: "actions",
@@ -92,15 +93,15 @@ export default function ZonesIndex() {
   ] as ColumnDef<Zone>[]), [t, handleDeleteZone]);
 
   return (
-      <ZoneLayout title={t('ui.floors.title')}>
+      <ZoneLayout title={t('ui.zones.title')}>
           <div className="p-6">
               <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                      <h1 className="text-3xl font-bold">{t('ui.floors.title')}</h1>
-                      <Link href="/floors/create">
+                      <h1 className="text-3xl font-bold">{t('ui.zones.title')}</h1>
+                      <Link href="/zones/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
-                              {t('ui.floors.buttons.new')}
+                              {t('ui.zones.buttons.new')}
                           </Button>
                       </Link>
                   </div>
@@ -111,10 +112,10 @@ export default function ZonesIndex() {
                           filters={
                               [
                                   {
-                                      id: 'floor_number',
-                                      label: t('ui.floors.filters.floor_number'), 
+                                      id: 'name',
+                                      label: t('ui.zones.filters.name'), 
                                       type: 'text',
-                                      placeholder: t('ui.floors.placeholders.floor_number'), 
+                                      placeholder: t('ui.zones.placeholders.name'), 
                                   }
                               ] as FilterConfig[]
                           }
@@ -137,7 +138,7 @@ export default function ZonesIndex() {
                           <div>
                               <Table
                                   data={
-                                      floors ?? {
+                                      zones ?? {
                                           data: [],
                                           meta: {
                                               current_page: 1,
