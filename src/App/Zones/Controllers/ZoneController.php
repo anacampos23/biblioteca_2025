@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Floors\Controllers;
+namespace App\Zones\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
-use Domain\Floors\Models\Floor;
-use Domain\Floors\Requests\FloorRequest;
+use Domain\Zones\Models\Zone;
+use Domain\Zones\Requests\ZoneRequest;
 use Inertia\Response;
-use Domain\Floors\Actions\FloorStoreAction;
-use Domain\Floors\Actions\FloorUpdateAction;
-use Domain\Floors\Actions\FloorDestroyAction;
+use Domain\Zones\Actions\ZoneStoreAction;
+use Domain\Zones\Actions\ZoneUpdateAction;
+use Domain\Zones\Actions\ZoneDestroyAction;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 
 
-class FloorController extends Controller
+class ZoneController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('floors/Index');
+        return Inertia::render('zones/Index');
     }
 
     /**
@@ -31,17 +31,17 @@ class FloorController extends Controller
      */
     public function create()
     {
-        return Inertia::render('floors/Create');
+        return Inertia::render('zones/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, FloorStoreAction $action)
+    public function store(Request $request, ZoneStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'floor_number' => ['required', 'numeric', 'max:255'],
-            'capacity_zones' => [ 'numeric', 'min:0', 'max:20'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -65,11 +65,11 @@ class FloorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, Floor $floor)
+    public function edit(Request $request, Zone $zone)
     {
 
-        return Inertia::render('floors/Edit', [
-            'floor' => $floor,
+        return Inertia::render('zones/Edit', [
+            'zone' => $zone,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
 
@@ -79,22 +79,22 @@ class FloorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  Floor $floor, FloorUpdateAction $action)
+    public function update(Request $request,  Zone $zone, ZoneUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'floor_number' => ['required', 'numeric', 'max:255',
-            Rule::unique('floors')->ignore($floor->id),
+            'name' => ['required', 'numeric', 'max:255',
+            Rule::unique('zones')->ignore($zone->id),
         ],
-            'capacity_zones' => [ 'numeric', 'min:0', 'max:20'],
+            'description' => ['string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
 
-        $action($floor, $validator->validated());
+        $action($zone, $validator->validated());
 
-        $redirectUrl = route('floors.index');
+        $redirectUrl = route('zones.index');
 
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {
@@ -111,11 +111,11 @@ class FloorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Floor $floor, FloorDestroyAction $action)
+    public function destroy(Zone $zone, ZoneDestroyAction $action)
     {
-        $action($floor);
+        $action($zone);
 
-        return redirect()->route('floors.index')
+        return redirect()->route('zones.index')
             ->with('success', __('messages.floors.deleted'));
     }
 }

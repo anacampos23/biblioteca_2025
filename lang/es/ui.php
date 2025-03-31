@@ -265,6 +265,30 @@ return [
                 'floor_number' =>'Piso número:', 
                 'capacity_zones' => 'Capacidad de zonas',
                 'actions' => 'Acciones',
+            ],
+            'edit' =>[
+                'name' => 'Editar piso',
+                'description' => 'Ingresa la información para editar el piso.'
             ]
+        ],
+        'zones'=>[
+            'title' => 'Zonas',
+            'description' => 'Gestiona las zonas',
+            'columns' => [
+                'name' =>'Zona:', 
+                'description' => 'Descripción',
+                'actions' => 'Acciones',
+            ],
+            'buttons' => [
+                'new' => 'Nueva zona',
+                'edit' => 'Editar',
+                'save' => 'Guardar',
+                'update' => 'Actualizar',
+                'cancel' => 'Cancelar',
+                'delete' => 'Eliminar',
+                'deleting' => 'Eliminando...',
+                'saving' => 'Guardando...',
+                'retry' => 'Reintentar',
+            ],
         ],
 ];
