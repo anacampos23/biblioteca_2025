@@ -9,7 +9,9 @@ use Domain\Floors\Models\Floor;
 use Domain\Floors\Requests\FloorRequest;
 use Inertia\Response;
 use Domain\Floors\Actions\FloorStoreAction;
+use Domain\Floors\Actions\FloorUpdateAction;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 
 
@@ -76,9 +78,33 @@ class FloorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,  Floor $floor, FloorUpdateAction $action)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'floor_number' => ['required', 'numeric', 'max:255',
+            Rule::unique('floors')->ignore($floor->id),
+        ],
+            'capacity_zones' => [ 'numeric', 'min:0', 'max:20'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $action($floor, $validator->validated());
+
+        $redirectUrl = route('floors.index');
+
+        // Añadir parámetros de página a la redirección si existen
+        if ($request->has('page')) {
+            $redirectUrl .= "?page=" . $request->query('page');
+            if ($request->has('perPage')) {
+                $redirectUrl .= "&per_page=" . $request->query('perPage');
+            }
+        }
+
+        return redirect($redirectUrl)
+            ->with('success', __('messages.users.updated'));
     }
 
     /**
