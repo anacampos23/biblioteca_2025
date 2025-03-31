@@ -2,6 +2,7 @@
 
 use App\Floors\Controllers\Api\FloorApiController;
 use App\Users\Controllers\Api\UserApiController;
+use App\Zones\Controllers\Api\ZoneApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web', 'auth'])->group(function () {
@@ -18,4 +19,12 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/floors', [FloorApiController::class, 'store']);
     Route::put('/floors/{floor}', [FloorApiController::class, 'update']);
     Route::delete('/floors/{floor}', [FloorApiController::class, 'destroy']);
+});
+
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/zones', [ZoneApiController::class, 'index']);
+    Route::get('/zones/{zone}', [ZoneApiController::class, 'show']);
+    Route::post('/zones', [ZoneApiController::class, 'store']);
+    Route::put('/zones/{zone}', [ZoneApiController::class, 'update']);
+    Route::delete('/zones/{zone}', [ZoneApiController::class, 'destroy']);
 });

@@ -270,6 +270,31 @@ return [
                 'floor_number' =>'Floor No. :', 
                 'capacity_zones' => 'Zone capacity',
                 'actions' => 'Actions',
+            ],
+            'edit' =>[
+                'name' => 'Edit Floor',
+                'description' => 'Input the information to edit the floor.'
             ]
         ],
+        'zones'=>[
+            'title' => 'Zones',
+            'description' => 'Manage the zones',
+            'columns' => [
+                'name' =>'Zone:', 
+                'description' => 'Description',
+                'actions' => 'Actions',
+            ],
+            'buttons' => [
+                'new' => 'New Zone',
+                'edit' => 'Edit',
+                'save' => 'Save',
+                'update' => 'Update',
+                'cancel' => 'Cancel',
+                'delete' => 'Delete',
+                'deleting' => 'Deleting...',
+                'saving' => 'Saving...',
+                'retry' => 'Retry',
+            ],
+        ],
+        
 ];

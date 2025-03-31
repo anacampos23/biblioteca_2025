@@ -1,13 +1,12 @@
 <?php
 
-namespace Domain\Zone\Models;
+namespace Domain\Zones\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Domain\Floor\Models\Floor;
+use Domain\Floors\Models\Floor;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
 
 class Zone extends Model
 {
