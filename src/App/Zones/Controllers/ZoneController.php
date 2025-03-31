@@ -50,8 +50,8 @@ class ZoneController extends Controller
         
         $action($validator->validated());
 
-        return redirect()->route('users.index')
-            ->with('success', __('messages.users.created'));
+        return redirect()->route('zones.index')
+            ->with('success', __('messages.zones.created'));
     }
 
     /**
@@ -81,8 +81,9 @@ class ZoneController extends Controller
      */
     public function update(Request $request,  Zone $zone, ZoneUpdateAction $action)
     {
+        
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'numeric', 'max:255',
+            'name' => ['required', 'string', 'max:255',
             Rule::unique('zones')->ignore($zone->id),
         ],
             'description' => ['string', 'max:255'],
@@ -105,7 +106,7 @@ class ZoneController extends Controller
         }
 
         return redirect($redirectUrl)
-            ->with('success', __('messages.users.updated'));
+            ->with('success', __('messages.zones.updated'));
     }
 
     /**
@@ -116,6 +117,6 @@ class ZoneController extends Controller
         $action($zone);
 
         return redirect()->route('zones.index')
-            ->with('success', __('messages.floors.deleted'));
+            ->with('success', __('messages.zones.deleted'));
     }
 }

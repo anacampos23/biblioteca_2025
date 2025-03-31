@@ -71,7 +71,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                 },
                 onError: (errors: Record<string, string>) => {
                     if (Object.keys(errors).length === 0) {
-                        toast.error(initialData ? t('messages.users.error.update') : t('messages.users.error.create'));
+                        toast.error(initialData ? t('messages.zones.error.update') : t('messages.zones.error.create'));
                     }
                 },
             };
@@ -107,9 +107,9 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
                                 return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.users.fields.name').toLowerCase() })
+                                    ? t('ui.validation.required', { attribute: t('ui.zones.fields.name').toLowerCase() })
                                     : value.length < 2
-                                        ? t('ui.validation.min.string', { attribute: t('ui.users.fields.name').toLowerCase(), min: '2' })
+                                        ? t('ui.validation.min.string', { attribute: t('ui.zones.fields.name').toLowerCase(), min: '2' })
                                         : undefined;
                             },
                         }}
@@ -117,9 +117,8 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1">
-                                        <User color="grey" size={18} />
-                                        {t('ui.users.fields.name')}
+                                    <div className="mb-1 flex items-center gap-1 mt-3">
+                                        {t('ui.zones.fields.name')}
                                     </div>
                                 </Label>
                                 <Input
@@ -128,7 +127,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
                                     onBlur={field.handleBlur}
-                                    placeholder={t('ui.users.placeholders.name')}
+                                    placeholder={t('ui.zones.placeholders.name')}
                                     disabled={form.state.isSubmitting}
                                     required={false}
                                     autoComplete="off"
@@ -146,9 +145,9 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
                                 return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.users.fields.name').toLowerCase() })
+                                    ? t('ui.validation.required', { attribute: t('ui.zones.fields.description.name').toLowerCase() })
                                     : value.length < 2
-                                        ? t('ui.validation.min.string', { attribute: t('ui.users.fields.name').toLowerCase(), min: '2' })
+                                        ? t('ui.validation.min.string', { attribute: t('ui.zones.fields.description.name').toLowerCase(), min: '2' })
                                         : undefined;
                             },
                         }}
@@ -156,9 +155,8 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1">
-                                        <User color="grey" size={18} />
-                                        {t('ui.users.fields.name')}
+                                    <div className="mb-1 flex items-center gap-1 mt-5">
+                                        {t('ui.zones.fields.description.title')}
                                     </div>
                                 </Label>
                                 <Input
@@ -167,7 +165,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
                                     onBlur={field.handleBlur}
-                                    placeholder={t('ui.users.placeholders.name')}
+                                    placeholder={t('ui.zones.placeholders.description')}
                                     disabled={form.state.isSubmitting}
                                     required={false}
                                     autoComplete="off"
@@ -196,7 +194,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                         disabled={form.state.isSubmitting}
                     >
                         <X />
-                        {t('ui.users.buttons.cancel')}
+                        {t('ui.zones.buttons.cancel')}
                     </Button>
 
                     <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
@@ -204,10 +202,10 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                             <Button type="submit" disabled={!canSubmit}>
                                 <Save />
                                 {isSubmitting
-                                    ? t('ui.users.buttons.saving')
+                                    ? t('ui.zones.buttons.saving')
                                     : initialData
-                                      ? t('ui.users.buttons.update')
-                                      : t('ui.users.buttons.save')}
+                                      ? t('ui.zones.buttons.update')
+                                      : t('ui.zones.buttons.save')}
                             </Button>
                         )}
                     </form.Subscribe>

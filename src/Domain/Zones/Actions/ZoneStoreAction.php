@@ -12,8 +12,8 @@ class ZoneStoreAction
     {
         
         $zone = Zone::create([
-            'name' => $data['floor_number'],
-            'description' => $data['capacity_zones'],
+            'name' => $data['name'],
+            'description' => $data['description'],
         ]);
 
         return ZoneResource::fromModel($zone);
