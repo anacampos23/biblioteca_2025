@@ -299,5 +299,37 @@ return [
                'name' => 'Nombre de la zona',
                 'description' => 'Descripción',
             ],
+            'edit' =>[
+                'name' => 'Editar zona',
+                'description' => 'Ingresa la información para editar la zona.'
+            ],
+            'fields' => [
+                'name' => 'Zona:',
+                'description' => [
+                    'name'=> 'descripción...',
+                    'title'=> 'Descripción:',
+                ]
+            ],
+            'cards' => [
+                'title' => 'Crear Nueva Zona',
+                'description' => 'Ingresa la información para crear un nueva zona en el sistema'
+            ],
+            'delete' => [
+                'title' => '¿Estás seguro?',
+                'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente la zona del sistema.',
+            ],
+            'delete_dialog' => [
+                'title' => '¿Estás seguro?',
+                'description' => 'Esta acción no se puede deshacer. Se eliminará permanentemente la zona del sistema.',
+                'success' => 'Eliminada correctamente ;)',
+            ],
+            'deleted_error' => 'Error al eliminar la zona',
+            'no_results' => 'No hay resultados.',
+            'error_loading' => 'Error al cargar las zonas. Por favor, inténtalo de nuevo.',
+            'showing_results' => 'Mostrando :from a :to de :total resultados',
+            'pagination' => [
+                'previous' => 'Anterior',
+                'next' => 'Siguiente',
+            ],
         ],
 ];

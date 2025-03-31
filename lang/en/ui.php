@@ -304,6 +304,38 @@ return [
                'name' => "Zone's name",
                 'description' => "Description",
             ],
+            'edit' =>[
+                'name' => 'Edit Zone',
+                'description' => 'Input the information to edit the zone.'
+            ],
+            'fields' => [
+                'name' =>'Zone:', 
+                'description' => [
+                    'name'=> 'description...',
+                    'title'=> 'Description:',
+                ]
+                ],
+                'cards' => [
+                    'title' => 'Create New Zone',
+                    'description' => 'Input the information to create a new zone in the system.'
+                ],
+                'delete' => [
+                    'title' => 'Are you sure?',
+                    'description' => 'This action cannot be undone. The zone will be permanently deleted from the system.',
+                ],
+                'delete_dialog' => [
+                    'title' => 'Are you sure?',
+                    'description' => 'This action cannot be undone. The zone will be permanently deleted from the system.',
+                    'success' => 'Successfully deleted ;)',
+                ],
+                'deleted_error' => 'Error deleting zone',
+                'no_results' => 'No results.',
+                'error_loading' => 'Error loading zones. Please try again.',
+                'showing_results' => 'Showing :from to :to of :total results',
+                'pagination' => [
+                    'previous' => 'Previous',
+                    'next' => 'Next',
+                ],
         ],
         
 ];

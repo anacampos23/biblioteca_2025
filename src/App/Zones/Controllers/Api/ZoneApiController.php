@@ -38,7 +38,7 @@ class ZoneApiController extends Controller
         $zone = $action($validator->validated());
 
         return response()->json([
-            'message' => __('messages.users.created'),
+            'message' => __('messages.zones.created'),
             'zone' => $zone
         ]);
     }
@@ -57,7 +57,7 @@ class ZoneApiController extends Controller
         $updatedZone = $action($zone, $validator->validated());
 
         return response()->json([
-            'message' => __('messages.users.updated'),
+            'message' => __('messages.zones.updated'),
             'zone' => $updatedZone
         ]);
     }
@@ -67,7 +67,7 @@ class ZoneApiController extends Controller
         $action($zone);
 
         return response()->json([
-            'message' => __('messages.users.deleted')
+            'message' => __('messages.zones.deleted')
         ]);
     }
 }

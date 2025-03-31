@@ -11,4 +11,24 @@ return [
             'delete' => 'Error al eliminar el usuario',
         ],
     ],
+    'floors' => [
+        'created' => 'Piso creado correctamente',
+        'updated' => 'Piso actualizado correctamente',
+        'deleted' => 'Piso eliminado correctamente',
+        'error' => [
+            'create' => 'Error al crear el psio',
+            'update' => 'Error al actualizar el piso',
+            'delete' => 'Error al eliminar el piso',
+        ],
+    ],
+    'zones' => [
+        'created' => 'Zona creado correctamente',
+        'updated' => 'Zona actualizado correctamente',
+        'deleted' => 'Zona eliminado correctamente',
+        'error' => [
+            'create' => 'Error al crear el zona',
+            'update' => 'Error al actualizar el zona',
+            'delete' => 'Error al eliminar el zona',
+        ],
+    ],
 ];
