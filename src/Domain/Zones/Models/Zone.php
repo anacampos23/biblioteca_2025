@@ -7,11 +7,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Domain\Floors\Models\Floor;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Database\Factories\ZoneFactory;
 
 class Zone extends Model
 {
     use HasFactory, HasUuids;
-
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return ZoneFactory::new();
+    }
+    //use HasApiTokens
     /**
      * The attributes that are mass assignable.
      *
@@ -19,15 +27,16 @@ class Zone extends Model
      */
     protected $fillable = [
         'name',
-        'description',
+        'floor_id',
     ];
 
 
       /**
      * Get the floors associated with the zones.
      */
-    public function floor(): BelongsToMany
+    // Definir la relación muchos a muchos con Floors
+    public function floor(): BelongsTo
     {
-        return $this->belongsToMany(Floor::class);
+        return $this->belongsTo(Floor::class);
     }
 }

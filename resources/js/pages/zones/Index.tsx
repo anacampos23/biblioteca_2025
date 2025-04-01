@@ -61,9 +61,9 @@ export default function ZonesIndex() {
       accessorKey: "name",
     }),
     createTextColumn<Zone>({
-      id: "description",
+      id: "floor_number",
       header: t("ui.zones.columns.description") || "Description",
-      accessorKey: "description",
+      accessorKey: "floor_number",
       enableSorting: false, // Desactiva la ordenación 
     }),
     createActionsColumn<Zone>({

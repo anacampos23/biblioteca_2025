@@ -19,6 +19,7 @@ interface ZoneFormProps {
         id: string;
         name: string;
         description: string;
+        floors: { id: string | number; floor_number: number; capacity_zones: number; }[];
     };
     page?: string;
     perPage?: string;
@@ -45,6 +46,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
         defaultValues: {
             name: initialData?.name ?? '',
             description: initialData?.description ?? '',
+            floors: initialData?.floors?.map(floor => floor.id) ?? [],
         },
         onSubmit: async ({ value }) => {
             const zoneData = {
@@ -137,7 +139,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                         )}
                     </form.Field>
                 </div>
-                {/* Name field */}
+                {/* Description field */}
                 <div>
                     <form.Field
                         name="description"

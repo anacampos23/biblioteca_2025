@@ -14,7 +14,6 @@ class ZoneIndexAction
         $zones = Zone::query()
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
-                $query->orWhere('description', 'like', "%{$search}%");
             })
             ->latest()
             ->paginate($perPage);

@@ -42,14 +42,24 @@ class ZoneController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['string', 'max:255'],
+            'floors' => ['array'],
+            'floors.*' => ['exists:floors,id'],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
         
-        $action($validator->validated());
+        // Crear la zona
+        $zone = Zone::create($validator->validated());
 
+        // Sincronizamos los pisos con la zona
+        $zone->floors()->sync($request->floors);  // Sincroniza la relación muchos a muchos
+
+        // Ejecutamos la acción de guardar (si es necesario)
+        $action($zone);
+
+        // Redirigimos a la lista de zonas
         return redirect()->route('zones.index')
             ->with('success', __('messages.zones.created'));
     }
@@ -68,11 +78,12 @@ class ZoneController extends Controller
     public function edit(Request $request, Zone $zone)
     {
 
+        $floors_count = Floor::select(['id', 'floor_number', 'capacity_zones']) ->withCount('zones') ->get() -> toArray();
         return Inertia::render('zones/Edit', [
             'zone' => $zone,
+            'floors' => $floors,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
-
         ]);
     }
 

@@ -14,16 +14,8 @@ return new class extends Migration
         //Zone table
         Schema::create('zones', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('name') -> unique();
-            $table->string('description');
-            $table->timestamps();
-        });
-
-        // Intermediate table (N:M) for floors and zones
-        Schema::create('floor_zone', function (Blueprint $table) {
-            $table->foreignUuid('floors_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('zones_id')->constrained()->onDelete('cascade');
-            $table->primary(['floors_id', 'zones_id'], 'id');
+            $table->string('name');
+            $table->foreignUuid('floor_id')->constrained('floors')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -34,6 +26,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('zones');
-        Schema::dropIfExists('floor_zone');
     }
 };

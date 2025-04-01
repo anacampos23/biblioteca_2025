@@ -1,10 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../../lib/axios";
+import { number } from "zod";
 
 export interface Zone {
   id: string;
   name: string;
-  description: string;
+  floor_id: string;
+  floor_number: string;
   created_at: string;
   updated_at: string;
 
