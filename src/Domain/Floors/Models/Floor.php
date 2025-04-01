@@ -38,9 +38,9 @@ class Floor extends Model
      * Get the zones associated with the floor.
      */
 
-    public function zone(): BelongsToMany
+    public function zones(): BelongsToMany
     {
-        return $this->belongsToMany(Zone::class);
+        return $this->belongsToMany(Zone::class, 'floor_zone', 'floors_id', 'zones_id');
     }
 
 }

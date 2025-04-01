@@ -23,4 +23,12 @@ class FloorFactory extends Factory
             //
         ];
     }
+    public function configure()
+    {
+        return $this->afterCreating(function (Floor $floor) {
+            // Asociar 3 zonas aleatorias
+            $zones = \Domain\Zone\Models\Zone::inRandomOrder()->take(3)->pluck('id');
+            $floor->zones()->attach($zones); // Usando el método attach
+        });
+    }
 }
