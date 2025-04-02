@@ -22,6 +22,7 @@ interface FloorFormProps {
         floor_number: number;
         capacity_zones: number;
     };
+    floor_number_list: number[];
     page?: string;
     perPage?: string;
 }
@@ -38,15 +39,15 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
+export function FloorForm({ initialData, page, perPage, floor_number_list }: FloorFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
 
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
-            floor_number: initialData?.floor_number ?? '',
-            capacity_zones: initialData?.capacity_zones ?? 0,
+            floor_number: initialData?.floor_number ?? undefined,
+            capacity_zones: initialData?.capacity_zones ?? undefined,
         },
         onSubmit: async ({ value }) => {
             const floorData = {
@@ -95,7 +96,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
         form.handleSubmit();
     };
 
-    
+
     const accesoPermisos = false;
 
     return (
@@ -108,9 +109,11 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return value === undefined || value === null 
+                                        // Verifica que floor_number_list es un array y haz el log
+                                        return !value && value!=0
                                             ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name')})
-                                              : undefined;
+                                            : floor_number_list.includes(value) && value!=initialData?.floor_number ? t('ui.validation.unique', { attribute: t('ui.floors.fields.floor')})
+                                            : undefined;
                                     },
                                 }}
                             >
@@ -121,13 +124,13 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                                 {t('ui.floors.fields.floor_number')}
                                             </div>
                                         </Label>
-                                        
+
                                         <Input
                                             id={field.name}
                                             name={field.name}
                                             type='number'
                                             value={field.state.value}
-                                            onChange={(e) => field.handleChange(Number(e.target.value))}
+                                            onChange={(e) => field.handleChange(parseInt(e.target.value))}
                                             onBlur={field.handleBlur}
                                             placeholder={t('ui.floors.placeholders.floor_number')}
                                             disabled={form.state.isSubmitting}
@@ -146,7 +149,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return value === undefined || value === null 
+                                        return !value && value!=0
                                             ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name')})
                                             : value < 0 || value > 20
                                               ? t('ui.validation.capacity_zones', { attribute: t('ui.floors.fields.capacity_zones') })
@@ -161,7 +164,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                                 {t('ui.floors.fields.capacity_zones.title')}
                                             </div>
                                         </Label>
-                                        
+
                                         <Input
                                             id={field.name}
                                             name={field.name}

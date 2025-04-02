@@ -44,17 +44,21 @@ export interface PaginatedResponse<T> {
 
 interface UseUsersParams {
   search?: string;
+  name?: string;
+  email?: string;
   page?: number;
   perPage?: number;
 }
 
-export function useUsers({ search, page = 1, perPage = 10 }: UseUsersParams = {}) {
+export function useUsers({ search, name, email, page = 1, perPage = 10 }: UseUsersParams = {}) {
   return useQuery({
-    queryKey: ["users", { search, page, perPage }],
+    queryKey: ["users", { search,name, email, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<User>>("/api/users", {
         params: {
           search,
+          name,
+          email,
           page,
           per_page: perPage,
         },
@@ -63,7 +67,7 @@ export function useUsers({ search, page = 1, perPage = 10 }: UseUsersParams = {}
           'X-Requested-With': 'XMLHttpRequest'
         }
       });
-      
+
       // Transform the API response to the expected format
       return {
         data: apiResponse.data,

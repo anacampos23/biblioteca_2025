@@ -10,14 +10,15 @@ interface EditZoneProps extends PageProps {
     zone: {
         id: string;
         name: string;
-        description: string;
+        floor_id: string;
     };
+    floors?: { id: string; floor_number: number; capacity_zones: number; }[];
     page?: string;
     perPage?: string;
 
 }
 
-export default function EditZone({ zone, page, perPage }: EditZoneProps) {
+export default function EditZone({ zone, page, perPage, floors }: EditZoneProps) {
     const { t } = useTranslations();
     return (
         <ZoneLayout title={t('ui.zones.edit.name')}>
@@ -38,6 +39,7 @@ export default function EditZone({ zone, page, perPage }: EditZoneProps) {
                             initialData={zone}
                             page={page}
                             perPage={perPage}
+                            floors={floors}
                         />
                     </CardContent>
                 </Card>
@@ -45,5 +47,5 @@ export default function EditZone({ zone, page, perPage }: EditZoneProps) {
         </ZoneLayout>
     );
 
-    
+
 }

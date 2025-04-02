@@ -230,6 +230,7 @@ return [
     ],
     'floors' => [
             'title' => 'Floors',
+            'title_sing' => 'Floor :number',
             'description' => 'Manage the building floors',
             'buttons' => [
                 'new' => 'New Floor',
@@ -260,14 +261,15 @@ return [
                 'description' => 'Input the information to create a new floor in the system.'
             ],
             'fields' => [
-                'floor_number' =>'Floor No. :', 
+                'floor_number' =>'Floor No. :',
+                'floor' => 'floor',
                 'capacity_zones' => [
                     'name'=> 'zone capacity',
                     'title'=> 'Zone capacity',
                 ]
             ],
             'columns' => [
-                'floor_number' =>'Floor No. :', 
+                'floor_number' =>'Floor No. :',
                 'capacity_zones' => 'Zone capacity',
                 'actions' => 'Actions',
             ],
@@ -275,67 +277,71 @@ return [
                 'name' => 'Edit Floor',
                 'description' => 'Input the information to edit the floor.'
             ]
+    ],
+
+    'zones'=> [
+        'title' => 'Zones',
+        'description' => 'Manage the zones',
+        'columns' => [
+            'name' =>'Zone:',
+            'description' => 'Description',
+            'actions' => 'Actions',
         ],
-        'zones'=>[
-            'title' => 'Zones',
-            'description' => 'Manage the zones',
-            'columns' => [
-                'name' =>'Zone:', 
-                'description' => 'Description',
-                'actions' => 'Actions',
-            ],
-            'buttons' => [
-                'new' => 'New Zone',
-                'edit' => 'Edit',
-                'save' => 'Save',
-                'update' => 'Update',
-                'cancel' => 'Cancel',
-                'delete' => 'Delete',
-                'deleting' => 'Deleting...',
-                'saving' => 'Saving...',
-                'retry' => 'Retry',
-            ],
-            'filters' => [
-                'search' => 'Search',
-                'name' => 'Zone',
-                'description' => "Description",
-            ],
-            'placeholders' => [
-               'name' => "Zone's name",
-                'description' => "Description",
-            ],
-            'edit' =>[
-                'name' => 'Edit Zone',
-                'description' => 'Input the information to edit the zone.'
-            ],
-            'fields' => [
-                'name' =>'Zone:', 
-                'description' => [
-                    'name'=> 'description...',
-                    'title'=> 'Description:',
-                ]
-                ],
-                'cards' => [
-                    'title' => 'Create New Zone',
-                    'description' => 'Input the information to create a new zone in the system.'
-                ],
-                'delete' => [
-                    'title' => 'Are you sure?',
-                    'description' => 'This action cannot be undone. The zone will be permanently deleted from the system.',
-                ],
-                'delete_dialog' => [
-                    'title' => 'Are you sure?',
-                    'description' => 'This action cannot be undone. The zone will be permanently deleted from the system.',
-                    'success' => 'Successfully deleted ;)',
-                ],
-                'deleted_error' => 'Error deleting zone',
-                'no_results' => 'No results.',
-                'error_loading' => 'Error loading zones. Please try again.',
-                'showing_results' => 'Showing :from to :to of :total results',
-                'pagination' => [
-                    'previous' => 'Previous',
-                    'next' => 'Next',
-                ],
+        'buttons' => [
+            'new' => 'New Zone',
+            'edit' => 'Edit',
+            'save' => 'Save',
+            'update' => 'Update',
+            'cancel' => 'Cancel',
+            'delete' => 'Delete',
+            'deleting' => 'Deleting...',
+            'saving' => 'Saving...',
+            'retry' => 'Retry',
         ],
-        
+        'filters' => [
+            'search' => 'Search',
+            'name' => 'Zone',
+            'description' => "Description",
+        ],
+        'placeholders' => [
+            'name' => "Zone's name",
+            'description' => "Description",
+            'selectFloor' => "Select the floor",
+        ],
+        'edit' =>[
+            'name' => 'Edit Zone',
+            'description' => 'Input the information to edit the zone.'
+        ],
+        'fields' => [
+            'title' =>'Zone:',
+            'name' => 'zone',
+            'floor_title' => 'Floor:',
+            'floor_name' => 'floor',
+            'description' => [
+                'name'=> 'description...',
+                'title'=> 'Description:',
+            ]
+        ],
+        'cards' => [
+            'title' => 'Create New Zone',
+            'description' => 'Input the information to create a new zone in the system.'
+        ],
+        'delete' => [
+            'title' => 'Are you sure?',
+            'description' => 'This action cannot be undone. The zone will be permanently deleted from the system.',
+        ],
+        'delete_dialog' => [
+            'title' => 'Are you sure?',
+            'description' => 'This action cannot be undone. The zone will be permanently deleted from the system.',
+            'success' => 'Successfully deleted ;)',
+        ],
+        'deleted_error' => 'Error deleting zone',
+        'no_results' => 'No results.',
+        'error_loading' => 'Error loading zones. Please try again.',
+        'showing_results' => 'Showing :from to :to of :total results',
+        'pagination' => [
+            'previous' => 'Previous',
+            'next' => 'Next',
+        ],
+    ],
 ];

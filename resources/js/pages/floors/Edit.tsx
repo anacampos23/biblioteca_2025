@@ -12,12 +12,13 @@ interface EditFloorProps extends PageProps {
         floor_number: number;
         capacity_zones: number;
     };
+    floor_number_list: number[];
     page?: string;
     perPage?: string;
 
 }
 
-export default function EditFloor({ floor, page, perPage }: EditFloorProps) {
+export default function EditFloor({ floor, page, perPage, floor_number_list}: EditFloorProps) {
     const { t } = useTranslations();
 
     return (
@@ -39,6 +40,7 @@ export default function EditFloor({ floor, page, perPage }: EditFloorProps) {
                             initialData={floor}
                             page={page}
                             perPage={perPage}
+                            floor_number_list={floor_number_list}
                         />
                     </CardContent>
                 </Card>
