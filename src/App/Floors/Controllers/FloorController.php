@@ -42,8 +42,10 @@ class FloorController extends Controller
     public function store(Request $request, FloorStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'floor_number' => ['required', 'numeric', 'max:255',
-            Rule::unique('floors')->ignore($request->floor_id),],
+            'floor_number' =>
+            ['required', 'numeric', 'max:255',
+            Rule::unique('floors', 'floor_number')->ignore($request->floor_id),
+        ],
             'capacity_zones' => [ 'required', 'numeric', 'min:0', 'max:20'],
         ]);
 
@@ -87,7 +89,7 @@ class FloorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'floor_number' => ['required', 'numeric', 'max:255',
-            Rule::unique('floors')->ignore($floor->id),
+            Rule::unique('floors', 'floor_number')->ignore($floor->id),
         ],
             'capacity_zones' => [ 'numeric', 'min:0', 'max:20'],
         ]);

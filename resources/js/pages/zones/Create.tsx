@@ -12,12 +12,13 @@ interface ZoneFormProps {
         name: string;
         floor_id: string;
     };
+    floor_zone_id?: string[];
     floors?: { id: string; floor_number: number; capacity_zones: number; }[];
     page?: string;
     perPage?: string;
 }
 
-export default function CreateZone({initialData, page, perPage, floors}: ZoneFormProps) {
+export default function CreateZone({initialData, page, perPage, floors, floor_zone_id}: ZoneFormProps) {
     const { t } = useTranslations();
 
     return (
@@ -35,7 +36,9 @@ export default function CreateZone({initialData, page, perPage, floors}: ZoneFor
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <ZoneForm floors={floors}/>
+                        <ZoneForm
+                        floors={floors}
+                        floor_zone_id={floor_zone_id}/>
                     </CardContent>
                 </Card>
             </div>

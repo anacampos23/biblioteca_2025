@@ -27,8 +27,14 @@ class ZoneApiController extends Controller
     public function store(Request $request, ZoneStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'name' =>  ['required', 'string', 'max:255'],
-            
+            'floor_id' => ['required', 'exists:floors,id'], // Makes sure that floor_id exists in floors table
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('zones')->where(function ($query) use ($request) {
+                    return $query->where('floor_id', $request->floor_id); // Asegúrate de que la combinación floor_id y name sea única
+                })->ignore($request->id), // Ignorar el registro actual si estamos actualizando
+            ],
         ]);
 
         if ($validator->fails()) {
