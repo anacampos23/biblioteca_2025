@@ -21,6 +21,7 @@ interface ZoneFormProps {
         floor_id: string;
     };
     floors?: { id: string; floor_number: number; capacity_zones: number; }[];
+    floor_zone_id:{ floor_id: string; name: string }[];
     page?: string;
     perPage?: string;
 }
@@ -37,9 +38,52 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function ZoneForm({ initialData, page, perPage, floors }: ZoneFormProps) {
+export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: ZoneFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
+
+    //Manejador unique floor_zone
+    function unique_floor_zone(floor_id: string, name: string) {
+        // Concatenamos el `floor_id` y el `name` con un guion
+        const floorZoneString = `${floor_id}-${name}`;
+
+        // Verificamos si ya existe un objeto con esa combinación de `floor_id` y `name`
+        const exists = floor_zone_id.some((item) => `${item.floor_id}-${item.name}` === floorZoneString);
+
+        if (exists) {
+            console.log("no es único");  // Si ya existe, no es único
+            return false;
+        }
+
+        console.log("es único");  // Si no existe, es único
+        return true;
+    }
+
+    // function unique_floor_zone(floor_id: string, name: string) {
+    //     // Concatenamos el `floor_id` y el `name` con un guión
+    //     const floorZoneString = `${floor_id}-${name}`;
+    //     console.log("Contenido de floor_zone_id:", floor_zone_id);
+
+
+    //     // Comprobamos si el valor concatenado ya está en el array `floor_zone_id`
+    //     if (floor_zone_id.includes(floorZoneString)) {
+    //         return console.log("no es unico");  // Si ya existe, no es único
+    //     }
+
+    //     return console.log("es unico");  // Si no existe, es único
+    // }
+    // function unique_floor_zone(floor_id: string, name: string) {
+    //     return !floor_zone_id.includes(`${floor_id}-${name}`);
+    // }
+       //Manejador unique floor_zone
+    // function unique_floor_zone(id: string, floor_id: string) {
+    //     if (id == name.field.state.value && floor_id == 'products.view' ) {
+    //         return false;
+    //     } else {
+    //         return !permisosUsuarioFinal.includes(parent);
+    //     }
+    // }
+
 
     // TanStack Form setup
     const form = useForm({
@@ -74,6 +118,7 @@ export function ZoneForm({ initialData, page, perPage, floors }: ZoneFormProps) 
                     if (Object.keys(errors).length === 0) {
                         toast.error(initialData ? t('messages.zones.error.update') : t('messages.zones.error.create'));
                     }
+
                 },
             };
 
@@ -144,11 +189,19 @@ export function ZoneForm({ initialData, page, perPage, floors }: ZoneFormProps) 
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
+
+                                // Usamos console.log para ver el valor
+                                console.log('Valor de floor_id:', value);
+
+                                // Usamos ternario para validar si el campo es vacío o no es único
                                 return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() })
-                                    : undefined;
+                                    ? (console.log('Error: El valor de floor_id es requerido'), t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() }))
+                                    : !unique_floor_zone(value, form.state.values.name)
+                                        ? (console.log('Error: El piso no es único'), t('ui.validation.unique', { attribute: t('ui.floors.fields.floor') }))
+                                        : (console.log('No hay errores para floor_id'), undefined);
                             },
                         }}
+
                     >
                         {(field) => (
                             <>

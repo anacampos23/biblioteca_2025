@@ -34,23 +34,28 @@ class ZoneController extends Controller
     public function create()
     {
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
-        return Inertia::render('zones/Create', ['floors' => $floors]);
+        $floor_zone_id = Zone::select(['name', 'floor_id']) ->get() -> toArray();
+
+        return Inertia::render('zones/Create', [
+            'floors' => $floors,
+            'floor_zone_id' => $floor_zone_id,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
 
-    public function store(Request $request, ZoneStoreAction $action)
+    public function store(Request $request, ZoneStoreAction $action, Zone $zone)
     {
         $validator = Validator::make($request->all(), [
             'floor_id' => ['required', 'exists:floors,id'], // Makes sure that floor_id exists in floors table
             'name' => [
                 'required',
                 'string',
-                Rule::unique('zones')->where(function ($query) use ($request) {
-                    return $query->where('floor_id', $request->floor_id); // Asegúrate de que la combinación floor_id y name sea única
-                })->ignore($request->id), // Ignorar el registro actual si estamos actualizando
+                Rule::unique('zones', 'name')
+                ->where(fn($query) => $query->where('floor_id', $request->floor_id))
+                ->ignore($zone->id),
             ],
         ]);
 
@@ -95,7 +100,7 @@ class ZoneController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255',
-            Rule::unique('zones')->ignore($zone->id),
+            Rule::unique('zones', 'name')->where(fn($query) => $query->where('floor_id', $request->floor_id))->ignore($zone->id)
         ],
         ]);
 
