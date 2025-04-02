@@ -10,10 +10,10 @@ class ZoneStoreAction
 {
     public function __invoke(array $data): ZoneResource
     {
-        
+
         $zone = Zone::create([
             'name' => $data['name'],
-            'description' => $data['description'],
+            'floor_id' => $data['floor_id'],
         ]);
 
         return ZoneResource::fromModel($zone);

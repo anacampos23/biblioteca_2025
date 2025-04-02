@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Domain\Zones\Models\Zone;
+use Domain\Floors\Models\Floor;
+use Domain\Floors\Data\Resources\FloorResource;
 use Domain\Zones\Requests\ZoneRequest;
 use Inertia\Response;
 use Domain\Zones\Actions\ZoneStoreAction;
@@ -31,35 +33,33 @@ class ZoneController extends Controller
      */
     public function create()
     {
-        return Inertia::render('zones/Create');
+        $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
+        return Inertia::render('zones/Create', ['floors' => $floors]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request, ZoneStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['string', 'max:255'],
-            'floors' => ['array'],
-            'floors.*' => ['exists:floors,id'],
+            'floor_id' => ['required', 'exists:floors,id'], // Makes sure that floor_id exists in floors table
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('zones')->where(function ($query) use ($request) {
+                    return $query->where('floor_id', $request->floor_id); // Asegúrate de que la combinación floor_id y name sea única
+                })->ignore($request->id), // Ignorar el registro actual si estamos actualizando
+            ],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
-        
-        // Crear la zona
-        $zone = Zone::create($validator->validated());
 
-        // Sincronizamos los pisos con la zona
-        $zone->floors()->sync($request->floors);  // Sincroniza la relación muchos a muchos
+        $action($validator->validated());
 
-        // Ejecutamos la acción de guardar (si es necesario)
-        $action($zone);
-
-        // Redirigimos a la lista de zonas
         return redirect()->route('zones.index')
             ->with('success', __('messages.zones.created'));
     }
@@ -77,8 +77,8 @@ class ZoneController extends Controller
      */
     public function edit(Request $request, Zone $zone)
     {
+        $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
 
-        $floors_count = Floor::select(['id', 'floor_number', 'capacity_zones']) ->withCount('zones') ->get() -> toArray();
         return Inertia::render('zones/Edit', [
             'zone' => $zone,
             'floors' => $floors,
@@ -92,12 +92,11 @@ class ZoneController extends Controller
      */
     public function update(Request $request,  Zone $zone, ZoneUpdateAction $action)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255',
             Rule::unique('zones')->ignore($zone->id),
         ],
-            'description' => ['string', 'max:255'],
         ]);
 
         if ($validator->fails()) {

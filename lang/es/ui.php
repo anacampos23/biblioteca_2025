@@ -224,6 +224,7 @@ return [
     ],
     'floors' => [
             'title' => 'Pisos',
+            'title_sing' => 'Piso :number',
             'description' => 'Gestiona los pisos del edificio',
             'buttons' => [
                 'new' => 'Nuevo Piso',
@@ -256,13 +257,14 @@ return [
             ],
             'fields' => [
                 'floor_number' => 'Piso número:',
+                'floor' => 'piso',
                 'capacity_zones' => [
                     'name'=> 'capacidad de zonas',
                     'title'=> 'Capacidad de zonas',
                 ]
             ],
             'columns' => [
-                'floor_number' =>'Piso número:', 
+                'floor_number' =>'Piso número:',
                 'capacity_zones' => 'Capacidad de zonas',
                 'actions' => 'Acciones',
             ],
@@ -271,11 +273,11 @@ return [
                 'description' => 'Ingresa la información para editar el piso.'
             ]
         ],
-        'zones'=>[
+    'zones'=>[
             'title' => 'Zonas',
             'description' => 'Gestiona las zonas',
             'columns' => [
-                'name' =>'Zona:', 
+                'name' =>'Zona:',
                 'description' => 'Descripción',
                 'actions' => 'Acciones',
             ],
@@ -298,13 +300,17 @@ return [
             'placeholders' => [
                'name' => 'Nombre de la zona',
                 'description' => 'Descripción',
+                'selectFloor' => 'Selecciona el piso en el que está',
             ],
             'edit' =>[
                 'name' => 'Editar zona',
                 'description' => 'Ingresa la información para editar la zona.'
             ],
             'fields' => [
-                'name' => 'Zona:',
+                'title' => 'Zona:',
+                'name' => 'zona',
+                'floor_title' => 'Piso:',
+                'floor_name' => 'piso',
                 'description' => [
                     'name'=> 'descripción...',
                     'title'=> 'Descripción:',

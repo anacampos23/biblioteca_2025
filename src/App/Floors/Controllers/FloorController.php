@@ -31,7 +31,9 @@ class FloorController extends Controller
      */
     public function create()
     {
-        return Inertia::render('floors/Create');
+        $floor_number_list= Floor::all()->pluck("floor_number");
+
+        return Inertia::render('floors/Create',  ["floor_number_list"=>$floor_number_list]);
     }
 
     /**
@@ -40,14 +42,15 @@ class FloorController extends Controller
     public function store(Request $request, FloorStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'floor_number' => ['required', 'numeric', 'max:255'],
-            'capacity_zones' => [ 'numeric', 'min:0', 'max:20'],
+            'floor_number' => ['required', 'numeric', 'max:255',
+            Rule::unique('floors')->ignore($request->floor_id),],
+            'capacity_zones' => [ 'required', 'numeric', 'min:0', 'max:20'],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
-        
+
         $action($validator->validated());
 
         return redirect()->route('users.index')
@@ -67,12 +70,13 @@ class FloorController extends Controller
      */
     public function edit(Request $request, Floor $floor)
     {
+        $floor_number_list= Floor::all()->pluck("floor_number"); //Lista de todos los floor_number
 
         return Inertia::render('floors/Edit', [
             'floor' => $floor,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
-
+            "floor_number_list"=>$floor_number_list,
         ]);
     }
 

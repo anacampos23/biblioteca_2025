@@ -6,8 +6,8 @@ namespace Domain\Floors\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Domain\Zone\Models\Zone;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Domain\Zones\Models\Zone;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Database\Factories\FloorFactory;
 use Illuminate\Notifications\Notifiable;
 
@@ -32,15 +32,15 @@ class Floor extends Model
         'floor_number',
         'capacity_zones'
     ];
-    
+
 
     /**
      * Get the zones associated with the floor.
      */
 
-    public function zones(): BelongsToMany
+    public function zones(): BelongsTo
     {
-        return $this->belongsToMany(Zone::class, 'floor_zone', 'floors_id', 'zones_id');
+        return $this->belongsTo(Zone::class);
     }
 
 }

@@ -12,11 +12,12 @@ interface FloorFormProps {
         name: string;
         category_zones: number;
     };
+    floor_number_list: number[];
     page?: string;
     perPage?: string;
 }
 
-export default function CreateFloor({initialData, page, perPage}: FloorFormProps) {
+export default function CreateFloor({initialData, page, perPage, floor_number_list}: FloorFormProps) {
     const { t } = useTranslations();
 
     return (
@@ -34,7 +35,7 @@ export default function CreateFloor({initialData, page, perPage}: FloorFormProps
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <FloorForm/>
+                        <FloorForm floor_number_list={floor_number_list}/>
                     </CardContent>
                 </Card>
             </div>

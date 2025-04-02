@@ -16,7 +16,7 @@ class UserApiController extends Controller
 {
     public function index(Request $request, UserIndexAction $action)
     {
-        return response()->json($action($request->search, $request->integer('per_page', 10)));
+        return response()->json($action($request->search, $request->name, $request->email, $request->integer('per_page', 10)));
     }
 
     public function show(User $user)

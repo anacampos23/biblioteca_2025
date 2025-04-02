@@ -18,9 +18,9 @@ interface ZoneFormProps {
     initialData?: {
         id: string;
         name: string;
-        description: string;
-        floors: { id: string | number; floor_number: number; capacity_zones: number; }[];
+        floor_id: string;
     };
+    floors?: { id: string; floor_number: number; capacity_zones: number; }[];
     page?: string;
     perPage?: string;
 }
@@ -37,7 +37,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
+export function ZoneForm({ initialData, page, perPage, floors }: ZoneFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
 
@@ -45,8 +45,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
-            description: initialData?.description ?? '',
-            floors: initialData?.floors?.map(floor => floor.id) ?? [],
+            floor_id: initialData?.floor_id?? '',
         },
         onSubmit: async ({ value }) => {
             const zoneData = {
@@ -87,7 +86,6 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
         },
     });
 
-
     // Form submission handler
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -95,7 +93,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
         form.handleSubmit();
     };
 
-    
+
     const accesoPermisos = false;
 
     return (
@@ -120,7 +118,7 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                             <>
                                 <Label htmlFor={field.name}>
                                     <div className="mb-1 flex items-center gap-1 mt-3">
-                                        {t('ui.zones.fields.name')}
+                                        {t('ui.zones.fields.title')}
                                     </div>
                                 </Label>
                                 <Input
@@ -139,44 +137,50 @@ export function ZoneForm({ initialData, page, perPage }: ZoneFormProps) {
                         )}
                     </form.Field>
                 </div>
-                {/* Description field */}
+                {/* Floor_number field */}
                 <div>
                     <form.Field
-                        name="description"
+                        name="floor_id"
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
                                 return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.zones.fields.description.name').toLowerCase() })
-                                    : value.length < 2
-                                        ? t('ui.validation.min.string', { attribute: t('ui.zones.fields.description.name').toLowerCase(), min: '2' })
-                                        : undefined;
+                                    ? t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() })
+                                    : undefined;
                             },
                         }}
                     >
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1 mt-5">
-                                        {t('ui.zones.fields.description.title')}
+                                    <div className="mb-1 flex items-center gap-1 mt-3">
+                                        {t('ui.zones.fields.floor_title')}
                                     </div>
                                 </Label>
-                                <Input
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    onBlur={field.handleBlur}
-                                    placeholder={t('ui.zones.placeholders.description')}
-                                    disabled={form.state.isSubmitting}
-                                    required={false}
-                                    autoComplete="off"
-                                />
+                                {/* Select dropdown para elegir el piso */}
+                                <Select
+                                    required={true}
+                                    value={field.state.value}  // Aquí se asigna el valor por defecto (ID del piso)
+                                    onValueChange={(value) => field.handleChange(value)} // Maneja el cambio de selección
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={t('ui.zones.placeholders.selectFloor')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {floors?.map((floor) => (
+                                            <SelectItem key={floor.id} value={floor.id.toString()}>
+                                                {t("ui.floors.title_sing", { number: floor.floor_number })}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+
                                 <FieldInfo field={field} />
                             </>
                         )}
                     </form.Field>
                 </div>
+
                 <Separator className="mt-3" />
                 {/* Form buttons */}
                 <div className="mt-3 mt-4 flex justify-center gap-100">
