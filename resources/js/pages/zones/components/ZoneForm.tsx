@@ -44,6 +44,9 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
 
     //Manejador unique floor_zone
     function unique_floor_zone(floor_id: string, name: string) {
+        if (!floor_zone_id || !Array.isArray(floor_zone_id)) {
+            return true; // Si no hay datos, asumimos que es único
+        }
         // Concatenamos el `floor_id` y el `name` con un guion
         const floorZoneString = `${floor_id}-${name}`;
 
@@ -51,38 +54,12 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
         const exists = floor_zone_id.some((item) => `${item.floor_id}-${item.name}` === floorZoneString);
 
         if (exists) {
-            console.log("no es único");  // Si ya existe, no es único
             return false;
         }
 
-        console.log("es único");  // Si no existe, es único
+        // Si no existe, es único
         return true;
     }
-
-    // function unique_floor_zone(floor_id: string, name: string) {
-    //     // Concatenamos el `floor_id` y el `name` con un guión
-    //     const floorZoneString = `${floor_id}-${name}`;
-    //     console.log("Contenido de floor_zone_id:", floor_zone_id);
-
-
-    //     // Comprobamos si el valor concatenado ya está en el array `floor_zone_id`
-    //     if (floor_zone_id.includes(floorZoneString)) {
-    //         return console.log("no es unico");  // Si ya existe, no es único
-    //     }
-
-    //     return console.log("es unico");  // Si no existe, es único
-    // }
-    // function unique_floor_zone(floor_id: string, name: string) {
-    //     return !floor_zone_id.includes(`${floor_id}-${name}`);
-    // }
-       //Manejador unique floor_zone
-    // function unique_floor_zone(id: string, floor_id: string) {
-    //     if (id == name.field.state.value && floor_id == 'products.view' ) {
-    //         return false;
-    //     } else {
-    //         return !permisosUsuarioFinal.includes(parent);
-    //     }
-    // }
 
 
     // TanStack Form setup
@@ -189,18 +166,14 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
-
-                                // Usamos console.log para ver el valor
-                                console.log('Valor de floor_id:', value);
-
-                                // Usamos ternario para validar si el campo es vacío o no es único
+                                console.log("Validando:", { value, name: form.state.values.name, existing: floor_zone_id });
                                 return !value
-                                    ? (console.log('Error: El valor de floor_id es requerido'), t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() }))
-                                    : !unique_floor_zone(value, form.state.values.name)
-                                        ? (console.log('Error: El piso no es único'), t('ui.validation.unique', { attribute: t('ui.floors.fields.floor') }))
-                                        : (console.log('No hay errores para floor_id'), undefined);
-                            },
-                        }}
+                                     ? t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() })
+                                        : !unique_floor_zone(value, form.state.values.name) && value!=initialData?.floor_id
+                                        ? t('ui.validation.zone_floor', { attribute: t('ui.floors.fields.floor') })
+                                    : undefined;
+                        },
+                    }}
 
                     >
                         {(field) => (

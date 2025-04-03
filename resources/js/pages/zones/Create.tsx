@@ -12,8 +12,8 @@ interface ZoneFormProps {
         name: string;
         floor_id: string;
     };
-    floor_zone_id?: string[];
     floors?: { id: string; floor_number: number; capacity_zones: number; }[];
+    floor_zone_id:{ floor_id: string; name: string }[];
     page?: string;
     perPage?: string;
 }

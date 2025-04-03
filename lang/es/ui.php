@@ -7,6 +7,9 @@ return [
         'items' => [
             'dashboard' => 'Panel',
             'users' => 'Usuarios',
+            'floors' => 'Pisos',
+            'zones' => 'Zonas',
+            'bookcases' => 'Estanterías',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
         ],
@@ -82,6 +85,7 @@ return [
             'confirmed' => 'El campo :attribute no coincide.',
             'must_be_numeric' => 'El campo :attribute debe ser numérico.',
             'capacity_zones' => 'La capacidad de un piso es de 0 a 20 zonas.',
+            'zone_floor' => 'Ya existe esa zona en este piso.',
     ],
     'common' => [
         'buttons' => [
@@ -277,8 +281,8 @@ return [
             'title' => 'Zonas',
             'description' => 'Gestiona las zonas',
             'columns' => [
-                'name' =>'Zona:',
-                'description' => 'Descripción',
+                'name' =>'Zona',
+                'floor' => 'Piso nº',
                 'actions' => 'Acciones',
             ],
             'buttons' => [
@@ -336,6 +340,17 @@ return [
             'pagination' => [
                 'previous' => 'Anterior',
                 'next' => 'Siguiente',
+            ],
+        ],
+
+        'bookcases'=> [
+            'title' => 'Estanterías',
+            'description' => 'Gestiona las estanterías',
+            'columns' => [
+                'name' =>'Estantería',
+                'zone' => 'Zona',
+                'floor' => 'Piso nº',
+                'actions' => 'Acciones',
             ],
         ],
 ];

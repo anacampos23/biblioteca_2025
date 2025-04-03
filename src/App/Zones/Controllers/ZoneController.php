@@ -83,14 +83,17 @@ class ZoneController extends Controller
     public function edit(Request $request, Zone $zone)
     {
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
+        $floor_zone_id = Zone::select(['name', 'floor_id']) ->get() -> toArray();
 
         return Inertia::render('zones/Edit', [
             'zone' => $zone,
             'floors' => $floors,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
+            'floor_zone_id' => $floor_zone_id,
         ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -99,6 +102,7 @@ class ZoneController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
+            'floor_id' => ['required', 'exists:floors,id'],
             'name' => ['required', 'string', 'max:255',
             Rule::unique('zones', 'name')->where(fn($query) => $query->where('floor_id', $request->floor_id))->ignore($zone->id)
         ],
@@ -123,6 +127,7 @@ class ZoneController extends Controller
         return redirect($redirectUrl)
             ->with('success', __('messages.zones.updated'));
     }
+
 
     /**
      * Remove the specified resource from storage.

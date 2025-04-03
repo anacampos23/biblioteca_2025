@@ -6,6 +6,9 @@ return [
         'items' => [
             'dashboard' => 'Dashboard',
             'users' => 'Users',
+            'floors' => 'Floors',
+            'zones' => 'Zones',
+            'bookcases' => 'Bookcases',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
         ],
@@ -81,6 +84,7 @@ return [
             'confirmed' => 'The :attribute confirmation does not match.',
             'must_be_numeric' => 'The :attribute must be numeric.',
             'capacity_zones' => 'The floor capacity should be from 0 to 20 zones.',
+            'zone_floor' => 'The zone already exists in this floor.',
     ],
     'common' => [
         'buttons' => [
@@ -283,8 +287,8 @@ return [
         'title' => 'Zones',
         'description' => 'Manage the zones',
         'columns' => [
-            'name' =>'Zone:',
-            'description' => 'Description',
+            'name' =>'Zone',
+            'floor' => 'Floor No.',
             'actions' => 'Actions',
         ],
         'buttons' => [
@@ -342,6 +346,17 @@ return [
         'pagination' => [
             'previous' => 'Previous',
             'next' => 'Next',
+        ],
+    ],
+
+    'bookcases'=> [
+        'title' => 'Bookcases',
+        'description' => 'Manage the bookcases',
+        'columns' => [
+            'name' =>'Bookcase',
+            'zone' => 'Zone',
+            'floor' => 'Floor No.',
+            'actions' => 'Actions',
         ],
     ],
 ];

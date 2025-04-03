@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
-import { Zone, useDeleteZone, useZones } from "@/hooks/zones/useZones";
+import { BookcaseLayout } from "@/layouts/bookcases/BookcaseLayout";
+import { Bookcase, useDeleteBookcase, useBookcases } from "@/hooks/bookcases/useBookcases";
 import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
@@ -13,9 +14,8 @@ import { DeleteDialog } from "@/components/stack-table/DeleteDialog";
 import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTable";
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { ZoneLayout } from "@/layouts/zones/ZoneLayout";
 
-export default function ZonesIndex() {
+export default function BookcasesIndex() {
   const { t } = useTranslations();
   const { url } = usePage();
 
@@ -28,12 +28,20 @@ export default function ZonesIndex() {
   const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
   const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
   const [filters, setFilters] = useState<Record<string, any>>({});
+  // Combine name and email filters into a single search string if they exist
+  const combinedSearch = [
+    filters.search,
+    filters.bookcase_name ? `bookcase_name:${filters.bookcase_name}` : null,
+    filters.zone_id ? `zone_id:${filters.zone_id}` : null
+  ].filter(Boolean).join(' ');
 
-  const { data: zones, isLoading, isError, refetch } = useZones({
+
+  const { data: bookcases, isLoading, isError, refetch } = useBookcases({
+    search: combinedSearch,
     page: currentPage,
     perPage: perPage,
   });
-  const deleteZoneMutation = useDeleteZone();
+  const deleteBookcaseMutation = useDeleteBookcase();
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -44,42 +52,47 @@ export default function ZonesIndex() {
     setCurrentPage(1); // Reset to first page when changing items per page
   };
 
-  const handleDeleteZone = async (id: string) => {
+  const handleDeleteBookcase = async (id: string) => {
     try {
-      await deleteZoneMutation.mutateAsync(id);
+      await deleteBookcaseMutation.mutateAsync(id);
       refetch();
     } catch (error) {
-      toast.error(t("ui.zones.deleted_error") || "Error deleting zone");
-      console.error("Error deleting zone:", error);
+      toast.error(t("ui.bookcases.deleted_error") || "Error deleting bookcase");
+      console.error("Error deleting bookcase:", error);
     }
   };
 
   const columns = useMemo(() => ([
-    createTextColumn<Zone>({
-      id: "name",
-      header: t("ui.zones.columns.name"),
-      accessorKey: "name",
+    createTextColumn<Bookcase>({
+      id: "bookcase_name",
+      header: t("ui.bookcases.columns.name") || "Name",
+      accessorKey: "bookcase_name",
     }),
-    createTextColumn<Zone>({
-      id: "floor_number",
-      header: t("ui.zones.columns.floor"),
-      accessorKey: "floor_number",
+    createTextColumn<Bookcase>({
+      id: "zone_id",
+      header: t("ui.bookcases.columns.zone") || "zone_id",
+      accessorKey: "zone_id",
     }),
-    createActionsColumn<Zone>({
+    createDateColumn<Bookcase>({
+      id: "floor_id",
+      header: t("ui.users.columns.created_at") || "floor_id",
+      accessorKey: "floor_id",
+    }),
+    createActionsColumn<Bookcase>({
       id: "actions",
-      header: t("ui.zones.columns.actions") || "Actions",
-      renderActions: (zone) => (
+      header: t("ui.bookcases.columns.actions") || "Actions",
+      renderActions: (bookcase) => (
         <>
-          <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.zones.buttons.edit") || "Edit zone"}>
+          <Link href={`/bookcases/${bookcase.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+            <Button variant="outline" size="icon" title={t("ui.bookcases.buttons.edit") || "Edit bookcase"}>
               <PencilIcon className="h-4 w-4" />
             </Button>
           </Link>
           <DeleteDialog
-            id={zone.id}
-            onDelete={handleDeleteZone}
-            title={t("ui.zones.delete.title") || "Delete zopne"}
-            description={t("ui.zones.delete.description") || "Are you sure you want to delete this zone? This action cannot be undone."}
+            id={bookcase.id}
+            onDelete={handleDeleteBookcase}
+            title={t("ui.bookcases.delete.title") || "Delete bookcase"}
+            description={t("ui.bookcases.delete.description") || "Are you sure you want to delete this bookcase? This action cannot be undone."}
             trigger={
               <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.users.buttons.delete") || "Delete user"}>
                 <TrashIcon className="h-4 w-4" />
@@ -89,18 +102,18 @@ export default function ZonesIndex() {
         </>
       ),
     }),
-  ] as ColumnDef<Zone>[]), [t, handleDeleteZone]);
+  ] as ColumnDef<Bookcase>[]), [t, handleDeleteBookcase]);
 
   return (
-      <ZoneLayout title={t('ui.zones.title')}>
+      <BookcaseLayout title={t('ui.bookcase.title')}>
           <div className="p-6">
               <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                      <h1 className="text-3xl font-bold">{t('ui.zones.title')}</h1>
-                      <Link href="/zones/create">
+                      <h1 className="text-3xl font-bold">{t('ui.bookcase.title')}</h1>
+                      <Link href="/bookcases/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
-                              {t('ui.zones.buttons.new')}
+                              {t('ui.bookcases.buttons.new')}
                           </Button>
                       </Link>
                   </div>
@@ -111,11 +124,23 @@ export default function ZonesIndex() {
                           filters={
                               [
                                   {
-                                      id: 'name',
-                                      label: t('ui.zones.filters.name'),
+                                      id: 'search',
+                                      label: t('ui.users.filters.search') || 'Buscar',
                                       type: 'text',
-                                      placeholder: t('ui.zones.placeholders.name'),
-                                  }
+                                      placeholder: t('ui.users.placeholders.search') || 'Buscar...',
+                                  },
+                                  {
+                                      id: 'bookcase_name',
+                                      label: t('ui.users.filters.name') || 'Nombre',
+                                      type: 'number',
+                                      placeholder: t('ui.users.placeholders.name') || 'Nombre...',
+                                  },
+                                  {
+                                      id: 'floor_id',
+                                      label: t('ui.users.filters.email') || 'Email',
+                                      type: 'text',
+                                      placeholder: t('ui.users.placeholders.email') || 'Email...',
+                                  },
                               ] as FilterConfig[]
                           }
                           onFilterChange={setFilters}
@@ -137,7 +162,7 @@ export default function ZonesIndex() {
                           <div>
                               <Table
                                   data={
-                                      zones ?? {
+                                      bookcases ?? {
                                           data: [],
                                           meta: {
                                               current_page: 1,
@@ -160,6 +185,6 @@ export default function ZonesIndex() {
                   </div>
               </div>
           </div>
-      </ZoneLayout>
+      </BookcaseLayout>
   );
 }

@@ -13,12 +13,13 @@ interface EditZoneProps extends PageProps {
         floor_id: string;
     };
     floors?: { id: string; floor_number: number; capacity_zones: number; }[];
+    floor_zone_id:{ floor_id: string; name: string }[];
     page?: string;
     perPage?: string;
 
 }
 
-export default function EditZone({ zone, page, perPage, floors }: EditZoneProps) {
+export default function EditZone({ zone, page, perPage, floors, floor_zone_id }: EditZoneProps) {
     const { t } = useTranslations();
     return (
         <ZoneLayout title={t('ui.zones.edit.name')}>
@@ -40,6 +41,7 @@ export default function EditZone({ zone, page, perPage, floors }: EditZoneProps)
                             page={page}
                             perPage={perPage}
                             floors={floors}
+                            floor_zone_id={floor_zone_id}
                         />
                     </CardContent>
                 </Card>
