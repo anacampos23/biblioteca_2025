@@ -1,5 +1,5 @@
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
-import { Users, User, Building2, MapPin, LibraryBig } from 'lucide-react';
+import { Users, User, Building2, MapPin, LibraryBig, Book } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -44,6 +44,12 @@ export default function Dashboard() {
                     description= {t('ui.bookcases.description')}
                     href="/bookcases"
                     icon={LibraryBig}
+                />
+                <DashboardCard
+                    title={t('ui.books.title')}
+                    description= {t('ui.books.description')}
+                    href="/books"
+                    icon={Book}
                 />
 
                 <CardFlip
