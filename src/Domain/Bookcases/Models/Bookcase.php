@@ -1,15 +1,16 @@
 <?php
 
-namespace Domain\Zones\Models;
+namespace Domain\Bookcases\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Domain\Floors\Models\Floor;
+use Domain\Zones\Models\Zone;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Database\Factories\ZoneFactory;
+use Database\Factories\BookcaseFactory;
 
-class Zone extends Model
+
+class Bookcase extends Model
 {
     use HasFactory, HasUuids;
     /**
@@ -17,7 +18,7 @@ class Zone extends Model
      */
     protected static function newFactory()
     {
-        return ZoneFactory::new();
+        return BookcaseFactory::new();
     }
     //use HasApiTokens
     /**
@@ -26,16 +27,17 @@ class Zone extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'bookcase_name',
+        'zone_id',
         'floor_id',
     ];
 
 
       /**
-     * Get the floors associated with the zones.
+     * Get the zones associated with the bookcases.
      */
-    public function floor(): BelongsTo
+    public function zone(): BelongsTo
     {
-        return $this->belongsTo(Floor::class);
+        return $this->belongsTo(Zone::class);
     }
 }

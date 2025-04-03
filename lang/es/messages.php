@@ -22,9 +22,9 @@ return [
         ],
     ],
     'zones' => [
-        'created' => 'Zona creado correctamente',
-        'updated' => 'Zona actualizado correctamente',
-        'deleted' => 'Zona eliminado correctamente',
+        'created' => 'Zona creada correctamente',
+        'updated' => 'Zona actualizada correctamente',
+        'deleted' => 'Zona eliminada correctamente',
         'error' => [
             'create' => 'Error al crear el zona',
             'update' => 'Error al actualizar el zona',

@@ -12,7 +12,7 @@ class ZoneUpdateAction
     {
         $updateData = [
             'name' => $data['name'],
-            'description' => $data['description'],
+            'floor_id' => $data['floor_id'],
         ];
 
         $zone->update($updateData);

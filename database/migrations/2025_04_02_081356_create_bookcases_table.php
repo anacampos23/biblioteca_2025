@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bookcases', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary()->unique();
+            $table->integer('bookcase_name');
+            $table->foreignUuid('zone_id')->constrained('zones')->onDelete('cascade');
+            $table->foreignUuid('floor_id')->constrained('floors')->onDelete('cascade');
             $table->timestamps();
         });
     }
