@@ -4,7 +4,7 @@ use App\Floors\Controllers\Api\FloorApiController;
 use App\Users\Controllers\Api\UserApiController;
 use App\Zones\Controllers\Api\ZoneApiController;
 use App\Bookcases\Controllers\Api\BookcaseApiController;
-use App\Book\Controllers\Api\BookApiController;
+use App\Books\Controllers\Api\BookApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web', 'auth'])->group(function () {

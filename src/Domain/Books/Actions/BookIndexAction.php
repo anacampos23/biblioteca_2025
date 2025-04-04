@@ -4,35 +4,39 @@ namespace Domain\Books\Actions;
 
 use Domain\Books\Data\Resources\BookResource;
 use Domain\Books\Models\Book;
+use Domain\Bookcases\Models\Bookcase;
+use Domain\Zones\Models\Zone;
+use Domain\Floors\Models\Floor;
 
 class BookIndexAction
 {
-    public function __invoke(
-        ?string $search = null,
-        ?string $title = null,
-        ?string $author = null,
-        ?string $genre = null,
-        ?int $ISBN = null,
-        ?string $editorial = null,
-        ?int $quantity = null,
-        ?string $status = null,
-        ?string $bookcase_id = null,
-        ?string $zone_id = null,
-        ?string $floor_id = null,
-        int $perPage = 10)
+    public function __invoke(?array $search = null, int $perPage = 10)
+
     {
-        $books = Book::query()
-            ->when($search, function ($query, $search) {
-                $query->where('title', 'like', "%{$search}%")
-                    ->orWhere('author', 'like', "%{$search}%");
-            })
+        $title = $search[0];
+        $author = $search[1];
+        $genre = $search[2];
+        $ISBN = $search[3];
+        $editorial = $search[4];
+        $quantity = $search[5];
+        $status = $search[6];
+        $bookcase_name = $search[7];
+        $name = $search[8];
+        $floor_number = $search[9];
 
-            ->when($genre, function ($query, $name) {
-                $query->where('name', 'like', "%{$name}%");
-            })
 
-            ->when($editorial, function ($query, $email) {
-                $query->where('email', 'like', "%{$email}%");
+        $floorZone = Floor::query() -> when($floor_number != "null", function ($query) use ($floor_number){
+            $query -> where('floor_number', 'like', $floor_number);
+        })-> first();
+
+        $floor_id= $floorZone -> id;
+
+        $zone = Zone::query()
+            ->when($name !== "null", function ($query) use ($name) {
+                $query->where('name', 'ILIKE', "%".$name."%");
+            })
+            ->when($floor_number !== "null", function ($query) use ($floor_id) {
+                $query->where('floor_id', 'ILIKE', $floor_id);
             })
             ->latest()
             ->paginate($perPage);
