@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('books', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary()->unique();
             $table->string('title');
             $table->string('author');
             $table->string('genre');
-            $table->integer('ISBN');
+            $table->bigInteger('ISBN');
             $table->string('editorial');
             $table->integer('quantity');
             $table->string('status');
@@ -24,6 +24,20 @@ return new class extends Migration
             $table->foreignUuid('zone_id')->constrained('zones')->onDelete('cascade');
             $table->foreignUuid('floor_id')->constrained('floors')->onDelete('cascade');
             $table->timestamps();
+        });
+
+        Schema::create('genres', function (Blueprint $table) {
+            $table->uuid('id')->primary()->unique();
+            $table->string('genre_name');
+            $table->timestamps();
+        });
+
+        Schema::create('book_genre', function (Blueprint $table) {
+            $table->foreignUuid('book_id')->constrained('books')->onDelete('cascade');
+            $table->foreignUuid('genre_id')->constrained('genres')->onDelete('cascade');
+
+            // Clave primaria compuesta
+            $table->primary(['book_id', 'genre_id']);
         });
     }
 
@@ -33,5 +47,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('books');
+        Schema::dropIfExists('genres');
+        Schema::dropIfExists('book_genre');
     }
 };

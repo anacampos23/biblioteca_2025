@@ -300,11 +300,11 @@ return [
             'filters' => [
                 'search' => 'Buscar',
                 'name' => 'Zona',
-                'description' => 'Descripción',
+                'floor' => 'Piso',
             ],
             'placeholders' => [
                'name' => 'Nombre de la zona',
-                'description' => 'Descripción',
+                'floor' => 'Número del piso',
                 'selectFloor' => 'Selecciona el piso en el que está',
             ],
             'edit' =>[

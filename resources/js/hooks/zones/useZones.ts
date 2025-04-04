@@ -47,7 +47,7 @@ export interface PaginatedResponse<T> {
 }
 
 interface UseZonesParams {
-  search?: string;
+  search?: any[];
   page?: number;
   perPage?: number;
 }
@@ -69,7 +69,7 @@ export function useZones({ search, page = 1, perPage = 10 }: UseZonesParams = {}
           'X-Requested-With': 'XMLHttpRequest'
         }
       });
-      
+
       // Transform the API response to the expected format
       return {
         data: apiResponse.data,

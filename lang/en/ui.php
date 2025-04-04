@@ -306,11 +306,11 @@ return [
         'filters' => [
             'search' => 'Search',
             'name' => 'Zone',
-            'description' => "Description",
+            'floor' => "Floor",
         ],
         'placeholders' => [
             'name' => "Zone's name",
-            'description' => "Description",
+            'floor' => 'Floor number',
             'selectFloor' => "Select the floor",
         ],
         'edit' =>[

@@ -20,7 +20,7 @@ class ZoneFactory extends Factory
 
     public function definition(): array
     {
-        $zoneNames = ['Literatura', 'Novela', 'Ciencias y tecnología', 'Humanidades', 'Arte', 'Estilo de vida', 'Infantil', 'Juvenil'];
+        $zoneNames = ['Literature', 'Novel', 'Science and Technology', 'Humanities', 'Art', 'Lifestyle', 'Children', 'Young Adult'];
 
         return [
             'id' => $this->faker->uuid(),

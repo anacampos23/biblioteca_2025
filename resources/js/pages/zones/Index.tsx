@@ -29,7 +29,14 @@ export default function ZonesIndex() {
   const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
   const [filters, setFilters] = useState<Record<string, any>>({});
 
+  // Combine filters into a single search string if they exist
+  const combinedSearch = [
+    filters.name ? filters.name : "null",
+    filters.floor_number ? filters.floor_number : "null"
+  ]
+
   const { data: zones, isLoading, isError, refetch } = useZones({
+    search: combinedSearch,
     page: currentPage,
     perPage: perPage,
   });
@@ -115,7 +122,13 @@ export default function ZonesIndex() {
                                       label: t('ui.zones.filters.name'),
                                       type: 'text',
                                       placeholder: t('ui.zones.placeholders.name'),
-                                  }
+                                  },
+                                  {
+                                    id: 'floor_number',
+                                    label: t('ui.zones.filters.floor'),
+                                    type: 'number',
+                                    placeholder: t('ui.zones.placeholders.floor')
+                                }
                               ] as FilterConfig[]
                           }
                           onFilterChange={setFilters}

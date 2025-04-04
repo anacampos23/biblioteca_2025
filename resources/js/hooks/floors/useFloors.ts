@@ -45,7 +45,7 @@ export interface PaginatedResponse<T> {
 }
 
 interface UseFloorsParams {
-  search?: string;
+  search?: any[];
   page?: number;
   perPage?: number;
 }
@@ -67,7 +67,7 @@ export function useFloors({ search, page = 1, perPage = 10 }: UseFloorsParams = 
           'X-Requested-With': 'XMLHttpRequest'
         }
       });
-      
+
       // Transform the API response to the expected format
       return {
         data: apiResponse.data,

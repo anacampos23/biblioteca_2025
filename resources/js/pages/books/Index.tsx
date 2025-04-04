@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
-import { Floor, useDeleteFloor, useFloors } from "@/hooks/floors/useFloors";
+import { UserLayout } from "@/layouts/users/UserLayout";
+import { User, useDeleteUser, useUsers } from "@/hooks/users/useUsers";
 import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
@@ -13,9 +14,8 @@ import { DeleteDialog } from "@/components/stack-table/DeleteDialog";
 import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTable";
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { FloorLayout } from "@/layouts/floors/FloorLayout";
 
-export default function FloorsIndex() {
+export default function UsersIndex() {
   const { t } = useTranslations();
   const { url } = usePage();
 
@@ -28,19 +28,26 @@ export default function FloorsIndex() {
   const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
   const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
   const [filters, setFilters] = useState<Record<string, any>>({});
-
-  // Combine filters into a single search string if they exist
+  // Combine name and email filters into a single search string if they exist
   const combinedSearch = [
-    filters.floor_number ? filters.floor_number : "null",
-    filters.capacity_zones ? filters.capacity_zones : "null",
-  ]
+    filters.search,
+    filters.name ? `name:${filters.name}` : null,
+    filters.email ? `email:${filters.email}` : null
+  ].filter(Boolean).join(' ');
 
-  const { data: floors, isLoading, isError, refetch } = useFloors({
+  const name = [
+    filters.name,
+    filters.name ? `name:${filters.name}` : null
+  ].filter(Boolean).join(' ');
+
+
+  const { data: users, isLoading, isError, refetch } = useUsers({
     search: combinedSearch,
+    name: name,
     page: currentPage,
     perPage: perPage,
   });
-  const deleteFloorMutation = useDeleteFloor();
+  const deleteUserMutation = useDeleteUser();
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -51,42 +58,47 @@ export default function FloorsIndex() {
     setCurrentPage(1); // Reset to first page when changing items per page
   };
 
-  const handleDeleteFloor = async (id: string) => {
+  const handleDeleteUser = async (id: string) => {
     try {
-      await deleteFloorMutation.mutateAsync(id);
+      await deleteUserMutation.mutateAsync(id);
       refetch();
     } catch (error) {
-      toast.error(t("ui.floors.deleted_error") || "Error deleting floor");
-      console.error("Error deleting floor:", error);
+      toast.error(t("ui.users.deleted_error") || "Error deleting user");
+      console.error("Error deleting user:", error);
     }
   };
 
   const columns = useMemo(() => ([
-    createTextColumn<Floor>({
-      id: "floor_number",
-      header: t("ui.floors.columns.floor_number") || "Floor number",
-      accessorKey: "floor_number",
+    createTextColumn<User>({
+      id: "name",
+      header: t("ui.users.columns.name") || "Name",
+      accessorKey: "name",
     }),
-    createTextColumn<Floor>({
-      id: "capacity_zones",
-      header: t("ui.floors.columns.capacity_zones") || "Capacity Zones",
-      accessorKey: "capacity_zones",
+    createTextColumn<User>({
+      id: "email",
+      header: t("ui.users.columns.email") || "Email",
+      accessorKey: "email",
     }),
-    createActionsColumn<Floor>({
+    createDateColumn<User>({
+      id: "created_at",
+      header: t("ui.users.columns.created_at") || "Created At",
+      accessorKey: "created_at",
+    }),
+    createActionsColumn<User>({
       id: "actions",
       header: t("ui.users.columns.actions") || "Actions",
-      renderActions: (floor) => (
+      renderActions: (user) => (
         <>
-          <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.floors.buttons.edit") || "Edit floor"}>
+          <Link href={`/users/${user.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+            <Button variant="outline" size="icon" title={t("ui.users.buttons.edit") || "Edit user"}>
               <PencilIcon className="h-4 w-4" />
             </Button>
           </Link>
           <DeleteDialog
-            id={floor.id}
-            onDelete={handleDeleteFloor}
-            title={t("ui.floors.delete.title") || "Delete floor"}
-            description={t("ui.floors.delete.description") || "Are you sure you want to delete this floor? This action cannot be undone."}
+            id={user.id}
+            onDelete={handleDeleteUser}
+            title={t("ui.users.delete.title") || "Delete user"}
+            description={t("ui.users.delete.description") || "Are you sure you want to delete this user? This action cannot be undone."}
             trigger={
               <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.users.buttons.delete") || "Delete user"}>
                 <TrashIcon className="h-4 w-4" />
@@ -96,18 +108,18 @@ export default function FloorsIndex() {
         </>
       ),
     }),
-  ] as ColumnDef<Floor>[]), [t, handleDeleteFloor]);
+  ] as ColumnDef<User>[]), [t, handleDeleteUser]);
 
   return (
-      <FloorLayout title={t('ui.floors.title')}>
+      <UserLayout title={t('ui.users.title')}>
           <div className="p-6">
               <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                      <h1 className="text-3xl font-bold">{t('ui.floors.title')}</h1>
-                      <Link href="/floors/create">
+                      <h1 className="text-3xl font-bold">{t('ui.users.title')}</h1>
+                      <Link href="/users/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
-                              {t('ui.floors.buttons.new')}
+                              {t('ui.users.buttons.new')}
                           </Button>
                       </Link>
                   </div>
@@ -118,17 +130,23 @@ export default function FloorsIndex() {
                           filters={
                               [
                                   {
-                                      id: 'floor_number',
-                                      label: t('ui.floors.filters.floor_number'),
-                                      type: 'number',
-                                      placeholder: t('ui.floors.placeholders.floor_number'),
+                                      id: 'search',
+                                      label: t('ui.users.filters.search') || 'Buscar',
+                                      type: 'text',
+                                      placeholder: t('ui.users.placeholders.search') || 'Buscar...',
                                   },
                                   {
-                                    id: 'capacity_zones',
-                                    label: t('ui.floors.filters.capacity_zones'),
-                                    type: 'number',
-                                    placeholder: t('ui.floors.placeholders.capacity_zones'),
-                                }
+                                      id: 'name',
+                                      label: t('ui.users.filters.name') || 'Nombre',
+                                      type: 'text',
+                                      placeholder: t('ui.users.placeholders.name') || 'Nombre...',
+                                  },
+                                  {
+                                      id: 'email',
+                                      label: t('ui.users.filters.email') || 'Email',
+                                      type: 'text',
+                                      placeholder: t('ui.users.placeholders.email') || 'Email...',
+                                  },
                               ] as FilterConfig[]
                           }
                           onFilterChange={setFilters}
@@ -150,7 +168,7 @@ export default function FloorsIndex() {
                           <div>
                               <Table
                                   data={
-                                      floors ?? {
+                                      users ?? {
                                           data: [],
                                           meta: {
                                               current_page: 1,
@@ -173,6 +191,6 @@ export default function FloorsIndex() {
                   </div>
               </div>
           </div>
-      </FloorLayout>
+      </UserLayout>
   );
 }
