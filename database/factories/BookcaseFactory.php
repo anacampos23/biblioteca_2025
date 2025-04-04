@@ -23,7 +23,7 @@ class BookcaseFactory extends Factory
     {
         return [
             'id' => $this->faker->uuid(),
-            'bookcase_name' => $this->faker->randomNumber(2, false),
+            'bookcase_name' => $this->faker->randomNumber(1, false),
             'zone_id' => Zone::inRandomOrder()->value('id') ?? Zone::factory()->create()->id,
             'floor_id' => Floor::inRandomOrder()->value('id') ?? Floor::factory()->create()->id,
         ];

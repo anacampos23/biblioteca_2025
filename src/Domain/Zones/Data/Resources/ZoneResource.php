@@ -21,6 +21,7 @@ class ZoneResource extends Data
     public static function fromModel(Zone $zone): self
     {
         $floor = Floor::where('id', $zone->floor_id)-> first();
+
         return new self(
             id: $zone->id,
             name: $zone->name,

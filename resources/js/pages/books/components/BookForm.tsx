@@ -63,6 +63,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
     const queryClient = useQueryClient();
     const [arrayPermisosState, setArrayPermisosState] = useState(permisosUsuarioFinal);
 
+
     useEffect(() => {
         if (permisosDelUsuario && initialData) {
             permisosUsuarioFinal = permisosDelUsuario;
