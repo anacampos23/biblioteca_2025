@@ -16,19 +16,7 @@ class BookApiController extends Controller
 {
     public function index(Request $request, BookIndexAction $action)
     {
-        return response()->json($action(
-            $request->search,
-            $request->title,
-            $request->author,
-            $request->genre,
-            $request->ISBN,
-            $request->editorial,
-            $request->quantity,
-            $request->status,
-            $request->bookcase_id,
-            $request->zone_id,
-            $request->floor_id,
-            $request->integer('per_page', 10)));
+        return response()->json($action($request->search, $request->integer('per_page', 10)));
     }
 
     public function show(Book $book)

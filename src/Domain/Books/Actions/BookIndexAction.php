@@ -25,22 +25,64 @@ class BookIndexAction
         $floor_number = $search[9];
 
 
-        $floorZone = Floor::query() -> when($floor_number != "null", function ($query) use ($floor_number){
+        //Une bookcase_name con el registro que tenemos del id
+        $bookBookcase = Bookcase::query() -> when($bookcase_name != "null", function ($query) use ($bookcase_name){
+            $query -> where('bookcase_name', 'like', $bookcase_name);
+        })-> first();
+
+        $bookcase_id= $bookBookcase-> id;
+
+
+        //Une el nombre de la zona con el registro que tenemos del id
+        $bookZone = Zone::query() -> when($name != "null", function ($query) use ($name){
+            $query -> where('name', 'ILIKE', "%".$name."%");
+        })->first();
+
+        $zone_id= $bookZone -> id;
+
+        //Une el nombre del floor
+        $bookFloor = Floor::query() -> when($floor_number != "null", function ($query) use ($floor_number){
             $query -> where('floor_number', 'like', $floor_number);
         })-> first();
 
-        $floor_id= $floorZone -> id;
+        $floor_id= $bookFloor -> id;
 
-        $zone = Zone::query()
-            ->when($name !== "null", function ($query) use ($name) {
-                $query->where('name', 'ILIKE', "%".$name."%");
+
+        $book = Book::query()
+            ->when($title !== "null", function ($query) use ($title) {
+                $query->where('title', 'ILIKE', "%".$title."%");
+            })
+            ->when($author !== "null", function ($query) use ($author) {
+                $query->where('author', 'ILIKE', "%".$author."%");
+            })
+            ->when($genre !== "null", function ($query) use ($genre) {
+                $query->where('genre', 'ILIKE', "%".$genre."%");
+            })
+            ->when($ISBN !== "null", function ($query) use ($ISBN) {
+                $query->where('ISBN', 'ILIKE', $ISBN."%");
+            })
+            ->when($editorial !== "null", function ($query) use ($editorial) {
+                $query->where('editorial', 'ILIKE', "%".$editorial."%");
+            })
+            ->when($quantity !== "null", function ($query) use ($quantity) {
+                $query->where('quantity', '=', $quantity);
+            })
+            ->when($status !== "null", function ($query) use ($status) {
+                $query->where('status', 'ILIKE', $status."%");
+            })
+            ->when($bookcase_name !== "null", function ($query) use ($bookcase_id) {
+                $query->where('bookcase_id', '=', $bookcase_id);
+            })
+            ->when($name !== "null", function ($query) use ($zone_id) {
+                $query->where('zone_id', 'like', $zone_id);
             })
             ->when($floor_number !== "null", function ($query) use ($floor_id) {
                 $query->where('floor_id', 'ILIKE', $floor_id);
             })
+
             ->latest()
             ->paginate($perPage);
 
-        return $books->through(fn ($book) => BookResource::fromModel($book));
+        return $book->through(fn ($book) => BookResource::fromModel($book));
     }
 }

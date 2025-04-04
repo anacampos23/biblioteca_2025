@@ -172,10 +172,10 @@ export default function BooksIndex() {
                           filters={
                               [
                                   {
-                                      id: 'title',
-                                      label: t('ui.books.filters.title'),
-                                      type: 'text',
-                                      placeholder: t('ui.books.placeholders.title'),
+                                    id: 'title',
+                                    label: t('ui.books.filters.title'),
+                                    type: 'text',
+                                    placeholder: t('ui.books.placeholders.title'),
                                   },
                                   {
                                     id: 'author',
@@ -216,7 +216,7 @@ export default function BooksIndex() {
                                 {
                                     id: 'bookcase_name',
                                     label: t('ui.books.filters.bookcase_name'),
-                                    type: 'text',
+                                    type: 'number',
                                     placeholder: t('ui.books.placeholders.bookcase_name'),
                                 },
                                 {
@@ -228,7 +228,7 @@ export default function BooksIndex() {
                                 {
                                     id: 'floor_number',
                                     label: t('ui.books.filters.floor_number'),
-                                    type: 'text',
+                                    type: 'number',
                                     placeholder: t('ui.books.placeholders.floor_number'),
                                 }
                               ] as FilterConfig[]
