@@ -23,52 +23,30 @@ class BookFactory extends Factory
     public function definition(): array
     {
         $genresByZone = [
-            'Literatura' => [
-                'Poesía', 'Teatro', 'Ensayo', 'Cuento', 'Clásicos', 'Ficción contemporánea'
-            ],
-            'Novela' => [
-                'Novela histórica', 'Novela negra', 'Novela de aventuras', 'Novela romántica',
-                'Novela de ciencia ficción', 'Novela fantástica', 'Novela policíaca', 'Novela gótica'
-            ],
-            'Ciencias y tecnología' => [
-                'Divulgación científica', 'Matemáticas', 'Física', 'Química', 'Biología',
-                'Astronomía', 'Ingeniería', 'Informática', 'Medicina'
-            ],
-            'Humanidades' => [
-                'Filosofía', 'Psicología', 'Sociología', 'Historia', 'Antropología', 'Política',
-                'Religión', 'Derecho', 'Economía'
-            ],
-            'Arte' => [
-                'Pintura', 'Escultura', 'Fotografía', 'Arquitectura', 'Música', 'Cine', 'Diseño gráfico',
-                'Moda'
-            ],
-            'Estilo de vida' => [
-                'Autoayuda', 'Salud y bienestar', 'Nutrición', 'Deporte', 'Viajes',
-                'Gastronomía', 'Hogar y jardinería', 'Manualidades'
-            ],
-            'Infantil' => [
-                'Cuentos infantiles', 'Fábulas', 'Libros ilustrados', 'Libros educativos',
-                'Primeros lectores'
-            ],
-            'Juvenil' => [
-                'Novela juvenil', 'Fantasía juvenil', 'Ciencia ficción juvenil',
-                'Thriller juvenil', 'Romance juvenil', 'Misterio juvenil'
-            ]
+            'Literature' => ['Poetry', 'Theater', 'Essay', 'Short Story', 'Classics'],
+            'Novel' => ['Historical Novel', 'Crime Novel', 'Science Fiction Novel', 'Romantic Novel'],
+            'Science and Technology' => ['Mathematics', 'Physics', 'Biology', 'Computer Science'],
+            'Humanities' => ['Philosophy', 'Psychology', 'Sociology', 'History', 'Politics'],
+            'Art' => ['Painting', 'Photography', 'Architecture', 'Music', 'Cinema'],
+            'Lifestyle' => ['Health and Wellness', 'Nutrition', 'Sport', 'Travel'],
+            'Children' => ['Children\'s Stories', 'Illustrated Books', 'Educational Books'],
+            'Young Adult' => ['Young Adult Novel', 'Young Adult Fantasy', 'Young Adult Thriller']
         ];
 
+
         // Selecciona una zona al azar
-        $zone = Zone::inRandomOrder()->first() ?? Zone::factory()->create();
+        $zone = Zone::inRandomOrder()->first();
 
         // Asegura que la zona tiene un género asociado
         $zoneName = $zone->name;
         $genres = $genresByZone[$zoneName] ?? ['Desconocido'];
-        $genre = $this->faker->randomElement($genres);
+        $selected_genres = $this->faker->randomElements($genres, rand(1, 3));
 
         return [
             'title' => $this->faker->sentence(6),
             'author' => fake()->name(),
-            'genre' => $genre,
-            'ISBN' => $this->faker->randomNumber(13, false),
+            'genre' => json_encode($selected_genres),
+            'ISBN' => $this->faker->numerify('#############'),
             'editorial' => $this->faker->sentence(2),
             'quantity' => $this->faker->randomNumber(1, false),
             'status' => $this->faker->randomElement(['disponible', 'no disponible']),

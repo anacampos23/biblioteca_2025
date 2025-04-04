@@ -9,12 +9,17 @@ use Domain\Floors\Models\Floor;
 
 class FloorIndexAction
 {
-    public function __invoke(?string $search = null, int $perPage = 10)
+    public function __invoke(?array $search = null, int $perPage = 10)
     {
+        $floor_number = $search[0];
+        $capacity_zones = $search[1];
+
         $floors = Floor::query()
-            ->when($search, function ($query, $search) {
-                $query->where('floor_number', 'like', "%{$search}%");
-                $query->orWhere('capacity_zones', 'like', "%{$search}%");
+            ->when($floor_number != "null", function ($query) use ($floor_number){
+                $query->where('floor_number', 'ILIKE', "%".$floor_number."%");
+            })
+            ->when($capacity_zones != "null", function ($query) use ($capacity_zones){
+                $query->where('capacity_zones', 'ILIKE', "%".$capacity_zones."%");
             })
             ->latest()
             ->paginate($perPage);

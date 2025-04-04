@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
             FloorSeeder::class,
             ZoneSeeder::class,
             BookcaseSeeder::class,
+            BookSeeder::class,
+            GenreSeeder::class,
+            BookGenreSeeder::class,
         ]);
 
         //migrar pulse database
