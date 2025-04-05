@@ -74,7 +74,7 @@ export function FloorForm({ initialData, page, perPage, floor_number_list }: Flo
                 },
                 onError: (errors: Record<string, string>) => {
                     if (Object.keys(errors).length === 0) {
-                        toast.error(initialData ? t('messages.users.error.update') : t('messages.users.error.create'));
+                        toast.error(initialData ? t('messages.floors.error.update') : t('messages.floors.error.create'));
                     }
                 },
             };
@@ -111,8 +111,10 @@ export function FloorForm({ initialData, page, perPage, floor_number_list }: Flo
                                         await new Promise((resolve) => setTimeout(resolve, 500));
                                         // Verifica que floor_number_list es un array y haz el log
                                         return !value && value!=0
-                                            ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name')})
+                                            ? t('ui.validation.required', { attribute: t('ui.floors.fields.floor')})
                                             : floor_number_list.includes(value) && value!=initialData?.floor_number ? t('ui.validation.unique', { attribute: t('ui.floors.fields.floor')})
+                                            : value < 0 || value > 20
+                                              ? t('ui.validation.floor', { attribute: t('ui.floors.fields.floor') })
                                             : undefined;
                                     },
                                 }}
@@ -151,7 +153,7 @@ export function FloorForm({ initialData, page, perPage, floor_number_list }: Flo
                                         await new Promise((resolve) => setTimeout(resolve, 500));
                                         return !value && value!=0
                                             ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name')})
-                                            : value < 0 || value > 20
+                                            : value < 0
                                               ? t('ui.validation.capacity_zones', { attribute: t('ui.floors.fields.capacity_zones') })
                                               : undefined;
                                     },
@@ -201,7 +203,7 @@ export function FloorForm({ initialData, page, perPage, floor_number_list }: Flo
                         disabled={form.state.isSubmitting}
                     >
                         <X />
-                        {t('ui.users.buttons.cancel')}
+                        {t('ui.floors.buttons.cancel')}
                     </Button>
 
                     <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
@@ -209,10 +211,10 @@ export function FloorForm({ initialData, page, perPage, floor_number_list }: Flo
                             <Button type="submit" disabled={!canSubmit}>
                                 <Save />
                                 {isSubmitting
-                                    ? t('ui.users.buttons.saving')
+                                    ? t('ui.floors.buttons.saving')
                                     : initialData
-                                      ? t('ui.users.buttons.update')
-                                      : t('ui.users.buttons.save')}
+                                      ? t('ui.floors.buttons.update')
+                                      : t('ui.floors.buttons.save')}
                             </Button>
                         )}
                     </form.Subscribe>

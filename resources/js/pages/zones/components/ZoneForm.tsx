@@ -42,16 +42,22 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
     const { t } = useTranslations();
     const queryClient = useQueryClient();
 
+     // Estado para manejar la zona personalizada
+     const [customZone, setCustomZone] = useState<string>('');
+
+     // Lista de zonas predefinidas
+    const zoneNames = ['Literature', 'Novel', 'Science and Technology', 'Humanities', 'Art', 'Lifestyle', 'Children', 'Young Adult'];
+
     //Manejador unique floor_zone
     function unique_floor_zone(floor_id: string, name: string) {
         if (!floor_zone_id || !Array.isArray(floor_zone_id)) {
             return true; // Si no hay datos, asumimos que es único
         }
         // Concatenamos el `floor_id` y el `name` con un guion
-        const floorZoneString = `${floor_id}-${name}`;
+        const floorZoneString = `${floor_id}-${name.toLowerCase()}`;
 
         // Verificamos si ya existe un objeto con esa combinación de `floor_id` y `name`
-        const exists = floor_zone_id.some((item) => `${item.floor_id}-${item.name}` === floorZoneString);
+        const exists = floor_zone_id.some((item) => `${item.floor_id}-${item.name.toLowerCase()}` === floorZoneString);
 
         if (exists) {
             return false;
@@ -71,6 +77,7 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
         onSubmit: async ({ value }) => {
             const zoneData = {
                 ...value,
+                name: customZone || value.name,
             };
 
             const options = {
@@ -116,12 +123,10 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
     };
 
 
-    const accesoPermisos = false;
-
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
-                {/* Name field */}
+                {/* Select para zonas */}
                 <div>
                     <form.Field
                         name="name"
@@ -143,17 +148,23 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
                                         {t('ui.zones.fields.title')}
                                     </div>
                                 </Label>
-                                <Input
-                                    id={field.name}
-                                    name={field.name}
+                                <Select
+                                    required={true}
                                     value={field.state.value}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    onBlur={field.handleBlur}
-                                    placeholder={t('ui.zones.placeholders.name')}
-                                    disabled={form.state.isSubmitting}
-                                    required={false}
-                                    autoComplete="off"
-                                />
+                                    onValueChange={(value) => field.handleChange(value)}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={t('ui.zones.placeholders.selectZone')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {zoneNames.map((zone) => (
+                                            <SelectItem key={zone} value={zone}>
+                                                {t(`ui.zones.list.${zone}`)} {/* Traducimos cada zona con t() */}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+
                                 <FieldInfo field={field} />
                             </>
                         )}

@@ -65,7 +65,7 @@ export function DeleteDialog({
     if (!externalIsDeleting) {
       setIsDeleting(true);
     }
-    
+
     try {
       await onDelete(id);
       toast.success(
