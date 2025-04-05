@@ -55,8 +55,8 @@ class FloorController extends Controller
 
         $action($validator->validated());
 
-        return redirect()->route('users.index')
-            ->with('success', __('messages.users.created'));
+        return redirect()->route('floors.index')
+            ->with('success', __('messages.floors.created'));
     }
 
     /**
@@ -111,7 +111,7 @@ class FloorController extends Controller
         }
 
         return redirect($redirectUrl)
-            ->with('success', __('messages.users.updated'));
+            ->with('success', __('messages.floors.updated'));
     }
 
     /**

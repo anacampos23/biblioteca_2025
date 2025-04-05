@@ -52,7 +52,7 @@ export function CustomColumns<TData>({
       const isRequired = columnOptions.find(
         (opt) => opt.id === columnId
       )?.required;
-      
+
       if (!isRequired) {
         onColumnToggle(visibleColumns.filter((id) => id !== columnId));
       }
@@ -109,15 +109,15 @@ export function useCustomColumns<TData>(
   );
 
   // Filtrar las columnas basado en las columnas visibles
-  const visibleColumns = allColumns.filter((col) => 
+  const visibleColumns = allColumns.filter((col) =>
     visibleColumnIds.includes(col.id as string)
   );
 
   // Convertir las columnas a opciones para el dropdown
   const columnOptions: ColumnOption[] = allColumns.map((col) => ({
     id: col.id as string,
-    label: typeof col.header === 'string' 
-      ? col.header 
+    label: typeof col.header === 'string'
+      ? col.header
       : col.id as string,
     // Puedes definir columnas requeridas según tus necesidades
     required: false,

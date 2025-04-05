@@ -85,8 +85,9 @@ return [
             'unique' => 'El campo :attribute ya ha sido tomado.',
             'confirmed' => 'El campo :attribute no coincide.',
             'must_be_numeric' => 'El campo :attribute debe ser numérico.',
-            'capacity_zones' => 'La capacidad de un piso es de 0 a 20 zonas.',
+            'floor' => 'El piso debe estar entre 0 y 20.',
             'zone_floor' => 'Ya existe esa zona en este piso.',
+            'capacity_zones'=> 'La capacidad del piso debe ser un número positivo',
     ],
     'common' => [
         'buttons' => [
@@ -99,7 +100,7 @@ return [
             'clear' => 'Limpiar',
         ],
         'delete_dialog' => [
-            'success' => 'Usuario eliminado correctamente',
+            'success' => 'Eliminado correctamente',
         ],
         'showing_results' => 'Mostrando :from a :to de :total resultados',
         'pagination' => [
@@ -286,6 +287,16 @@ return [
                 'floor' => 'Piso nº',
                 'actions' => 'Acciones',
             ],
+            'list'=> [
+                'Literature'=>'Literatura',
+                'Novel'=> 'Novela',
+                'Science and Technology'=> 'Ciencia y Tecnología',
+                'Humanities'=> 'Humanidades',
+                'Art'=> 'Arte',
+                'Lifestyle'=> 'Estilo de vida',
+                'Children'=> 'Infantil',
+                'Young Adult'=> 'Jóvenes',
+            ],
             'buttons' => [
                 'new' => 'Nueva zona',
                 'edit' => 'Editar',
@@ -306,6 +317,7 @@ return [
                'name' => 'Nombre de la zona',
                 'floor' => 'Número del piso',
                 'selectFloor' => 'Selecciona el piso en el que está',
+                'selectZone'=> 'Selecciona el nombre de la zona',
             ],
             'edit' =>[
                 'name' => 'Editar zona',

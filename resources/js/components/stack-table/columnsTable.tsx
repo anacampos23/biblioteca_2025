@@ -24,7 +24,7 @@ export interface CreateColumnOptions<TData, TValue = unknown> {
 /**
  * Opciones para crear una columna de texto
  */
-export interface CreateTextColumnOptions<TData> 
+export interface CreateTextColumnOptions<TData>
   extends Omit<CreateColumnOptions<TData, string>, 'accessorKey' | 'cell'> {
   /** Clave para acceder a los datos */
   accessorKey: keyof TData;
@@ -105,7 +105,7 @@ export function createColumn<TData, TValue = unknown>(
         },
     enableSorting,
   };
-  
+
   return columnDef;
 }
 
@@ -133,17 +133,17 @@ export function createTextColumn<TData>(
 export function createDateColumn<TData>(
   options: CreateDateColumnOptions<TData>
 ): ColumnDef<TData, string> {
-  const { 
-    accessorKey, 
-    dateFormat = { 
-      year: 'numeric', 
-      month: '2-digit', 
+  const {
+    accessorKey,
+    dateFormat = {
+      year: 'numeric',
+      month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit'
-    }, 
+    },
     locale = 'es-ES',
-    ...rest 
+    ...rest
   } = options;
 
   return createColumn<TData, string>({
@@ -152,7 +152,7 @@ export function createDateColumn<TData>(
     cell: ({ row }) => {
       const value = row.original[accessorKey];
       if (!value) return "";
-      
+
       try {
         const date = new Date(value as string);
         return new Intl.DateTimeFormat(locale, dateFormat).format(date);

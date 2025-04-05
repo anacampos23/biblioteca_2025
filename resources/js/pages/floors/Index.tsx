@@ -63,9 +63,9 @@ export default function FloorsIndex() {
 
   const columns = useMemo(() => ([
     createTextColumn<Floor>({
-      id: "floor_number",
-      header: t("ui.floors.columns.floor_number") || "Floor number",
-      accessorKey: "floor_number",
+        id: "floor_number",
+        header: t("ui.floors.columns.floor_number") || "Floor number",
+        accessorKey: "floor_number",
     }),
     createTextColumn<Floor>({
       id: "capacity_zones",
@@ -74,7 +74,7 @@ export default function FloorsIndex() {
     }),
     createActionsColumn<Floor>({
       id: "actions",
-      header: t("ui.users.columns.actions") || "Actions",
+      header: t("ui.floors.columns.actions") || "Actions",
       renderActions: (floor) => (
         <>
           <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
@@ -88,7 +88,7 @@ export default function FloorsIndex() {
             title={t("ui.floors.delete.title") || "Delete floor"}
             description={t("ui.floors.delete.description") || "Are you sure you want to delete this floor? This action cannot be undone."}
             trigger={
-              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.users.buttons.delete") || "Delete user"}>
+              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.floors.buttons.delete") || "Delete floors"}>
                 <TrashIcon className="h-4 w-4" />
               </Button>
             }
@@ -141,9 +141,9 @@ export default function FloorsIndex() {
                           <TableSkeleton columns={4} rows={10} />
                       ) : isError ? (
                           <div className="p-4 text-center">
-                              <div className="mb-4 text-red-500">{t('ui.users.error_loading')}</div>
+                              <div className="mb-4 text-red-500">{t('ui.floors.error_loading')}</div>
                               <Button onClick={() => refetch()} variant="outline">
-                                  {t('ui.users.buttons.retry')}
+                                  {t('ui.floors.buttons.retry')}
                               </Button>
                           </div>
                       ) : (
@@ -166,7 +166,7 @@ export default function FloorsIndex() {
                                   onPageChange={handlePageChange}
                                   onPerPageChange={handlePerPageChange}
                                   perPageOptions={[10, 25, 50, 100]}
-                                  noResultsMessage={t('ui.users.no_results') || 'No users found'}
+                                  noResultsMessage={t('ui.floors.no_results') || 'No floors found'}
                               />
                           </div>
                       )}

@@ -84,8 +84,9 @@ return [
             'unique' => 'The :attribute has already been taken.',
             'confirmed' => 'The :attribute confirmation does not match.',
             'must_be_numeric' => 'The :attribute must be numeric.',
-            'capacity_zones' => 'The floor capacity should be from 0 to 20 zones.',
+            'floor' => 'The floor shoul be from 0 to 20.',
             'zone_floor' => 'The zone already exists in this floor.',
+            'capacity_zones' => 'The floor capacity should be a positive number',
     ],
     'common' => [
         'buttons' => [
@@ -98,7 +99,7 @@ return [
             'clear' => 'Clear',
         ],
         'delete_dialog' => [
-            'success' => 'User deleted successfully',
+            'success' => 'Deleted successfully',
         ],
         'showing_results' => 'Showing :from to :to of :total results',
         'pagination' => [
@@ -292,6 +293,16 @@ return [
             'floor' => 'Floor No.',
             'actions' => 'Actions',
         ],
+        'list'=> [
+            'Literature'=>'Literature',
+            'Novel'=> 'Novel',
+            'Science and Technology'=> 'Science and Technology',
+            'Humanities'=> 'Humanities',
+            'Art'=> 'Art',
+            'Lifestyle'=> 'Lifestyle',
+            'Children'=> 'Children',
+            'Young Adult'=> 'Young Adult',
+        ],
         'buttons' => [
             'new' => 'New Zone',
             'edit' => 'Edit',
@@ -312,6 +323,7 @@ return [
             'name' => "Zone's name",
             'floor' => 'Floor number',
             'selectFloor' => "Select the floor",
+            'selectZone'=> 'Select zone name',
         ],
         'edit' =>[
             'name' => 'Edit Zone',
