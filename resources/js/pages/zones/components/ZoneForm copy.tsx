@@ -20,7 +20,7 @@ interface ZoneFormProps {
         name: string;
         floor_id: string;
     };
-    floors?: { id: string; floor_number: number; capacity_zones: number, zones_count: number}[];
+    floors?: { id: string; floor_number: number; capacity_zones: number; }[];
     floor_zone_id:{ floor_id: string; name: string }[];
     page?: string;
     perPage?: string;
@@ -42,12 +42,6 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
     const { t } = useTranslations();
     const queryClient = useQueryClient();
 
-     // Estado para manejar la zona personalizada
-     const [customZone, setCustomZone] = useState<string>('');
-
-     // Lista de zonas predefinidas
-    const zoneNames = ['Literature', 'Novel', 'Science and Technology', 'Humanities', 'Art', 'Lifestyle', 'Children', 'Young Adult'];
-
     //Manejador unique floor_zone
     function unique_floor_zone(floor_id: string, name: string) {
         if (!floor_zone_id || !Array.isArray(floor_zone_id)) {
@@ -67,28 +61,6 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
         return true;
     }
 
-    // //Manejador de capacity_zone
-    // function capacity_overload(floor_id: string, capacity_zones: number, zones_count: number) {
-    //     // Verificamos si ya existe un objeto con esa combinación de `floor_id` y `name`
-    //     const selectedFloor = floors?.find(floor => floor.id === floor_id);
-
-    //     if (
-    //         selectedFloor?.capacity_zones<zones_count
-    //     )
-
-
-    //     return true;
-    // }
-
-    function validateFloorCapacity(floorId: string): boolean | undefined {
-        const selectedFloor = floors?.find(floor => floor.id === floorId);
-        if (selectedFloor && selectedFloor.zones_count > selectedFloor.capacity_zones) {
-            return true;
-        }
-        return undefined;
-    }
-
-
 
     // TanStack Form setup
     const form = useForm({
@@ -99,8 +71,8 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
         onSubmit: async ({ value }) => {
             const zoneData = {
                 ...value,
-                name: customZone || value.name,
             };
+
             const options = {
                 // preserveState:true,
                 onSuccess: () => {
@@ -144,10 +116,12 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
     };
 
 
+    const accesoPermisos = false;
+
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
-                {/* Select para zonas */}
+                {/* Name field */}
                 <div>
                     <form.Field
                         name="name"
@@ -169,23 +143,17 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
                                         {t('ui.zones.fields.title')}
                                     </div>
                                 </Label>
-                                <Select
-                                    required={true}
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
                                     value={field.state.value}
-                                    onValueChange={(value) => field.handleChange(value)}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder={t('ui.zones.placeholders.selectZone')} />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {zoneNames.map((zone) => (
-                                            <SelectItem key={zone} value={zone}>
-                                                {t(`ui.zones.list.${zone}`)} {/* Traducimos cada zona con t() */}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.zones.placeholders.name')}
+                                    disabled={form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
                                 <FieldInfo field={field} />
                             </>
                         )}
@@ -203,8 +171,6 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
                                      ? t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() })
                                         : !unique_floor_zone(value, form.state.values.name) && value!=initialData?.floor_id
                                         ? t('ui.validation.zone_floor', { attribute: t('ui.floors.fields.floor') })
-                                        : validateFloorCapacity(value)
-                                        ? t('ui.validation.zone_overload', { attribute: t('ui.zones.fields.floor_name').toLowerCase() })
                                     : undefined;
                         },
                     }}

@@ -40,7 +40,8 @@ class BookFactory extends Factory
         // Asegura que la zona tiene un género asociado
         $zoneName = $zone->name;
         $genres = $genresByZone[$zoneName] ?? ['Desconocido'];
-        $selected_genres = $this->faker->randomElements($genres, rand(1, 3));
+        $selected_genres = $this->faker->randomElements($genres, min(count($genres), rand(1, 3)));
+
 
         return [
             'title' => $this->faker->sentence(6),

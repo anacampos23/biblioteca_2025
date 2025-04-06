@@ -25,7 +25,7 @@ export interface CreateColumnOptions<TData, TValue = unknown> {
  * Opciones para crear una columna de texto
  */
 export interface CreateTextColumnOptions<TData>
-  extends Omit<CreateColumnOptions<TData, string>, 'accessorKey' | 'cell'> {
+  extends CreateColumnOptions<TData, string> {
   /** Clave para acceder a los datos */
   accessorKey: keyof TData;
   /** Formato para el texto */

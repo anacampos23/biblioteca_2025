@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Domain\Zones\Models\Zone;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Database\Factories\FloorFactory;
 use Illuminate\Notifications\Notifiable;
 
@@ -38,9 +38,9 @@ class Floor extends Model
      * Get the zones associated with the floor.
      */
 
-    public function zones(): BelongsTo
+    public function zones(): hasMany
     {
-        return $this->belongsTo(Zone::class);
+        return $this->hasMany(Zone::class);
     }
 
 }

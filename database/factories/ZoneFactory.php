@@ -20,12 +20,10 @@ class ZoneFactory extends Factory
 
     public function definition(): array
     {
-        $zoneNames = ['Literature', 'Novel', 'Science and Technology', 'Humanities', 'Art', 'Lifestyle', 'Children', 'Young Adult'];
+
 
         return [
-            'id' => $this->faker->uuid(),
-            'name' => $this->faker->randomElement($zoneNames),
-            'floor_id' => Floor::inRandomOrder()->value('id') ?? Floor::factory()->create()->id,
+//
         ];
     }
 }

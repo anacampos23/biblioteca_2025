@@ -87,6 +87,7 @@ return [
             'floor' => 'The floor shoul be from 0 to 20.',
             'zone_floor' => 'The zone already exists in this floor.',
             'capacity_zones' => 'The floor capacity should be a positive number',
+            'zone_overload'=> 'There floor is full, there is not enough space.'
     ],
     'common' => [
         'buttons' => [
