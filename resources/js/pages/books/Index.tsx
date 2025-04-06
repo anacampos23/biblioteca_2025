@@ -85,6 +85,10 @@ export default function BooksIndex() {
         id: "genre",
         header: t("ui.books.columns.genre") || "genre",
         accessorKey: "genre",
+        // cell: ({ row }) => {
+        //     const genres = row.original.genre as string[]; // Accede a la propiedad 'genre' directamente desde 'row.original'
+        //     return genres ? genres.join(", ") : ""; // Unir los géneros en una cadena separada por comas
+        //   },
       }),
       createTextColumn<Book>({
         id: "ISBN",

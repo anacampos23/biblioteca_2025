@@ -88,6 +88,7 @@ return [
             'floor' => 'El piso debe estar entre 0 y 20.',
             'zone_floor' => 'Ya existe esa zona en este piso.',
             'capacity_zones'=> 'La capacidad del piso debe ser un número positivo',
+            'zone_overload'=> 'El piso está lleno, ya no caben más zonas.'
     ],
     'common' => [
         'buttons' => [

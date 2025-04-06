@@ -33,8 +33,20 @@ class ZoneController extends Controller
      */
     public function create()
     {
-        $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
-        $floor_zone_id = Zone::select(['name', 'floor_id']) ->get() -> toArray();
+        $floors = Floor::withCount('zones')
+        ->orderBy('floor_number', 'asc')
+        ->get()
+        ->map(function ($floor) {
+            return [
+                'id' => $floor->id,
+                'floor_number' => $floor->floor_number,
+                'capacity_zones' => $floor->capacity_zones,
+                'zones_count' => $floor->zones_count,
+            ];
+        })
+        ->toArray();
+
+        $floor_zone_id = Zone::select(['name', 'floor_id'])->get()->toArray();
 
         return Inertia::render('zones/Create', [
             'floors' => $floors,
@@ -82,8 +94,13 @@ class ZoneController extends Controller
      */
     public function edit(Request $request, Zone $zone)
     {
-        $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
-        $floor_zone_id = Zone::select(['name', 'floor_id']) ->get() -> toArray();
+        $floors = Floor::withCount('zones') // <- añadimos el withCount aquí también
+        ->select(['id', 'floor_number', 'capacity_zones'])
+        ->orderBy('floor_number', 'asc')
+        ->get()
+        ->toArray();
+
+        $floor_zone_id = Zone::select(['name', 'floor_id'])->get()->toArray();
 
         return Inertia::render('zones/Edit', [
             'zone' => $zone,

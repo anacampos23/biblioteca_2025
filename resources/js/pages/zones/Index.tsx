@@ -71,6 +71,7 @@ export default function ZonesIndex() {
       id: "floor_number",
       header: t("ui.zones.columns.floor"),
       accessorKey: "floor_number",
+    //   cell: ({ row }) => <span>{t("ui.pisos")} {row.original.floor_number}</span>,
     }),
     createActionsColumn<Zone>({
       id: "actions",

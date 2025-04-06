@@ -19,7 +19,7 @@ class FloorSeeder extends Seeder
         ]);
         Floor::create([
             'floor_number' => '2',
-            'capacity_zones' => 2,
+            'capacity_zones' => 5,
         ]);
         Floor::create([
             'floor_number' => '3',
@@ -27,7 +27,14 @@ class FloorSeeder extends Seeder
         ]); Floor::create([
             'floor_number' => '4',
             'capacity_zones' => 6,
+        ]);Floor::create([
+            'floor_number' => '5',
+            'capacity_zones' => 7
+        ]);Floor::create([
+            'floor_number' => '6',
+            'capacity_zones' => 4,
         ]);
+
 
     }
 }
