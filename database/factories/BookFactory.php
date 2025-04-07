@@ -49,7 +49,7 @@ class BookFactory extends Factory
             'genre' => json_encode($selected_genres),
             'ISBN' => $this->faker->numerify('#############'),
             'editorial' => $this->faker->sentence(2),
-            'quantity' => $this->faker->randomNumber(1, false),
+            'quantity' => $this->faker->numberBetween(1, 8),
             'status' => $this->faker->randomElement(['disponible', 'no disponible']),
             'bookcase_id' => Bookcase::inRandomOrder()->value('id') ?? Bookcase::factory()->create()->id,
             'zone_id' => Zone::inRandomOrder()->value('id') ?? Zone::factory()->create()->id,

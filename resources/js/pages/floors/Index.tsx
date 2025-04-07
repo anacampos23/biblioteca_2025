@@ -66,6 +66,7 @@ export default function FloorsIndex() {
         id: "floor_number",
         header: t("ui.floors.columns.floor_number") || "Floor number",
         accessorKey: "floor_number",
+        format: (value)=>t("ui.floors.columns.floor")+' '+value,
     }),
     createTextColumn<Floor>({
       id: "capacity_zones",
