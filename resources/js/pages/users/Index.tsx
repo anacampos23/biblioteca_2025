@@ -35,15 +35,11 @@ export default function UsersIndex() {
     filters.email ? `email:${filters.email}` : null
   ].filter(Boolean).join(' ');
 
-  const name = [
-    filters.name,
-    filters.name ? `name:${filters.name}` : null
-  ].filter(Boolean).join(' ');
+
 
 
   const { data: users, isLoading, isError, refetch } = useUsers({
     search: combinedSearch,
-    name: name,
     page: currentPage,
     perPage: perPage,
   });

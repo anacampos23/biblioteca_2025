@@ -32,6 +32,7 @@ class BookController extends Controller
         $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
         $bookcases = Bookcase::select(['id', 'bookcase_name']) ->get() -> toArray();
+        $media=$book->getFirstMediaUrl('image');
         return Inertia::render('books/Show', [
             'book' => $book,
             'zones' => $zones,
