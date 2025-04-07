@@ -85,14 +85,19 @@ export default function BooksIndex() {
         id: "genre",
         header: t("ui.books.columns.genre") || "genre",
         accessorKey: "genre",
-        format: (value) => {
-            if (Array.isArray(value)) {
-              return value
-                .map((genre) => t(`ui.books.genres.${genre.trim()}`) || genre)  // Aseguramos que el valor esté sin espacios y lo traducimos
-                .join(", ");  // Unirlos con comas
-            }
-            return typeof value === "string" ? t(`ui.books.genres.${value.trim()}`) || value : "";  // Traducción si es un único género
-          }
+        // format: (value) => {
+        //     // Si value es una cadena, hacer split
+        //     if (typeof value === "string") {
+        //         const genresArray = value.split(",");  // Dividir la cadena por comas
+
+        //         return genresArray
+        //             .map((genre) => t(`ui.books.genres.${genre.trim()}`) || genre.trim())  // Traducir cada género
+        //             .join(", ");  // Unir los géneros traducidos con comas
+        //     }
+
+        //     // Si value no es una cadena, devolver una cadena vacía
+        //     return "";
+        // }
       }),
       createTextColumn<Book>({
         id: "ISBN",
