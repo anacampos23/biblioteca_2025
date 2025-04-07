@@ -66,12 +66,20 @@ export default function ZonesIndex() {
       id: "name",
       header: t("ui.zones.columns.name"),
       accessorKey: "name",
+      format: (value) => {
+        if (Array.isArray(value)) {
+          return value
+            .map((name) => t(`ui.zones.list.${name}`) ||  name)
+            .join(", ");
+        }
+        return typeof value === "string" ? t(`ui.zones.list.${value}`) || value : "";
+      },
     }),
     createTextColumn<Zone>({
       id: "floor_number",
       header: t("ui.zones.columns.floor"),
       accessorKey: "floor_number",
-    //   cell: ({ row }) => <span>{t("ui.pisos")} {row.original.floor_number}</span>,
+      format: (value)=>t("ui.zones.columns.floor_number")+' '+value,
     }),
     createActionsColumn<Zone>({
       id: "actions",

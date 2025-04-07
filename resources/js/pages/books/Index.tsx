@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Book, useDeleteBook, useBooks } from "@/hooks/books/useBooks";
-import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, Eye } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -14,6 +14,7 @@ import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTabl
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { BookLayout } from "@/layouts/books/BookLayout";
+import TextLink from "@/components/text-link";
 
 export default function BooksIndex() {
   const { t } = useTranslations();
@@ -42,7 +43,6 @@ export default function BooksIndex() {
     filters.name ? filters.name : "null",
     filters.floor_number ? filters.floor_number : "null",
   ]
-
 
   const { data: books, isLoading, isError, refetch } = useBooks({
     search: combinedSearch,
@@ -85,10 +85,14 @@ export default function BooksIndex() {
         id: "genre",
         header: t("ui.books.columns.genre") || "genre",
         accessorKey: "genre",
-        // cell: ({ row }) => {
-        //     const genres = row.original.genre as string[]; // Accede a la propiedad 'genre' directamente desde 'row.original'
-        //     return genres ? genres.join(", ") : ""; // Unir los géneros en una cadena separada por comas
-        //   },
+        format: (value) => {
+            if (Array.isArray(value)) {
+              return value
+                .map((genre) => t(`ui.books.genres.${genre.trim()}`) || genre)  // Aseguramos que el valor esté sin espacios y lo traducimos
+                .join(", ");  // Unirlos con comas
+            }
+            return typeof value === "string" ? t(`ui.books.genres.${value.trim()}`) || value : "";  // Traducción si es un único género
+          }
       }),
       createTextColumn<Book>({
         id: "ISBN",
@@ -119,11 +123,20 @@ export default function BooksIndex() {
         id: "name",
         header: t("ui.books.columns.name") || "name",
         accessorKey: "name",
+        format: (value) => {
+            if (Array.isArray(value)) {
+              return value
+                .map((name) => t(`ui.books.zones.${name}`) ||  name)
+                .join(", ");
+            }
+            return typeof value === "string" ? t(`ui.books.zones.${value}`) || value : "";
+          },
       }),
       createTextColumn<Book>({
         id: "floor_number",
         header: t("ui.books.columns.floor_number") || "floor_number",
         accessorKey: "floor_number",
+        format: (value)=>t("ui.books.columns.floor_number")+' '+value,
       }),
     createDateColumn<Book>({
       id: "created_at",
@@ -135,6 +148,11 @@ export default function BooksIndex() {
       header: t("ui.books.columns.actions") || "Actions",
       renderActions: (book) => (
         <>
+        <Link href={`/books/${book.id}`}>
+            <Button variant="outline" size="icon" title={t("ui.books.buttons.view") || "View book"}>
+                <Eye className="h-4 w-4" />
+            </Button>
+        </Link>
           <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
             <Button variant="outline" size="icon" title={t("ui.books.buttons.edit") || "Edit book"}>
               <PencilIcon className="h-4 w-4" />
