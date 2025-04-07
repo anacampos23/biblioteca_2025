@@ -69,14 +69,19 @@ export default function BookcasesIndex() {
       accessorKey: "bookcase_name",
     }),
     createTextColumn<Bookcase>({
-      id: "zone_id",
-      header: t("ui.bookcases.columns.zone") || "zone_id",
-      accessorKey: "zone_id",
+      id: "name",
+      header: t("ui.bookcases.columns.zone") || "name",
+      accessorKey: "name",
     }),
+    createTextColumn<Bookcase>({
+        id: "floor_number",
+        header: t("ui.bookcases.columns.floor_number") || "name",
+        accessorKey: "floor_number",
+      }),
     createDateColumn<Bookcase>({
-      id: "floor_id",
-      header: t("ui.users.columns.created_at") || "floor_id",
-      accessorKey: "floor_id",
+      id: "floor_number",
+      header: t("ui.users.columns.floor_number") || "floor_number",
+      accessorKey: "floor_number",
     }),
     createActionsColumn<Bookcase>({
       id: "actions",
@@ -124,23 +129,23 @@ export default function BookcasesIndex() {
                           filters={
                               [
                                   {
-                                      id: 'search',
-                                      label: t('ui.users.filters.search') || 'Buscar',
-                                      type: 'text',
-                                      placeholder: t('ui.users.placeholders.search') || 'Buscar...',
-                                  },
-                                  {
                                       id: 'bookcase_name',
-                                      label: t('ui.users.filters.name') || 'Nombre',
+                                      label: t('ui.bookcases.filters.name') || 'Nombre',
                                       type: 'number',
-                                      placeholder: t('ui.users.placeholders.name') || 'Nombre...',
+                                      placeholder: t('ui.bookcases.placeholders.name') || 'Nombre...',
                                   },
                                   {
-                                      id: 'floor_id',
-                                      label: t('ui.users.filters.email') || 'Email',
+                                      id: 'zone',
+                                      label: t('ui.bookcases.filters.zone') || 'Email',
                                       type: 'text',
-                                      placeholder: t('ui.users.placeholders.email') || 'Email...',
+                                      placeholder: t('ui.bookcases.placeholders.zone') || 'Email...',
                                   },
+                                  {
+                                    id: 'floor',
+                                    label: t('ui.bookcases.filters.floor') || 'Email',
+                                    type: 'text',
+                                    placeholder: t('ui.bookcases.placeholders.floor') || 'Email...',
+                                },
                               ] as FilterConfig[]
                           }
                           onFilterChange={setFilters}
