@@ -7,6 +7,8 @@ export interface Bookcase {
   zone_id: string;
   floor_id: string;
   created_at: string;
+  name: string;
+  floor_number: number;
 }
 
 // Interface representing the actual API response structure
@@ -48,13 +50,15 @@ interface UseBookcasesParams {
   bookcase_name?: number;
   zone_id?: string;
   floor_id?: string;
+  name?: string;
+  floor_number?: number;
   page?: number;
   perPage?: number;
 }
 
-export function useBookcases({ search, bookcase_name, zone_id, floor_id, page = 1, perPage = 10 }: UseBookcasesParams = {}) {
+export function useBookcases({ search, bookcase_name, zone_id, floor_id, name, floor_number, page = 1, perPage = 10 }: UseBookcasesParams = {}) {
   return useQuery({
-    queryKey: ["bookcases", { search, bookcase_name, zone_id, floor_id, page, perPage }],
+    queryKey: ["bookcases", { search, bookcase_name, zone_id, floor_id, name, floor_number, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Bookcase>>("/api/bookcases", {
         params: {
@@ -62,6 +66,8 @@ export function useBookcases({ search, bookcase_name, zone_id, floor_id, page = 
           bookcase_name,
           zone_id,
           floor_id,
+          name,
+          floor_number,
           page,
           per_page: perPage,
         },
