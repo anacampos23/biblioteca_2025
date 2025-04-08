@@ -13,6 +13,24 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        Book::factory(30)->create();
+        $uniqueBooks = Book::factory(15)->create(); // 15 libros únicos
+
+        // Para cada libro único, creamos de 1 a 3 copias más
+        $uniqueBooks->each(function ($book) {
+            $copies = rand(1, 3); // Número de copias adicionales
+            for ($i = 0; $i < $copies; $i++) {
+                Book::factory()->create([
+                    'title' => $book->title,
+                    'author' => $book->author,
+                    //'genre' => $book->genre,
+                    'ISBN' => $book->ISBN,
+                    'editorial' => $book->editorial,
+                    'status' => $book->status,
+                    'bookcase_id' => $book->bookcase_id,
+                    'zone_id' => $book->zone_id,
+                    'floor_id' => $book->floor_id,
+                ]);
+            }
+        });
     }
 }

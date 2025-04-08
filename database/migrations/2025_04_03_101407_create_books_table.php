@@ -15,10 +15,9 @@ return new class extends Migration
             $table->uuid('id')->primary()->unique();
             $table->string('title');
             $table->string('author');
-            $table->string('genre');
+           // $table->string('genre');
             $table->bigInteger('ISBN');
             $table->string('editorial');
-            $table->integer('quantity');
             $table->string('status');
             $table->foreignUuid('bookcase_id')->constrained('bookcases')->onDelete('cascade');
             $table->foreignUuid('zone_id')->constrained('zones')->onDelete('cascade');

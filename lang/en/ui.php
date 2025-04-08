@@ -10,6 +10,7 @@ return [
             'zones' => 'Zones',
             'bookcases' => 'Bookcases',
             'books' => 'Books',
+            'loans'=> 'Loans',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
         ],
@@ -502,5 +503,9 @@ return [
             'Young Adult Fantasy'=> 'Young Adult Fantasy',
             'Young Adult Thriller'=> 'Young Adult Thriller',
         ]
-    ]
+        ],
+        'loans'=>[
+            'title'=> 'Loans',
+            'description'=> 'Manage the loans',
+        ]
 ];

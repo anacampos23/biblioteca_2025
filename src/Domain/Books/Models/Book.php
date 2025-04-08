@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Domain\Genres\Models\Genre;
+use Domain\Loans\Models\Loan;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Database\Factories\BookFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Enums\Fit;
@@ -63,5 +66,22 @@ class Book extends Model implements HasMedia
     public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Genre::class, 'book_genre');
+    }
+
+
+    /**
+         * Get the active loans.
+         */
+        public function loans(): HasMany
+        {
+            return $this->hasMany(Loan::class);
+        }
+
+    /**
+         * Get the active loans.
+         */
+    public function activeLoan(): HasOne
+    {
+        return $this->hasOne(Loan::class)->where('active', true);
     }
 }

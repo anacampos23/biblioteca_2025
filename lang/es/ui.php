@@ -11,6 +11,7 @@ return [
             'zones' => 'Zonas',
             'bookcases' => 'Estanterías',
             'books' => 'Libros',
+            'loans'=> 'Préstamos',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
         ],
@@ -390,7 +391,7 @@ return [
         'books'=>[
             'title' => 'Libros',
             'title_sing' => 'Libro :number',
-            'description' => 'Gestiona los libros del edificio',
+            'description' => 'Gestiona los libros',
             'book'=> 'Libro',
             'filters' => [
                 'title' => 'Título',
@@ -499,5 +500,9 @@ return [
                 'Young Adult Thriller'=> 'Suspenso Juvenil',
             ],
 
+        ],
+        'loans'=> [
+            'title' => 'Préstamos',
+            'description' => 'Gestiona los préstamos',
         ]
 ];
