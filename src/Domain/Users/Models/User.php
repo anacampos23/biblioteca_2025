@@ -3,12 +3,14 @@
 namespace Domain\Users\Models;
 
 use Domain\Users\Models\UserSetting;
+use Domain\Loans\Models\Loan;
 
 use Database\Factories\UserFactory;
 use Domain\Users\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -73,4 +75,20 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserSetting::class, 'user_id');
     }
-}
+
+    /**
+         * Get the settings associated with the user.
+         */
+        public function loans(): HasMany
+    {
+        return $this->hasMany(Loan::class);
+    }
+
+     /**
+         * Get the active loans.
+         */
+    public function activeLoan(): HasMany
+    {
+        return $this->hasOne(Loan::class)->where('active', true);
+    }
+    }

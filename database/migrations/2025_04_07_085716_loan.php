@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary()->unique();
             $table->date('start_loan');
             $table->date('end_loan');
-            $table->boolean('status');
+            $table->integer('days_overdue');
+            $table->boolean('active');
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignUuid('book_id')->constrained('books')->onDelete('cascade');
             $table->timestamps();
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('loans');
     }
 };
