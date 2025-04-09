@@ -33,6 +33,7 @@ class BookController extends Controller
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
         $bookcases = Bookcase::select(['id', 'bookcase_name']) ->get() -> toArray();
         $media=$book->getFirstMediaUrl('image');
+        $book->genre = json_decode($book->genre); // Decodificando el JSON a un array o un string
         return Inertia::render('books/Show', [
             'book' => $book,
             'zones' => $zones,
@@ -43,16 +44,19 @@ class BookController extends Controller
 
     public function create()
     {
+
         $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
         $bookcases = Bookcase::select(['id', 'bookcase_name']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
+
 
         return Inertia::render('books/Create', [
             'zones' => $zones,
             'floors' => $floors,
             'bookcases' => $bookcases,
             'floor_zone_id' => $floor_zone_id,
+
         ]);
     }
 

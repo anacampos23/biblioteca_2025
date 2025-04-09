@@ -46,7 +46,7 @@ class BookFactory extends Factory
         return [
             'title' => $this->faker->sentence(6),
             'author' => fake()->name(),
-            //'genre' => json_encode($selected_genres),
+            'genre' => json_encode($selected_genres),
             'ISBN' => $this->faker->numerify('#############'),
             'editorial' => $this->faker->sentence(2),
             'status' => $this->faker->randomElement(['disponible', 'no disponible']),

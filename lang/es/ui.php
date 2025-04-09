@@ -440,6 +440,7 @@ return [
                 'name' => 'Zona',
                 'floor_number' => 'Piso',
                 'actions' => 'Acciones',
+                'isbn_loan_count' => 'Ejemplares disponibles',
             ],
             'show'=> [
                 'title' => 'Título',
@@ -504,5 +505,45 @@ return [
         'loans'=> [
             'title' => 'Préstamos',
             'description' => 'Gestiona los préstamos',
+            'filters' => [
+                'title' => 'Títlo',
+                'author' => 'Autor',
+                'ISBN' => 'ISBN',
+                'name' => 'Nombre de usuario',
+                'start_loan' => 'Inicio del préstamo',
+                'end_loan' => 'Final del préstamo',
+                'days_overdue' => 'Días de retraso',
+                'active' => 'Estado del préstamo',
+            ],
+            'placeholders' => [
+                 'title' => 'Título...',
+                 'author' => 'Autor...',
+                 'ISBN' => 'ISBN...',
+                 'start_loan' => 'Fecha de inicio del préstamo',
+                    'end_loan' => 'Fecha final del préstamo',
+                    'days_overdue' => 'Días de retraso...',
+                    'active' => 'Préstamo activo/inactivo...',
+             ],
+             'buttons' => [
+                'new' => 'Nuevo Libro',
+                'edit' => 'Editar',
+                'save' => 'Guardar',
+                'update' => 'Actualizar',
+                'cancel' => 'Cancelar',
+                'delete' => 'Eliminar',
+                'deleting' => 'Eliminando...',
+                'saving' => 'Guardando...',
+                'retry' => 'Reintentar',
+            ],
+            'columns' => [
+                'title' => 'Títlo',
+                'author' => 'Autor',
+                'ISBN' => 'ISBN',
+                'name' => 'Nombre de usuario',
+                'start_loan' => 'Inicio del préstamo',
+                'end_loan' => 'Final del préstamo',
+                'days_overdue' => 'Días de retraso',
+                'active' => 'Estado del préstamo',
+            ],
         ]
 ];

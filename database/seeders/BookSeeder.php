@@ -22,7 +22,7 @@ class BookSeeder extends Seeder
                 Book::factory()->create([
                     'title' => $book->title,
                     'author' => $book->author,
-                    //'genre' => $book->genre,
+                    'genre' => $book->genre,
                     'ISBN' => $book->ISBN,
                     'editorial' => $book->editorial,
                     'status' => $book->status,
@@ -30,6 +30,7 @@ class BookSeeder extends Seeder
                     'zone_id' => $book->zone_id,
                     'floor_id' => $book->floor_id,
                 ]);
+
             }
         });
     }

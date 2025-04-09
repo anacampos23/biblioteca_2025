@@ -27,6 +27,7 @@ class Book extends Model implements HasMedia
         return BookFactory::new();
     }
     //use HasApiTokens
+
     /**
      * The attributes that are mass assignable.
      *
@@ -38,8 +39,6 @@ class Book extends Model implements HasMedia
         'genre',
         'ISBN',
         'editorial',
-        'quantity',
-        'status',
         'bookcase_id',
         'zone_id',
         'floor_id',

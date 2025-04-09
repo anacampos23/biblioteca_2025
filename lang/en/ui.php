@@ -444,6 +444,7 @@ return [
             'name' => 'Zone',
             'floor_number' => 'Floor',
             'actions' => 'Actions',
+            'isbn_loan_count' => 'Copies available',
         ],
         'show' =>[
             'title' => 'Title',
@@ -507,5 +508,45 @@ return [
         'loans'=>[
             'title'=> 'Loans',
             'description'=> 'Manage the loans',
+            'filters' => [
+                'title' => 'Title',
+                'author' => 'Author',
+                'ISBN' => 'ISBN',
+                'name' => 'User name',
+                'start_loan' => 'Start loan',
+                'end_loan' => 'End loan',
+                'days_overdue' => 'Days overdue',
+                'active' => 'Loan status',
+            ],
+            'placeholders' => [
+                 'title' => 'Title...',
+                 'author' => 'Author...',
+                 'ISBN' => 'ISBN...',
+                 'start_loan' => 'Date Start loan',
+                    'end_loan' => 'Date End loan',
+                    'days_overdue' => 'Days overdue...',
+                    'active' => 'Active/Inactive loan...',
+             ],
+             'buttons' => [
+                'new' => 'New Loan',
+                'edit' => 'Edit',
+                'save' => 'Save',
+                'update' => 'Update',
+                'cancel' => 'Cancel',
+                'delete' => 'Delete',
+                'deleting' => 'Deleting...',
+                'saving' => 'Saving...',
+                'retry' => 'Retry',
+            ],
+            'columns' => [
+                'title' => 'Title',
+                'author' => 'Author',
+                'ISBN' => 'ISBN',
+                'name' => 'User name',
+                'start_loan' => 'Start loan',
+                'end_loan' => 'End loan',
+                'days_overdue' => 'Days overdue',
+                'active' => 'Active/Inactive loan',
+            ],
         ]
 ];

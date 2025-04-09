@@ -49,10 +49,10 @@ Route::middleware(['web', 'auth'])->group(function () {
 });
 
 Route::middleware(['web', 'auth'])->group(function () {
-    Route::get('/loans', [BookApiController::class, 'index']);
-    Route::get('/loans/{loan}', [BookApiController::class, 'show']);
-    Route::post('/loans', [BookApiController::class, 'store']);
-    Route::put('/loans/{loan}', [BookApiController::class, 'update']);
-    Route::delete('/loans/{loan}', [BookApiController::class, 'destroy']);
+    Route::get('/loans', [LoanApiController::class, 'index']);
+    Route::get('/loans/{loan}', [LoanApiController::class, 'show']);
+    Route::post('/loans', [LoanApiController::class, 'store']);
+    Route::put('/loans/{loan}', [LoanApiController::class, 'update']);
+    Route::delete('/loans/{loan}', [LoanApiController::class, 'destroy']);
 });
 

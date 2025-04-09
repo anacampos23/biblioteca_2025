@@ -37,11 +37,11 @@ export default function BooksIndex() {
     filters.genre ? filters.genre : "null",
     filters.ISBN ? filters.ISBN : "null",
     filters.editorial ? filters.editorial : "null",
-    filters.quantity ? filters.quantity : "null",
     filters.status ? filters.status : "null",
     filters.bookcase_name ? filters.bookcase_name : "null",
     filters.name ? filters.name : "null",
     filters.floor_number ? filters.floor_number : "null",
+    filters.isbn_count ? filters.isbn_count : "null",
   ]
 
   const { data: books, isLoading, isError, refetch } = useBooks({
@@ -70,6 +70,13 @@ export default function BooksIndex() {
     }
   };
 
+  //ISBN count
+  interface BookCount {
+    ISBN: string;
+    isbn_count: number;
+}
+
+
   const columns = useMemo(() => ([
     createTextColumn<Book>({
       id: "title",
@@ -85,6 +92,13 @@ export default function BooksIndex() {
         id: "genre",
         header: t("ui.books.columns.genre") || "genre",
         accessorKey: "genre",
+        format: (value) => {
+            if (Array.isArray(value)) {
+              // Si el valor es un array, lo mapeamos a los textos correspondientes
+              return value.map((genre) => t(`ui.books.genres.${genre}`) || genre).join(", ");
+            }
+            return value; // Si no es un array, lo mostramos tal cual
+          },
       }),
       createTextColumn<Book>({
         id: "ISBN",
@@ -97,14 +111,12 @@ export default function BooksIndex() {
         accessorKey: "editorial",
       }),
       createTextColumn<Book>({
-        id: "quantity",
-        header: t("ui.books.columns.quantity") || "quantity",
-        accessorKey: "quantity",
-      }),
-      createTextColumn<Book>({
-        id: "status",
+        id: "available",
         header: t("ui.books.columns.status") || "status",
-        accessorKey: "status",
+        accessorKey: "available",
+        format(value){
+            return value? 'available' : 'not available'
+        }
       }),
       createTextColumn<Book>({
         id: "bookcase_name",
@@ -129,6 +141,17 @@ export default function BooksIndex() {
         header: t("ui.books.columns.floor_number") || "floor_number",
         accessorKey: "floor_number",
         format: (value)=>t("ui.books.columns.floor_number")+' '+value,
+      }),
+      createActionsColumn<Book>({
+        id: "isbn_loan_count",
+        header: t("ui.books.columns.isbn_loan_count") || "Actions",
+        renderActions: ($book) => {
+            let $isbn_count = $book.isbn_count;
+            let $isbn_loan_count = $book.isbn_loan_count;
+            return(
+                <span> {$isbn_loan_count}/{$isbn_count}</span>
+            )
+        }
       }),
     createDateColumn<Book>({
       id: "created_at",
@@ -216,12 +239,6 @@ export default function BooksIndex() {
                                     placeholder: t('ui.books.placeholders.editorial'),
                                 },
                                 {
-                                    id: 'quantity',
-                                    label: t('ui.books.filters.quantity'),
-                                    type: 'number',
-                                    placeholder: t('ui.books.placeholders.quantity'),
-                                },
-                                {
                                     id: 'status',
                                     label: t('ui.books.filters.status'),
                                     type: 'text',
@@ -244,7 +261,7 @@ export default function BooksIndex() {
                                     label: t('ui.books.filters.floor_number'),
                                     type: 'number',
                                     placeholder: t('ui.books.placeholders.floor_number'),
-                                }
+                                },
                               ] as FilterConfig[]
                           }
                           onFilterChange={setFilters}

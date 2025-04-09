@@ -9,13 +9,15 @@ export interface Book {
   ISBN: number;
   editorial: string;
   quantity: number;
-  status: string;
+  available: boolean;
   bookcase_id: string;
   bookcase_name: string;
   zone_id: string;
   name: string;
   floor_id: string;
   floor_number: number;
+  isbn_count: number;
+  isbn_loan_count:number;
   created_at: string;
 }
 
@@ -61,21 +63,23 @@ interface UseBooksParams {
   ISBN?: number;
   editorial?: string;
   quantity?: number;
-  status?: string;
+  available?: boolean;
   bookcase_id?: string;
   bookcase_name?: string;
   zone_id?: string;
   name?: string;
   floor_id?: string;
   floor_number?: number;
+  isbn_count?: number;
+  isbn_loan_count?:number;
   page?: number;
   perPage?: number;
 }
 
-export function useBooks({ search, title, author, genre, ISBN, editorial, quantity, status, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, page = 1, perPage = 10 }:
+export function useBooks({ search, title, author, genre, ISBN, editorial, quantity, available, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, isbn_loan_count, page = 1, perPage = 10 }:
     UseBooksParams = {}) {
   return useQuery({
-    queryKey: ["books", { search,title, author, genre, ISBN, editorial, quantity, status, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, page, perPage }],
+    queryKey: ["books", { search,title, author, genre, ISBN, editorial, quantity, available, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, isbn_loan_count, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Book>>("/api/books", {
         params: {
@@ -86,13 +90,15 @@ export function useBooks({ search, title, author, genre, ISBN, editorial, quanti
           ISBN,
           editorial,
           quantity,
-          status,
+          available,
           bookcase_id,
           bookcase_name,
           zone_id,
           name,
           floor_id,
           floor_number,
+          isbn_count,
+          isbn_loan_count,
           page,
           per_page: perPage,
         },
@@ -127,13 +133,15 @@ export function useCreateBook() {
         ISBN?: number;
         editorial?: string;
         quantity?: number;
-        status?: string;
+        available?: boolean;
         bookcase_id?: string;
         bookcase_name?: string;
         zone_id?: string;
         name?: string;
         floor_id?: string;
-        floor_number?: number }) => {
+        floor_number?: number;
+        isbn_count?: number;
+        isbn_loan_count?: number;}) => {
       const response = await axios.post("/api/books", data, {
         headers: {
           'Accept': 'application/json',
@@ -154,13 +162,15 @@ export function useUpdateBook(bookId: string) {
         ISBN?: number;
         editorial?: string;
         quantity?: number;
-        status?: string;
+        available?: boolean;
         bookcase_id?: string;
         bookcase_name?: string;
         zone_id?: string;
         name?: string;
         floor_id?: string;
-        floor_number?: number}) => {
+        floor_number?: number;
+        isbn_count?: number;
+        isbn_loan_count:number;}) => {
       const response = await axios.put(`/api/books/${bookId}`, data, {
         headers: {
           'Accept': 'application/json',

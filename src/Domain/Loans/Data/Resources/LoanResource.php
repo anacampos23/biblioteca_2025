@@ -15,9 +15,8 @@ class LoanResource extends Data
         public readonly string $end_loan,
         public readonly int $days_overdue,
         public readonly bool $active,
-        public readonly int $user_id,
-        public readonly int $book_id,
-
+        public readonly string $user_id,
+        public readonly string $book_id,
         public readonly string $name,
         public readonly string $email,
         public readonly string $title,
@@ -28,13 +27,13 @@ class LoanResource extends Data
 
     public static function fromModel(Loan $loan): self
     {
-        $book = Book::where('id', $loan->book_id)-> first();
-        $user = User::where('id', $loan->user_id)-> first();
+        $book = Book::select(['id', 'title', 'author', 'ISBN'])->where('id', $loan->book_id)->first();
+        $user = User::select(['id', 'name', 'email'])->where('id', $loan->user_id)->first();
 
         return new self(
             id: $loan->id,
-            start_loan: $loan->start_loan->format('Y-m-d'),
-            end_loan: $loan->end_loan->format('Y-m-d'),
+            start_loan: $loan->start_loan,
+            end_loan: $loan->end_loan,
             days_overdue: $loan->days_overdue,
             active: $loan->active,
             user_id: $loan->user_id,
