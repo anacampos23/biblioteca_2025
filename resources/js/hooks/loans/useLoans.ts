@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../../lib/axios";
 
-export interface Book {
+export interface Loan {
   id: string;
   start_loan: string;
   end_loan: string;
@@ -14,7 +14,6 @@ export interface Book {
   title: string;
   author: string;
   ISBN: string;
-
   created_at: string;
 }
 
@@ -52,7 +51,7 @@ export interface PaginatedResponse<T> {
   };
 }
 
-interface UseBooksParams {
+interface UseLoansParams {
   search?: any[];
   start_loan?: string;
   end_loan?: string;
@@ -69,12 +68,12 @@ interface UseBooksParams {
   perPage?: number;
 }
 
-export function useBooks({ search, start_loan, end_loan, days_overdue, active, book_id, user_id, name, email, title, author, ISBN, page = 1, perPage = 10 }:
-    UseBooksParams = {}) {
+export function useLoans({ search, start_loan, end_loan, days_overdue, active, book_id, user_id, name, email, title, author, ISBN, page = 1, perPage = 10 }:
+    UseLoansParams = {}) {
   return useQuery({
-    queryKey: ["books", { search, start_loan, end_loan, days_overdue, active, book_id, user_id, name, email, title, author, ISBN, page, perPage }],
+    queryKey: ["loans", { search, start_loan, end_loan, days_overdue, active, book_id, user_id, name, email, title, author, ISBN, page, perPage }],
     queryFn: async () => {
-      const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Book>>("/api/books", {
+      const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Loan>>("/api/loans", {
         params: {
           search,
           start_loan,
@@ -108,12 +107,12 @@ export function useBooks({ search, start_loan, end_loan, days_overdue, active, b
           to: apiResponse.to,
           total: apiResponse.total
         }
-      } as PaginatedResponse<Book>;
+      } as PaginatedResponse<Loan>;
     },
   });
 }
 
-export function useCreateBook() {
+export function useCreateLoan() {
   return useMutation({
     mutationFn: async (data: {
     start_loan?: string;
@@ -129,7 +128,7 @@ export function useCreateBook() {
      ISBN?: string;
 
     }) => {
-      const response = await axios.post("/api/books", data, {
+      const response = await axios.post("/api/loans", data, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
@@ -140,7 +139,7 @@ export function useCreateBook() {
   });
 }
 
-export function useUpdateBook(bookId: string) {
+export function useUpdateLoan(loanId: string) {
   return useMutation({
     mutationFn: async (data: {
         start_loan?: string;
@@ -154,7 +153,7 @@ export function useUpdateBook(bookId: string) {
         title?: string;
         author?: string;
         ISBN?: string;}) => {
-      const response = await axios.put(`/api/books/${bookId}`, data, {
+      const response = await axios.put(`/api/loans/${loanId}`, data, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
@@ -165,10 +164,10 @@ export function useUpdateBook(bookId: string) {
   });
 }
 
-export function useDeleteBook() {
+export function useDeleteLoan() {
   return useMutation({
-    mutationFn: async (bookId: string) => {
-      await axios.delete(`/api/books/${bookId}`, {
+    mutationFn: async (loanId: string) => {
+      await axios.delete(`/api/loans/${loanId}`, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'

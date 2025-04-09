@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary()->unique();
             $table->string('title');
             $table->string('author');
-           // $table->string('genre');
+           $table->string('genre');
             $table->bigInteger('ISBN');
             $table->string('editorial');
             $table->string('status');

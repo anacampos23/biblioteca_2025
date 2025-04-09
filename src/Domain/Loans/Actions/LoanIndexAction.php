@@ -2,35 +2,86 @@
 
 namespace Domain\Loans\Actions;
 
+use Carbon\Carbon;
 use Domain\Loans\Data\Resources\LoanResource;
 use Domain\Loans\Models\Loan;
+use Domain\Books\Models\Book;
+use Domain\Users\Models\User;
 
 class LoanIndexAction
 {
-    public function __invoke(?string $search = null, ?string $name = null, ?string $email = null, int $perPage = 10)
+    public function __invoke(?array $search = null, int $perPage = 10)
     {
+        $title = $search[0];
+        $author = $search[1];
+        $ISBN = $search[2];
+        $name = $search[3];
+        $email = $search[4];
+        $start_loan = $search[5];
+        $end_loan = $search[6];
+        $days_overdue = $search[7];
+        $active = $search[8];
+
+
+        //Título del libro
+        $bookTitle = Book::query() -> when($title != "null", function ($query) use ($title){
+            $query -> where('title', 'ILIKE', "%".$title."%");
+        })-> pluck('id');
+
+        //Autor del libro
+        $bookAuthor = Book::query() -> when($author != "null", function ($query) use ($author){
+            $query -> where('author', 'ILIKE', "%".$author."%");
+        })-> pluck('id');
+
+         //ISBN del libro
+         $bookISBN = Book::query() -> when($ISBN != "null", function ($query) use ($ISBN){
+            $query -> where('ISBN', 'ILIKE', "%".$ISBN."%");
+        })-> pluck('id');
+
+        //Nombre del usuario
+         $userName = User::query() -> when($name != "null", function ($query) use ($name){
+            $query -> where('name', 'ILIKE', "%".$name."%");
+        })-> pluck('id');
+
+        //email del usuario
+        $userEmail = User::query() -> when($email != "null", function ($query) use ($email){
+            $query -> where('email', 'ILIKE', "%".$email."%");
+        })-> pluck('id');
+
+
         $loans = Loan::query()
-            ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            })
+        ->when($title !== "null", function ($query) use ($bookTitle) {
+            $query->whereIn('book_id', $bookTitle);
+        })
+        ->when($author !== "null", function ($query) use ($bookAuthor) {
+            $query->whereIn('book_id', $bookAuthor);
+        })
+        ->when($ISBN !== "null", function ($query) use ($bookISBN) {
+            $query->whereIn('book_id', $bookISBN);
+        })
+        ->when($name !== "null", function ($query) use ($userName) {
+            $query->whereIn('user_id', $userName);
+        })
+        ->when($email !== "null", function ($query) use ($userEmail) {
+            $query->whereIn('user_id', 'ILIKE', $userEmail);
+        })
 
-            ->when($name, function ($query, $name) {
-                $query->where('name', 'like', "%{$name}%");
-            })
+        ->when($start_loan !== "null", function ($query) use ($start_loan) {
+            $query->where('start_loan', '=', $start_loan);
+        })
+        ->when($end_loan !== "null", function ($query) use ($end_loan) {
+            $query->whereDate('end_loan', '=', $end_loan);
+        })
+        ->when($days_overdue !== "null", function ($query) use ($days_overdue) {
+            $query->whereDate('days_overdue', '=', $days_overdue);
+        })
+        ->when($active !== "null", function ($query) use ($active) {
+            $query->where('active', 'like', $active);
+        })
 
-            ->when($email, function ($query, $email) {
-                $query->where('email', 'like', "%{$email}%");
-            })
+
             ->latest()
             ->paginate($perPage);
-
-            'book_id' => $data['book_id'],
-            'user_id' => $data['user_id'],
-            'start_loan' => $data['start_loan'],
-            'end_loan' => $data['end_loan'],
-            'days_overdue' => $data['days_overdue'],
-            'borrowed' => $data['borrowed'],
 
         return $loans->through(fn ($loan) => LoanResource::fromModel($loan));
     }

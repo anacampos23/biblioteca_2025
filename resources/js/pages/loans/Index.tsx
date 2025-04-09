@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
-import { Book, useDeleteBook, useBooks } from "@/hooks/books/useBooks";
+import { Loan, useDeleteLoan, useLoans } from "@/hooks/loans/useLoans";
 import { PencilIcon, PlusIcon, TrashIcon, Eye } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
@@ -13,7 +13,7 @@ import { DeleteDialog } from "@/components/stack-table/DeleteDialog";
 import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTable";
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { BookLayout } from "@/layouts/books/BookLayout";
+import { LoanLayout } from "@/layouts/loans/LoanLayout";
 
 export default function LoansIndex() {
   const { t } = useTranslations();
@@ -33,19 +33,21 @@ export default function LoansIndex() {
   const combinedSearch = [
     filters.title ? filters.title : "null",
     filters.author ? filters.author : "null",
-    filters.genre ? filters.genre : "null",
     filters.ISBN ? filters.ISBN : "null",
-    filters.editorial ? filters.editorial : "null",
-    filters.quantity ? filters.quantity : "null",
-    filters.status ? filters.status : "null",
+    filters.name ? filters.name : "null",
+    filters.email ? filters.email : "null",
+    filters.start_loan ? filters.start_loan : "null",
+    filters.end_loan ? filters.end_loan : "null",
+    filters.days_overdue ? filters.days_overdue : "null",
+    filters.active ? filters.active : "null",
   ]
 
-  const { data: books, isLoading, isError, refetch } = useBooks({
+  const { data: loans, isLoading, isError, refetch } = useLoans({
     search: combinedSearch,
     page: currentPage,
     perPage: perPage,
   });
-  const deleteBookMutation = useDeleteBook();
+  const deleteLoanMutation = useDeleteLoan();
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -56,103 +58,84 @@ export default function LoansIndex() {
     setCurrentPage(1); // Reset to first page when changing items per page
   };
 
-  const handleDeleteBook = async (id: string) => {
+  const handleDeleteLoan = async (id: string) => {
     try {
-      await deleteBookMutation.mutateAsync(id);
+      await deleteLoanMutation.mutateAsync(id);
       refetch();
     } catch (error) {
-      toast.error(t("ui.books.deleted_error") || "Error deleting book");
-      console.error("Error deleting book:", error);
+      toast.error(t("ui.loans.deleted_error") || "Error deleting loan");
+      console.error("Error deleting loan:", error);
     }
   };
-
   const columns = useMemo(() => ([
-    createTextColumn<Book>({
+    createTextColumn<Loan>({
       id: "title",
-      header: t("ui.books.columns.title") || "Title",
+      header: t("ui.loans.columns.title") || "Title",
       accessorKey: "title",
     }),
-    createTextColumn<Book>({
+    createTextColumn<Loan>({
         id: "author",
-        header: t("ui.books.columns.author") || "author",
+        header: t("ui.loans.columns.author") || "author",
         accessorKey: "author",
       }),
-      createTextColumn<Book>({
-        id: "genre",
-        header: t("ui.books.columns.genre") || "genre",
-        accessorKey: "genre",
-      }),
-      createTextColumn<Book>({
+      createTextColumn<Loan>({
         id: "ISBN",
-        header: t("ui.books.columns.ISBN") || "ISBN",
+        header: t("ui.loans.columns.ISBN") || "ISBN",
         accessorKey: "ISBN",
       }),
-      createTextColumn<Book>({
-        id: "editorial",
-        header: t("ui.books.columns.editorial") || "editorial",
-        accessorKey: "editorial",
-      }),
-      createTextColumn<Book>({
-        id: "quantity",
-        header: t("ui.books.columns.quantity") || "quantity",
-        accessorKey: "quantity",
-      }),
-      createTextColumn<Book>({
-        id: "status",
-        header: t("ui.books.columns.status") || "status",
-        accessorKey: "status",
-      }),
-      createTextColumn<Book>({
-        id: "bookcase_name",
-        header: t("ui.books.columns.bookcase_name") || "bookcase_name",
-        accessorKey: "bookcase_name",
-      }),
-      createTextColumn<Book>({
+      createTextColumn<Loan>({
         id: "name",
-        header: t("ui.books.columns.name") || "name",
+        header: t("ui.users.columns.name") || "name",
         accessorKey: "name",
-        format: (value) => {
-            if (Array.isArray(value)) {
-              return value
-                .map((name) => t(`ui.books.zones.${name}`) ||  name)
-                .join(", ");
-            }
-            return typeof value === "string" ? t(`ui.books.zones.${value}`) || value : "";
-          },
       }),
-      createTextColumn<Book>({
-        id: "floor_number",
-        header: t("ui.books.columns.floor_number") || "floor_number",
-        accessorKey: "floor_number",
-        format: (value)=>t("ui.books.columns.floor_number")+' '+value,
+      createTextColumn<Loan>({
+        id: "email",
+        header: t("ui.users.columns.email") || "email",
+        accessorKey: "email",
       }),
-    createDateColumn<Book>({
-      id: "created_at",
-      header: t("ui.books.columns.created_at") || "Created At",
-      accessorKey: "created_at",
-    }),
-    createActionsColumn<Book>({
+      createTextColumn<Loan>({
+        id: "start_loan",
+        header: t("ui.loans.columns.start_loan") || "start_loan",
+        accessorKey: "start_loan",
+      }),
+      createTextColumn<Loan>({
+        id: "end_loan",
+        header: t("ui.loans.columns.end_loan") || "end_loan",
+        accessorKey: "end_loan",
+      }),
+      createTextColumn<Loan>({
+        id: "days_overdue",
+        header: t("ui.loans.columns.days_overdue") || "days_overdue",
+        accessorKey: "days_overdue",
+      }),
+      createTextColumn<Loan>({
+        id: "active",
+        header: t("ui.loans.columns.active") || "active",
+        accessorKey: "active",
+        format: (value)=>(value? 'active' : 'inactive')
+      }),
+    createActionsColumn<Loan>({
       id: "actions",
-      header: t("ui.books.columns.actions") || "Actions",
-      renderActions: (book) => (
+      header: t("ui.loans.columns.actions") || "Actions",
+      renderActions: (loan) => (
         <>
-        <Link href={`/books/${book.id}`}>
-            <Button variant="outline" size="icon" title={t("ui.books.buttons.view") || "View book"}>
+        <Link href={`/loans/${loan.id}`}>
+            <Button variant="outline" size="icon" title={t("ui.loans.buttons.view") || "View loan"}>
                 <Eye className="h-4 w-4" />
             </Button>
         </Link>
-          <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.books.buttons.edit") || "Edit book"}>
+          <Link href={`/loans/${loan.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+            <Button variant="outline" size="icon" title={t("ui.loans.buttons.edit") || "Edit loan"}>
               <PencilIcon className="h-4 w-4" />
             </Button>
           </Link>
           <DeleteDialog
-            id={book.id}
-            onDelete={handleDeleteBook}
-            title={t("ui.books.delete.title") || "Delete book"}
-            description={t("ui.books.delete.description") || "Are you sure you want to delete this book? This action cannot be undone."}
+            id={loan.id}
+            onDelete={handleDeleteLoan}
+            title={t("ui.loans.delete.title") || "Delete loan"}
+            description={t("ui.loans.delete.description") || "Are you sure you want to delete this loan? This action cannot be undone."}
             trigger={
-              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.books.buttons.delete") || "Delete book"}>
+              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.loans.buttons.delete") || "Delete loan"}>
                 <TrashIcon className="h-4 w-4" />
               </Button>
             }
@@ -160,18 +143,18 @@ export default function LoansIndex() {
         </>
       ),
     }),
-  ] as ColumnDef<Book>[]), [t, handleDeleteBook]);
+  ] as ColumnDef<Loan>[]), [t, handleDeleteLoan]);
 
   return (
-      <BookLayout title={t('ui.books.title')}>
+      <LoanLayout title={t('ui.loans.title')}>
           <div className="p-6">
               <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                      <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
-                      <Link href="/books/create">
+                      <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
+                      <Link href="/loans/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
-                              {t('ui.books.buttons.new')}
+                              {t('ui.loans.buttons.new')}
                           </Button>
                       </Link>
                   </div>
@@ -183,64 +166,59 @@ export default function LoansIndex() {
                               [
                                   {
                                     id: 'title',
-                                    label: t('ui.books.filters.title'),
+                                    label: t('ui.loans.filters.title'),
                                     type: 'text',
-                                    placeholder: t('ui.books.placeholders.title'),
+                                    placeholder: t('ui.loans.placeholders.title'),
                                   },
                                   {
                                     id: 'author',
-                                    label: t('ui.books.filters.author'),
+                                    label: t('ui.loans.filters.author'),
                                     type: 'text',
-                                    placeholder: t('ui.books.placeholders.author'),
-                                },
-                                {
-                                    id: 'genre',
-                                    label: t('ui.books.filters.genre'),
-                                    type: 'text',
-                                    placeholder: t('ui.books.placeholders.genre'),
+                                    placeholder: t('ui.loans.placeholders.author'),
                                 },
                                 {
                                     id: 'ISBN',
-                                    label: t('ui.books.filters.ISBN'),
+                                    label: t('ui.loans.filters.ISBN'),
                                     type: 'number',
-                                    placeholder: t('ui.books.placeholders.ISBN'),
-                                },
-                                {
-                                    id: 'editorial',
-                                    label: t('ui.books.filters.editorial'),
-                                    type: 'text',
-                                    placeholder: t('ui.books.placeholders.editorial'),
-                                },
-                                {
-                                    id: 'quantity',
-                                    label: t('ui.books.filters.quantity'),
-                                    type: 'number',
-                                    placeholder: t('ui.books.placeholders.quantity'),
-                                },
-                                {
-                                    id: 'status',
-                                    label: t('ui.books.filters.status'),
-                                    type: 'text',
-                                    placeholder: t('ui.books.placeholders.status'),
-                                },
-                                {
-                                    id: 'bookcase_name',
-                                    label: t('ui.books.filters.bookcase_name'),
-                                    type: 'number',
-                                    placeholder: t('ui.books.placeholders.bookcase_name'),
+                                    placeholder: t('ui.loans.placeholders.ISBN'),
                                 },
                                 {
                                     id: 'name',
-                                    label: t('ui.books.filters.name'),
+                                    label: t('ui.users.filters.name') || 'Nombre',
                                     type: 'text',
-                                    placeholder: t('ui.books.placeholders.name'),
+                                    placeholder: t('ui.users.placeholders.name') || 'Nombre...',
                                 },
                                 {
-                                    id: 'floor_number',
-                                    label: t('ui.books.filters.floor_number'),
+                                    id: 'email',
+                                    label: t('ui.users.filters.email') || 'Email',
+                                    type: 'text',
+                                    placeholder: t('ui.users.placeholders.email') || 'Email...',
+                                },
+                                {
+                                    id: 'start_loan',
+                                    label: t('ui.loans.filters.start_loan'),
+                                    type: 'date',
+                                    placeholder: t('ui.loans.placeholders.start_loan'),
+                                },
+                                {
+                                    id: 'end_loan',
+                                    label: t('ui.loans.filters.end_loan'),
+                                    type: 'date',
+                                    placeholder: t('ui.loans.placeholders.end_loan'),
+                                },
+                                {
+                                    id: 'days_overdue',
+                                    label: t('ui.loans.filters.days_overdue'),
                                     type: 'number',
-                                    placeholder: t('ui.books.placeholders.floor_number'),
-                                }
+                                    placeholder: t('ui.loans.placeholders.days_overdue'),
+                                },
+                                {
+                                    id: 'active',
+                                    label: t('ui.loans.filters.active'),
+                                    type: 'text',
+                                    placeholder: t('ui.loans.placeholders.active'),
+                                },
+
                               ] as FilterConfig[]
                           }
                           onFilterChange={setFilters}
@@ -253,16 +231,16 @@ export default function LoansIndex() {
                           <TableSkeleton columns={4} rows={10} />
                       ) : isError ? (
                           <div className="p-4 text-center">
-                              <div className="mb-4 text-red-500">{t('ui.books.error_loading')}</div>
+                              <div className="mb-4 text-red-500">{t('ui.loans.error_loading')}</div>
                               <Button onClick={() => refetch()} variant="outline">
-                                  {t('ui.books.buttons.retry')}
+                                  {t('ui.loans.buttons.retry')}
                               </Button>
                           </div>
                       ) : (
                           <div>
                               <Table
                                   data={
-                                      books ?? {
+                                      loans ?? {
                                           data: [],
                                           meta: {
                                               current_page: 1,
@@ -278,13 +256,13 @@ export default function LoansIndex() {
                                   onPageChange={handlePageChange}
                                   onPerPageChange={handlePerPageChange}
                                   perPageOptions={[10, 25, 50, 100]}
-                                  noResultsMessage={t('ui.books.no_results') || 'No books found'}
+                                  noResultsMessage={t('ui.loans.no_results') || 'No loans found'}
                               />
                           </div>
                       )}
                   </div>
               </div>
           </div>
-      </BookLayout>
+      </LoanLayout>
   );
 }

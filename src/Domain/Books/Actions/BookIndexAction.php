@@ -18,11 +18,10 @@ class BookIndexAction
         $genre = $search[2];
         $ISBN = $search[3];
         $editorial = $search[4];
-        $quantity = $search[5];
-        $status = $search[6];
-        $bookcase_name = $search[7];
-        $name = $search[8];
-        $floor_number = $search[9];
+        $status = $search[5];
+        $bookcase_name = $search[6];
+        $name = $search[7];
+        $floor_number = $search[8];
 
 
         //Une bookcase_name con el registro que tenemos del id
@@ -63,9 +62,6 @@ class BookIndexAction
             })
             ->when($editorial !== "null", function ($query) use ($editorial) {
                 $query->where('editorial', 'ILIKE', "%".$editorial."%");
-            })
-            ->when($quantity !== "null", function ($query) use ($quantity) {
-                $query->where('quantity', '=', $quantity);
             })
             ->when($status !== "null", function ($query) use ($status) {
                 $query->where('status', 'ILIKE', $status."%");
