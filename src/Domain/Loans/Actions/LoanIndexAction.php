@@ -67,18 +67,17 @@ class LoanIndexAction
         })
 
         ->when($start_loan !== "null", function ($query) use ($start_loan) {
-            $query->where('start_loan', '=', $start_loan);
+            $query->whereDate('start_loan', '=', $start_loan);
         })
         ->when($end_loan !== "null", function ($query) use ($end_loan) {
             $query->whereDate('end_loan', '=', $end_loan);
         })
         ->when($days_overdue !== "null", function ($query) use ($days_overdue) {
-            $query->whereDate('days_overdue', '=', $days_overdue);
+            $query->where('days_overdue', '=', $days_overdue);
         })
         ->when($active !== "null", function ($query) use ($active) {
             $query->where('active', 'like', $active);
         })
-
 
             ->latest()
             ->paginate($perPage);

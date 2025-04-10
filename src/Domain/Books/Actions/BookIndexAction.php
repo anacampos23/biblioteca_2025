@@ -18,7 +18,7 @@ class BookIndexAction
         $genre = $search[2];
         $ISBN = $search[3];
         $editorial = $search[4];
-        $status = $search[5];
+        $available = $search[5];
         $bookcase_name = $search[6];
         $name = $search[7];
         $floor_number = $search[8];
@@ -46,6 +46,8 @@ class BookIndexAction
 
         $floor_id= $bookFloor -> id;
 
+        //Disponible/no disponible
+
 
         $book = Book::query()
             ->when($title !== "null", function ($query) use ($title) {
@@ -63,8 +65,8 @@ class BookIndexAction
             ->when($editorial !== "null", function ($query) use ($editorial) {
                 $query->where('editorial', 'ILIKE', "%".$editorial."%");
             })
-            ->when($status !== "null", function ($query) use ($status) {
-                $query->where('status', 'ILIKE', $status."%");
+            ->when($available !== "null", function ($query) use ($available) {
+                $query->where('available', $available === 'true');
             })
             ->when($bookcase_name !== "null", function ($query) use ($bookcase_id) {
                 $query->where('bookcase_id', '=', $bookcase_id);

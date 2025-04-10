@@ -1,46 +1,65 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useTranslations } from '@/hooks/use-translations';
-import { UserLayout } from '@/layouts/users/UserLayout';
-import { UserForm } from '@/pages/users/components/UserForm';
-import { User } from 'lucide-react';
+import { LoanLayout } from '@/layouts/loans/LoanLayout';
+import { BookUp  } from 'lucide-react';
+import { number } from 'zod';
+import { LoanForm } from './components/LoanForm';
+import { usePage } from '@inertiajs/react';
 
-interface UserFormProps {
+interface LoanFormProps {
     initialData?: {
         id: string;
+        start_loan: string;
+        end_loan: string;
+        days_overdue: number;
+        active: boolean;
+        user_id: string;
+        book_id: string;
         name: string;
         email: string;
+        title: string;
+        author: string;
+        ISBN: number;
     };
+    // book_id: string;
+    // title:string;
+    // author:string;
+    // ISBN:string;
     page?: string;
     perPage?: string;
-    roles?: string[];
-    rolesConPermisos: Record<string, string[]>;
-    permisos?: string[];
-    permisosAgrupados: Record<string, string[]>;
 }
 
-export default function CreateUser({ roles, rolesConPermisos, permisos, permisosAgrupados }: UserFormProps) {
+export default function CreateLoan({initialData, page, perPage}: LoanFormProps) {
     const { t } = useTranslations();
+    const url=window.location.href;
+    const param = new URLSearchParams(window.location.search);
+
+    const title = param.get('title');
+    const author = param.get('author');
+    const ISBN = param.get('ISBN');
 
     return (
-        <UserLayout title={t('ui.users.create')}>
+        <LoanLayout title={t('ui.loans.cards.title')}>
             <div className="flex max-w-screen items-center self-center">
                 <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
-                            <div className="flex items-center gap-1">
-                                <User color="#2762c2" />
-                                {t('ui.users.cards.title')}
+                            <div className="flex items-center gap-1 mt-5">
+                                <BookUp  color="#2762c2" />
+                                {t('ui.loans.card.create')}
                             </div>
                         </CardTitle>
-                        <CardDescription>{t('ui.users.cards.description')}</CardDescription>
+                        <CardDescription className= "font-semibold mt-2">{title}</CardDescription>
+                        <CardDescription>{author}</CardDescription>
+                        <CardDescription>ISBN: {ISBN}</CardDescription>
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <UserForm roles={roles} rolesConPermisos={rolesConPermisos} permisos={permisos} permisosAgrupados={permisosAgrupados} />
+                        <LoanForm />
                     </CardContent>
                 </Card>
             </div>
-        </UserLayout>
+        </LoanLayout>
     );
 }

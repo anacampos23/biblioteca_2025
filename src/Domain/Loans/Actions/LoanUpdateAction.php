@@ -10,13 +10,14 @@ class LoanUpdateAction
 {
     public function __invoke(Loan $loan, array $data): LoanResource
     {
+
         $updateData = [
-            'book_id' => $data['book_id'],
-            'user_id' => $data['user_id'],
-            'start_loan' => $data['start_loan'],
-            'end_loan' => $data['end_loan'],
-            'days_overdue' => $data['days_overdue'],
-            'active' => $data['active'],
+            // 'book_id' => $data['book_id'],
+            // 'user_id' => $data['user_id'],
+            // 'start_loan' => $data['start_loan'],
+            // 'end_loan' => $data['end_loan'],
+            // 'days_overdue' => $data['days_overdue'],
+            'active' => $data['newStatus'],
         ];
 
         $loan->update($updateData);
