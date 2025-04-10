@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Loan, useDeleteLoan, useLoans } from "@/hooks/loans/useLoans";
-import { PencilIcon, PlusIcon, TrashIcon, Eye } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, BookCheck , SearchCheck  } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -14,6 +14,7 @@ import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTabl
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { LoanLayout } from "@/layouts/loans/LoanLayout";
+import { router } from "@inertiajs/react";
 
 export default function LoansIndex() {
   const { t } = useTranslations();
@@ -38,7 +39,7 @@ export default function LoansIndex() {
     filters.email ? filters.email : "null",
     filters.start_loan ? filters.start_loan : "null",
     filters.end_loan ? filters.end_loan : "null",
-    filters.days_overdue ? filters.days_overdue : "null",
+    filters.days_overdue === 0 ? 0 : (filters.days_overdue ? filters.days_overdue : "null"),
     filters.active ? filters.active : "null",
   ]
 
@@ -67,7 +68,35 @@ export default function LoansIndex() {
       console.error("Error deleting loan:", error);
     }
   };
+
+  function handleChangeStatus (loan_id: string){
+    const newStatus = false;
+    const informacion = new FormData();
+    informacion.append('newStatus', newStatus);
+    informacion.append('_method', 'PUT');
+    router.post(`/loans/${loan_id}`, informacion);
+    window.location.reload();
+  };
+
   const columns = useMemo(() => ([
+    createActionsColumn<Loan>({
+        id: "actions",
+        header: t("ui.loans.columns.return") || "Actions",
+        renderActions: (loan) => (
+          <>
+              <Button
+                onClick={() => handleChangeStatus(loan.id)}
+                variant="outline"
+                size="icon"
+                title={t("ui.loans.buttons.view") || "View loan"}
+                disabled={!loan.active} // Desactivar el botón si el préstamo está inactivo
+                className={`${loan.active ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+                >
+                  <BookCheck  className="h-4 w-4" />
+              </Button>
+          </>
+        ),
+      }),
     createTextColumn<Loan>({
       id: "title",
       header: t("ui.loans.columns.title") || "Title",
@@ -85,23 +114,31 @@ export default function LoansIndex() {
       }),
       createTextColumn<Loan>({
         id: "name",
-        header: t("ui.users.columns.name") || "name",
+        header: t("ui.loans.columns.name") || "name",
         accessorKey: "name",
       }),
       createTextColumn<Loan>({
         id: "email",
-        header: t("ui.users.columns.email") || "email",
+        header: t("ui.loans.columns.email") || "email",
         accessorKey: "email",
       }),
       createTextColumn<Loan>({
         id: "start_loan",
         header: t("ui.loans.columns.start_loan") || "start_loan",
         accessorKey: "start_loan",
+        format: (value) => {
+            const date = new Date(value);
+            return date.toLocaleDateString("es-ES"); // Formato dd/mm/yyyy en España
+          },
       }),
       createTextColumn<Loan>({
         id: "end_loan",
         header: t("ui.loans.columns.end_loan") || "end_loan",
         accessorKey: "end_loan",
+        format: (value) => {
+            const date = new Date(value);
+            return date.toLocaleDateString("es-ES"); // Formato dd/mm/yyyy en España
+          },
       }),
       createTextColumn<Loan>({
         id: "days_overdue",
@@ -112,18 +149,13 @@ export default function LoansIndex() {
         id: "active",
         header: t("ui.loans.columns.active") || "active",
         accessorKey: "active",
-        format: (value)=>(value? 'active' : 'inactive')
+        format: (value)=>(value? 'Activo' : 'Inactivo')
       }),
     createActionsColumn<Loan>({
       id: "actions",
       header: t("ui.loans.columns.actions") || "Actions",
       renderActions: (loan) => (
         <>
-        <Link href={`/loans/${loan.id}`}>
-            <Button variant="outline" size="icon" title={t("ui.loans.buttons.view") || "View loan"}>
-                <Eye className="h-4 w-4" />
-            </Button>
-        </Link>
           <Link href={`/loans/${loan.id}/edit?page=${currentPage}&perPage=${perPage}`}>
             <Button variant="outline" size="icon" title={t("ui.loans.buttons.edit") || "Edit loan"}>
               <PencilIcon className="h-4 w-4" />
@@ -149,16 +181,19 @@ export default function LoansIndex() {
       <LoanLayout title={t('ui.loans.title')}>
           <div className="p-6">
               <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                      <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
-                      <Link href="/loans/create">
-                          <Button>
-                              <PlusIcon className="mr-2 h-4 w-4" />
-                              {t('ui.loans.buttons.new')}
-                          </Button>
-                      </Link>
-                  </div>
-                  <div></div>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
+
+                <div className="flex flex-col sm:flex-row gap-2">
+                    <Link href="/loans/create">
+                    <Button className="bg-blue-500 sm:mr-3 w-full sm:w-auto">
+                        <SearchCheck className="mr-2 h-4 w-4" />
+                        {t('ui.loans.active')}
+                    </Button>
+                    </Link>
+                </div>
+                </div>
+
 
                   <div className="space-y-4">
                       <FiltersTable
@@ -211,6 +246,7 @@ export default function LoansIndex() {
                                     label: t('ui.loans.filters.days_overdue'),
                                     type: 'number',
                                     placeholder: t('ui.loans.placeholders.days_overdue'),
+                                    min: 0,
                                 },
                                 {
                                     id: 'active',

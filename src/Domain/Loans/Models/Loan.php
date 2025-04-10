@@ -27,6 +27,10 @@ class Loan extends Model
     }
     //use HasApiTokens
 
+
+    const CREATED_AT = 'start_loan';
+    const UPDATED_AT = 'updated_date';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -34,13 +38,16 @@ class Loan extends Model
      */
     protected $fillable = [
         'id',
-        'start_loan',
         'end_loan',
         'days_overdue',
         'active',
         'user_id',
         'book_id',
+
     ];
+
+
+
 
     public function user(): BelongsTo
     {

@@ -440,7 +440,8 @@ return [
                 'name' => 'Zona',
                 'floor_number' => 'Piso',
                 'actions' => 'Acciones',
-                'isbn_loan_count' => 'Ejemplares disponibles',
+                'isbn_loan_count' => 'Ejemplares prestados',
+                'borrow'=> 'Tomar prestado'
             ],
             'show'=> [
                 'title' => 'Título',
@@ -505,6 +506,10 @@ return [
         'loans'=> [
             'title' => 'Préstamos',
             'description' => 'Gestiona los préstamos',
+            'active'=> 'Ver préstamos activos',
+            'card'=>[
+                 'create'=> 'Realizar un préstamo:',
+            ],
             'filters' => [
                 'title' => 'Títlo',
                 'author' => 'Autor',
@@ -544,6 +549,8 @@ return [
                 'end_loan' => 'Final del préstamo',
                 'days_overdue' => 'Días de retraso',
                 'active' => 'Estado del préstamo',
+                'email'=>'Email del usuario',
+                'return'=>'Devolver libro',
             ],
         ]
 ];

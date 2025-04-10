@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Book, useDeleteBook, useBooks } from "@/hooks/books/useBooks";
-import { PencilIcon, PlusIcon, TrashIcon, Eye } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, Eye, BookUp  } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { useTranslations } from "@/hooks/use-translations";
 import { Table } from "@/components/stack-table/Table";
 import { createTextColumn, createDateColumn, createActionsColumn } from "@/components/stack-table/columnsTable";
@@ -37,11 +37,10 @@ export default function BooksIndex() {
     filters.genre ? filters.genre : "null",
     filters.ISBN ? filters.ISBN : "null",
     filters.editorial ? filters.editorial : "null",
-    filters.status ? filters.status : "null",
+    filters.available ? filters.available : "null",
     filters.bookcase_name ? filters.bookcase_name : "null",
     filters.name ? filters.name : "null",
     filters.floor_number ? filters.floor_number : "null",
-    filters.isbn_count ? filters.isbn_count : "null",
   ]
 
   const { data: books, isLoading, isError, refetch } = useBooks({
@@ -70,6 +69,12 @@ export default function BooksIndex() {
     }
   };
 
+  //Crear préstamo
+
+  function handleCreate(book_id:string, title:string, author:string, ISBN: number) {
+    return router.get('loans/create', {book_id, title, author, ISBN});
+  };
+
   //ISBN count
   interface BookCount {
     ISBN: string;
@@ -78,6 +83,23 @@ export default function BooksIndex() {
 
 
   const columns = useMemo(() => ([
+    createActionsColumn<Book>({
+        id: "actions",
+        header: t("ui.books.columns.borrow") || "Actions",
+        renderActions: (book) => (
+          <>
+              <Button
+              variant="outline"
+              size="icon"
+              title={t("ui.books.buttons.edit") || "Edit book"}
+              onClick={()=>{handleCreate(book.id, book.title, book.author, book.ISBN)}}
+              disabled={!book.available} // Desactivar el botón si el préstamo está inactivo
+              className={`${book.available ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}>
+                <BookUp  className="h-4 w-4" />
+              </Button>
+          </>
+        ),
+      }),
     createTextColumn<Book>({
       id: "title",
       header: t("ui.books.columns.title") || "Title",
@@ -112,10 +134,10 @@ export default function BooksIndex() {
       }),
       createTextColumn<Book>({
         id: "available",
-        header: t("ui.books.columns.status") || "status",
+        header: t("ui.books.columns.available") || "available",
         accessorKey: "available",
         format(value){
-            return value? 'available' : 'not available'
+            return value? 'Disponible' : 'No disponible'
         }
       }),
       createTextColumn<Book>({
@@ -163,11 +185,6 @@ export default function BooksIndex() {
       header: t("ui.books.columns.actions") || "Actions",
       renderActions: (book) => (
         <>
-        <Link href={`/books/${book.id}`}>
-            <Button variant="outline" size="icon" title={t("ui.books.buttons.view") || "View book"}>
-                <Eye className="h-4 w-4" />
-            </Button>
-        </Link>
           <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
             <Button variant="outline" size="icon" title={t("ui.books.buttons.edit") || "Edit book"}>
               <PencilIcon className="h-4 w-4" />
@@ -239,10 +256,10 @@ export default function BooksIndex() {
                                     placeholder: t('ui.books.placeholders.editorial'),
                                 },
                                 {
-                                    id: 'status',
-                                    label: t('ui.books.filters.status'),
+                                    id: 'available',
+                                    label: t('ui.books.filters.available'),
                                     type: 'text',
-                                    placeholder: t('ui.books.placeholders.status'),
+                                    placeholder: t('ui.books.placeholders.available'),
                                 },
                                 {
                                     id: 'bookcase_name',
