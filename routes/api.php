@@ -6,6 +6,7 @@ use App\Zones\Controllers\Api\ZoneApiController;
 use App\Bookcases\Controllers\Api\BookcaseApiController;
 use App\Books\Controllers\Api\BookApiController;
 use App\Loans\Controllers\Api\LoanApiController;
+use App\Reserves\Controllers\Api\ReserveApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web', 'auth'])->group(function () {
@@ -54,5 +55,13 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/loans', [LoanApiController::class, 'store']);
     Route::put('/loans/{loan}', [LoanApiController::class, 'update']);
     Route::delete('/loans/{loan}', [LoanApiController::class, 'destroy']);
+});
+
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/reserves', [ReserveApiController::class, 'index']);
+    Route::get('/reserves/{reserve}', [ReserveApiController::class, 'show']);
+    Route::post('/reserves', [ReserveApiController::class, 'store']);
+    Route::put('/reserves/{reserve}', [ReserveApiController::class, 'update']);
+    Route::delete('/reserves/{reserve}', [ReserveApiController::class, 'destroy']);
 });
 

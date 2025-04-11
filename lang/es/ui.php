@@ -530,7 +530,7 @@ return [
                     'active' => 'Préstamo activo/inactivo...',
              ],
              'buttons' => [
-                'new' => 'Nuevo Libro',
+                'new' => 'Nuevo Préstamo',
                 'edit' => 'Editar',
                 'save' => 'Guardar',
                 'update' => 'Actualizar',
@@ -550,7 +550,14 @@ return [
                 'days_overdue' => 'Días de retraso',
                 'active' => 'Estado del préstamo',
                 'email'=>'Email del usuario',
-                'return'=>'Devolver libro',
+                'delete' => 'Eliminar',
+                'edit'=> 'Editar préstamo',
             ],
+            'fields'=> [
+            'ISBN' => 'ISBN',
+        ],
+        'cards'=>[
+            'new'=> 'Nuevo préstamo',
+        ],
         ]
 ];

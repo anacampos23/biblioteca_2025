@@ -553,7 +553,14 @@ return [
             'days_overdue' => 'Days overdue',
             'active' => 'Active/Inactive loan',
             'email'=> 'User email',
-            'return' => 'Return book',
+            'delete' => 'Eliminar',
+            'edit'=> 'Edit Loan',
         ],
+        'fields'=> [
+            'ISBN' => 'ISBN',
+        ],
+        'cards'=>[
+            'new'=> 'New loan',
+        ]
     ],
 ];

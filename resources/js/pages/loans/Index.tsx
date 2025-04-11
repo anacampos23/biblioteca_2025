@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Loan, useDeleteLoan, useLoans } from "@/hooks/loans/useLoans";
-import { PencilIcon, PlusIcon, TrashIcon, BookCheck , SearchCheck  } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, BookCheck , SearchCheck, TimerReset } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -15,6 +15,13 @@ import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { LoanLayout } from "@/layouts/loans/LoanLayout";
 import { router } from "@inertiajs/react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function LoansIndex() {
   const { t } = useTranslations();
@@ -69,19 +76,33 @@ export default function LoansIndex() {
     }
   };
 
+  //Change status from active to inactive
   function handleChangeStatus (loan_id: string){
     const newStatus = false;
     const informacion = new FormData();
     informacion.append('newStatus', newStatus);
     informacion.append('_method', 'PUT');
     router.post(`/loans/${loan_id}`, informacion);
-    window.location.reload();
+    refetch();
   };
+
+    //Change status from active to inactive
+    function handleChangeDueDate (loan_id: string,end_loan: string){
+        const endDate = new Date(end_loan);
+        endDate.setDate(endDate.getDate() + 15);
+        const newDueDate = endDate.toISOString().split('T')[0]; // formato YYYY-MM-DD
+
+        const informacion = new FormData();
+        informacion.append('newDueDate', newDueDate);
+        informacion.append('_method', 'PUT');
+        router.post(`/loans/${loan_id}`, informacion);
+        refetch();
+      };
 
   const columns = useMemo(() => ([
     createActionsColumn<Loan>({
         id: "actions",
-        header: t("ui.loans.columns.return") || "Actions",
+        header: t("ui.loans.columns.edit") || "Edit",
         renderActions: (loan) => (
           <>
               <Button
@@ -93,6 +114,16 @@ export default function LoansIndex() {
                 className={`${loan.active ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
                 >
                   <BookCheck  className="h-4 w-4" />
+              </Button>
+              <Button
+                onClick={() => handleChangeDueDate(loan.id, loan.end_loan)}
+                variant="outline"
+                size="icon"
+                title={t("ui.loans.buttons.view") || "View loan"}
+                disabled={!loan.active} // Desactivar el botón si el préstamo está inactivo
+                className={`${loan.active ? 'bg-orange-400 text-white hover:bg-orange-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+                >
+                  <TimerReset   className="h-4 w-4" />
               </Button>
           </>
         ),
@@ -153,14 +184,9 @@ export default function LoansIndex() {
       }),
     createActionsColumn<Loan>({
       id: "actions",
-      header: t("ui.loans.columns.actions") || "Actions",
+      header: t("ui.loans.columns.delete") || "Actions",
       renderActions: (loan) => (
         <>
-          <Link href={`/loans/${loan.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.loans.buttons.edit") || "Edit loan"}>
-              <PencilIcon className="h-4 w-4" />
-            </Button>
-          </Link>
           <DeleteDialog
             id={loan.id}
             onDelete={handleDeleteLoan}
@@ -185,12 +211,18 @@ export default function LoansIndex() {
                 <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
 
                 <div className="flex flex-col sm:flex-row gap-2">
-                    <Link href="/loans/create">
                     <Button className="bg-blue-500 sm:mr-3 w-full sm:w-auto">
-                        <SearchCheck className="mr-2 h-4 w-4" />
+                        <SearchCheck
+                        className="mr-2 h-4 w-4" />
                         {t('ui.loans.active')}
                     </Button>
-                    </Link>
+
+                    <Link href="/loans/create">
+                          <Button>
+                              <PlusIcon className="mr-2 h-4 w-4" />
+                              {t('ui.loans.buttons.new')}
+                          </Button>
+                      </Link>
                 </div>
                 </div>
 
@@ -253,8 +285,7 @@ export default function LoansIndex() {
                                     label: t('ui.loans.filters.active'),
                                     type: 'text',
                                     placeholder: t('ui.loans.placeholders.active'),
-                                },
-
+                                    },
                               ] as FilterConfig[]
                           }
                           onFilterChange={setFilters}

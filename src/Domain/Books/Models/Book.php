@@ -10,6 +10,7 @@ use Domain\Loans\Models\Loan;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Database\Factories\BookFactory;
+use Domain\Reserves\Models\Reserve;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -70,7 +71,7 @@ class Book extends Model implements HasMedia
 
 
     /**
-         * Get the active loans.
+         * Get the loans.
          */
         public function loans(): HasMany
         {
@@ -83,5 +84,13 @@ class Book extends Model implements HasMedia
     public function activeLoan(): HasOne
     {
         return $this->hasOne(Loan::class)->where('active', true);
+    }
+
+    /**
+         * Get the reserves.
+         */
+        public function reserves(): HasMany
+    {
+        return $this->hasMany(Reserve::class);
     }
 }

@@ -7,6 +7,7 @@ use Carbon\Month;
 use Domain\Loans\Data\Resources\LoanResource;
 use Domain\Loans\Models\Loan;
 use Domain\Users\Models\User;
+use Domain\Books\Models\Book;
 use Illuminate\Support\Facades\Hash;
 
 class LoanStoreAction
@@ -14,9 +15,10 @@ class LoanStoreAction
     public function __invoke(array $data): LoanResource
     {
         $userId = User::where('email', $data['email'])->first()->id;
+        $bookId = Book::where('ISBN', $data['ISBN'])->first()->id;
 
         $loan = Loan::create([
-            'book_id' => $data['book_id'],
+            'book_id' => $bookId,
             'user_id' => $userId,
             'start_loan' => Carbon::now(),
             'end_loan' => Carbon::now()->addMonth(),
