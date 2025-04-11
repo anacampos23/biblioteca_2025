@@ -6,6 +6,7 @@ use Domain\Users\Models\UserSetting;
 use Domain\Loans\Models\Loan;
 
 use Database\Factories\UserFactory;
+use Domain\Reserves\Models\Reserve;
 use Domain\Users\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -90,5 +91,12 @@ class User extends Authenticatable
     public function activeLoan(): HasMany
     {
         return $this->hasOne(Loan::class)->where('active', true);
+    }
+    /**
+         * Get the settings associated with the user.
+         */
+        public function reserves(): HasMany
+    {
+        return $this->hasMany(Reserve::class);
     }
     }

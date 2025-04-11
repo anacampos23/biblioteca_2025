@@ -93,9 +93,8 @@ export default function BooksIndex() {
               size="icon"
               title={t("ui.books.buttons.edit") || "Edit book"}
               onClick={()=>{handleCreate(book.id, book.title, book.author, book.ISBN)}}
-              disabled={!book.available} // Desactivar el botón si el préstamo está inactivo
               className={`${book.available ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}>
-                <BookUp  className="h-4 w-4" />
+                <BookUp  className="h-4 w-4 orange-600" />
               </Button>
           </>
         ),

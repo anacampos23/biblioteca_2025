@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Loans\Controllers;
+namespace App\Reserves\Controllers;
 
 use App\Core\Controllers\Controller;
-use Domain\Loans\Actions\LoanDestroyAction;
-use Domain\Loans\Actions\LoanIndexAction;
-use Domain\Loans\Actions\LoanStoreAction;
-use Domain\Loans\Actions\LoanUpdateAction;
-use Domain\Loans\Models\Loan;
+use Domain\Reserves\Actions\ReserveDestroyAction;
+use Domain\Reserves\Actions\ReserveIndexAction;
+use Domain\Reserves\Actions\ReserveStoreAction;
+use Domain\Reserves\Actions\ReserveUpdateAction;
+use Domain\Reserves\Models\Reserve;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -16,11 +16,11 @@ use Inertia\Response;
 use Domain\Users\Models\User;
 use Domain\Books\Models\Book;
 
-class LoanController extends Controller
+class ReserveController extends Controller
 {
     public function index()
     {
-        return Inertia::render('loans/Index');
+        return Inertia::render('reserves/Index');
     }
 
 
@@ -29,17 +29,17 @@ class LoanController extends Controller
         $books = Book::select(['id', 'title', 'author', 'ISBN']) ->get() -> toArray();
         $users = User::select(['id', 'name', 'email']) ->orderBy('name', 'asc') ->get() -> toArray();
 
-        return Inertia::render('loans/Create', [
+        return Inertia::render('reserves/Create', [
             'users' => $users,
             'books' => $books,
         ]);
     }
 
-    public function store(Request $request, LoanStoreAction $action)
+    public function store(Request $request, ReserveStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'email' => ['required'],
-            'ISBN' => ['required'],
+            // 'email' => ['required'],
+            // 'ISBN' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -48,42 +48,42 @@ class LoanController extends Controller
 
         $action($validator->validated());
 
-        return redirect()->route('loans.index')
-            ->with('success', __('messages.loans.created'));
+        return redirect()->route('reserves.index')
+            ->with('success', __('messages.reserves.created'));
     }
 
-    public function edit(Request $request, Loan $loan)
+    public function edit(Request $request, Reserve $reserve)
     {
 
         $books = Book::select(['id', 'title', 'author', 'ISBN']) ->get() -> toArray();
         $users = User::select(['id', 'name', 'email']) ->orderBy('name', 'asc') ->get() -> toArray();
 
-        return Inertia::render('loans/Edit', [
+        return Inertia::render('reserves/Edit', [
             'users' => $users,
             'books' => $books,
         ]);
     }
 
-    public function update(Request $request, Loan $loan, LoanUpdateAction $action)
+    public function update(Request $request, Reserve $reserve, ReserveUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
             // 'book_id' => ['required', 'exists:books, id'],
             // 'user_id' => ['required', 'exists:users, id'],
-            // 'start_loan' => ['required', 'date'],
-            // 'end_loan' => ['required', 'date'],
+            // 'start_reserve' => ['required', 'date'],
+            // 'end_reserve' => ['required', 'date'],
             // 'days_overdue' => ['required', 'numeric', 'max:255'],
             // 'active' => ['required', 'boolean'],
-            'newDueDate' => [],
-            'newStatus' => [],
+            // 'newDueDate' => [],
+            // 'newStatus' => [],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
 
-        $action($loan, $validator->validated());
+        $action($reserve, $validator->validated());
 
-        $redirectUrl = route('loans.index');
+        $redirectUrl = route('reserves.index');
 
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {
@@ -94,14 +94,14 @@ class LoanController extends Controller
         }
 
         return redirect($redirectUrl)
-            ->with('success', __('messages.loans.updated'));
+            ->with('success', __('messages.reserves.updated'));
     }
 
-    public function destroy(Loan $loan, LoanDestroyAction $action)
+    public function destroy(Reserve $reserve, ReserveDestroyAction $action)
     {
-        $action($loan);
+        $action($reserve);
 
-        return redirect()->route('loans.index')
-            ->with('success', __('messages.loans.deleted'));
+        return redirect()->route('reserves.index')
+            ->with('success', __('messages.reserves.deleted'));
     }
 }

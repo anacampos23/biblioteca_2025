@@ -2,13 +2,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { useTranslations } from '@/hooks/use-translations';
 import { LoanLayout } from '@/layouts/loans/LoanLayout';
-import { BookUp  } from 'lucide-react';
-import { number } from 'zod';
+import { PageProps } from '@inertiajs/core';
+import { User } from 'lucide-react';
 import { LoanForm } from './components/LoanForm';
-import { usePage } from '@inertiajs/react';
 
-interface LoanFormProps {
-    initialData?: {
+interface EditLoanProps extends PageProps {
+    loan: {
         id: string;
         start_loan: string;
         end_loan: string;
@@ -26,31 +25,29 @@ interface LoanFormProps {
     perPage?: string;
 }
 
-export default function CreateLoan({initialData, page, perPage}: LoanFormProps) {
+export default function EditLoan({ loan, page, perPage }: EditLoanProps) {
     const { t } = useTranslations();
-    const url=window.location.href;
-    const param = new URLSearchParams(window.location.search);
-
-    const title = param.get('title');
-    const author = param.get('author');
 
     return (
-        <LoanLayout title={t('ui.loans.cards.new')}>
+        <LoanLayout title={t('ui.loans.edit')}>
             <div className="flex max-w-screen items-center self-center">
                 <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
-                            <div className="flex items-center gap-1 mt-5">
-                                <BookUp  color="#2762c2" />
-                                {t('ui.loans.card.create')}
+                            <div className="flex items-center gap-1">
+                                <User color="#2762c2" />
+                                {t('ui.loans.cards.title')}
                             </div>
                         </CardTitle>
-                        <CardDescription className= "font-semibold mt-2">{title}</CardDescription>
-                        <CardDescription>{author}</CardDescription>
+                        <CardDescription>{t('ui.loans.cards.description')}</CardDescription>
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <LoanForm />
+                        <LoanForm
+                            initialData={loan}
+                            page={page}
+                            perPage={perPage}
+                        />
                     </CardContent>
                 </Card>
             </div>
