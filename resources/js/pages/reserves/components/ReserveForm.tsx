@@ -12,18 +12,14 @@ import { router } from '@inertiajs/react';
 import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { Bolt, Eye, EyeOff, FileText, Lock, Mail, PackageOpen, Save, Shield, Building2, X, Barcode  } from 'lucide-react';
+import { Bolt, FileText, Lock, Mail, PackageOpen, Save, Shield, Building2, X, Barcode } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 
-interface LoanFormProps {
+interface ReserveFormProps {
     initialData?: {
         id: string;
-        start_loan: string;
-        end_loan: string;
-        days_overdue: number;
-        active: boolean;
         user_id: string;
         book_id: string;
         name: string;
@@ -48,7 +44,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
+export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const url=window.location.href;
@@ -62,10 +58,6 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
         defaultValues: {
             book_id: initialData?.book_id ?? bookId ?? '',
             email: initialData?.email ?? '',
-            start_loan: initialData?.start_loan ?? '',
-            end_loan: initialData?.end_loan ?? '',
-            days_overdue: initialData?.days_overdue ?? '',
-            active: initialData?.active ?? '',
             user_id: initialData?.user_id ?? '',
             name: initialData?.name ?? '',
             title: initialData?.title ?? '',
@@ -75,20 +67,20 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
 
         onSubmit: async ({ value }) => {
 
-            const loanData = {
+            const reserveData = {
                 ...value,
             };
 
-            console.log('Datos del formulario:', loanData);
+            console.log('Datos del formulario:', reserveData);
             const options = {
                 // preserveState:true,
                 onSuccess: () => {
                     console.log('Préstamo creado con éxito.');
 
-                    queryClient.invalidateQueries({ queryKey: ['loans'] });
+                    queryClient.invalidateQueries({ queryKey: ['reserves'] });
 
                     // Construct URL with page parameters
-                    let url = '/loans';
+                    let url = '/reserves';
                     if (page) {
                         url += `?page=${page}`;
                         if (perPage) {
@@ -100,16 +92,16 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                 },
                 onError: (errors: Record<string, string>) => {
                     if (Object.keys(errors).length === 0) {
-                        toast.error(initialData ? t('messages.loans.error.update') : t('messages.loans.error.create'));
+                        toast.error(initialData ? t('messages.reserves.error.update') : t('messages.reserves.error.create'));
                     }
                 },
             };
 
             // Submit with Inertia
             if (initialData) {
-                router.put(`/loans/${initialData.id}`, loanData, options);
+                router.put(`/reserves/${initialData.id}`, reserveData, options);
             } else {
-                router.post('/loans', loanData, options);
+                router.post('/reserves', reserveData, options);
             }
         },
     });
@@ -136,7 +128,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                                 onChangeAsync: async ({ value }) => {
                                     await new Promise((resolve) => setTimeout(resolve, 500));
                                     return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.loans.fields.ISBN')})
+                                        ? t('ui.validation.required', { attribute: t('ui.reserves.fields.ISBN')})
                                             : undefined;
                                 },
                             }}
@@ -146,7 +138,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                                     <Label htmlFor={field.name}>
                                         <div className="mb-1 flex items-center gap-1">
                                             <Barcode  color="grey" size={18} />
-                                            {t('ui.loans.fields.ISBN')}
+                                            {t('ui.reserves.fields.ISBN')}
                                         </div>
                                     </Label>
 
@@ -157,7 +149,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                                         value={field.state.value}
                                         onChange={(e) => field.handleChange(Number(e.target.value))}
                                         onBlur={field.handleBlur}
-                                        placeholder={t('ui.loans.placeholders.ISBN')}
+                                        placeholder={t('ui.reserves.placeholders.ISBN')}
                                         disabled={form.state.isSubmitting}
                                         required={false}
                                         autoComplete="off"
@@ -217,7 +209,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                         type="button"
                         variant="outline"
                         onClick={() => {
-                            let url = '/loans';
+                            let url = '/reserves';
                             if (page) {
                                 url += `?page=${page}`;
                                 if (perPage) {
@@ -229,7 +221,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                         disabled={form.state.isSubmitting}
                     >
                         <X />
-                        {t('ui.loans.buttons.cancel')}
+                        {t('ui.reserves.buttons.cancel')}
                     </Button>
 
                     <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
@@ -237,10 +229,10 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                             <Button type="submit" disabled={!canSubmit}>
                                 <Save />
                                 {isSubmitting
-                                    ? t('ui.loans.buttons.saving')
+                                    ? t('ui.reserves.buttons.saving')
                                     : initialData
-                                      ? t('ui.loans.buttons.update')
-                                      : t('ui.loans.buttons.save')}
+                                      ? t('ui.reserves.buttons.update')
+                                      : t('ui.reserves.buttons.save')}
                             </Button>
                         )}
                     </form.Subscribe>

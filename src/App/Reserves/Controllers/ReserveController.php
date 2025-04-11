@@ -38,8 +38,8 @@ class ReserveController extends Controller
     public function store(Request $request, ReserveStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            // 'email' => ['required'],
-            // 'ISBN' => ['required'],
+            'email' => ['required'],
+             'ISBN' => ['required'],
         ]);
 
         if ($validator->fails()) {
