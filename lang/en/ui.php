@@ -553,7 +553,7 @@ return [
             'days_overdue' => 'Days overdue',
             'active' => 'Active/Inactive loan',
             'email'=> 'User email',
-            'delete' => 'Eliminar',
+            'delete' => 'Delete',
             'edit'=> 'Edit Loan',
         ],
         'fields'=> [
@@ -563,4 +563,46 @@ return [
             'new'=> 'New loan',
         ]
     ],
+    'reserves'=>[
+        'title' => 'Reservations',
+        'description' => 'Manage the book reservations',
+        'card'=>[
+            'create'=> 'Make a book reservation:',
+            'new'=> 'New book reservation',
+        ],
+        'filters' => [
+            'title' => 'Title',
+            'author' => 'Author',
+            'ISBN' => 'ISBN',
+            'name' => 'User name',
+        ],
+        'placeholders' => [
+                'title' => 'Title...',
+                'author' => 'Author...',
+                'ISBN' => 'ISBN...',
+            ],
+            'buttons' => [
+            'new' => 'New Reservation',
+            'edit' => 'Edit',
+            'save' => 'Save',
+            'update' => 'Update',
+            'cancel' => 'Cancel',
+            'delete' => 'Delete',
+            'deleting' => 'Deleting...',
+            'saving' => 'Saving...',
+            'retry' => 'Retry',
+        ],
+        'columns' => [
+            'title' => 'Title',
+            'author' => 'Author',
+            'ISBN' => 'ISBN',
+            'name' => 'User name',
+            'email'=> 'User email',
+            'delete' => 'Delete',
+            'edit'=> 'Edit Reservation',
+        ],
+        'fields'=> [
+            'ISBN' => 'ISBN',
+        ],
+    ]
 ];

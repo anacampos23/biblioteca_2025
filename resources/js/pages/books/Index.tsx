@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Book, useDeleteBook, useBooks } from "@/hooks/books/useBooks";
-import { PencilIcon, PlusIcon, TrashIcon, Eye, BookUp  } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, Eye, BookUp, BookmarkCheck } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
@@ -69,11 +69,15 @@ export default function BooksIndex() {
     }
   };
 
-  //Crear préstamo
+ // Crear préstamo o reserva
+function handleCreateLoan_ReserveBook(book_id: string, title: string, author: string, ISBN: number, available: boolean) {
+    if (available === true) {
+      return router.get('/loans/create', { book_id, title, author, ISBN });
+    } else {
+      return router.get('/reserves/create', { book_id, title, author, ISBN });
+    }
+  }
 
-  function handleCreate(book_id:string, title:string, author:string, ISBN: number) {
-    return router.get('loans/create', {book_id, title, author, ISBN});
-  };
 
   //ISBN count
   interface BookCount {
@@ -92,9 +96,13 @@ export default function BooksIndex() {
               variant="outline"
               size="icon"
               title={t("ui.books.buttons.edit") || "Edit book"}
-              onClick={()=>{handleCreate(book.id, book.title, book.author, book.ISBN)}}
-              className={`${book.available ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}>
-                <BookUp  className="h-4 w-4 orange-600" />
+              onClick={()=>{handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available)}}
+              className={`${book.available ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-gray-300 text-gray-500'}`}>
+                {book.available ? (
+                    <BookUp className="h-4 w-4" />
+                ) : (
+                    <BookmarkCheck className="h-4 w-4" />
+                )}
               </Button>
           </>
         ),

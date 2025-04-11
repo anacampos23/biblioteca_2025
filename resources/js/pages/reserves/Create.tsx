@@ -1,19 +1,15 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useTranslations } from '@/hooks/use-translations';
-import { LoanLayout } from '@/layouts/loans/LoanLayout';
-import { BookUp  } from 'lucide-react';
+import { ReserveLayout } from '@/layouts/reserves/ReserveLayout';
+import { BookmarkCheck  } from 'lucide-react';
 import { number } from 'zod';
-import { LoanForm } from './components/LoanForm';
 import { usePage } from '@inertiajs/react';
+import { ReserveForm } from './components/ReserveForm';
 
-interface LoanFormProps {
+interface ReserveFormProps {
     initialData?: {
         id: string;
-        start_loan: string;
-        end_loan: string;
-        days_overdue: number;
-        active: boolean;
         user_id: string;
         book_id: string;
         name: string;
@@ -26,7 +22,7 @@ interface LoanFormProps {
     perPage?: string;
 }
 
-export default function CreateLoan({initialData, page, perPage}: LoanFormProps) {
+export default function CreateReserve({initialData, page, perPage}: ReserveFormProps) {
     const { t } = useTranslations();
     const url=window.location.href;
     const param = new URLSearchParams(window.location.search);
@@ -35,14 +31,14 @@ export default function CreateLoan({initialData, page, perPage}: LoanFormProps) 
     const author = param.get('author');
 
     return (
-        <LoanLayout title={t('ui.loans.cards.new')}>
+        <ReserveLayout title={t('ui.reserves.card.new')}>
             <div className="flex max-w-screen items-center self-center">
                 <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1 mt-5">
-                                <BookUp  color="#2762c2" />
-                                {t('ui.loans.card.create')}
+                                <BookmarkCheck  color="#2762c2" />
+                                {t('ui.reserves.card.create')}
                             </div>
                         </CardTitle>
                         <CardDescription className= "font-semibold mt-2">{title}</CardDescription>
@@ -50,10 +46,10 @@ export default function CreateLoan({initialData, page, perPage}: LoanFormProps) 
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <LoanForm />
+                        <ReserveForm />
                     </CardContent>
                 </Card>
             </div>
-        </LoanLayout>
+        </ReserveLayout>
     );
 }

@@ -187,7 +187,7 @@ return [
             'email' => 'Email del usuario',
         ],
         'placeholders' => [
-            'name' => 'Nombre completo del usuario',
+            'name' => 'Nombre del usuario',
             'email' => 'correo@ejemplo.com',
             'password' => 'Contraseña segura',
             'search' => 'Buscar usuarios...',
@@ -509,6 +509,7 @@ return [
             'active'=> 'Ver préstamos activos',
             'card'=>[
                  'create'=> 'Realizar un préstamo:',
+                 'new'=> 'Nuevo préstamo',
             ],
             'filters' => [
                 'title' => 'Títlo',
@@ -556,8 +557,48 @@ return [
             'fields'=> [
             'ISBN' => 'ISBN',
         ],
-        'cards'=>[
-            'new'=> 'Nuevo préstamo',
+    ],
+
+    'reserves'=>[
+        'title' => 'Reservas',
+        'description' => 'Gestiona las reservas',
+        'card'=>[
+            'create'=> 'Reserva el libro',
+            'new'=> 'Nueva reserva',
         ],
-        ]
+        'filters' => [
+            'title' => 'Títlo',
+            'author' => 'Autor',
+            'ISBN' => 'ISBN',
+            'name' => 'Nombre de usuario',
+        ],
+        'placeholders' => [
+            'title' => 'Título...',
+            'author' => 'Autor...',
+            'ISBN' => 'ISBN...',
+         ],
+         'buttons' => [
+            'new' => 'Nueva Reserva',
+            'edit' => 'Editar',
+            'save' => 'Guardar',
+            'update' => 'Actualizar',
+            'cancel' => 'Cancelar',
+            'delete' => 'Eliminar',
+            'deleting' => 'Eliminando...',
+            'saving' => 'Guardando...',
+            'retry' => 'Reintentar',
+        ],
+        'columns' => [
+            'title' => 'Títlo',
+            'author' => 'Autor',
+            'ISBN' => 'ISBN',
+            'name' => 'Nombre de usuario',
+            'email'=>'Email del usuario',
+            'delete' => 'Eliminar',
+            'edit'=> 'Editar préstamo',
+        ],
+        'fields'=> [
+            'ISBN' => 'ISBN',
+        ],
+    ]
 ];
