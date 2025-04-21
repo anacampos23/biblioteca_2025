@@ -12,6 +12,7 @@ use Domain\Books\Models\Book;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Database\Factories\LoanFactory;
 use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
 
 
 class Loan extends Model
@@ -27,7 +28,6 @@ class Loan extends Model
     }
     //use HasApiTokens
 
-
     const CREATED_AT = 'start_loan';
     const UPDATED_AT = 'updated_date';
 
@@ -39,7 +39,7 @@ class Loan extends Model
     protected $fillable = [
         'id',
         'end_loan',
-        'days_overdue',
+        'due_date',
         'active',
         'user_id',
         'book_id',
@@ -58,4 +58,29 @@ class Loan extends Model
     {
         return $this->belongsTo(Book::class);
     }
+
+    /**
+     * Get the number of days the loan is overdue.
+     */
+    public function getDaysOverdueAttribute(): int
+{
+    if (!$this->end_loan) {
+        // El libro no ha sido devuelto, entonces comparamos con la fecha de hoy
+        $dueDate = Carbon::parse($this->due_date);
+        $today = Carbon::now();
+
+        // Si la fecha de vencimiento ya pasó y el libro aún no se ha devuelto, calculamos el retraso
+        return $dueDate->lt($today)
+            ? $dueDate->diffInDays($today) // Diferencia entre due_date y hoy
+            : 0; // Si no ha pasado el plazo, no hay retraso
+    }
+
+    // Si el libro ya ha sido devuelto, calculamos el retraso entre end_loan y due_date
+    $endLoanDate = Carbon::parse($this->end_loan);
+    $dueDate = Carbon::parse($this->due_date);
+
+    return $dueDate->lt($endLoanDate)
+        ? $dueDate->diffInDays($endLoanDate) // Si la devolución es después de la fecha de vencimiento
+        : 0; // Si no hay retraso, devolvemos 0
+}
 }

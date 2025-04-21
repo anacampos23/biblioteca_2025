@@ -4,14 +4,14 @@ import { useTranslations } from '@/hooks/use-translations';
 import { LoanLayout } from '@/layouts/loans/LoanLayout';
 import { PageProps } from '@inertiajs/core';
 import { User } from 'lucide-react';
-import { LoanForm } from './components/LoanForm';
+import { LoanForm } from '../loans/components/LoanForm';
 
 interface EditLoanProps extends PageProps {
     loan: {
         id: string;
         start_loan: string;
         end_loan: string;
-        days_overdue: number;
+        due_date: string;
         active: boolean;
         user_id: string;
         book_id: string;

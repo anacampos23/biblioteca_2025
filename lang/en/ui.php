@@ -76,6 +76,7 @@ return [
     'validation' => [
            'required' => 'The :attribute field is required.',
             'email' => 'The :attribute field must be a valid email address.',
+            'email_not_exist' => 'The email is not in the data base',
             'min' => [
                 'string' => 'The :attribute field must be at least :min characters.',
             ],
@@ -510,6 +511,7 @@ return [
         'title'=> 'Loans',
         'description'=> 'Manage the loans',
         'active'=> 'View active loans',
+        'ISBN_list'=> ':ISBN',
         'card'=>[
             'create'=> 'Make a loan:',
         ],
@@ -531,6 +533,7 @@ return [
                 'end_loan' => 'Date End loan',
                 'days_overdue' => 'Days overdue...',
                 'active' => 'Active/Inactive loan...',
+                'selectISBN' => 'Select the book ISBN',
             ],
             'buttons' => [
             'new' => 'New Loan',
@@ -542,6 +545,8 @@ return [
             'deleting' => 'Deleting...',
             'saving' => 'Saving...',
             'retry' => 'Retry',
+            'return' => 'Return the book',
+            'renew' => 'Renew the loan',
         ],
         'columns' => [
             'title' => 'Title',
@@ -549,7 +554,8 @@ return [
             'ISBN' => 'ISBN',
             'name' => 'User name',
             'start_loan' => 'Start loan',
-            'end_loan' => 'End loan',
+            'end_loan' => 'Returned',
+            'due_date' =>'Loan due date',
             'days_overdue' => 'Days overdue',
             'active' => 'Active/Inactive loan',
             'email'=> 'User email',
@@ -558,6 +564,8 @@ return [
         ],
         'fields'=> [
             'ISBN' => 'ISBN',
+            'not_returned' => 'Not returned yet',
+            'returned' => 'Returned: ',
         ],
         'cards'=>[
             'new'=> 'New loan',

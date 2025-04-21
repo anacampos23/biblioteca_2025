@@ -77,6 +77,7 @@ return [
     'validation' => [
             'required' => 'El campo :attribute es obligatorio.',
             'email' => 'El campo :attribute debe ser una dirección de correo válida.',
+            'email_not_exist'=> 'El email no se encuentra en la base de datos.',
             'min' => [
                 'string' => 'El campo :attribute debe tener al menos :min caracteres.',
             ],
@@ -507,6 +508,7 @@ return [
             'title' => 'Préstamos',
             'description' => 'Gestiona los préstamos',
             'active'=> 'Ver préstamos activos',
+            'ISBN_list'=> ':ISBN',
             'card'=>[
                  'create'=> 'Realizar un préstamo:',
                  'new'=> 'Nuevo préstamo',
@@ -529,6 +531,7 @@ return [
                     'end_loan' => 'Fecha final del préstamo',
                     'days_overdue' => 'Días de retraso...',
                     'active' => 'Préstamo activo/inactivo...',
+                    'selectISBN'=> 'Selecciona el ISBN del libro',
              ],
              'buttons' => [
                 'new' => 'Nuevo Préstamo',
@@ -540,6 +543,8 @@ return [
                 'deleting' => 'Eliminando...',
                 'saving' => 'Guardando...',
                 'retry' => 'Reintentar',
+                'return' => 'Devolver el libro',
+                'renew' => 'Alargar el préstamo',
             ],
             'columns' => [
                 'title' => 'Títlo',
@@ -547,7 +552,8 @@ return [
                 'ISBN' => 'ISBN',
                 'name' => 'Nombre de usuario',
                 'start_loan' => 'Inicio del préstamo',
-                'end_loan' => 'Final del préstamo',
+                'end_loan' => 'Devuelto',
+                'due_date' =>'Vencimiento del préstamo',
                 'days_overdue' => 'Días de retraso',
                 'active' => 'Estado del préstamo',
                 'email'=>'Email del usuario',
@@ -556,6 +562,8 @@ return [
             ],
             'fields'=> [
             'ISBN' => 'ISBN',
+            'not_returned' => 'No devuelto',
+            'returned' => 'Devuelto el: ',
         ],
     ],
 

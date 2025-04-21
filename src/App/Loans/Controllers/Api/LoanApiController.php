@@ -30,8 +30,8 @@ class LoanApiController extends Controller
             'book_id' => ['required', 'exists:books, id'],
             'user_id' => ['required', 'exists:users, id'],
             'start_loan' => ['required', 'date'],
-            'end_loan' => ['required', 'date'],
-            'days_overdue' => ['required', 'numeric', 'max:255'],
+            'end_loan' => ['date'],
+            'due_date' => ['required', 'date'],
             'active' => ['required', 'boolean'],
         ]);
 
@@ -53,8 +53,8 @@ class LoanApiController extends Controller
             'book_id' => ['required', 'exists:books, id'],
             'user_id' => ['required', 'exists:users, id'],
             'start_loan' => ['required', 'date'],
-            'end_loan' => ['required', 'date'],
-            'days_overdue' => ['required', 'numeric', 'max:255'],
+            'end_loan' => ['date'],
+            'due_date' => ['required', 'date'],
             'active' => ['required', 'boolean'],
         ]);
 
