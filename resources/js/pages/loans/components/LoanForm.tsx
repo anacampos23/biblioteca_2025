@@ -12,6 +12,7 @@ import { router } from '@inertiajs/react';
 import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
+import { includes } from 'lodash';
 import { Bolt, Eye, EyeOff, FileText, Lock, Mail, PackageOpen, Save, Shield, Building2, X, Barcode  } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -22,7 +23,7 @@ interface LoanFormProps {
         id: string;
         start_loan: string;
         end_loan: string;
-        days_overdue: number;
+        due_date: string;
         active: boolean;
         user_id: string;
         book_id: string;
@@ -32,6 +33,8 @@ interface LoanFormProps {
         author: string;
         ISBN: number;
     };
+    users: { id: string; name: string; email:string; }[];
+    ISBN_available: { id: string; ISBN: number; }[];
     page?: string;
     perPage?: string;
 }
@@ -48,7 +51,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
+export function LoanForm({ initialData, page, perPage, users, ISBN_available }: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const url=window.location.href;
@@ -57,6 +60,8 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
     const bookId = param.get('book_id');
     const bookISBN = param.get('ISBN');
 
+    const userEmails = users.map(user => user.email);
+
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
@@ -64,7 +69,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
             email: initialData?.email ?? '',
             start_loan: initialData?.start_loan ?? '',
             end_loan: initialData?.end_loan ?? '',
-            days_overdue: initialData?.days_overdue ?? '',
+            due_date: initialData?.due_date ?? '',
             active: initialData?.active ?? '',
             user_id: initialData?.user_id ?? '',
             name: initialData?.name ?? '',
@@ -137,7 +142,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                                     await new Promise((resolve) => setTimeout(resolve, 500));
                                     return !value
                                         ? t('ui.validation.required', { attribute: t('ui.loans.fields.ISBN')})
-                                            : undefined;
+                                        : undefined;
                                 },
                             }}
                         >
@@ -180,7 +185,11 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                                         ? t('ui.validation.required', { attribute: t('ui.users.fields.email').toLowerCase() })
                                         : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
                                             ? t('ui.validation.email', { attribute: t('ui.users.fields.email').toLowerCase() })
-                                            : undefined;
+                                            : !userEmails.includes(value) ? t('ui.validation.email_not_exist', {
+                                                attribute: t('ui.users.fields.email').toLowerCase(),
+                                              })
+
+                                            :undefined;
                                 },
                             }}
                         >

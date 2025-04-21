@@ -46,6 +46,7 @@ export default function LoansIndex() {
     filters.email ? filters.email : "null",
     filters.start_loan ? filters.start_loan : "null",
     filters.end_loan ? filters.end_loan : "null",
+    filters.due_date ? filters.due_date : "null",
     filters.days_overdue === 0 ? 0 : (filters.days_overdue ? filters.days_overdue : "null"),
     filters.active ? filters.active : "null",
   ]
@@ -109,7 +110,7 @@ export default function LoansIndex() {
                 onClick={() => handleChangeStatus(loan.id)}
                 variant="outline"
                 size="icon"
-                title={t("ui.loans.buttons.view") || "View loan"}
+                title={t("ui.loans.buttons.return") || "View loan"}
                 disabled={!loan.active} // Desactivar el botón si el préstamo está inactivo
                 className={`${loan.active ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
                 >
@@ -119,7 +120,7 @@ export default function LoansIndex() {
                 onClick={() => handleChangeDueDate(loan.id, loan.end_loan)}
                 variant="outline"
                 size="icon"
-                title={t("ui.loans.buttons.view") || "View loan"}
+                title={t("ui.loans.buttons.renew") || "View loan"}
                 disabled={!loan.active} // Desactivar el botón si el préstamo está inactivo
                 className={`${loan.active ? 'bg-orange-400 text-white hover:bg-orange-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
                 >
@@ -166,6 +167,21 @@ export default function LoansIndex() {
         id: "end_loan",
         header: t("ui.loans.columns.end_loan") || "end_loan",
         accessorKey: "end_loan",
+        format: (value) => {
+            // Si end_loan es null o no existe, mostramos mensaje
+            if (!value) {
+                return t("ui.loans.fields.not_returned");
+            }
+
+            // Si hay una fecha de devolución, la formateamos
+            const date = new Date(value);
+            return t("ui.loans.fields.returned") + date.toLocaleDateString("es-ES"); // Formato dd/mm/yyyy en España
+        },
+      }),
+      createTextColumn<Loan>({
+        id: "due_date",
+        header: t("ui.loans.columns.due_date") || "due_date",
+        accessorKey: "due_date",
         format: (value) => {
             const date = new Date(value);
             return date.toLocaleDateString("es-ES"); // Formato dd/mm/yyyy en España
@@ -272,6 +288,12 @@ export default function LoansIndex() {
                                     label: t('ui.loans.filters.end_loan'),
                                     type: 'date',
                                     placeholder: t('ui.loans.placeholders.end_loan'),
+                                },
+                                {
+                                    id: 'due_date',
+                                    label: t('ui.loans.filters.due_date'),
+                                    type: 'date',
+                                    placeholder: t('ui.loans.placeholders.due_date'),
                                 },
                                 {
                                     id: 'days_overdue',

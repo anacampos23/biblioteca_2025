@@ -11,7 +11,7 @@ interface EditLoanProps extends PageProps {
         id: string;
         start_loan: string;
         end_loan: string;
-        days_overdue: number;
+        due_date: string;
         active: boolean;
         user_id: string;
         book_id: string;
@@ -21,11 +21,13 @@ interface EditLoanProps extends PageProps {
         author: string;
         ISBN: number;
     };
+    ISBN_available: { id: string; ISBN: number; }[];
+    users: { id: string; name: string; email:string; }[];
     page?: string;
     perPage?: string;
 }
 
-export default function EditLoan({ loan, page, perPage }: EditLoanProps) {
+export default function EditLoan({ loan, users, ISBN_available, page, perPage }: EditLoanProps) {
     const { t } = useTranslations();
 
     return (
@@ -47,6 +49,8 @@ export default function EditLoan({ loan, page, perPage }: EditLoanProps) {
                             initialData={loan}
                             page={page}
                             perPage={perPage}
+                            users={users}
+                            ISBN_available={ISBN_available}
                         />
                     </CardContent>
                 </Card>

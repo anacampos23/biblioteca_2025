@@ -12,7 +12,8 @@ class LoanResource extends Data
     public function __construct(
         public readonly string $id,
         public readonly string $start_loan,
-        public readonly string $end_loan,
+        public readonly ?string $end_loan,
+        public readonly string $due_date,
         public readonly int $days_overdue,
         public readonly bool $active,
         public readonly string $user_id,
@@ -34,6 +35,7 @@ class LoanResource extends Data
             id: $loan->id,
             start_loan: $loan->start_loan,
             end_loan: $loan->end_loan,
+            due_date: $loan->due_date,
             days_overdue: $loan->days_overdue,
             active: $loan->active,
             user_id: $loan->user_id,

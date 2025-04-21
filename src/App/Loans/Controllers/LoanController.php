@@ -28,10 +28,15 @@ class LoanController extends Controller
     {
         $books = Book::select(['id', 'title', 'author', 'ISBN']) ->get() -> toArray();
         $users = User::select(['id', 'name', 'email']) ->orderBy('name', 'asc') ->get() -> toArray();
+        $ISBN_available = Book::select(['id', 'ISBN'])
+                ->where('available', true)
+                ->get()
+                ->toArray();
 
         return Inertia::render('loans/Create', [
             'users' => $users,
             'books' => $books,
+            'ISBN_available'=> $ISBN_available,
         ]);
     }
 

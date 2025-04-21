@@ -5,7 +5,7 @@ export interface Loan {
   id: string;
   start_loan: string;
   end_loan: string;
-  days_overdue: number;
+  due_date: string;
   active: boolean;
   book_id: string;
   user_id: string;
@@ -55,7 +55,7 @@ interface UseLoansParams {
   search?: any[];
   start_loan?: string;
   end_loan?: string;
-  days_overdue?: number;
+  due_date?: string;
   active?: boolean;
   book_id?: string;
   user_id?: string;
@@ -68,17 +68,17 @@ interface UseLoansParams {
   perPage?: number;
 }
 
-export function useLoans({ search, start_loan, end_loan, days_overdue, active, book_id, user_id, name, email, title, author, ISBN, page = 1, perPage = 10 }:
+export function useLoans({ search, start_loan, end_loan, due_date, active, book_id, user_id, name, email, title, author, ISBN, page = 1, perPage = 10 }:
     UseLoansParams = {}) {
   return useQuery({
-    queryKey: ["loans", { search, start_loan, end_loan, days_overdue, active, book_id, user_id, name, email, title, author, ISBN, page, perPage }],
+    queryKey: ["loans", { search, start_loan, end_loan, due_date, active, book_id, user_id, name, email, title, author, ISBN, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Loan>>("/api/loans", {
         params: {
           search,
           start_loan,
           end_loan,
-          days_overdue,
+          due_date,
           active,
           book_id,
           user_id,
@@ -117,7 +117,7 @@ export function useCreateLoan() {
     mutationFn: async (data: {
     start_loan?: string;
     end_loan?: string;
-    days_overdue?: number;
+    due_date?: string;
     active?: boolean;
     book_id?: string;
     user_id?: string;
@@ -144,7 +144,7 @@ export function useUpdateLoan(loanId: string) {
     mutationFn: async (data: {
         start_loan?: string;
         end_loan?: string;
-        days_overdue?: number;
+        due_date?: string;
         active?: boolean;
         book_id?: string;
         user_id?: string;
