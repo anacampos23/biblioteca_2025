@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

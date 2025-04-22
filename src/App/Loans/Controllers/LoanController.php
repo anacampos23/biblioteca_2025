@@ -31,8 +31,8 @@ class LoanController extends Controller
 
     public function create()
     {
-        $books = Book::select(['id', 'title', 'author', 'ISBN'])->get()->toArray();
-        $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->get()->toArray();
+        $books = Book::select(['id', 'title', 'author', 'ISBN'])->withTrashed()->get()->toArray();
+        $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->withTrashed()->get()->toArray();
         $ISBN_available = Book::select(['id', 'ISBN'])
             ->where('available', true)
             ->get()
@@ -84,8 +84,8 @@ class LoanController extends Controller
     public function edit(Request $request, Loan $loan)
     {
 
-        $books = Book::select(['id', 'title', 'author', 'ISBN'])->get()->toArray();
-        $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->get()->toArray();
+        $books = Book::select(['id', 'title', 'author', 'ISBN'])->withTrashed()->get()->toArray();
+        $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->withTrashed()->get()->toArray();
 
         return Inertia::render('loans/Edit', [
             'users' => $users,
@@ -114,23 +114,63 @@ class LoanController extends Controller
 
         $action($loan, $validator->validated());
 
-        // Obtén el book_id y el user_id del préstamo
+
+        //OBTENER EL ISBN DEL LIBRO DEVUELTO
         $bookId = $loan->book_id;
-        $userId = $loan->user_id;
+        $book = Book::find($bookId);
+        $bookISBN = $book->ISBN;
 
-        $reserves = Reserve::select(['user_id', 'book_id'])
-            ->where('book_id', $bookId)
-            ->get()
-            ->first(); // Obtiene la primera reserva que cumpla con el criterio
+        // Buscar la primera reserva de un libro que tenga el mismo ISBN
+        $reserve = Reserve::with(['book']) // Cargar relación con el libro
+            ->withTrashed()
+            ->whereHas('book', function ($query) use ($bookISBN) {
+                $query->where('ISBN', $bookISBN);
+            })
+            ->orderBy('created_at') // Opcional: para que sea la más antigua
+            ->first();
 
-        if (isset($reserves)) {
-
-            $user = User::select(['id', 'name', 'email'])
-            ->where('id', $userId)
-            ->get()
-            ->first(); // Obtiene la primera reserva que cumpla con el criterio
-            $user->notify(new notification_email);
+        if ($reserve) {
+            $user = User::find($reserve->user_id);
+            if ($user) {
+                $user->notify(new notification_email($reserve->book, $user));
+            }
         }
+
+
+
+
+
+        // // Obtener la reserva (según el book_id del préstamo)
+        // $bookId = $loan->book_id; //el id del libro prestado
+
+        // $reserves = Reserve::select(['user_id', 'book_id'])
+        //     ->withTrashed()
+        //     ->where('book_id', $bookId)
+        //     ->get()
+        //     ->first(); // Obtiene la primera reserva que cumpla con el criterio
+
+        //     //Encuentra el ISBN de ese libro
+        //     $bookISBN = Book::find('ISBN')
+        //         ->withTrashed()
+        //         ->where('ISBN', $bookId);
+
+
+        // //Enviar email si existe reserva
+        // if (isset($reserves)) {
+        //     //Obtener el usuario que tiene esa reserva
+        //     $userId = $reserves->user_id;
+
+        //     $user = User::select(['id', 'name', 'email'])
+        //         ->withTrashed()
+        //         ->where('id', $userId)
+        //         ->get()
+        //         ->first();
+
+        //     //Traer Book y User para usarlo en el mensaje
+        //     $book = Book::find($bookId);
+        //     $user = User::find($userId);
+        //     $user->notify(new notification_email($book, $user));
+        // }
 
         $redirectUrl = route('loans.index');
 

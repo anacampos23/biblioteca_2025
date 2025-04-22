@@ -28,8 +28,8 @@ class LoanResource extends Data
 
     public static function fromModel(Loan $loan): self
     {
-        $book = Book::select(['id', 'title', 'author', 'ISBN'])->where('id', $loan->book_id)->first();
-        $user = User::select(['id', 'name', 'email'])->where('id', $loan->user_id)->first();
+        $book = Book::select(['id', 'title', 'author', 'ISBN'])->where('id', $loan->book_id)->withTrashed()->first();
+        $user = User::select(['id', 'name', 'email'])->where('id', $loan->user_id)->withTrashed()->first();
 
         return new self(
             id: $loan->id,

@@ -20,27 +20,27 @@ class ReserveIndexAction
 
         //Título del libro
         $bookTitle = Book::query() -> when($title != "null", function ($query) use ($title){
-            $query -> where('title', 'ILIKE', "%".$title."%");
+            $query -> where('title', 'ILIKE', "%".$title."%")->withTrashed();
         })-> pluck('id');
 
         //Autor del libro
         $bookAuthor = Book::query() -> when($author != "null", function ($query) use ($author){
-            $query -> where('author', 'ILIKE', "%".$author."%");
+            $query -> where('author', 'ILIKE', "%".$author."%")->withTrashed();
         })-> pluck('id');
 
          //ISBN del libro
          $bookISBN = Book::query() -> when($ISBN != "null", function ($query) use ($ISBN){
-            $query -> where('ISBN', 'ILIKE', "%".$ISBN."%");
+            $query -> where('ISBN', 'ILIKE', "%".$ISBN."%")->withTrashed();
         })-> pluck('id');
 
         //Nombre del usuario
          $userName = User::query() -> when($name != "null", function ($query) use ($name){
-            $query -> where('name', 'ILIKE', "%".$name."%");
+            $query -> where('name', 'ILIKE', "%".$name."%")->withTrashed();
         })-> pluck('id');
 
         //email del usuario
         $userEmail = User::query() -> when($email != "null", function ($query) use ($email){
-            $query -> where('email', 'ILIKE', "%".$email."%");
+            $query -> where('email', 'ILIKE', "%".$email."%")->withTrashed();
         })-> pluck('id');
 
 

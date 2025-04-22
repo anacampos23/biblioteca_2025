@@ -66,7 +66,7 @@ class BookIndexAction
                 $query->where('editorial', 'ILIKE', "%".$editorial."%");
             })
             ->when($available !== "null", function ($query) use ($available) {
-                $query->where('available', $available === 'true');
+                $query->where('available', 'like', $available);
             })
             ->when($bookcase_name !== "null", function ($query) use ($bookcase_id) {
                 $query->where('bookcase_id', '=', $bookcase_id);

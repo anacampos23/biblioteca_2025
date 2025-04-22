@@ -102,7 +102,9 @@ export default function LoansIndex() {
         informacion.append('newDueDate', newDueDate);
         informacion.append('_method', 'PUT');
         router.post(`/loans/${loan_id}`, informacion);
-        refetch();
+        setTimeout(function(){
+            refetch();
+        }, 500)
       };
 
     //Search active/inactive
@@ -204,7 +206,7 @@ export default function LoansIndex() {
         id: "active",
         header: t("ui.loans.columns.active") || "active",
         accessorKey: "active",
-        format: (value)=>(value? 'Activo' : 'Inactivo')
+        format: (value)=>(value? t('ui.loans.filters.active_status') : t('ui.loans.filters.inactive_status'))
       }),
     createActionsColumn<Loan>({
       id: "actions",
@@ -315,7 +317,8 @@ export default function LoansIndex() {
                                 {
                                     id: 'active',
                                     label: t('ui.loans.filters.active'),
-                                    type: 'text',
+                                    type: 'select',
+                                    options:[{value:'true', label: t('ui.loans.filters.active_status')}, {value:'false', label: t('ui.loans.filters.inactive_status')}],
                                     placeholder: t('ui.loans.placeholders.active'),
 
                                     },

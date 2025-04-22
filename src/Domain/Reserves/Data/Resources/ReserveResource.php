@@ -26,8 +26,8 @@ class ReserveResource extends Data
     public static function fromModel(Reserve $reserve): self
     {
 
-        $book = Book::select(['id', 'title', 'author', 'ISBN'])->where('id', $reserve->book_id)->first();
-        $user = User::select(['id', 'name', 'email'])->where('id', $reserve->user_id)->first();
+        $book = Book::select(['id', 'title', 'author', 'ISBN'])->where('id', $reserve->book_id)->withTrashed()->first();
+        $user = User::select(['id', 'name', 'email'])->where('id', $reserve->user_id)->withTrashed()->first();
 
         return new self(
             id: $reserve->id,

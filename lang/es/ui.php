@@ -405,6 +405,8 @@ return [
                 'bookcase_name' => 'Estantería',
                 'name' => 'Zona',
                 'floor_number' => 'Piso',
+                'available' => 'Disponible',
+                'not_available' => 'No disponible'
             ],
             'placeholders' => [
                 'title' => 'Título...',
@@ -522,6 +524,8 @@ return [
                 'end_loan' => 'Final del préstamo',
                 'days_overdue' => 'Días de retraso',
                 'active' => 'Estado del préstamo',
+                'active_status' => 'En progreso',
+                'inactive_status' => 'Inactivo'
             ],
             'placeholders' => [
                  'title' => 'Título...',
@@ -530,7 +534,7 @@ return [
                  'start_loan' => 'Fecha de inicio del préstamo',
                     'end_loan' => 'Fecha final del préstamo',
                     'days_overdue' => 'Días de retraso...',
-                    'active' => 'Préstamo activo/inactivo...',
+                    'active' => 'Préstamo en progreso/inactivo...',
                     'selectISBN'=> 'Selecciona el ISBN del libro',
              ],
              'buttons' => [
