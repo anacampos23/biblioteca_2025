@@ -11,12 +11,17 @@ class notification_email extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    protected $book;
+    protected $user;
+
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($book, $user)
     {
-        //
+        $this->book = $book;
+        $this->user = $user;
     }
 
     /**
@@ -35,9 +40,12 @@ class notification_email extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('Aquí es donde escribo lo que llega')
-                    ->action('Tu reserva está lista', url('/'))
-                    ->line('Thank you for using our application!');
+            ->greeting('¡Hola ' . $this->user->name . '!')
+            ->line('Tu libro ya está disponible.')
+            ->line('"'. $this->book->title . '"'. ' de ' . $this->book->author)
+            ->line('Tienes 15 días para pasarte por la biblioteca para recogerlo.')
+            ->action('Biblioteca', url('/'))
+            ->line('Gracias por utilizar nuestros servicios');
     }
 
     /**

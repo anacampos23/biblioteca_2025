@@ -409,6 +409,8 @@ return [
             'bookcase_name' => 'Bookcase',
             'name' => 'Zone',
             'floor_number' => 'Floor',
+            'available' => 'Available',
+            'not_available' => 'Not available'
         ],
         'placeholders' => [
              'title' => 'Title...',
@@ -525,6 +527,8 @@ return [
             'end_loan' => 'End loan',
             'days_overdue' => 'Days overdue',
             'active' => 'Loan status',
+            'active_status' => 'In progress',
+            'inactive_status' => 'Inactive'
         ],
         'placeholders' => [
                 'title' => 'Title...',
@@ -533,7 +537,7 @@ return [
                 'start_loan' => 'Date Start loan',
                 'end_loan' => 'Date End loan',
                 'days_overdue' => 'Days overdue...',
-                'active' => 'Active/Inactive loan...',
+                'active' => 'In progress/Inactive loan...',
                 'selectISBN' => 'Select the book ISBN',
             ],
             'buttons' => [

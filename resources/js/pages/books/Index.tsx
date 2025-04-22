@@ -144,7 +144,7 @@ export default function BooksIndex() {
         header: t("ui.books.columns.available") || "available",
         accessorKey: "available",
         format(value){
-            return value? 'Disponible' : 'No disponible'
+            return value? t('ui.books.filters.available') : t('ui.books.filters.not_available')
         }
       }),
       createTextColumn<Book>({
@@ -265,7 +265,8 @@ export default function BooksIndex() {
                                 {
                                     id: 'available',
                                     label: t('ui.books.filters.available'),
-                                    type: 'text',
+                                    type: 'select',
+                                    options:[{value:'true', label: t('ui.books.filters.available')}, {value:'false', label: t('ui.books.filters.not_available')}],
                                     placeholder: t('ui.books.placeholders.available'),
                                 },
                                 {

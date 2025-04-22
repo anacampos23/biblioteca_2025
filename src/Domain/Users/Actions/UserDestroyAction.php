@@ -9,7 +9,7 @@ class UserDestroyAction
 {
     public function __invoke(User $user): void
     {
-        // $user->delete();
-        $user->notify(new notification_email);
+        $user->delete();
+
     }
 }

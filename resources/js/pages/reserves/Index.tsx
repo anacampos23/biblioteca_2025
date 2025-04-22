@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Reserve, useDeleteReserve, useReserves } from "@/hooks/reserves/useReserves";
-import { PencilIcon, PlusIcon, TrashIcon, BookCheck , SearchCheck, TimerReset } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon,  BookUp } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -78,6 +78,25 @@ export default function ReservesIndex() {
 
 
   const columns = useMemo(() => ([
+    createActionsColumn<Reserve>({
+        id: "actions",
+        header: t("ui.reserves.columns.loan") || "Actions",
+        renderActions: (reserve) => (
+          <>
+            <DeleteDialog
+              id={reserve.id}
+              onDelete={handleDeleteReserve}
+              title={t("ui.reserves.delete.title") || "Delete reserve"}
+              description={t("ui.reserves.delete.description") || "Are you sure you want to delete this reserve? This action cannot be undone."}
+              trigger={
+                <Button variant="outline" size="icon" className="" title={t("ui.reserves.buttons.delete") || "Delete reserve"}>
+                  <BookUp className="h-4 w-4" />
+                </Button>
+              }
+            />
+          </>
+        ),
+      }),
     createTextColumn<Reserve>({
       id: "title",
       header: t("ui.reserves.columns.title") || "Title",

@@ -26,8 +26,8 @@ class ReserveController extends Controller
 
     public function create()
     {
-        $books = Book::select(['id', 'title', 'author', 'ISBN']) ->get() -> toArray();
-        $users = User::select(['id', 'name', 'email']) ->orderBy('name', 'asc') ->get() -> toArray();
+        $books = Book::select(['id', 'title', 'author', 'ISBN']) ->withTrashed()->get() -> toArray();
+        $users = User::select(['id', 'name', 'email']) ->withTrashed() ->orderBy('name', 'asc') ->get() -> toArray();
 
         return Inertia::render('reserves/Create', [
             'users' => $users,
@@ -55,8 +55,8 @@ class ReserveController extends Controller
     public function edit(Request $request, Reserve $reserve)
     {
 
-        $books = Book::select(['id', 'title', 'author', 'ISBN']) ->get() -> toArray();
-        $users = User::select(['id', 'name', 'email']) ->orderBy('name', 'asc') ->get() -> toArray();
+        $books = Book::select(['id', 'title', 'author', 'ISBN'])->withTrashed() ->get() -> toArray();
+        $users = User::select(['id', 'name', 'email']) ->orderBy('name', 'asc') ->withTrashed() ->get() -> toArray();
 
         return Inertia::render('reserves/Edit', [
             'users' => $users,

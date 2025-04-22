@@ -369,9 +369,6 @@ function renderFilterInput(
             />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">
-              {filter.placeholder || "Todos"}
-            </SelectItem>
             {(filter as SelectFilterConfig).options.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}

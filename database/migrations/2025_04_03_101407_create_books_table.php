@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignUuid('zone_id')->constrained('zones')->onDelete('cascade');
             $table->foreignUuid('floor_id')->constrained('floors')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('genres', function (Blueprint $table) {

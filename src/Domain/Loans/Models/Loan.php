@@ -13,11 +13,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Database\Factories\LoanFactory;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Loan extends Model
 {
-    use HasFactory, Notifiable, HasUuids;
+    use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
     /**
      * Create a new factory instance for the model.
@@ -51,7 +51,7 @@ class Loan extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function book(): BelongsTo
