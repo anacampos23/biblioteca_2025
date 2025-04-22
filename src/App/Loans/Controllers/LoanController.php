@@ -3,6 +3,7 @@
 namespace App\Loans\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Notifications\notification_email;
 use Carbon\Carbon;
 use Domain\Loans\Actions\LoanDestroyAction;
 use Domain\Loans\Actions\LoanIndexAction;
@@ -16,7 +17,9 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Domain\Users\Models\User;
 use Domain\Books\Models\Book;
+use Domain\Reserves\Models\Reserve;
 
+use function Laravel\Prompts\alert;
 
 class LoanController extends Controller
 {
@@ -28,17 +31,17 @@ class LoanController extends Controller
 
     public function create()
     {
-        $books = Book::select(['id', 'title', 'author', 'ISBN']) ->get() -> toArray();
-        $users = User::select(['id', 'name', 'email']) ->orderBy('name', 'asc') ->get() -> toArray();
+        $books = Book::select(['id', 'title', 'author', 'ISBN'])->get()->toArray();
+        $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->get()->toArray();
         $ISBN_available = Book::select(['id', 'ISBN'])
-                ->where('available', true)
-                ->get()
-                ->toArray();
+            ->where('available', true)
+            ->get()
+            ->toArray();
 
         return Inertia::render('loans/Create', [
             'users' => $users,
             'books' => $books,
-            'ISBN_available'=> $ISBN_available,
+            'ISBN_available' => $ISBN_available,
         ]);
     }
 
@@ -58,7 +61,7 @@ class LoanController extends Controller
 
         // Buscar el libro con el ISBN y que esté disponible
         $book = Book::where('ISBN', $request->ISBN)
-                    ->first();
+            ->first();
 
         // Si no se encuentra el libro disponible con ese ISBN, lanzamos un error
         if (!$book) {
@@ -81,8 +84,8 @@ class LoanController extends Controller
     public function edit(Request $request, Loan $loan)
     {
 
-        $books = Book::select(['id', 'title', 'author', 'ISBN']) ->get() -> toArray();
-        $users = User::select(['id', 'name', 'email']) ->orderBy('name', 'asc') ->get() -> toArray();
+        $books = Book::select(['id', 'title', 'author', 'ISBN'])->get()->toArray();
+        $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->get()->toArray();
 
         return Inertia::render('loans/Edit', [
             'users' => $users,
@@ -101,14 +104,33 @@ class LoanController extends Controller
             // 'active' => ['required', 'boolean'],
             'newDueDate' => [],
             'newStatus' => [],
-            'newReturned'=> [],
+            'newReturned' => [],
         ]);
+
 
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
 
         $action($loan, $validator->validated());
+
+        // Obtén el book_id y el user_id del préstamo
+        $bookId = $loan->book_id;
+        $userId = $loan->user_id;
+
+        $reserves = Reserve::select(['user_id', 'book_id'])
+            ->where('book_id', $bookId)
+            ->get()
+            ->first(); // Obtiene la primera reserva que cumpla con el criterio
+
+        if (isset($reserves)) {
+
+            $user = User::select(['id', 'name', 'email'])
+            ->where('id', $userId)
+            ->get()
+            ->first(); // Obtiene la primera reserva que cumpla con el criterio
+            $user->notify(new notification_email);
+        }
 
         $redirectUrl = route('loans.index');
 
