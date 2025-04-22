@@ -3,6 +3,7 @@
 namespace App\Loans\Controllers;
 
 use App\Core\Controllers\Controller;
+use Carbon\Carbon;
 use Domain\Loans\Actions\LoanDestroyAction;
 use Domain\Loans\Actions\LoanIndexAction;
 use Domain\Loans\Actions\LoanStoreAction;
@@ -15,6 +16,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Domain\Users\Models\User;
 use Domain\Books\Models\Book;
+
 
 class LoanController extends Controller
 {
@@ -42,20 +44,39 @@ class LoanController extends Controller
 
     public function store(Request $request, LoanStoreAction $action)
     {
+        // Validación de los datos del formulario
         $validator = Validator::make($request->all(), [
             'email' => ['required'],
+            'book_id' => [],
             'ISBN' => ['required'],
         ]);
 
+        // Si la validación falla, devolvemos los errores
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
 
-        $action($validator->validated());
+        // Buscar el libro con el ISBN y que esté disponible
+        $book = Book::where('ISBN', $request->ISBN)
+                    ->first();
 
+        // Si no se encuentra el libro disponible con ese ISBN, lanzamos un error
+        if (!$book) {
+            return back()->withErrors(['ISBN' => 'El libro con ese ISBN no está disponible.']);
+        }
+
+        // Crear el préstamo
+        $loan = $action($validator->validated());
+
+        // Marcar el libro como no disponible
+        $book->available = false;
+        $book->save();
+
+        // Redirigir después de crear el préstamo
         return redirect()->route('loans.index')
             ->with('success', __('messages.loans.created'));
     }
+
 
     public function edit(Request $request, Loan $loan)
     {
@@ -80,6 +101,7 @@ class LoanController extends Controller
             // 'active' => ['required', 'boolean'],
             'newDueDate' => [],
             'newStatus' => [],
+            'newReturned'=> [],
         ]);
 
         if ($validator->fails()) {

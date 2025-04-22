@@ -21,8 +21,7 @@ class LoanStoreAction
             'book_id' => $bookId,
             'user_id' => $userId,
             'start_loan' => Carbon::now(),
-            'end_loan' => Carbon::now()->addMonth(),
-            'days_overdue' => 0,
+            'due_date' => Carbon::now()->addMonth(),
             'active' => true,
         ]);
 

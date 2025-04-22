@@ -514,6 +514,7 @@ return [
         'ISBN_list'=> ':ISBN',
         'card'=>[
             'create'=> 'Make a loan:',
+            'new'=> 'New loan',
         ],
         'filters' => [
             'title' => 'Title',
@@ -566,9 +567,6 @@ return [
             'ISBN' => 'ISBN',
             'not_returned' => 'Not returned yet',
             'returned' => 'Returned: ',
-        ],
-        'cards'=>[
-            'new'=> 'New loan',
         ]
     ],
     'reserves'=>[

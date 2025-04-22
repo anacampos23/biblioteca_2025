@@ -70,13 +70,13 @@ export default function BooksIndex() {
   };
 
  // Crear préstamo o reserva
-function handleCreateLoan_ReserveBook(book_id: string, title: string, author: string, ISBN: number, available: boolean) {
-    if (available === true) {
-      return router.get('/loans/create', { book_id, title, author, ISBN });
-    } else {
-      return router.get('/reserves/create', { book_id, title, author, ISBN });
+    function handleCreateLoan_ReserveBook(book_id: string, title: string, author: string, ISBN: number, available: boolean) {
+        if (available === true) {
+        return router.get('/loans/create', { book_id, title, author, ISBN });
+        } else {
+        return router.get('/reserves/create', { book_id, title, author, ISBN });
+        }
     }
-  }
 
 
   //ISBN count
