@@ -5,6 +5,8 @@ namespace Domain\Loans\Actions;
 use Domain\Loans\Data\Resources\LoanResource;
 use Domain\Loans\Models\Loan;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\notification_email;
+use Domain\Users\Models\User;
 
 class LoanUpdateAction
 {

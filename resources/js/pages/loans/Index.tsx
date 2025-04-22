@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { LoanLayout } from "@/layouts/loans/LoanLayout";
 import { router } from "@inertiajs/react";
+
 import {
   Select,
   SelectContent,
@@ -77,7 +78,7 @@ export default function LoansIndex() {
     }
   };
 
-  //Change status from active to inactive
+  //Return book
   function handleChangeStatus (loan_id: string){
     const newStatus = false;
     const newReturned = new Date().toISOString().split('T')[0];
@@ -86,7 +87,9 @@ export default function LoansIndex() {
     informacion.append('newReturned', newReturned);
     informacion.append('_method', 'PUT');
     router.post(`/loans/${loan_id}`, informacion);
-    refetch();
+    setTimeout(function(){
+        refetch();
+    }, 500)
   };
 
     //Change DueDate
@@ -101,6 +104,9 @@ export default function LoansIndex() {
         router.post(`/loans/${loan_id}`, informacion);
         refetch();
       };
+
+    //Search active/inactive
+    const [showOnlyActive, setShowOnlyActive] = useState(false);
 
   const columns = useMemo(() => ([
     createActionsColumn<Loan>({
@@ -229,11 +235,13 @@ export default function LoansIndex() {
                 <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
 
                 <div className="flex flex-col sm:flex-row gap-2">
-                    <Button className="bg-blue-500 sm:mr-3 w-full sm:w-auto">
-                        <SearchCheck
-                        className="mr-2 h-4 w-4" />
-                        {t('ui.loans.active')}
-                    </Button>
+                    {/* <Button
+                        onClick={() => setShowOnlyActive(prev => !prev)}
+                        className={`w-full sm:w-auto ${showOnlyActive ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-500 hover:bg-blue-600'}`}
+                        >
+                        <SearchCheck className="mr-2 h-4 w-4" />
+                        {showOnlyActive ? t('ui.loans.active_filtered') || "Showing Active" : t('ui.loans.active') || "Only Active"}
+                        </Button> */}
 
                     <Link href="/loans/create">
                           <Button>
@@ -309,6 +317,7 @@ export default function LoansIndex() {
                                     label: t('ui.loans.filters.active'),
                                     type: 'text',
                                     placeholder: t('ui.loans.placeholders.active'),
+
                                     },
                               ] as FilterConfig[]
                           }
