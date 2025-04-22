@@ -80,18 +80,20 @@ export default function LoansIndex() {
   //Change status from active to inactive
   function handleChangeStatus (loan_id: string){
     const newStatus = false;
+    const newReturned = new Date().toISOString().split('T')[0];
     const informacion = new FormData();
     informacion.append('newStatus', newStatus);
+    informacion.append('newReturned', newReturned);
     informacion.append('_method', 'PUT');
     router.post(`/loans/${loan_id}`, informacion);
     refetch();
   };
 
-    //Change status from active to inactive
-    function handleChangeDueDate (loan_id: string,end_loan: string){
-        const endDate = new Date(end_loan);
-        endDate.setDate(endDate.getDate() + 15);
-        const newDueDate = endDate.toISOString().split('T')[0]; // formato YYYY-MM-DD
+    //Change DueDate
+    function handleChangeDueDate (loan_id: string,due_date: string){
+        const dueDate = new Date(due_date);
+        dueDate.setDate(dueDate.getDate() + 15);
+        const newDueDate = dueDate.toISOString().split('T')[0]; // formato YYYY-MM-DD
 
         const informacion = new FormData();
         informacion.append('newDueDate', newDueDate);
@@ -117,7 +119,7 @@ export default function LoansIndex() {
                   <BookCheck  className="h-4 w-4" />
               </Button>
               <Button
-                onClick={() => handleChangeDueDate(loan.id, loan.end_loan)}
+                onClick={() => handleChangeDueDate(loan.id, loan.due_date)}
                 variant="outline"
                 size="icon"
                 title={t("ui.loans.buttons.renew") || "View loan"}

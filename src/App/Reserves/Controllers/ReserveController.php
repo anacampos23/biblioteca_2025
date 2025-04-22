@@ -39,7 +39,7 @@ class ReserveController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => ['required'],
-             'ISBN' => ['required'],
+            'ISBN' => ['required'],
         ]);
 
         if ($validator->fails()) {

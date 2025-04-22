@@ -24,8 +24,12 @@ class LoanUpdateAction
             $updateData['start_loan'] = $data['start_loan'];
         }
 
+        if (isset($data['newReturned'])) {
+            $updateData['end_loan'] = $data['newReturned'];
+        }
+
         if (isset($data['newDueDate'])) {
-            $updateData['end_loan'] = $data['newDueDate'];
+            $updateData['due_date'] = $data['newDueDate'];
         }
 
         if (isset($data['days_overdue'])) {

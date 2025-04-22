@@ -37,7 +37,7 @@ export default function CreateLoan({initialData, users, ISBN_available, page, pe
     const author = param.get('author');
 
     return (
-        <LoanLayout title={t('ui.loans.cards.new')}>
+        <LoanLayout title={t('ui.loans.card.new')}>
             <div className="flex max-w-screen items-center self-center">
                 <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
