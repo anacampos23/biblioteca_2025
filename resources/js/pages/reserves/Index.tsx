@@ -233,7 +233,7 @@ export default function ReservesIndex() {
                                   onPageChange={handlePageChange}
                                   onPerPageChange={handlePerPageChange}
                                   perPageOptions={[10, 25, 50, 100]}
-                                  noResultsMessage={t('ui.reserves.no_results') || 'No reserves found'}
+                                  noResultsMessage={t('ui.common.no_results') || 'No reserves found'}
                               />
                           </div>
                       )}

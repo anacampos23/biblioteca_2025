@@ -33,6 +33,8 @@ interface LoanFormProps {
         author: string;
         ISBN: number;
     };
+    books: { id: string; title: string; author:string; ISBN: number; }[];
+    booksAvailable: { id: string; title: string; author:string; ISBN: number; }[];
     users: { id: string; name: string; email:string; }[];
     ISBN_available: { id: string; ISBN: number; }[];
     page?: string;
@@ -51,7 +53,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function LoanForm({ initialData, page, perPage, users, ISBN_available }: LoanFormProps) {
+export function LoanForm({ initialData, page, perPage, users, books, ISBN_available, booksAvailable }: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const url=window.location.href;
@@ -60,6 +62,8 @@ export function LoanForm({ initialData, page, perPage, users, ISBN_available }: 
     const bookId = param.get('book_id');
     const bookISBN = param.get('ISBN');
 
+    const bookISBNs = books.map(book => book.ISBN);
+    const booksAvailableISBNs = booksAvailable.map(book => book.ISBN);
     const userEmails = users.map(user => user.email);
 
     // TanStack Form setup
@@ -75,7 +79,7 @@ export function LoanForm({ initialData, page, perPage, users, ISBN_available }: 
             name: initialData?.name ?? '',
             title: initialData?.title ?? '',
             author: initialData?.author ?? '',
-            ISBN: initialData?.ISBN ?? bookISBN ?? '',
+            ISBN: Number(initialData?.ISBN ?? bookISBN) || 0,
         },
 
         onSubmit: async ({ value }) => {
@@ -142,7 +146,14 @@ export function LoanForm({ initialData, page, perPage, users, ISBN_available }: 
                                     await new Promise((resolve) => setTimeout(resolve, 500));
                                     return !value
                                         ? t('ui.validation.required', { attribute: t('ui.loans.fields.ISBN')})
-                                        : undefined;
+                                        : !bookISBNs.includes(value) ? t('ui.validation.ISBN_not_available', {
+                                            attribute: t('ui.books.fields.ISBN').toLowerCase(),
+                                          })
+                                        // : !booksAvailableISBNs.includes(value) ? t('ui.validation.ISBN_not_available', {
+                                        // attribute: t('ui.books.fields.ISBN').toLowerCase(),
+                                        // })
+
+                                        :undefined;
                                 },
                             }}
                         >

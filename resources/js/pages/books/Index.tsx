@@ -143,9 +143,7 @@ export default function BooksIndex() {
         id: "available",
         header: t("ui.books.columns.available") || "available",
         accessorKey: "available",
-        format(value){
-            return value? t('ui.books.filters.available') : t('ui.books.filters.not_available')
-        }
+        format: (value)=>(value? t('ui.books.filters.available') : t('ui.books.filters.not_available'))
       }),
       createTextColumn<Book>({
         id: "bookcase_name",
@@ -324,7 +322,7 @@ export default function BooksIndex() {
                                   onPageChange={handlePageChange}
                                   onPerPageChange={handlePerPageChange}
                                   perPageOptions={[10, 25, 50, 100]}
-                                  noResultsMessage={t('ui.books.no_results') || 'No books found'}
+                                  noResultsMessage={t('ui.common.no_results') || 'No books found'}
                               />
                           </div>
                       )}

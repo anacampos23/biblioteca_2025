@@ -320,7 +320,6 @@ export default function LoansIndex() {
                                     type: 'select',
                                     options:[{value:'true', label: t('ui.loans.filters.active_status')}, {value:'false', label: t('ui.loans.filters.inactive_status')}],
                                     placeholder: t('ui.loans.placeholders.active'),
-
                                     },
                               ] as FilterConfig[]
                           }
@@ -359,7 +358,7 @@ export default function LoansIndex() {
                                   onPageChange={handlePageChange}
                                   onPerPageChange={handlePerPageChange}
                                   perPageOptions={[10, 25, 50, 100]}
-                                  noResultsMessage={t('ui.loans.no_results') || 'No loans found'}
+                                  noResultsMessage={t('ui.common.no_results') || 'No loans found'}
                               />
                           </div>
                       )}

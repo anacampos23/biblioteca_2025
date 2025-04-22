@@ -31,7 +31,16 @@ class LoanController extends Controller
 
     public function create()
     {
-        $books = Book::select(['id', 'title', 'author', 'ISBN'])->withTrashed()->get()->toArray();
+        $books = Book::select(['id', 'title', 'author', 'ISBN'])
+            ->withTrashed()
+            ->get()
+            ->toArray();
+
+        $booksAvailable = Book::select(['id', 'title', 'author', 'ISBN'])
+            ->where('available', true)
+            ->withTrashed()
+            ->get()
+            ->toArray();
         $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->withTrashed()->get()->toArray();
         $ISBN_available = Book::select(['id', 'ISBN'])
             ->where('available', true)
@@ -42,6 +51,7 @@ class LoanController extends Controller
             'users' => $users,
             'books' => $books,
             'ISBN_available' => $ISBN_available,
+            'booksAvailable' => $booksAvailable,
         ]);
     }
 
@@ -136,41 +146,6 @@ class LoanController extends Controller
             }
         }
 
-
-
-
-
-        // // Obtener la reserva (según el book_id del préstamo)
-        // $bookId = $loan->book_id; //el id del libro prestado
-
-        // $reserves = Reserve::select(['user_id', 'book_id'])
-        //     ->withTrashed()
-        //     ->where('book_id', $bookId)
-        //     ->get()
-        //     ->first(); // Obtiene la primera reserva que cumpla con el criterio
-
-        //     //Encuentra el ISBN de ese libro
-        //     $bookISBN = Book::find('ISBN')
-        //         ->withTrashed()
-        //         ->where('ISBN', $bookId);
-
-
-        // //Enviar email si existe reserva
-        // if (isset($reserves)) {
-        //     //Obtener el usuario que tiene esa reserva
-        //     $userId = $reserves->user_id;
-
-        //     $user = User::select(['id', 'name', 'email'])
-        //         ->withTrashed()
-        //         ->where('id', $userId)
-        //         ->get()
-        //         ->first();
-
-        //     //Traer Book y User para usarlo en el mensaje
-        //     $book = Book::find($bookId);
-        //     $user = User::find($userId);
-        //     $user->notify(new notification_email($book, $user));
-        // }
 
         $redirectUrl = route('loans.index');
 

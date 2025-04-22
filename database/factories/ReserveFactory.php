@@ -36,18 +36,18 @@ class ReserveFactory extends Factory
      */
     private function calculateDaysOverdue(\DateTime $endReserve, bool $active): int
     {
-        $currentDate = new \DateTime();
+        // $currentDate = new \DateTime();
 
-        if ($endReserve < $currentDate) {
-            if ($active) {
-                // Préstamo vencido y aún activo → calcular retraso real
-                return $endReserve->diff($currentDate)->days;
-            } else {
-                // Préstamo vencido pero ya no activo → simular retraso
-                return random_int(0, 10);
-            }
-        }
+        // if ($endReserve < $currentDate) {
+        //     if ($active) {
+        //         // Préstamo vencido y aún activo → calcular retraso real
+        //         return $endReserve->diff($currentDate)->days;
+        //     } else {
+        //         // Préstamo vencido pero ya no activo → simular retraso
+        //         return random_int(0, 10);
+        //     }
+        // }
 
-        return 0; // Aún no ha vencido
+        // return 0; // Aún no ha vencido
     }
 }

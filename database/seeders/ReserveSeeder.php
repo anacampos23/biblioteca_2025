@@ -13,6 +13,6 @@ class ReserveSeeder extends Seeder
      */
     public function run(): void
     {
-        Reserve::factory(2)->create();
+        // Reserve::factory(2)->create();
     }
 }
