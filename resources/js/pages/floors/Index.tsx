@@ -167,7 +167,7 @@ export default function FloorsIndex() {
                                   onPageChange={handlePageChange}
                                   onPerPageChange={handlePerPageChange}
                                   perPageOptions={[10, 25, 50, 100]}
-                                  noResultsMessage={t('ui.floors.no_results') || 'No floors found'}
+                                  noResultsMessage={t('ui.common.no_results') || 'No floors found'}
                               />
                           </div>
                       )}

@@ -77,6 +77,7 @@ return [
            'required' => 'The :attribute field is required.',
             'email' => 'The :attribute field must be a valid email address.',
             'email_not_exist' => 'The email is not in the data base',
+            'ISBN_not_available'=> 'This ISBN is not available.',
             'min' => [
                 'string' => 'The :attribute field must be at least :min characters.',
             ],

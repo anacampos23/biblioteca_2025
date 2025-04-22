@@ -78,6 +78,7 @@ return [
             'required' => 'El campo :attribute es obligatorio.',
             'email' => 'El campo :attribute debe ser una dirección de correo válida.',
             'email_not_exist'=> 'El email no se encuentra en la base de datos.',
+            'ISBN_not_available'=> 'Este ISBN no está disponible.',
             'min' => [
                 'string' => 'El campo :attribute debe tener al menos :min caracteres.',
             ],

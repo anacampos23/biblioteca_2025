@@ -23,12 +23,14 @@ interface LoanFormProps {
         ISBN: number;
     };
     ISBN_available: { id: string; ISBN: number; }[];
+    books: { id: string; title: string; author:string; ISBN: number; }[];
+    booksAvailable: { id: string; title: string; author:string; ISBN: number; }[];
     users: { id: string; name: string; email:string; }[];
     page?: string;
     perPage?: string;
 }
 
-export default function CreateLoan({initialData, users, ISBN_available, page, perPage}: LoanFormProps) {
+export default function CreateLoan({initialData, users, books, ISBN_available, booksAvailable, page, perPage}: LoanFormProps) {
     const { t } = useTranslations();
     const url=window.location.href;
     const param = new URLSearchParams(window.location.search);
@@ -52,7 +54,7 @@ export default function CreateLoan({initialData, users, ISBN_available, page, pe
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <LoanForm users={users} ISBN_available={ISBN_available}/>
+                        <LoanForm users={users} books={books} ISBN_available={ISBN_available} booksAvailable={booksAvailable}/>
                     </CardContent>
                 </Card>
             </div>
