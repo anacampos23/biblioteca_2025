@@ -10,6 +10,7 @@ export interface Book {
   editorial: string;
   quantity: number;
   available: boolean;
+  reserved: boolean;
   bookcase_id: string;
   bookcase_name: string;
   zone_id: string;
@@ -64,6 +65,7 @@ interface UseBooksParams {
   editorial?: string;
   quantity?: number;
   available?: boolean;
+  reserved?: boolean;
   bookcase_id?: string;
   bookcase_name?: string;
   zone_id?: string;
@@ -76,10 +78,10 @@ interface UseBooksParams {
   perPage?: number;
 }
 
-export function useBooks({ search, title, author, genre, ISBN, editorial, quantity, available, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, isbn_loan_count, page = 1, perPage = 10 }:
+export function useBooks({ search, title, author, genre, ISBN, editorial, quantity, available, reserved, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, isbn_loan_count, page = 1, perPage = 10 }:
     UseBooksParams = {}) {
   return useQuery({
-    queryKey: ["books", { search,title, author, genre, ISBN, editorial, quantity, available, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, isbn_loan_count, page, perPage }],
+    queryKey: ["books", { search,title, author, genre, ISBN, editorial, quantity, available, reserved, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, isbn_loan_count, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Book>>("/api/books", {
         params: {
@@ -91,6 +93,7 @@ export function useBooks({ search, title, author, genre, ISBN, editorial, quanti
           editorial,
           quantity,
           available,
+          reserved,
           bookcase_id,
           bookcase_name,
           zone_id,
@@ -134,6 +137,7 @@ export function useCreateBook() {
         editorial?: string;
         quantity?: number;
         available?: boolean;
+        reserved?: boolean;
         bookcase_id?: string;
         bookcase_name?: string;
         zone_id?: string;
@@ -163,6 +167,7 @@ export function useUpdateBook(bookId: string) {
         editorial?: string;
         quantity?: number;
         available?: boolean;
+        reserved?: boolean;
         bookcase_id?: string;
         bookcase_name?: string;
         zone_id?: string;

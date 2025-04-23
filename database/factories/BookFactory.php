@@ -50,6 +50,7 @@ class BookFactory extends Factory
             'ISBN' => $this->faker->numerify('#############'),
             'editorial' => $this->faker->sentence(2),
             'available' => true,
+            'reserved' => false,
             'bookcase_id' => Bookcase::inRandomOrder()->value('id') ?? Bookcase::factory()->create()->id,
             'zone_id' => Zone::inRandomOrder()->value('id') ?? Zone::factory()->create()->id,
             'floor_id' => Floor::inRandomOrder()->value('id') ?? Floor::factory()->create()->id,
