@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('ISBN');
             $table->string('editorial');
             $table->boolean('available');
+            $table->boolean('reserved');
             $table->foreignUuid('bookcase_id')->constrained('bookcases')->onDelete('cascade');
             $table->foreignUuid('zone_id')->constrained('zones')->onDelete('cascade');
             $table->foreignUuid('floor_id')->constrained('floors')->onDelete('cascade');

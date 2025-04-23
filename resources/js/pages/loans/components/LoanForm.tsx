@@ -64,6 +64,7 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
 
     const bookISBNs = books.map(book => book.ISBN);
     const booksAvailableISBNs = booksAvailable.map(book => book.ISBN);
+    console.log(booksAvailableISBNs);
     const userEmails = users.map(user => user.email);
 
     // TanStack Form setup
@@ -79,7 +80,8 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
             name: initialData?.name ?? '',
             title: initialData?.title ?? '',
             author: initialData?.author ?? '',
-            ISBN: Number(initialData?.ISBN ?? bookISBN) || 0,
+            ISBN: initialData?.ISBN ? Number(initialData.ISBN): bookISBN? Number(bookISBN): '',
+            // ISBN: Number(initialData?.ISBN ?? bookISBN) || 0,
         },
 
         onSubmit: async ({ value }) => {
@@ -146,12 +148,12 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
                                     await new Promise((resolve) => setTimeout(resolve, 500));
                                     return !value
                                         ? t('ui.validation.required', { attribute: t('ui.loans.fields.ISBN')})
-                                        : !bookISBNs.includes(value) ? t('ui.validation.ISBN_not_available', {
+                                        : !bookISBNs.includes(value) ? t('ui.validation.ISBN_not_exist', {
                                             attribute: t('ui.books.fields.ISBN').toLowerCase(),
                                           })
-                                        // : !booksAvailableISBNs.includes(value) ? t('ui.validation.ISBN_not_available', {
-                                        // attribute: t('ui.books.fields.ISBN').toLowerCase(),
-                                        // })
+                                        : !booksAvailableISBNs.includes(value) ? t('ui.validation.book_not_available', {
+                                        attribute: t('ui.books.fields.ISBN').toLowerCase(),
+                                        })
 
                                         :undefined;
                                 },

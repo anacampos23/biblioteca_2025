@@ -77,7 +77,8 @@ return [
            'required' => 'The :attribute field is required.',
             'email' => 'The :attribute field must be a valid email address.',
             'email_not_exist' => 'The email is not in the data base',
-            'ISBN_not_available'=> 'This ISBN is not available.',
+            'ISBN_not_exist'=> 'This ISBN does not exist.',
+            'book_not_available'=> 'This book is not available to be loaned.',
             'min' => [
                 'string' => 'The :attribute field must be at least :min characters.',
             ],
@@ -435,6 +436,7 @@ return [
             'deleting' => 'Deleting...',
             'saving' => 'Saving...',
             'retry' => 'Retry',
+            'reserve' => 'Reserve book',
         ],
         'columns' => [
             'title' => 'Title',

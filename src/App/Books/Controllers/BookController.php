@@ -69,10 +69,10 @@ class BookController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
             'genre' => ['required', 'string', 'max:255'],
-            'ISBN' => ['required', 'number', 'max:255'],
+            'ISBN' => ['required', 'numeric', 'max:255'],
             'editorial' => ['required', 'string', 'max:255'],
-            'quantity' => ['required', 'number', 'max:255'],
-            'status' => ['required', 'string', 'max:255'],
+            'quantity' => ['required', 'numeric', 'max:255'],
+            'available' => ['required', 'boolean'],
         ]);
 
         if ($validator->fails()) {
@@ -102,23 +102,53 @@ class BookController extends Controller
     public function update(Request $request, Book $book, BookUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'bookcase_id' => ['required', 'exists:bookcases, id'],
-            'zone_id' => ['required', 'exists:zones, id'],
-            'floor_id' => ['required', 'exists:floors, id'],
-            'title' => ['required', 'string', 'max:255'],
-            'author' => ['required', 'string', 'max:255'],
-            'genre' => ['required', 'string', 'max:255'],
-            'ISBN' => ['required', 'number', 'max:255'],
-            'editorial' => ['required', 'string', 'max:255'],
-            'quantity' => ['required', 'number', 'max:255'],
-            'status' => ['required', 'string', 'max:255'],
+            'bookcase_id' => ['exists:bookcases, id'],
+            'zone_id' => ['exists:zones, id'],
+            'floor_id' => ['exists:floors, id'],
+            'title' => ['string', 'max:255'],
+            'author' => ['string', 'max:255'],
+            'genre' => ['string', 'max:255'],
+            'ISBN' => ['numeric', 'max:255'],
+            'editorial' => ['string', 'max:255'],
+            'quantity' => ['numeric', 'max:255'],
+            'available' => ['boolean'],
+            'newReservationStatus' => [],
         ]);
 
         if ($validator->fails()) {
+
             return back()->withErrors($validator);
         }
 
         $action($book, $validator->validated());
+
+        //No dejar reservar si ya existe un libro con el mismo ISBN disponible
+        $bookISBN = $book->ISBN;
+        $book_id= $book->id;
+
+        //Seleccionar todos los ISBN iguales
+        $bookAvailable = Book::select(['id', 'ISBN'])
+                ->where('ISBN', $bookISBN)
+                ->where('available', true)
+                ->first();
+
+                if ($request->input('newReservationStatus')) {
+                    if (!empty($bookAvailable)) {
+                        return redirect()->route('loans.create', [
+                            'book_id' => $book->id,
+                            'title' => $book->title,
+                            'author' => $book->author,
+                            'ISBN' => $book->ISBN,
+                        ]);
+                    } else {
+                        return redirect()->route('reserves.create', [
+                            'book_id' => $book->id,
+                            'title' => $book->title,
+                            'author' => $book->author,
+                            'ISBN' => $book->ISBN,
+                        ]);
+                    }
+                }
 
         $redirectUrl = route('books.index');
 

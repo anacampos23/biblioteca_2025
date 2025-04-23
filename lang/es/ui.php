@@ -78,7 +78,8 @@ return [
             'required' => 'El campo :attribute es obligatorio.',
             'email' => 'El campo :attribute debe ser una dirección de correo válida.',
             'email_not_exist'=> 'El email no se encuentra en la base de datos.',
-            'ISBN_not_available'=> 'Este ISBN no está disponible.',
+            'ISBN_not_exist'=> 'Este ISBN no existe.',
+            'book_not_available'=> 'El libro no está disponible para ser prestado.',
             'min' => [
                 'string' => 'El campo :attribute debe tener al menos :min caracteres.',
             ],
@@ -431,6 +432,7 @@ return [
                 'deleting' => 'Eliminando...',
                 'saving' => 'Guardando...',
                 'retry' => 'Reintentar',
+                'reserve' => 'Reservar el libro',
             ],
             'columns' => [
                 'title' => 'Título',

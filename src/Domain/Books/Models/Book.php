@@ -41,6 +41,7 @@ class Book extends Model implements HasMedia
         'genre',
         'ISBN',
         'available',
+        'reserved',
         'editorial',
         'bookcase_id',
         'zone_id',

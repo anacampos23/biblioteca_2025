@@ -26,6 +26,7 @@ class BookSeeder extends Seeder
                     'ISBN' => $book->ISBN,
                     'editorial' => $book->editorial,
                     'available' => $book->available,
+                    'reserved' => $book->reserved,
                     'bookcase_id' => $book->bookcase_id,
                     'zone_id' => $book->zone_id,
                     'floor_id' => $book->floor_id,

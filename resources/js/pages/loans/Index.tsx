@@ -80,10 +80,9 @@ export default function LoansIndex() {
 
   //Return book
   function handleChangeStatus (loan_id: string){
-    const newStatus = false;
     const newReturned = new Date().toISOString().split('T')[0];
     const informacion = new FormData();
-    informacion.append('newStatus', newStatus);
+    informacion.append('newStatus', '0');
     informacion.append('newReturned', newReturned);
     informacion.append('_method', 'PUT');
     router.post(`/loans/${loan_id}`, informacion);

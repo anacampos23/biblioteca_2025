@@ -69,7 +69,7 @@ class LoanController extends Controller
             return back()->withErrors($validator);
         }
 
-        // Buscar el libro con el ISBN y que esté disponible
+        // Buscar el libro con el ISBN
         $book = Book::where('ISBN', $request->ISBN)
             ->first();
 
@@ -139,15 +139,21 @@ class LoanController extends Controller
             ->orderBy('created_at') // Opcional: para que sea la más antigua
             ->first();
 
-        if ($reserve) {
-            $user = User::find($reserve->user_id);
-            if ($user) {
-                $user->notify(new notification_email($reserve->book, $user));
-            }
-        }
-
 
         $redirectUrl = route('loans.index');
+
+        if ($request->input('newStatus') == false){
+        // Marcar el libro como no disponible
+        $book->available = true;
+        $book->save();
+            if ($reserve) {
+                $user = User::find($reserve->user_id);
+                if ($user) {
+                    $user->notify(new notification_email($reserve->book, $user));
+                }
+            }
+
+        }
 
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {
@@ -156,6 +162,7 @@ class LoanController extends Controller
                 $redirectUrl .= "&per_page=" . $request->query('perPage');
             }
         }
+
 
         return redirect($redirectUrl)
             ->with('success', __('messages.loans.updated'));
