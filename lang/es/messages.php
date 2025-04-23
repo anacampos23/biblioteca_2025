@@ -16,7 +16,7 @@ return [
         'updated' => 'Piso actualizado correctamente',
         'deleted' => 'Piso eliminado correctamente',
         'error' => [
-            'create' => 'Error al crear el psio',
+            'create' => 'Error al crear el piso',
             'update' => 'Error al actualizar el piso',
             'delete' => 'Error al eliminar el piso',
         ],
@@ -26,9 +26,20 @@ return [
         'updated' => 'Zona actualizada correctamente',
         'deleted' => 'Zona eliminada correctamente',
         'error' => [
-            'create' => 'Error al crear el zona',
-            'update' => 'Error al actualizar el zona',
-            'delete' => 'Error al eliminar el zona',
+            'create' => 'Error al crear la zona',
+            'update' => 'Error al actualizar la zona',
+            'delete' => 'Error al eliminar la zona',
         ],
+    ],
+    'books' => [
+        'created' => 'Libro creado correctamente',
+        'updated' => 'Libro actualizado correctamente',
+        'deleted' => 'Libro eliminado correctamente',
+        'error' => [
+            'create' => 'Error al crear el libro',
+            'update' => 'Error al actualizar el libro',
+            'delete' => 'Error al eliminar el libro',
+        ],
+        'loan_reserve' => 'El libro está disponible. Puedes realizar directamente un préstamo.',
     ],
 ];

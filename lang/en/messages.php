@@ -31,4 +31,15 @@ return [
             'delete' => 'Error deleting zone',
         ],
     ],
+    'books' => [
+        'created' => 'Book created successfully',
+        'updated' => 'Book updated successfully',
+        'deleted' => 'Book deleted successfully',
+        'error' => [
+            'create' => 'Error creating book',
+            'update' => 'Error updating book',
+            'delete' => 'Error deleting book',
+        ],
+        'loan_reserve' => 'The book is available. You can already loan it.'
+    ],
 ];
