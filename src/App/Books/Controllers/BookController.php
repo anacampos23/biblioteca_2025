@@ -134,12 +134,21 @@ class BookController extends Controller
 
                 if ($request->input('newReservationStatus')) {
                     if (!empty($bookAvailable)) {
-                        return redirect()->route('loans.create', [
-                            'book_id' => $book->id,
+                        if ($book_id == $bookAvailable->id){
+                            return redirect()->route('loans.create', [
+                            'book_id' => $bookAvailable->id,
                             'title' => $book->title,
                             'author' => $book->author,
                             'ISBN' => $book->ISBN,
                         ]);
+                        } else {
+                                return redirect()->route('loans.create', [
+                                'book_id' => $bookAvailable->id,
+                                'title' => $book->title,
+                                'author' => $book->author,
+                                'ISBN' => $book->ISBN,
+                            ])->with('success', __('messages.books.loan_reserve'));
+                        }
                     } else {
                         return redirect()->route('reserves.create', [
                             'book_id' => $book->id,
