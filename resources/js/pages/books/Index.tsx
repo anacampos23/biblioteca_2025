@@ -82,6 +82,16 @@ export default function BooksIndex() {
         // }
     }
 
+    //Filters
+    const handleFilterChange = (newFilters: Record<string, any>) => {
+        const filtersChanged = newFilters!==filters;
+
+        if (filtersChanged) {
+            setCurrentPage(1);
+        }
+        setFilters(newFilters);
+        };
+
 
   //ISBN count
   interface BookCount {
@@ -266,7 +276,7 @@ export default function BooksIndex() {
                                 },
                                 {
                                     id: 'available',
-                                    label: t('ui.books.filters.available'),
+                                    label: t('ui.books.filters.availability'),
                                     type: 'select',
                                     options:[{value:'true', label: t('ui.books.filters.available')}, {value:'false', label: t('ui.books.filters.not_available')}],
                                     placeholder: t('ui.books.placeholders.available'),
@@ -291,7 +301,7 @@ export default function BooksIndex() {
                                 },
                               ] as FilterConfig[]
                           }
-                          onFilterChange={setFilters}
+                          onFilterChange={handleFilterChange}
                           initialValues={filters}
                       />
                   </div>

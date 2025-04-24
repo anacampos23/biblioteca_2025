@@ -102,16 +102,16 @@ class BookController extends Controller
     public function update(Request $request, Book $book, BookUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'bookcase_id' => ['exists:bookcases, id'],
-            'zone_id' => ['exists:zones, id'],
-            'floor_id' => ['exists:floors, id'],
-            'title' => ['string', 'max:255'],
-            'author' => ['string', 'max:255'],
-            'genre' => ['string', 'max:255'],
-            'ISBN' => ['numeric', 'max:255'],
-            'editorial' => ['string', 'max:255'],
-            'quantity' => ['numeric', 'max:255'],
-            'available' => ['boolean'],
+            // 'bookcase_id' => ['exists:bookcases, id'],
+            // 'zone_id' => ['exists:zones, id'],
+            // 'floor_id' => ['exists:floors, id'],
+            // 'title' => ['string', 'max:255'],
+            // 'author' => ['string', 'max:255'],
+            // 'genre' => ['string', 'max:255'],
+            // 'ISBN' => ['numeric', 'max:255'],
+            // 'editorial' => ['string', 'max:255'],
+            // 'quantity' => ['numeric', 'max:255'],
+            // 'available' => ['boolean'],
             'newReservationStatus' => [],
         ]);
 
@@ -122,33 +122,37 @@ class BookController extends Controller
 
         $action($book, $validator->validated());
 
+        $redirectUrl = route('books.index');
+
         //No dejar reservar si ya existe un libro con el mismo ISBN disponible
         $bookISBN = $book->ISBN;
-        $book_id= $book->id;
+        $book_availability= $book->available;
+
 
         //Seleccionar todos los ISBN iguales
-        $bookAvailable = Book::select(['id', 'ISBN'])
+        $bookAvailable = Book::select(['id', 'ISBN', 'available'])
                 ->where('ISBN', $bookISBN)
                 ->where('available', true)
                 ->first();
 
-                if ($request->input('newReservationStatus')) {
-                    if (!empty($bookAvailable)) {
-                        if ($book_id == $bookAvailable->id){
-                            return redirect()->route('loans.create', [
+        // dd($bookAvailable);
+
+        if ($request->input('newReservationStatus')) {
+            if ($book_availability == true) {
+                return redirect()->route('loans.create', [
+                    'book_id' => $book->id,
+                    'title' => $book->title,
+                    'author' => $book->author,
+                    'ISBN' => $book->ISBN,
+                ]);
+            } else {
+                if (!empty($bookAvailable)) {
+                        return redirect()->route('loans.create', [
                             'book_id' => $bookAvailable->id,
                             'title' => $book->title,
                             'author' => $book->author,
                             'ISBN' => $book->ISBN,
                         ]);
-                        } else {
-                                return redirect()->route('loans.create', [
-                                'book_id' => $bookAvailable->id,
-                                'title' => $book->title,
-                                'author' => $book->author,
-                                'ISBN' => $book->ISBN,
-                            ])->with('success', __('messages.books.loan_reserve'));
-                        }
                     } else {
                         return redirect()->route('reserves.create', [
                             'book_id' => $book->id,
@@ -158,8 +162,37 @@ class BookController extends Controller
                         ]);
                     }
                 }
+            }
 
-        $redirectUrl = route('books.index');
+
+                // if ($request->input('newReservationStatus')) {
+                //     if (!empty($bookAvailable)) {
+                //         if ($book_id == $bookAvailable->id){
+                //             return redirect()->route('loans.create', [
+                //             'book_id' => $bookAvailable->id,
+                //             'title' => $book->title,
+                //             'author' => $book->author,
+                //             'ISBN' => $book->ISBN,
+                //         ]);
+                //         } else {
+                //                 return redirect()->route('loans.create', [
+                //                 'book_id' => $bookAvailable->id,
+                //                 'title' => $book->title,
+                //                 'author' => $book->author,
+                //                 'ISBN' => $book->ISBN,
+                //             ])->with('success', __('messages.books.loan_reserve'));
+                //         }
+                //     } else {
+                //         return redirect()->route('reserves.create', [
+                //             'book_id' => $book->id,
+                //             'title' => $book->title,
+                //             'author' => $book->author,
+                //             'ISBN' => $book->ISBN,
+                //         ]);
+                //     }
+                // }
+
+
 
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {

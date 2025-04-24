@@ -61,6 +61,16 @@ export default function ZonesIndex() {
     }
   };
 
+  //Filters
+  const handleFilterChange = (newFilters: Record<string, any>) => {
+    const filtersChanged = newFilters!==filters;
+
+    if (filtersChanged) {
+        setCurrentPage(1);
+    }
+    setFilters(newFilters);
+    };
+
   const columns = useMemo(() => ([
     createTextColumn<Zone>({
       id: "name",
@@ -140,7 +150,7 @@ export default function ZonesIndex() {
                                 }
                               ] as FilterConfig[]
                           }
-                          onFilterChange={setFilters}
+                          onFilterChange={handleFilterChange}
                           initialValues={filters}
                       />
                   </div>

@@ -106,6 +106,16 @@ export default function LoansIndex() {
         }, 500)
       };
 
+      //Filters
+  const handleFilterChange = (newFilters: Record<string, any>) => {
+    const filtersChanged = newFilters!==filters;
+
+    if (filtersChanged) {
+        setCurrentPage(1);
+    }
+    setFilters(newFilters);
+    };
+
     //Search active/inactive
     const [showOnlyActive, setShowOnlyActive] = useState(false);
 
@@ -121,7 +131,7 @@ export default function LoansIndex() {
                 size="icon"
                 title={t("ui.loans.buttons.return") || "View loan"}
                 disabled={!loan.active} // Desactivar el botón si el préstamo está inactivo
-                className={`${loan.active ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+                className={`${loan.active ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
                 >
                   <BookCheck  className="h-4 w-4" />
               </Button>
@@ -201,12 +211,12 @@ export default function LoansIndex() {
         header: t("ui.loans.columns.days_overdue") || "days_overdue",
         accessorKey: "days_overdue",
       }),
-      createTextColumn<Loan>({
-        id: "active",
-        header: t("ui.loans.columns.active") || "active",
-        accessorKey: "active",
-        format: (value)=>(value? t('ui.loans.filters.active_status') : t('ui.loans.filters.inactive_status'))
-      }),
+    //   createTextColumn<Loan>({
+    //     id: "active",
+    //     header: t("ui.loans.columns.active") || "active",
+    //     accessorKey: "active",
+    //     format: (value)=>(value? t('ui.loans.filters.active_status') : t('ui.loans.filters.inactive_status'))
+    //   }),
     createActionsColumn<Loan>({
       id: "actions",
       header: t("ui.loans.columns.delete") || "Actions",
@@ -313,16 +323,16 @@ export default function LoansIndex() {
                                     placeholder: t('ui.loans.placeholders.days_overdue'),
                                     min: 0,
                                 },
-                                {
-                                    id: 'active',
-                                    label: t('ui.loans.filters.active'),
-                                    type: 'select',
-                                    options:[{value:'true', label: t('ui.loans.filters.active_status')}, {value:'false', label: t('ui.loans.filters.inactive_status')}],
-                                    placeholder: t('ui.loans.placeholders.active'),
-                                    },
+                                // {
+                                //     id: 'active',
+                                //     label: t('ui.loans.filters.active'),
+                                //     type: 'select',
+                                //     options:[{value:'true', label: t('ui.loans.filters.active_status')}, {value:'false', label: t('ui.loans.filters.inactive_status')}],
+                                //     placeholder: t('ui.loans.placeholders.active'),
+                                //     },
                               ] as FilterConfig[]
                           }
-                          onFilterChange={setFilters}
+                          onFilterChange={handleFilterChange}
                           initialValues={filters}
                       />
                   </div>

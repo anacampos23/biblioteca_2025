@@ -407,7 +407,7 @@ return [
             'ISBN' => 'ISBN',
             'editorial' => 'Editorial',
             'quantity' => 'Units',
-            'status' => 'Status',
+            'availability' => 'Availability',
             'bookcase_name' => 'Bookcase',
             'name' => 'Zone',
             'floor_number' => 'Floor',
@@ -421,7 +421,7 @@ return [
              'ISBN' => 'ISBN...',
              'editorial' => 'Editorial...',
              'quantity' => 'Units...',
-             'status' => 'Status...',
+             'available' => 'Available/Not available',
              'bookcase_name' => 'Bookcase...',
              'name' => 'Zone...',
              'floor_number' => 'Floor...',
@@ -445,13 +445,14 @@ return [
             'ISBN' => 'ISBN',
             'editorial' => 'Editorial',
             'quantity' => 'Units',
-            'status' => 'Status',
+            'available' => 'Availability',
             'bookcase_name' => 'Bookcase',
             'name' => 'Zone',
             'floor_number' => 'Floor',
             'actions' => 'Actions',
             'isbn_loan_count' => 'Borrowed copies',
-            'borrow' => 'Make loan'
+            'borrow' => 'Make loan',
+            'created_at' => 'Created at',
         ],
         'show' =>[
             'title' => 'Title',
@@ -527,6 +528,7 @@ return [
             'ISBN' => 'ISBN',
             'name' => 'User name',
             'start_loan' => 'Start loan',
+            'due_date' => 'Due date',
             'end_loan' => 'End loan',
             'days_overdue' => 'Days overdue',
             'active' => 'Loan status',
@@ -538,6 +540,7 @@ return [
                 'author' => 'Author...',
                 'ISBN' => 'ISBN...',
                 'start_loan' => 'Date Start loan',
+                'due_date' => 'Due date',
                 'end_loan' => 'Date End loan',
                 'days_overdue' => 'Days overdue...',
                 'active' => 'In progress/Inactive loan...',
@@ -604,6 +607,7 @@ return [
             'deleting' => 'Deleting...',
             'saving' => 'Saving...',
             'retry' => 'Retry',
+            'loan' => 'Make loan'
         ],
         'columns' => [
             'title' => 'Title',
@@ -613,9 +617,14 @@ return [
             'email'=> 'User email',
             'delete' => 'Delete',
             'edit'=> 'Edit Reservation',
+            'loan' => 'Make loan'
         ],
         'fields'=> [
             'ISBN' => 'ISBN',
         ],
+        'messages'=>[
+            'title'=> 'Do you want to loan the book?',
+            'description' => 'The book is already available.',
+        ]
     ]
 ];

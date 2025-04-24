@@ -64,6 +64,16 @@ export default function UsersIndex() {
     }
   };
 
+  //Filters
+  const handleFilterChange = (newFilters: Record<string, any>) => {
+    const filtersChanged = newFilters!==filters;
+
+    if (filtersChanged) {
+        setCurrentPage(1);
+    }
+    setFilters(newFilters);
+    };
+
   const columns = useMemo(() => ([
     createTextColumn<User>({
       id: "name",
@@ -145,7 +155,7 @@ export default function UsersIndex() {
                                   },
                               ] as FilterConfig[]
                           }
-                          onFilterChange={setFilters}
+                          onFilterChange={handleFilterChange}
                           initialValues={filters}
                       />
                   </div>

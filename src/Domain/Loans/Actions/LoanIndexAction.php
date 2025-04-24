@@ -21,7 +21,7 @@ class LoanIndexAction
         $end_loan = $search[6];
         $due_date = $search[7];
         $days_overdue = $search[8];
-        $active = $search[9];
+        // $active = $search[9];
 
 
         //Título del libro
@@ -79,9 +79,9 @@ class LoanIndexAction
         ->when($days_overdue !== "null", function ($query) use ($days_overdue) {
             $query->where('days_overdue', '=', $days_overdue);
         })
-        ->when($active !== "null", function ($query) use ($active) {
-            $query->where('active', 'like', $active);
-        })
+        // ->when($active !== "null", function ($query) use ($active) {
+        //     $query->where('active', 'like', $active);
+        // })
 
             ->latest()
             ->paginate($perPage);

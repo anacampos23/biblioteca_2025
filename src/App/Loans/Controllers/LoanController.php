@@ -69,17 +69,16 @@ class LoanController extends Controller
             return back()->withErrors($validator);
         }
 
+        $loan = $action($validator->validated());
+
         // Buscar el libro con el ISBN
-        $book = Book::where('ISBN', $request->ISBN)
+        $book = Book::where('id', $request->book_id)
             ->first();
 
         // Si no se encuentra el libro disponible con ese ISBN, lanzamos un error
         if (!$book) {
             return back()->withErrors(['ISBN' => 'El libro con ese ISBN no está disponible.']);
         }
-
-        // Crear el préstamo
-        $loan = $action($validator->validated());
 
         // Marcar el libro como no disponible
         $book->available = false;
