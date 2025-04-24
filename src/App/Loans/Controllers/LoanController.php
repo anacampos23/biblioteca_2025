@@ -132,7 +132,8 @@ class LoanController extends Controller
         // Buscar la primera reserva de un libro que tenga el mismo ISBN
         $reserve = Reserve::with(['book']) // Cargar relación con el libro
             ->whereHas('book', function ($query) use ($bookISBN) {
-                $query->where('ISBN', $bookISBN);
+                $query->where('ISBN', $bookISBN)
+                      -> where('status', false);
             })
             ->orderBy('created_at') // Opcional: para que sea la más antigua
             ->first();
@@ -142,8 +143,7 @@ class LoanController extends Controller
 
         if ($request->input('newStatus') == false) {
             if ($reserve) {
-                $user = User::find($reserve->user_id)
-                            -> where('status', false);
+                $user = User::find($reserve->user_id);
                 if ($user) {
                     $user->notify(new notification_email($reserve->book, $user));
                 }
