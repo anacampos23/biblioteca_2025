@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Reserve, useDeleteReserve, useReserves } from "@/hooks/reserves/useReserves";
-import { PencilIcon, PlusIcon, TrashIcon,  BookUp, BookmarkX  } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon,  BookUp } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -112,51 +112,32 @@ export default function ReservesIndex() {
                       <>
                           <Dialog>
                               <DialogTrigger asChild>
-                                  <Button
-                                      variant="outline"
-                                      size="icon"
-                                      className="text-green-600"
-                                      title={t('ui.reserves.buttons.loan') || 'Delete reserve'}
-                                  >
+                                  <Button variant="outline" size="icon" className="text-green-600" title={t('ui.reserves.buttons.loan') || 'Delete reserve'}>
                                       <BookUp className="h-4 w-4" />
                                   </Button>
                               </DialogTrigger>
 
                               <DialogContent>
                                   <DialogTitle> {t('ui.reserves.messages.title') || '¿Quieres coger prestado el libro?'} </DialogTitle>
-                                  <DialogDescription>
-                                      {' '}
-                                      {t('ui.reserves.messages.description') || 'El libro ya está disponible para ser prestado'}{' '}
-                                  </DialogDescription>
+                                  <DialogDescription> {t('ui.reserves.messages.description') || 'El libro ya está disponible para ser prestado'} </DialogDescription>
 
                                   <DialogFooter>
                                       <DialogClose asChild>
-                                          <Button variant="outline">{t('ui.reserves.buttons.cancel') || 'Cancel'}</Button>
+                                          <Button  variant="outline">{t('ui.reserves.buttons.cancel') || 'Cancel'}</Button>
                                       </DialogClose>
 
                                       <DialogClose asChild>
                                           <Button
-                                              className="bg-indigo-600"
-                                              onClick={() => handleCreateLoan(reserve.book_id, reserve.user_id, reserve.id)}
+                                            className="bg-indigo-600"
+                                            onClick={() =>handleCreateLoan(reserve.book_id, reserve.user_id, reserve.id)}
                                           >
-                                              {t('ui.reserves.buttons.loan') || 'Loan'}
-                                              <BookUp className="h-4 w-4" />
+                                            {t('ui.reserves.buttons.loan') || 'Loan'}
+                                            <BookUp className="h-4 w-4" />
                                           </Button>
                                       </DialogClose>
                                   </DialogFooter>
                               </DialogContent>
                           </Dialog>
-
-                          <Button
-                              onClick={() => handleChangeStatus(loan.id)}
-                              variant="outline"
-                              size="icon"
-                              title={t('ui.loans.buttons.return') || 'View loan'}
-                              disabled={!reserve.active} // Desactivar el botón si el préstamo está inactivo
-                              className={`${reserve.active ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'cursor-not-allowed bg-gray-300 text-gray-500'}`}
-                          >
-                              <BookmarkX  className="h-4 w-4" />
-                          </Button>
 
                           {/* <Dialog
               id={reserve.id}
@@ -198,11 +179,11 @@ export default function ReservesIndex() {
                   accessorKey: 'email',
               }),
               createTextColumn<Reserve>({
-                  id: 'status',
-                  header: t('ui.reserves.columns.status') || 'status',
-                  accessorKey: 'status',
-                  format: (value) => (value ? t('ui.reserves.filters.contacted') : t('ui.reserves.filters.waiting')),
-              }),
+                id: 'status',
+                header: t('ui.reserves.columns.status') || 'status',
+                accessorKey: 'status',
+                format: (value)=>(value? t('ui.reserves.filters.contacted') : t('ui.reserves.filters.waiting'))
+            }),
               createActionsColumn<Reserve>({
                   id: 'delete',
                   header: t('ui.reserves.columns.delete') || 'Actions',

@@ -10,13 +10,13 @@ use Domain\Users\Models\User;
 use Domain\Books\Models\Book;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Database\Factories\ReserveFactory;
-// use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 
 class Reserve extends Model
 {
-    use HasFactory, Notifiable, HasUuids ;
+    use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
     /**
      * Create a new factory instance for the model.
