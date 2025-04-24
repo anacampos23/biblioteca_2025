@@ -537,7 +537,7 @@ return [
             'days_overdue' => 'Days overdue',
             'active' => 'Loan status',
             'active_status' => 'In progress',
-            'inactive_status' => 'Inactive'
+            'inactive_status' => 'Finished',
         ],
         'placeholders' => [
                 'title' => 'Title...',
@@ -547,7 +547,7 @@ return [
                 'due_date' => 'Due date',
                 'end_loan' => 'Date End loan',
                 'days_overdue' => 'Days overdue...',
-                'active' => 'In progress/Inactive loan...',
+                'active' => 'In progress/Finished loan...',
                 'selectISBN' => 'Select the book ISBN',
             ],
             'buttons' => [
@@ -595,11 +595,15 @@ return [
             'author' => 'Author',
             'ISBN' => 'ISBN',
             'name' => 'User name',
+            'contacted' => 'Contacted',
+            'waiting' => 'Waiting',
+            'status' => 'Waiting/Contacted',
         ],
         'placeholders' => [
                 'title' => 'Title...',
                 'author' => 'Author...',
                 'ISBN' => 'ISBN...',
+                'status' => 'Waiting/Contacted',
             ],
             'buttons' => [
             'new' => 'New Reservation',
@@ -621,7 +625,8 @@ return [
             'email'=> 'User email',
             'delete' => 'Delete',
             'edit'=> 'Edit Reservation',
-            'loan' => 'Make loan'
+            'loan' => 'Make loan',
+            'status' => 'Waiting/Contacted',
         ],
         'fields'=> [
             'ISBN' => 'ISBN',

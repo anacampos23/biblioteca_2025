@@ -64,7 +64,7 @@ class LoanIndexAction
             $query->whereIn('user_id', $userName);
         })
         ->when($email !== "null", function ($query) use ($userEmail) {
-            $query->whereIn('user_id', 'ILIKE', $userEmail);
+            $query->whereIn('user_id', $userEmail);
         })
 
         ->when($start_loan !== "null", function ($query) use ($start_loan) {

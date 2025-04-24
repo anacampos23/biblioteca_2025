@@ -218,7 +218,7 @@ export default function LoansIndex() {
     //     format: (value)=>(value? t('ui.loans.filters.active_status') : t('ui.loans.filters.inactive_status'))
     //   }),
     createActionsColumn<Loan>({
-      id: "actions",
+      id: "delete",
       header: t("ui.loans.columns.delete") || "Actions",
       renderActions: (loan) => (
         <>

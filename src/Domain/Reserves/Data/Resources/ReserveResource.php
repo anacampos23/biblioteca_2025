@@ -18,6 +18,7 @@ class ReserveResource extends Data
         public readonly string $title,
         public readonly string $author,
         public readonly int $ISBN,
+        public readonly bool $status,
         public readonly string $created_at,
         public readonly string $updated_at,
     ) {
@@ -38,6 +39,7 @@ class ReserveResource extends Data
             title: $book->title,
             author: $book->author,
             ISBN: $book->ISBN,
+            status: $reserve->status,
             created_at: $reserve->created_at->format('Y-m-d H:i:s'),
             updated_at: $reserve->updated_at->format('Y-m-d H:i:s'),
         );

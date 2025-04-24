@@ -105,7 +105,7 @@ export default function BooksIndex() {
       () =>
           [
               createActionsColumn<Book>({
-                  id: 'actions',
+                  id: 'action_loan',
                   header: t('ui.books.columns.borrow') || 'Actions',
                   renderActions: (book) => (
                       <>

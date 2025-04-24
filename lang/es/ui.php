@@ -534,7 +534,8 @@ return [
                 'days_overdue' => 'Días de retraso',
                 'active' => 'Estado del préstamo',
                 'active_status' => 'En progreso',
-                'inactive_status' => 'Inactivo'
+                'inactive_status' => 'Terminado',
+
             ],
             'placeholders' => [
                  'title' => 'Título...',
@@ -544,8 +545,6 @@ return [
                  'due_date' => 'Fecha de vencimiento',
                 'end_loan' => 'Fecha final del préstamo',
                 'days_overdue' => 'Días de retraso...',
-                'active' => 'Préstamo en progreso/inactivo...',
-                'selectISBN'=> 'Selecciona el ISBN del libro',
              ],
              'buttons' => [
                 'new' => 'Nuevo Préstamo',
@@ -593,11 +592,17 @@ return [
             'author' => 'Autor',
             'ISBN' => 'ISBN',
             'name' => 'Nombre de usuario',
+            'status' => 'En espera/Contactado',
+            'contacted' => 'Contactado',
+            'waiting' => 'En espera',
         ],
         'placeholders' => [
             'title' => 'Título...',
             'author' => 'Autor...',
             'ISBN' => 'ISBN...',
+            'active' => 'Préstamo en progreso/Terminado...',
+            'selectISBN'=> 'Selecciona el ISBN del libro',
+            'status' => 'En espera/Contactado',
          ],
          'buttons' => [
             'new' => 'Nueva Reserva',
@@ -619,7 +624,8 @@ return [
             'email'=>'Email del usuario',
             'delete' => 'Eliminar',
             'edit'=> 'Editar préstamo',
-            'loan' => 'Realizar préstamo'
+            'loan' => 'Realizar préstamo',
+            'status' => 'En espera/Contactado',
         ],
         'fields'=> [
             'ISBN' => 'ISBN',

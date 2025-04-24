@@ -10,6 +10,7 @@ export interface Reserve {
   title: string;
   author: string;
   ISBN: string;
+  status: boolean;
   created_at: string;
 }
 
@@ -56,14 +57,15 @@ interface UseReservesParams {
   title?: string;
   author?: string;
   ISBN?: string;
+  status?: boolean;
   page?: number;
   perPage?: number;
 }
 
-export function useReserves({ search, book_id, user_id, name, email, title, author, ISBN, page = 1, perPage = 10 }:
+export function useReserves({ search, book_id, user_id, name, email, title, author, ISBN, status, page = 1, perPage = 10 }:
     UseReservesParams = {}) {
   return useQuery({
-    queryKey: ["reserves", { search, book_id, user_id, name, email, title, author, ISBN, page, perPage }],
+    queryKey: ["reserves", { search, book_id, user_id, name, email, title, author, ISBN, status, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Reserve>>("/api/reserves", {
         params: {
@@ -75,6 +77,7 @@ export function useReserves({ search, book_id, user_id, name, email, title, auth
           title,
           author,
           ISBN,
+          status,
           page,
           per_page: perPage,
         },
@@ -110,6 +113,7 @@ export function useCreateReserve() {
     title?: string;
     author?: string;
     ISBN?: string;
+    status?: boolean;
 
     }) => {
       const response = await axios.post("/api/reserves", data, {
@@ -132,7 +136,8 @@ export function useUpdateReserve(reserveId: string) {
         email?: string;
         title?: string;
         author?: string;
-        ISBN?: string;}) => {
+        ISBN?: string;
+        status?:boolean;}) => {
       const response = await axios.put(`/api/reserves/${reserveId}`, data, {
         headers: {
           'Accept': 'application/json',

@@ -16,7 +16,7 @@ class ReserveIndexAction
         $ISBN = $search[2];
         $name = $search[3];
         $email = $search[4];
-
+        $status = $search[5];
 
         //Título del libro
         $bookTitle = Book::query() -> when($title != "null", function ($query) use ($title){
@@ -43,7 +43,6 @@ class ReserveIndexAction
             $query -> where('email', 'ILIKE', "%".$email."%")->withTrashed();
         })-> pluck('id');
 
-
         $reserves = Reserve::query()
         ->when($title !== "null", function ($query) use ($bookTitle) {
             $query->whereIn('book_id', $bookTitle);
@@ -58,7 +57,10 @@ class ReserveIndexAction
             $query->whereIn('user_id', $userName);
         })
         ->when($email !== "null", function ($query) use ($userEmail) {
-            $query->whereIn('user_id', 'ILIKE', $userEmail);
+            $query->whereIn('user_id', $userEmail);
+        })
+        ->when($status !== "null", function ($query) use ($status) {
+            $query->where('status', 'like', $status);
         })
 
             ->latest()
