@@ -135,8 +135,6 @@ class BookController extends Controller
                 ->where('available', true)
                 ->first();
 
-        // dd($bookAvailable);
-
         if ($request->input('newReservationStatus')) {
             if ($book_availability == true) {
                 return redirect()->route('loans.create', [
@@ -152,7 +150,7 @@ class BookController extends Controller
                             'title' => $book->title,
                             'author' => $book->author,
                             'ISBN' => $book->ISBN,
-                        ]);
+                        ])->with('success', __('messages.books.loan_reserve'));
                     } else {
                         return redirect()->route('reserves.create', [
                             'book_id' => $book->id,
@@ -165,32 +163,6 @@ class BookController extends Controller
             }
 
 
-                // if ($request->input('newReservationStatus')) {
-                //     if (!empty($bookAvailable)) {
-                //         if ($book_id == $bookAvailable->id){
-                //             return redirect()->route('loans.create', [
-                //             'book_id' => $bookAvailable->id,
-                //             'title' => $book->title,
-                //             'author' => $book->author,
-                //             'ISBN' => $book->ISBN,
-                //         ]);
-                //         } else {
-                //                 return redirect()->route('loans.create', [
-                //                 'book_id' => $bookAvailable->id,
-                //                 'title' => $book->title,
-                //                 'author' => $book->author,
-                //                 'ISBN' => $book->ISBN,
-                //             ])->with('success', __('messages.books.loan_reserve'));
-                //         }
-                //     } else {
-                //         return redirect()->route('reserves.create', [
-                //             'book_id' => $book->id,
-                //             'title' => $book->title,
-                //             'author' => $book->author,
-                //             'ISBN' => $book->ISBN,
-                //         ]);
-                //     }
-                // }
 
 
 

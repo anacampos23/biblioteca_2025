@@ -38,6 +38,7 @@ export default function BooksIndex() {
     filters.ISBN ? filters.ISBN : "null",
     filters.editorial ? filters.editorial : "null",
     filters.available ? filters.available : "null",
+    filters.reserved ? filters.reserved : "null",
     filters.bookcase_name ? filters.bookcase_name : "null",
     filters.name ? filters.name : "null",
     filters.floor_number ? filters.floor_number : "null",
@@ -100,130 +101,147 @@ export default function BooksIndex() {
 }
 
 
-  const columns = useMemo(() => ([
-    createActionsColumn<Book>({
-        id: "actions",
-        header: t("ui.books.columns.borrow") || "Actions",
-        renderActions: (book) => (
-          <>
-              <Button
-              variant="outline"
-              size="icon"
-              title={t("ui.books.buttons.reserve") || "Reserve book"}
-              onClick={()=>{handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available)}}
-              className={`${book.available ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-gray-300 text-gray-500'}`}>
-                {book.available ? (
-                    <BookUp className="h-4 w-4" />
-                ) : (
-                    <BookmarkCheck className="h-4 w-4" />
-                )}
-              </Button>
-          </>
-        ),
-      }),
-    createTextColumn<Book>({
-      id: "title",
-      header: t("ui.books.columns.title") || "Title",
-      accessorKey: "title",
-    }),
-    createTextColumn<Book>({
-        id: "author",
-        header: t("ui.books.columns.author") || "author",
-        accessorKey: "author",
-      }),
-      createTextColumn<Book>({
-        id: "genre",
-        header: t("ui.books.columns.genre") || "genre",
-        accessorKey: "genre",
-        format: (value) => {
-            if (Array.isArray(value)) {
-              // Si el valor es un array, lo mapeamos a los textos correspondientes
-              return value.map((genre) => t(`ui.books.genres.${genre}`) || genre).join(", ");
-            }
-            return value; // Si no es un array, lo mostramos tal cual
-          },
-      }),
-      createTextColumn<Book>({
-        id: "ISBN",
-        header: t("ui.books.columns.ISBN") || "ISBN",
-        accessorKey: "ISBN",
-      }),
-      createTextColumn<Book>({
-        id: "editorial",
-        header: t("ui.books.columns.editorial") || "editorial",
-        accessorKey: "editorial",
-      }),
-      createTextColumn<Book>({
-        id: "available",
-        header: t("ui.books.columns.available") || "available",
-        accessorKey: "available",
-        format: (value)=>(value? t('ui.books.filters.available') : t('ui.books.filters.not_available'))
-      }),
-      createTextColumn<Book>({
-        id: "bookcase_name",
-        header: t("ui.books.columns.bookcase_name") || "bookcase_name",
-        accessorKey: "bookcase_name",
-      }),
-      createTextColumn<Book>({
-        id: "name",
-        header: t("ui.books.columns.name") || "name",
-        accessorKey: "name",
-        format: (value) => {
-            if (Array.isArray(value)) {
-              return value
-                .map((name) => t(`ui.books.zones.${name}`) ||  name)
-                .join(", ");
-            }
-            return typeof value === "string" ? t(`ui.books.zones.${value}`) || value : "";
-          },
-      }),
-      createTextColumn<Book>({
-        id: "floor_number",
-        header: t("ui.books.columns.floor_number") || "floor_number",
-        accessorKey: "floor_number",
-        format: (value)=>t("ui.books.columns.floor_number")+' '+value,
-      }),
-      createActionsColumn<Book>({
-        id: "isbn_loan_count",
-        header: t("ui.books.columns.isbn_loan_count") || "Actions",
-        renderActions: ($book) => {
-            let $isbn_count = $book.isbn_count;
-            let $isbn_loan_count = $book.isbn_loan_count;
-            return(
-                <span> {$isbn_loan_count}/{$isbn_count}</span>
-            )
-        }
-      }),
-    createDateColumn<Book>({
-      id: "created_at",
-      header: t("ui.books.columns.created_at") || "Created At",
-      accessorKey: "created_at",
-    }),
-    createActionsColumn<Book>({
-      id: "actions",
-      header: t("ui.books.columns.actions") || "Actions",
-      renderActions: (book) => (
-        <>
-          <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.books.buttons.edit") || "Edit book"}>
-              <PencilIcon className="h-4 w-4" />
-            </Button>
-          </Link>
-          <DeleteDialog
-            id={book.id}
-            onDelete={handleDeleteBook}
-            title={t("ui.books.delete.title") || "Delete book"}
-            description={t("ui.books.delete.description") || "Are you sure you want to delete this book? This action cannot be undone."}
-            trigger={
-              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.books.buttons.delete") || "Delete book"}>
-                <TrashIcon className="h-4 w-4" />
-              </Button>
-            }
-          />
-        </>
-      ),
-    }),
-  ] as ColumnDef<Book>[]), [t, handleDeleteBook]);
+  const columns = useMemo(
+      () =>
+          [
+              createActionsColumn<Book>({
+                  id: 'actions',
+                  header: t('ui.books.columns.borrow') || 'Actions',
+                  renderActions: (book) => (
+                      <>
+                          <Button
+                              variant="outline"
+                              size="icon"
+                              title={t('ui.books.buttons.reserve') || 'Reserve book'}
+                              onClick={() => {
+                                  handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available);
+                              }}
+                              className={`${
+                                  book.available
+                                      ? 'bg-green-500 text-white hover:bg-green-600'
+                                      : book.reserved
+                                        ? 'bg-gray-200 text-orange-500'
+                                        : 'bg-gray-200 text-gray-500'
+                              }`}
+                          >
+                              {book.available ? <BookUp className="h-4 w-4" /> : <BookmarkCheck className="h-4 w-4" />}
+                          </Button>
+                      </>
+                  ),
+              }),
+              createTextColumn<Book>({
+                  id: 'title',
+                  header: t('ui.books.columns.title') || 'Title',
+                  accessorKey: 'title',
+              }),
+              createTextColumn<Book>({
+                  id: 'author',
+                  header: t('ui.books.columns.author') || 'author',
+                  accessorKey: 'author',
+              }),
+              createTextColumn<Book>({
+                  id: 'genre',
+                  header: t('ui.books.columns.genre') || 'genre',
+                  accessorKey: 'genre',
+                  format: (value) => {
+                      if (Array.isArray(value)) {
+                          // Si el valor es un array, lo mapeamos a los textos correspondientes
+                          return value.map((genre) => t(`ui.books.genres.${genre}`) || genre).join(', ');
+                      }
+                      return value; // Si no es un array, lo mostramos tal cual
+                  },
+              }),
+              createTextColumn<Book>({
+                  id: 'ISBN',
+                  header: t('ui.books.columns.ISBN') || 'ISBN',
+                  accessorKey: 'ISBN',
+              }),
+              createTextColumn<Book>({
+                  id: 'editorial',
+                  header: t('ui.books.columns.editorial') || 'editorial',
+                  accessorKey: 'editorial',
+              }),
+              createTextColumn<Book>({
+                  id: 'available',
+                  header: t('ui.books.columns.available') || 'available',
+                  accessorKey: 'available',
+                  format: (value) => (value ? t('ui.books.filters.available') : t('ui.books.filters.not_available')),
+              }),
+              createTextColumn<Book>({
+                  id: 'bookcase_name',
+                  header: t('ui.books.columns.bookcase_name') || 'bookcase_name',
+                  accessorKey: 'bookcase_name',
+              }),
+              createTextColumn<Book>({
+                  id: 'name',
+                  header: t('ui.books.columns.name') || 'name',
+                  accessorKey: 'name',
+                  format: (value) => {
+                      if (Array.isArray(value)) {
+                          return value.map((name) => t(`ui.books.zones.${name}`) || name).join(', ');
+                      }
+                      return typeof value === 'string' ? t(`ui.books.zones.${value}`) || value : '';
+                  },
+              }),
+              createTextColumn<Book>({
+                  id: 'floor_number',
+                  header: t('ui.books.columns.floor_number') || 'floor_number',
+                  accessorKey: 'floor_number',
+                  format: (value) => t('ui.books.columns.floor_number') + ' ' + value,
+              }),
+              createActionsColumn<Book>({
+                  id: 'isbn_loan_count',
+                  header: t('ui.books.columns.isbn_loan_count') || 'Actions',
+                  renderActions: ($book) => {
+                      let $isbn_count = $book.isbn_count;
+                      let $isbn_loan_count = $book.isbn_loan_count;
+                      return (
+                          <span>
+                              {' '}
+                              {$isbn_loan_count}/{$isbn_count}
+                          </span>
+                      );
+                  },
+              }),
+              createDateColumn<Book>({
+                  id: 'created_at',
+                  header: t('ui.books.columns.created_at') || 'Created At',
+                  accessorKey: 'created_at',
+              }),
+              createActionsColumn<Book>({
+                  id: 'actions',
+                  header: t('ui.books.columns.actions') || 'Actions',
+                  renderActions: (book) => (
+                      <>
+                          <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                              <Button variant="outline" size="icon" title={t('ui.books.buttons.edit') || 'Edit book'}>
+                                  <PencilIcon className="h-4 w-4" />
+                              </Button>
+                          </Link>
+                          <DeleteDialog
+                              id={book.id}
+                              onDelete={handleDeleteBook}
+                              title={t('ui.books.delete.title') || 'Delete book'}
+                              description={
+                                  t('ui.books.delete.description') || 'Are you sure you want to delete this book? This action cannot be undone.'
+                              }
+                              trigger={
+                                  <Button
+                                      variant="outline"
+                                      size="icon"
+                                      className="text-destructive hover:text-destructive"
+                                      title={t('ui.books.buttons.delete') || 'Delete book'}
+                                  >
+                                      <TrashIcon className="h-4 w-4" />
+                                  </Button>
+                              }
+                          />
+                      </>
+                  ),
+              }),
+          ] as ColumnDef<Book>[],
+      [t, handleDeleteBook],
+  );
 
   return (
       <BookLayout title={t('ui.books.title')}>
@@ -280,6 +298,13 @@ export default function BooksIndex() {
                                     type: 'select',
                                     options:[{value:'true', label: t('ui.books.filters.available')}, {value:'false', label: t('ui.books.filters.not_available')}],
                                     placeholder: t('ui.books.placeholders.available'),
+                                },
+                                {
+                                    id: 'reserved',
+                                    label: t('ui.books.filters.reserve'),
+                                    type: 'select',
+                                    options:[{value:'true', label: t('ui.books.filters.reserved')}, {value:'false', label: t('ui.books.filters.not_reserved')}],
+                                    placeholder: t('ui.books.placeholders.reserved'),
                                 },
                                 {
                                     id: 'bookcase_name',

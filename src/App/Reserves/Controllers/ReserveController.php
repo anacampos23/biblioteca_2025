@@ -48,6 +48,13 @@ class ReserveController extends Controller
 
         $action($validator->validated());
 
+        // Buscar el libro con el ISBN
+        $book = Book::where('id', $request->book_id)
+            ->first();
+        // Marcar el libro como no disponible
+        $book->reserved = true;
+        $book->save();
+
         return redirect()->route('reserves.index')
             ->with('success', __('messages.reserves.created'));
     }
@@ -100,6 +107,16 @@ class ReserveController extends Controller
     public function destroy(Reserve $reserve, ReserveDestroyAction $action)
     {
         $action($reserve);
+
+        // Obtener el libro asociado a la reserva
+        $book = Book::find($reserve->book_id);
+
+        if ($book) {
+            // Marcar el libro como NO reservado
+            $book->reserved = false;
+            $book->save();
+        }
+
 
         return redirect()->route('reserves.index')
             ->with('success', __('messages.reserves.deleted'));

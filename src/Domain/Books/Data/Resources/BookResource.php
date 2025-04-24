@@ -19,6 +19,7 @@ class BookResource extends Data
         public readonly int $ISBN,
         public readonly string $editorial,
         public readonly bool $available,
+        public readonly bool $reserved,
         public readonly string $bookcase_id,
         public readonly int $bookcase_name,
         public readonly int $isbn_loan_count,
@@ -37,7 +38,6 @@ class BookResource extends Data
         $bookcase = Bookcase::where('id', $book->bookcase_id)-> first();
         $zone = Zone::where('id', $book->zone_id)-> first();
         $floor = Floor::where('id', $book->floor_id)-> first();
-
         $book_count = Book::where('ISBN',$book->ISBN) -> pluck('id');
         $loans = Loan::where('active', true)->whereIn('book_id', $book_count);
 
@@ -49,6 +49,7 @@ class BookResource extends Data
             ISBN: $book->ISBN,
             editorial: $book->editorial,
             available: $book->activeLoan()->first() ===null,
+            reserved: $book->reserved,
             bookcase_id: $book->bookcase_id,
             zone_id: $book->zone_id,
             floor_id: $book->floor_id,
