@@ -15,10 +15,10 @@ class LoanStoreAction
     public function __invoke(array $data): LoanResource
     {
         $userId = User::where('email', $data['email'])->first()->id;
-        $bookId = Book::where('ISBN', $data['ISBN'])->where('available', true)->first()->id;
+
 
         $loan = Loan::create([
-            'book_id' => $bookId,
+            'book_id' => $data['book_id'],
             'user_id' => $userId,
             'start_loan' => Carbon::now(),
             'due_date' => Carbon::now()->addMonth(),

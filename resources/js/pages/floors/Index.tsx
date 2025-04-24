@@ -35,6 +35,7 @@ export default function FloorsIndex() {
     filters.capacity_zones ? filters.capacity_zones : "null",
   ]
 
+
   const { data: floors, isLoading, isError, refetch } = useFloors({
     search: combinedSearch,
     page: currentPage,
@@ -60,6 +61,16 @@ export default function FloorsIndex() {
       console.error("Error deleting floor:", error);
     }
   };
+
+  //Filters
+  const handleFilterChange = (newFilters: Record<string, any>) => {
+    const filtersChanged = newFilters!==filters;
+
+    if (filtersChanged) {
+        setCurrentPage(1);
+    }
+    setFilters(newFilters);
+    };
 
   const columns = useMemo(() => ([
     createTextColumn<Floor>({
@@ -132,7 +143,7 @@ export default function FloorsIndex() {
                                 }
                               ] as FilterConfig[]
                           }
-                          onFilterChange={setFilters}
+                          onFilterChange={handleFilterChange}
                           initialValues={filters}
                       />
                   </div>

@@ -139,7 +139,7 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
-                {/* Capacity_zones field */}
+                {/* ISBN field */}
                     <div>
                         <form.Field
                             name="ISBN"
@@ -148,11 +148,11 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
                                     await new Promise((resolve) => setTimeout(resolve, 500));
                                     return !value
                                         ? t('ui.validation.required', { attribute: t('ui.loans.fields.ISBN')})
-                                        : !bookISBNs.includes(value) ? t('ui.validation.ISBN_not_exist', {
+                                        : !bookISBNs.includes(Number(value)) ? t('ui.validation.ISBN_not_exist', {
                                             attribute: t('ui.books.fields.ISBN').toLowerCase(),
-                                          })
-                                        : !booksAvailableISBNs.includes(value) ? t('ui.validation.book_not_available', {
-                                        attribute: t('ui.books.fields.ISBN').toLowerCase(),
+                                        })
+                                        : !booksAvailableISBNs.includes(Number(value)) ? t('ui.validation.book_not_available', {
+                                            attribute: t('ui.books.fields.ISBN').toLowerCase(),
                                         })
 
                                         :undefined;

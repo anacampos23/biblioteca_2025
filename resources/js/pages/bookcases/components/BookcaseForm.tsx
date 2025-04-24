@@ -388,7 +388,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                                         <Card className="grow" key={categoria.id}>
                                             <CardHeader>
                                                 <div className="flex gap-1">
-                                                    <Icono size={18} color="blue" />
+                                                    <Icono size={18} color="indigo" />
                                                     <CardTitle>{t('ui.users.gridelements.' + categoria.label)}</CardTitle>
                                                 </div>
                                             </CardHeader>
@@ -396,7 +396,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                                                 {permisosCat.map((permiso) => (
                                                     <div className="items-top flex space-x-2" key={String(permiso)}>
                                                         <Checkbox
-                                                            className="border-blue-500"
+                                                            className="border-indigo-500"
                                                             id={String(permiso)}
                                                             value={String(permiso)}
                                                             checked={arrayPermisosState.includes(permiso)}

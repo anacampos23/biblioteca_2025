@@ -22,6 +22,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+    Dialog,
+    DialogTrigger,
+    DialogContent,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+    DialogClose,
+  } from "@/components/ui/dialog"; // tu componente personalizado
+
 
 export default function ReservesIndex() {
   const { t } = useTranslations();
@@ -76,14 +86,63 @@ export default function ReservesIndex() {
     }
   };
 
+  //Filters
+  const handleFilterChange = (newFilters: Record<string, any>) => {
+    const filtersChanged = newFilters!==filters;
 
-  const columns = useMemo(() => ([
-    createActionsColumn<Reserve>({
-        id: "actions",
-        header: t("ui.reserves.columns.loan") || "Actions",
-        renderActions: (reserve) => (
-          <>
-            <DeleteDialog
+    if (filtersChanged) {
+        setCurrentPage(1);
+    }
+    setFilters(newFilters);
+    };
+
+
+   // Crear préstamo
+      async function handleCreateLoan(book_id: string, user_id: string, id: string) {
+        router.get('/loans/create', { book_id, user_id, id });
+        await deleteReserveMutation.mutateAsync(id);
+      refetch();
+      }
+
+
+  const columns = useMemo(
+      () =>
+          [
+              createActionsColumn<Reserve>({
+                  id: 'actions',
+                  header: t('ui.reserves.columns.loan') || 'Actions',
+                  renderActions: (reserve) => (
+                      <>
+                          <Dialog>
+                              <DialogTrigger asChild>
+                                  <Button variant="outline" size="icon" className="text-green-600" title={t('ui.reserves.buttons.loan') || 'Delete reserve'}>
+                                      <BookUp className="h-4 w-4" />
+                                  </Button>
+                              </DialogTrigger>
+
+                              <DialogContent>
+                                  <DialogTitle> {t('ui.reserves.messages.title') || '¿Quieres coger prestado el libro?'} </DialogTitle>
+                                  <DialogDescription> {t('ui.reserves.messages.description') || 'El libro ya está disponible para ser prestado'} </DialogDescription>
+
+                                  <DialogFooter>
+                                      <DialogClose asChild>
+                                          <Button  variant="outline">{t('ui.reserves.buttons.cancel') || 'Cancel'}</Button>
+                                      </DialogClose>
+
+                                      <DialogClose asChild>
+                                          <Button
+                                            className="bg-indigo-600"
+                                            onClick={() =>handleCreateLoan(reserve.book_id, reserve.user_id, reserve.id)}
+                                          >
+                                            {t('ui.reserves.buttons.loan') || 'Loan'}
+                                            <BookUp className="h-4 w-4" />
+                                          </Button>
+                                      </DialogClose>
+                                  </DialogFooter>
+                              </DialogContent>
+                          </Dialog>
+
+                          {/* <Dialog
               id={reserve.id}
               onDelete={handleDeleteReserve}
               title={t("ui.reserves.delete.title") || "Delete reserve"}
@@ -93,55 +152,64 @@ export default function ReservesIndex() {
                   <BookUp className="h-4 w-4" />
                 </Button>
               }
-            />
-          </>
-        ),
-      }),
-    createTextColumn<Reserve>({
-      id: "title",
-      header: t("ui.reserves.columns.title") || "Title",
-      accessorKey: "title",
-    }),
-    createTextColumn<Reserve>({
-        id: "author",
-        header: t("ui.reserves.columns.author") || "author",
-        accessorKey: "author",
-      }),
-      createTextColumn<Reserve>({
-        id: "ISBN",
-        header: t("ui.reserves.columns.ISBN") || "ISBN",
-        accessorKey: "ISBN",
-      }),
-      createTextColumn<Reserve>({
-        id: "name",
-        header: t("ui.reserves.columns.name") || "name",
-        accessorKey: "name",
-      }),
-      createTextColumn<Reserve>({
-        id: "email",
-        header: t("ui.reserves.columns.email") || "email",
-        accessorKey: "email",
-      }),
-    createActionsColumn<Reserve>({
-      id: "actions",
-      header: t("ui.reserves.columns.delete") || "Actions",
-      renderActions: (reserve) => (
-        <>
-          <DeleteDialog
-            id={reserve.id}
-            onDelete={handleDeleteReserve}
-            title={t("ui.reserves.delete.title") || "Delete reserve"}
-            description={t("ui.reserves.delete.description") || "Are you sure you want to delete this reserve? This action cannot be undone."}
-            trigger={
-              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.reserves.buttons.delete") || "Delete reserve"}>
-                <TrashIcon className="h-4 w-4" />
-              </Button>
-            }
-          />
-        </>
-      ),
-    }),
-  ] as ColumnDef<Reserve>[]), [t, handleDeleteReserve]);
+            /> */}
+                      </>
+                  ),
+              }),
+              createTextColumn<Reserve>({
+                  id: 'title',
+                  header: t('ui.reserves.columns.title') || 'Title',
+                  accessorKey: 'title',
+              }),
+              createTextColumn<Reserve>({
+                  id: 'author',
+                  header: t('ui.reserves.columns.author') || 'author',
+                  accessorKey: 'author',
+              }),
+              createTextColumn<Reserve>({
+                  id: 'ISBN',
+                  header: t('ui.reserves.columns.ISBN') || 'ISBN',
+                  accessorKey: 'ISBN',
+              }),
+              createTextColumn<Reserve>({
+                  id: 'name',
+                  header: t('ui.reserves.columns.name') || 'name',
+                  accessorKey: 'name',
+              }),
+              createTextColumn<Reserve>({
+                  id: 'email',
+                  header: t('ui.reserves.columns.email') || 'email',
+                  accessorKey: 'email',
+              }),
+              createActionsColumn<Reserve>({
+                  id: 'actions',
+                  header: t('ui.reserves.columns.delete') || 'Actions',
+                  renderActions: (reserve) => (
+                      <>
+                          <DeleteDialog
+                              id={reserve.id}
+                              onDelete={handleDeleteReserve}
+                              title={t('ui.reserves.delete.title') || 'Delete reserve'}
+                              description={
+                                  t('ui.reserves.delete.description') || 'Are you sure you want to delete this reserve? This action cannot be undone.'
+                              }
+                              trigger={
+                                  <Button
+                                      variant="outline"
+                                      size="icon"
+                                      className="text-destructive hover:text-destructive"
+                                      title={t('ui.reserves.buttons.delete') || 'Delete reserve'}
+                                  >
+                                      <TrashIcon className="h-4 w-4" />
+                                  </Button>
+                              }
+                          />
+                      </>
+                  ),
+              }),
+          ] as ColumnDef<Reserve>[],
+      [t, handleDeleteReserve],
+  );
 
   return (
       <ReserveLayout title={t('ui.reserves.title')}>
@@ -198,7 +266,7 @@ export default function ReservesIndex() {
                                 },
                               ] as FilterConfig[]
                           }
-                          onFilterChange={setFilters}
+                          onFilterChange={handleFilterChange}
                           initialValues={filters}
                       />
                   </div>

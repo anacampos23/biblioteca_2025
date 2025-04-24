@@ -62,6 +62,16 @@ export default function BookcasesIndex() {
     }
   };
 
+  //Filters
+  const handleFilterChange = (newFilters: Record<string, any>) => {
+    const filtersChanged = newFilters!==filters;
+
+    if (filtersChanged) {
+        setCurrentPage(1);
+    }
+    setFilters(newFilters);
+    };
+
   const columns = useMemo(() => ([
     createTextColumn<Bookcase>({
       id: "bookcase_name",
@@ -148,7 +158,7 @@ export default function BookcasesIndex() {
                                 },
                               ] as FilterConfig[]
                           }
-                          onFilterChange={setFilters}
+                          onFilterChange={handleFilterChange}
                           initialValues={filters}
                       />
                   </div>

@@ -35,10 +35,6 @@ export function LoanLayout({ title, children }: LoanLayoutProps) {
       title: "Dashboard",
       href: "/dashboard",
     },
-    {
-      title: "Loans",
-      href: "/loans",
-    },
   ];
 
   if (title !== "Loans") {
