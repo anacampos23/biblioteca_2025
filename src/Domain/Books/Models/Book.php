@@ -80,13 +80,13 @@ class Book extends Model implements HasMedia
             return $this->hasMany(Loan::class);
         }
 
-    /**
-         * Get the active loans.
-         */
-    public function activeLoan(): HasOne
-    {
-        return $this->hasOne(Loan::class)->where('active', true);
-    }
+    // /**
+    //      * Get the active loans.
+    //      */
+    // public function activeLoan(): HasOne
+    // {
+    //     return $this->hasOne(Loan::class)->where('active', true);
+    // }
 
     /**
          * Get the reserves.

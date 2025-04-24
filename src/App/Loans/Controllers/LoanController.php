@@ -131,7 +131,6 @@ class LoanController extends Controller
 
         // Buscar la primera reserva de un libro que tenga el mismo ISBN
         $reserve = Reserve::with(['book']) // Cargar relación con el libro
-            ->withTrashed()
             ->whereHas('book', function ($query) use ($bookISBN) {
                 $query->where('ISBN', $bookISBN);
             })
@@ -141,18 +140,42 @@ class LoanController extends Controller
 
         $redirectUrl = route('loans.index');
 
-        if ($request->input('newStatus') == false){
-        // Marcar el libro como no disponible
-        $book->available = true;
-        $book->save();
+        if ($request->input('newStatus') == false) {
             if ($reserve) {
-                $user = User::find($reserve->user_id);
+                $user = User::find($reserve->user_id)
+                            -> where('status', false);
                 if ($user) {
                     $user->notify(new notification_email($reserve->book, $user));
                 }
+                $book->available = false;
+                $reserve->status = true;
+                $book->save();
+                $reserve->save();
+            }else {
+                // Marcar el libro como disponible
+                $book->available = true;
+                $book->save();
             }
 
         }
+
+        // //Marcar el préstamo cono terminado
+        // if ($request->input('newStatus') == false) {
+        //     if ($reserve) {
+        //         // Marcar el libro como disponible
+        //         $book->available = false;
+        //         $book->save();
+        //         $user = User::find($reserve->user_id);
+        //         if ($user) {
+        //             $user->notify(new notification_email($reserve->book, $user));
+        //         }
+        //     } else {
+        //         // Marcar el libro como disponible
+        //         $book->available = true;
+        //         $book->save();
+        //     }
+
+        // }
 
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {

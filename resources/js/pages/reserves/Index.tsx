@@ -54,10 +54,7 @@ export default function ReservesIndex() {
     filters.ISBN ? filters.ISBN : "null",
     filters.name ? filters.name : "null",
     filters.email ? filters.email : "null",
-    filters.start_loan ? filters.start_loan : "null",
-    filters.end_loan ? filters.end_loan : "null",
-    filters.days_overdue === 0 ? 0 : (filters.days_overdue ? filters.days_overdue : "null"),
-    filters.active ? filters.active : "null",
+    filters.status ? filters.status : "null",
   ]
 
   const { data: reserves, isLoading, isError, refetch } = useReserves({
@@ -181,8 +178,14 @@ export default function ReservesIndex() {
                   header: t('ui.reserves.columns.email') || 'email',
                   accessorKey: 'email',
               }),
+              createTextColumn<Reserve>({
+                id: 'status',
+                header: t('ui.reserves.columns.status') || 'status',
+                accessorKey: 'status',
+                format: (value)=>(value? t('ui.reserves.filters.contacted') : t('ui.reserves.filters.waiting'))
+            }),
               createActionsColumn<Reserve>({
-                  id: 'actions',
+                  id: 'delete',
                   header: t('ui.reserves.columns.delete') || 'Actions',
                   renderActions: (reserve) => (
                       <>
@@ -264,6 +267,13 @@ export default function ReservesIndex() {
                                     type: 'text',
                                     placeholder: t('ui.users.placeholders.email') || 'Email...',
                                 },
+                                {
+                                    id: 'status',
+                                    label: t('ui.reserves.filters.status'),
+                                    type: 'select',
+                                    options:[{value:'true', label: t('ui.reserves.filters.contacted')}, {value:'false', label: t('ui.reserves.filters.waiting')}],
+                                    placeholder: t('ui.reserves.placeholders.status'),
+                                    },
                               ] as FilterConfig[]
                           }
                           onFilterChange={handleFilterChange}

@@ -8,6 +8,7 @@ use Domain\Zones\Models\Zone;
 use Domain\Floors\Models\Floor;
 use Spatie\LaravelData\Data;
 use Domain\Loans\Models\Loan;
+use Domain\Reserves\Models\Reserve;
 
 class BookResource extends Data
 {
@@ -41,6 +42,7 @@ class BookResource extends Data
         $book_count = Book::where('ISBN',$book->ISBN) -> pluck('id');
         $loans = Loan::where('active', true)->whereIn('book_id', $book_count);
 
+
         return new self(
             id: $book->id,
             title: $book->title,
@@ -48,7 +50,7 @@ class BookResource extends Data
             genre: $book->genre,
             ISBN: $book->ISBN,
             editorial: $book->editorial,
-            available: $book->activeLoan()->first() ===null,
+            available: $book->available,
             reserved: $book->reserved,
             bookcase_id: $book->bookcase_id,
             zone_id: $book->zone_id,
