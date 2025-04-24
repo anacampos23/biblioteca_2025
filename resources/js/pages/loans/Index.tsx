@@ -323,13 +323,13 @@ export default function LoansIndex() {
                                     placeholder: t('ui.loans.placeholders.days_overdue'),
                                     min: 0,
                                 },
-                                // {
-                                //     id: 'active',
-                                //     label: t('ui.loans.filters.active'),
-                                //     type: 'select',
-                                //     options:[{value:'true', label: t('ui.loans.filters.active_status')}, {value:'false', label: t('ui.loans.filters.inactive_status')}],
-                                //     placeholder: t('ui.loans.placeholders.active'),
-                                //     },
+                                {
+                                    id: 'active',
+                                    label: t('ui.loans.filters.active'),
+                                    type: 'select',
+                                    options:[{value:'true', label: t('ui.loans.filters.active_status')}, {value:'false', label: t('ui.loans.filters.inactive_status')}],
+                                    placeholder: t('ui.loans.placeholders.active'),
+                                    },
                               ] as FilterConfig[]
                           }
                           onFilterChange={handleFilterChange}

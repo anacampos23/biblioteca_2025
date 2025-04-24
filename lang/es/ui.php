@@ -408,7 +408,10 @@ return [
                 'name' => 'Zona',
                 'floor_number' => 'Piso',
                 'available' => 'Disponible',
-                'not_available' => 'No disponible'
+                'not_available' => 'No disponible',
+                'reserve' =>'Reserva',
+                'reserved' => 'Reservado',
+                'not_reserved' => 'No reservado',
             ],
             'placeholders' => [
                 'title' => 'Título...',
@@ -421,6 +424,7 @@ return [
                 'bookcase_name' => 'Estantería...',
                 'name' => 'Zona...',
                 'floor_number' => 'Piso...',
+                'reserved' => 'Reservado/No reservado'
             ],
             'buttons' => [
                 'new' => 'Nuevo Libro',

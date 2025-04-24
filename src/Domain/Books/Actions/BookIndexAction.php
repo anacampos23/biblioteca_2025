@@ -19,9 +19,10 @@ class BookIndexAction
         $ISBN = $search[3];
         $editorial = $search[4];
         $available = $search[5];
-        $bookcase_name = $search[6];
-        $name = $search[7];
-        $floor_number = $search[8];
+        $reserved = $search[6];
+        $bookcase_name = $search[7];
+        $name = $search[8];
+        $floor_number = $search[9];
 
 
         //Une bookcase_name con el registro que tenemos del id
@@ -67,6 +68,9 @@ class BookIndexAction
             })
             ->when($available !== "null", function ($query) use ($available) {
                 $query->where('available', 'like', $available);
+            })
+            ->when($reserved !== "null", function ($query) use ($reserved) {
+                $query->where('reserved', 'like', $reserved);
             })
             ->when($bookcase_name !== "null", function ($query) use ($bookcase_id) {
                 $query->where('bookcase_id', '=', $bookcase_id);

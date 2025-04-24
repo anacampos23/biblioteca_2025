@@ -412,7 +412,10 @@ return [
             'name' => 'Zone',
             'floor_number' => 'Floor',
             'available' => 'Available',
-            'not_available' => 'Not available'
+            'not_available' => 'Not available',
+            'reserve' => 'Reserva',
+            'reserved' => 'Reserved',
+            'not_reserved' => 'Not reserved',
         ],
         'placeholders' => [
              'title' => 'Title...',
@@ -425,6 +428,7 @@ return [
              'bookcase_name' => 'Bookcase...',
              'name' => 'Zone...',
              'floor_number' => 'Floor...',
+             'reserved' => 'Reserved/Not reserved'
          ],
          'buttons' => [
             'new' => 'New Book',
