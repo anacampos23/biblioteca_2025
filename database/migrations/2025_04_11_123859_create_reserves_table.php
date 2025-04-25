@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary()->unique();
             $table->foreignUuid('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
-            $table->boolean('status');
+            $table->string('status');
             $table->timestamps();
             $table->softDeletes();
         });

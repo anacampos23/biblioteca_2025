@@ -3,7 +3,8 @@
 namespace App\Loans\Controllers;
 
 use App\Core\Controllers\Controller;
-use App\Notifications\notification_email;
+use App\Notifications\Disponible;
+use App\Notifications\Préstamo;
 use Carbon\Carbon;
 use Domain\Loans\Actions\LoanDestroyAction;
 use Domain\Loans\Actions\LoanIndexAction;
@@ -84,6 +85,34 @@ class LoanController extends Controller
         $book->available = false;
         $book->save();
 
+        // Buscar una reserva con el mismo ISBN, email y status "contacted"
+        $reserve = Reserve::with('book')
+            ->where('status', 'contacted')
+            ->whereHas('book', function ($query) use ($request) {
+                $query->where('ISBN', $request->ISBN);
+            })
+            ->whereHas('user', function ($query) use ($request) {
+                $query->where('email', $request->email);
+            })
+            ->orderBy('created_at')
+            ->first();
+
+        // Si existe una reserva, podrías hacer algo con ella (por ejemplo, marcarla como "terminada")
+        if ($reserve) {
+            $reserve->status = 'finished';
+            $reserve->book->reserved=false;
+            $reserve->book->save();
+            $reserve->save();
+        }
+
+        // Obtener el usuario con el email del request
+        $user = User::where('email', $request->email)->first();
+
+        // Asegurarse de que el usuario existe antes de notificar
+        if ($user) {
+            $user->notify(new Préstamo($book, $user));
+        }
+
         // Redirigir después de crear el préstamo
         return redirect()->route('loans.index')
             ->with('success', __('messages.loans.created'));
@@ -130,12 +159,12 @@ class LoanController extends Controller
         $bookISBN = $book->ISBN;
 
         // Buscar la primera reserva de un libro que tenga el mismo ISBN
-        $reserve = Reserve::with(['book']) // Cargar relación con el libro
+        $reserve = Reserve::with(['book'])
+            ->where('status', 'waiting')
             ->whereHas('book', function ($query) use ($bookISBN) {
-                $query->where('ISBN', $bookISBN)
-                      -> where('status', false);
+                $query->where('ISBN', $bookISBN);
             })
-            ->orderBy('created_at') // Opcional: para que sea la más antigua
+            ->orderBy('created_at')
             ->first();
 
 
@@ -145,10 +174,10 @@ class LoanController extends Controller
             if ($reserve) {
                 $user = User::find($reserve->user_id);
                 if ($user) {
-                    $user->notify(new notification_email($reserve->book, $user));
+                    $user->notify(new Disponible($reserve->book, $user));
                 }
                 $book->available = false;
-                $reserve->status = true;
+                $reserve->status = 'contacted';
                 $book->save();
                 $reserve->save();
             }else {

@@ -61,27 +61,28 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
 
     const bookId = param.get('book_id');
     const bookISBN = param.get('ISBN');
+    const bookTitle = param.get('title');
+    const bookAuthor = param.get('author');
+    const loanEmail = param.get('email');
 
     const bookISBNs = books.map(book => book.ISBN);
     const booksAvailableISBNs = booksAvailable.map(book => book.ISBN);
-    console.log(booksAvailableISBNs);
     const userEmails = users.map(user => user.email);
 
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
             book_id: initialData?.book_id ?? bookId ?? '',
-            email: initialData?.email ?? '',
+            email: initialData?.email ?? loanEmail ?? '',
             start_loan: initialData?.start_loan ?? '',
             end_loan: initialData?.end_loan ?? '',
             due_date: initialData?.due_date ?? '',
             active: initialData?.active ?? '',
             user_id: initialData?.user_id ?? '',
             name: initialData?.name ?? '',
-            title: initialData?.title ?? '',
-            author: initialData?.author ?? '',
+            title: initialData?.title ?? bookTitle ?? '',
+            author: initialData?.author ?? bookAuthor ??'',
             ISBN: initialData?.ISBN ? Number(initialData.ISBN): bookISBN? Number(bookISBN): '',
-            // ISBN: Number(initialData?.ISBN ?? bookISBN) || 0,
         },
 
         onSubmit: async ({ value }) => {
@@ -140,97 +141,97 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
                 {/* ISBN field */}
-                    <div>
-                        <form.Field
-                            name="ISBN"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.loans.fields.ISBN')})
-                                        : !bookISBNs.includes(Number(value)) ? t('ui.validation.ISBN_not_exist', {
+                <div>
+                    <form.Field
+                        name="ISBN"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value
+                                    ? t('ui.validation.required', { attribute: t('ui.loans.fields.ISBN') })
+                                    : !bookISBNs.includes(Number(value))
+                                      ? t('ui.validation.ISBN_not_exist', {
                                             attribute: t('ui.books.fields.ISBN').toLowerCase(),
                                         })
-                                        : !booksAvailableISBNs.includes(Number(value)) ? t('ui.validation.book_not_available', {
-                                            attribute: t('ui.books.fields.ISBN').toLowerCase(),
-                                        })
+                                      : !booksAvailableISBNs.includes(Number(value)) && !loanEmail
+                                        ? t('ui.validation.book_not_available', {
+                                              attribute: t('ui.books.fields.ISBN').toLowerCase(),
+                                          })
+                                        : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="mb-1 flex items-center gap-1">
+                                        <Barcode color="grey" size={18} />
+                                        {t('ui.loans.fields.ISBN')}
+                                    </div>
+                                </Label>
 
-                                        :undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>
-                                        <div className="mb-1 flex items-center gap-1">
-                                            <Barcode  color="grey" size={18} />
-                                            {t('ui.loans.fields.ISBN')}
-                                        </div>
-                                    </Label>
-
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        type='number'
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(Number(e.target.value))}
-                                        onBlur={field.handleBlur}
-                                        placeholder={t('ui.loans.placeholders.ISBN')}
-                                        disabled={form.state.isSubmitting}
-                                        required={false}
-                                        autoComplete="off"
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="number"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.loans.placeholders.ISBN')}
+                                    disabled={form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
 
                 {/* Email field */}
-                    <div className= 'mt-4 mb-6'>
-                        <form.Field
-                            name="email"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.users.fields.email').toLowerCase() })
-                                        : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-                                            ? t('ui.validation.email', { attribute: t('ui.users.fields.email').toLowerCase() })
-                                            : !userEmails.includes(value) ? t('ui.validation.email_not_exist', {
-                                                attribute: t('ui.users.fields.email').toLowerCase(),
-                                              })
-
-                                            :undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>
-                                        <div className="mb-1 flex items-center gap-1">
-                                            <Mail color="grey" size={18} />
-                                            {t('ui.users.fields.email')}
-                                        </div>
-                                    </Label>
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        type="text"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        onBlur={field.handleBlur}
-                                        placeholder={t('ui.users.placeholders.email')}
-                                        disabled={form.state.isSubmitting}
-                                        required={false}
-                                        autoComplete="off"
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
+                <div className="mt-4 mb-6">
+                    <form.Field
+                        name="email"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value
+                                    ? t('ui.validation.required', { attribute: t('ui.users.fields.email').toLowerCase() })
+                                    : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                                      ? t('ui.validation.email', { attribute: t('ui.users.fields.email').toLowerCase() })
+                                      : !userEmails.includes(value)
+                                        ? t('ui.validation.email_not_exist', {
+                                              attribute: t('ui.users.fields.email').toLowerCase(),
+                                          })
+                                        : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="mb-1 flex items-center gap-1">
+                                        <Mail color="grey" size={18} />
+                                        {t('ui.users.fields.email')}
+                                    </div>
+                                </Label>
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="text"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.users.placeholders.email')}
+                                    disabled={form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
                 <Separator className="mt-3" />
 
                 {/* Form buttons */}
@@ -238,6 +239,7 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
                     <Button
                         type="button"
                         variant="outline"
+                        className=" hover:bg-gray-200"
                         onClick={() => {
                             let url = '/loans';
                             if (page) {
@@ -256,7 +258,7 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
 
                     <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
                         {([canSubmit, isSubmitting]) => (
-                            <Button type="submit" disabled={!canSubmit}>
+                            <Button type="submit" disabled={!canSubmit} className="bg-indigo-700 hover:bg-indigo-900">
                                 <Save />
                                 {isSubmitting
                                     ? t('ui.loans.buttons.saving')

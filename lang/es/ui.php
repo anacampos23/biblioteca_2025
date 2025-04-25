@@ -14,6 +14,7 @@ return [
             'loans'=> 'Préstamos',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
+            'reserves' => 'Reservas'
         ],
     ],
     'user_menu' => [
@@ -396,6 +397,7 @@ return [
             'title_sing' => 'Libro :number',
             'description' => 'Gestiona los libros',
             'book'=> 'Libro',
+            'books'=> 'Libros',
             'filters' => [
                 'title' => 'Título',
                 'author' => 'Autor',
@@ -586,6 +588,8 @@ return [
         'card'=>[
             'create'=> 'Reserva el libro',
             'new'=> 'Nueva reserva',
+            'not_available'=> 'El libro ya está prestado, le mandaremos un email cuando esté disponible.',
+            'book'=> 'Datos del libro:',
         ],
         'filters' => [
             'title' => 'Título',
@@ -595,6 +599,7 @@ return [
             'status' => 'En espera/Contactado',
             'contacted' => 'Contactado',
             'waiting' => 'En espera',
+            'finished'=> 'Finalizada'
         ],
         'placeholders' => [
             'title' => 'Título...',
@@ -633,6 +638,15 @@ return [
         'messages'=>[
             'title'=> '¿Quieres coger prestado el libro?',
             'description' => 'El libro ya está disponible',
+        ],
+        'status'=>[
+            'waiting' => 'En espera',
+            'contacted' => 'Usuario contactado',
+            'finished' => 'Terminada'
+        ],
+        'delete'=> [
+            'title' => '¿Estás seguro/a de que quieres eliminar esta reserva?',
+            'description' => 'La información se mantendrá en la base de datos'
         ]
     ]
 ];

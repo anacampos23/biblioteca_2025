@@ -42,4 +42,25 @@ return [
         ],
         'loan_reserve' => 'The book is available. You can already loan it.'
     ],
+    'loans' => [
+        'created' => 'Loan created successfully',
+        'updated' => 'Loan updated successfully',
+        'deleted' => 'Loan deleted successfully',
+        'error' => [
+            'create' => 'Error creating loan',
+            'update' => 'Error updating loan',
+            'delete' => 'Error deleting loan',
+        ],
+    ],
+    'reserves' => [
+        'created' => 'Reservation created successfully',
+        'updated' => 'Reservation updated successfully',
+        'deleted' => 'Reservation deleted successfully',
+        'error' => [
+            'create' => 'Error creating reservation',
+            'update' => 'Error updating reservation',
+            'delete' => 'Error deleting reservation',
+            'delete_not_finished' => 'You can not delete a current reservation'
+        ],
+    ],
 ];

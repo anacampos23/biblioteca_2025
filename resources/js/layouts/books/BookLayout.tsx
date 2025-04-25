@@ -1,3 +1,4 @@
+import { useTranslations } from "@/hooks/use-translations";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
 import { Head, usePage } from "@inertiajs/react";
@@ -19,7 +20,8 @@ interface BookLayoutProps extends PropsWithChildren {
 }
 
 export function BookLayout({ title, children }: BookLayoutProps) {
-  const { flash } = usePage<PageProps>().props;
+    const { t } = useTranslations();
+    const { flash } = usePage<PageProps>().props;
 
   useEffect(() => {
     if (flash.success) {
@@ -36,7 +38,7 @@ export function BookLayout({ title, children }: BookLayoutProps) {
       href: "/dashboard",
     },
     {
-      title: "Libros",
+      title: t("ui.books.books"),
       href: "/books",
     },
   ];

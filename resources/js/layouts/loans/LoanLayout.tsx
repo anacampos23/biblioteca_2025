@@ -1,3 +1,4 @@
+import { useTranslations } from "@/hooks/use-translations";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
 import { Head, usePage } from "@inertiajs/react";
@@ -19,7 +20,8 @@ interface LoanLayoutProps extends PropsWithChildren {
 }
 
 export function LoanLayout({ title, children }: LoanLayoutProps) {
-  const { flash } = usePage<PageProps>().props;
+   const { t } = useTranslations();
+const { flash } = usePage<PageProps>().props;
 
   useEffect(() => {
     if (flash.success) {
@@ -35,6 +37,10 @@ export function LoanLayout({ title, children }: LoanLayoutProps) {
       title: "Dashboard",
       href: "/dashboard",
     },
+    {
+        title: t("ui.loans.title"),
+        href: "/loans",
+      },
   ];
 
   if (title !== "Loans") {

@@ -33,15 +33,17 @@ export default function CreateReserve({initialData, page, perPage}: ReserveFormP
     return (
         <ReserveLayout title={t('ui.reserves.card.new')}>
             <div className="flex max-w-screen items-center self-center">
-                <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
+                <Card className="max-w-70% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white ">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1 mt-5">
-                                <BookmarkCheck  color="#2762c2" />
+                                <BookmarkCheck  className="text-indigo-700" />
                                 {t('ui.reserves.card.create')}
                             </div>
                         </CardTitle>
-                        <CardDescription className= "font-semibold mt-2">{title}</CardDescription>
+                        <CardDescription className= "mt-2">{t('ui.reserves.card.not_available')}</CardDescription>
+                        <CardDescription className= "font-semibold mt-4 underline">{t('ui.reserves.card.book')}</CardDescription>
+                        <CardDescription className= "font-semibold">{title}</CardDescription>
                         <CardDescription>{author}</CardDescription>
                     </CardHeader>
                     <Separator />
