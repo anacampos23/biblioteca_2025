@@ -19,7 +19,7 @@ class ReserveStoreAction
         $reserve = Reserve::create([
             'book_id' => $bookId,
             'user_id' => $userId,
-            'status' => false,
+            'status' => 'waiting',
         ]);
 
         return ReserveResource::fromModel($reserve);

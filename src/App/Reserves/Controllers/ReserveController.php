@@ -108,14 +108,14 @@ class ReserveController extends Controller
     {
         $action($reserve);
 
-        // Obtener el libro asociado a la reserva
-        $book = Book::find($reserve->book_id);
+        // // Obtener el libro asociado a la reserva
+        // $book = Book::find($reserve->book_id);
 
-        if ($book) {
-            // Marcar el libro como NO reservado
-            $book->reserved = false;
-            $book->save();
-        }
+        // if ($book) {
+        //     // Marcar el libro como NO reservado
+        //     $book->reserved = false;
+        //     $book->save();
+        // }
 
 
         return redirect()->route('reserves.index')

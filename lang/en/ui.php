@@ -13,6 +13,7 @@ return [
             'loans'=> 'Loans',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
+            'reserves' => 'Reservations'
         ],
     ],
     'user_menu' => [
@@ -400,6 +401,7 @@ return [
         'title' => 'Books',
         'description' => 'Manage the books',
         'book'=> 'Book',
+        'books'=> 'Books',
         'filters' => [
             'title' => 'Title',
             'author' => 'Author',
@@ -589,6 +591,8 @@ return [
         'card'=>[
             'create'=> 'Make a book reservation:',
             'new'=> 'New book reservation',
+            'not_available' => 'The book is already loaned, we would send you an email when it is available',
+            'book'=> 'Book data:',
         ],
         'filters' => [
             'title' => 'Title',
@@ -597,13 +601,14 @@ return [
             'name' => 'User name',
             'contacted' => 'Contacted',
             'waiting' => 'Waiting',
-            'status' => 'Waiting/Contacted',
+            'status' => 'Reservation Status',
+            'finished' => 'Finished',
         ],
         'placeholders' => [
                 'title' => 'Title...',
                 'author' => 'Author...',
                 'ISBN' => 'ISBN...',
-                'status' => 'Waiting/Contacted',
+                'status' => 'Status',
             ],
             'buttons' => [
             'new' => 'New Reservation',
@@ -626,7 +631,7 @@ return [
             'delete' => 'Delete',
             'edit'=> 'Edit Reservation',
             'loan' => 'Make loan',
-            'status' => 'Waiting/Contacted',
+            'status' => 'Reservation Status',
         ],
         'fields'=> [
             'ISBN' => 'ISBN',
@@ -634,6 +639,15 @@ return [
         'messages'=>[
             'title'=> 'Do you want to loan the book?',
             'description' => 'The book is already available.',
+        ],
+        'status'=>[
+            'waiting' => 'Waiting',
+            'contacted' => 'User contacted',
+            'finished' => 'Finished'
+        ],
+        'delete'=> [
+            'title' => 'Are you sure you want to delete this reservation?',
+            'description' => 'Information would be safe on data base'
         ]
     ]
 ];

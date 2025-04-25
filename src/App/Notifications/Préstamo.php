@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class notification_email extends Notification implements ShouldQueue
+class Préstamo extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -41,11 +41,12 @@ class notification_email extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->greeting('¡Hola ' . $this->user->name . '!')
-            ->line('Tu libro ya está disponible.')
-            ->line('"'. $this->book->title . '"'. ' de ' . $this->book->author)
-            ->line('Tienes 15 días para pasarte por la biblioteca para recogerlo.')
+            ->line('Este es un correo de confirmación del préstamo.')
+            ->line('Actualmente has cogido prestado el libro: '. $this->book->title . '"'. ' de ' . $this->book->author)
+            ->line('Recuerda que tienes 30 días para poder disfrutarlo.')
             ->action('Biblioteca', url('/'))
-            ->line('Gracias por utilizar nuestros servicios');
+            ->line('Cualquier duda estamos a tu disposición.')
+            ->line('Gracias por utilizar nuestros servicios.');
     }
 
     /**

@@ -42,4 +42,25 @@ return [
         ],
         'loan_reserve' => 'El libro está disponible. Puedes realizar directamente un préstamo.',
     ],
+    'loans' => [
+        'created' => 'Préstamo creado correctamente',
+        'updated' => 'Préstamo actualizado correctamente',
+        'deleted' => 'Préstamo eliminado correctamente',
+        'error' => [
+            'create' => 'Error al crear el préstamo',
+            'update' => 'Error al actualizar el préstamo',
+            'delete' => 'Error al eliminar el préstamo',
+        ],
+    ],
+    'reserves' => [
+        'created' => 'Reserva creada correctamente',
+        'updated' => 'Reserva actualizada correctamente',
+        'deleted' => 'Reserva eliminada correctamente',
+        'error' => [
+            'create' => 'Error al crear la reserva',
+            'update' => 'Error al actualizar la reserva',
+            'delete' => 'Error al eliminar la reserva',
+            'delete_not_finished' => 'No puedes eliminar una reserva que está en proceso'
+        ],
+    ],
 ];

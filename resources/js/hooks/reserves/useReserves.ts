@@ -9,8 +9,8 @@ export interface Reserve {
   email: string;
   title: string;
   author: string;
-  ISBN: string;
-  status: boolean;
+  ISBN: number;
+  status: string;
   created_at: string;
 }
 
@@ -25,7 +25,7 @@ export interface ApiPaginatedResponse<T> {
   links: Array<{
     url: string | null;
     label: string;
-    active: boolean;
+    active: string;
   }>;
   next_page_url: string | null;
   path: string;
@@ -56,8 +56,8 @@ interface UseReservesParams {
   email?: string;
   title?: string;
   author?: string;
-  ISBN?: string;
-  status?: boolean;
+  ISBN?: number;
+  status?: string;
   page?: number;
   perPage?: number;
 }
@@ -112,8 +112,8 @@ export function useCreateReserve() {
     email?: string;
     title?: string;
     author?: string;
-    ISBN?: string;
-    status?: boolean;
+    ISBN?: number;
+    status?: string;
 
     }) => {
       const response = await axios.post("/api/reserves", data, {
@@ -136,8 +136,8 @@ export function useUpdateReserve(reserveId: string) {
         email?: string;
         title?: string;
         author?: string;
-        ISBN?: string;
-        status?:boolean;}) => {
+        ISBN?: number;
+        status?:string;}) => {
       const response = await axios.put(`/api/reserves/${reserveId}`, data, {
         headers: {
           'Accept': 'application/json',

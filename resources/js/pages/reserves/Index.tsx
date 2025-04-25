@@ -47,6 +47,7 @@ export default function ReservesIndex() {
   const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
   const [filters, setFilters] = useState<Record<string, any>>({});
 
+
   // Combine filters
   const combinedSearch = [
     filters.title ? filters.title : "null",
@@ -95,9 +96,9 @@ export default function ReservesIndex() {
 
 
    // Crear préstamo
-      async function handleCreateLoan(book_id: string, user_id: string, id: string) {
-        router.get('/loans/create', { book_id, user_id, id });
-        await deleteReserveMutation.mutateAsync(id);
+       function handleCreateLoan(book_id: string, user_id: string, id: string, ISBN: number, email:string, title: string, author:string) {
+        router.get('/loans/create', { book_id, user_id, id, ISBN, email, title, author });
+        // await deleteReserveMutation.mutateAsync(id);
       refetch();
       }
 
@@ -112,27 +113,40 @@ export default function ReservesIndex() {
                       <>
                           <Dialog>
                               <DialogTrigger asChild>
-                                  <Button variant="outline" size="icon" className="text-green-600" title={t('ui.reserves.buttons.loan') || 'Delete reserve'}>
+                                  <Button
+                                      variant="outline"
+                                      size="icon"
+                                      disabled={reserve.status === "waiting" || reserve.status === "finished"}
+                                      className={
+                                        reserve.status === "waiting" || reserve.status === "finished"
+                                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                          : 'text-green-600 hover:bg-gray-200'
+                                      }
+                                      title={t('ui.reserves.buttons.loan') || 'Delete reserve'}
+                                  >
                                       <BookUp className="h-4 w-4" />
                                   </Button>
                               </DialogTrigger>
 
                               <DialogContent>
                                   <DialogTitle> {t('ui.reserves.messages.title') || '¿Quieres coger prestado el libro?'} </DialogTitle>
-                                  <DialogDescription> {t('ui.reserves.messages.description') || 'El libro ya está disponible para ser prestado'} </DialogDescription>
+                                  <DialogDescription>
+                                      {' '}
+                                      {t('ui.reserves.messages.description') || 'El libro ya está disponible para ser prestado'}{' '}
+                                  </DialogDescription>
 
                                   <DialogFooter>
                                       <DialogClose asChild>
-                                          <Button  variant="outline">{t('ui.reserves.buttons.cancel') || 'Cancel'}</Button>
+                                          <Button variant="outline">{t('ui.reserves.buttons.cancel') || 'Cancel'}</Button>
                                       </DialogClose>
 
                                       <DialogClose asChild>
                                           <Button
-                                            className="bg-indigo-600"
-                                            onClick={() =>handleCreateLoan(reserve.book_id, reserve.user_id, reserve.id)}
+                                              className="bg-indigo-600"
+                                              onClick={() => handleCreateLoan(reserve.book_id, reserve.user_id, reserve.id, reserve.ISBN, reserve.email, reserve. title, reserve.author)}
                                           >
-                                            {t('ui.reserves.buttons.loan') || 'Loan'}
-                                            <BookUp className="h-4 w-4" />
+                                              {t('ui.reserves.buttons.loan') || 'Loan'}
+                                              <BookUp className="h-4 w-4" />
                                           </Button>
                                       </DialogClose>
                                   </DialogFooter>
@@ -179,11 +193,22 @@ export default function ReservesIndex() {
                   accessorKey: 'email',
               }),
               createTextColumn<Reserve>({
-                id: 'status',
-                header: t('ui.reserves.columns.status') || 'status',
-                accessorKey: 'status',
-                format: (value)=>(value? t('ui.reserves.filters.contacted') : t('ui.reserves.filters.waiting'))
-            }),
+                  id: 'status',
+                  header: t('ui.reserves.columns.status') || 'status',
+                  accessorKey: 'status',
+                  format: (value) => {
+                      switch (value) {
+                          case 'waiting':
+                              return t('ui.reserves.status.waiting');
+                          case 'contacted':
+                              return t('ui.reserves.status.contacted');
+                          case 'finished':
+                              return t('ui.reserves.status.finished');
+                          default:
+                              return value;
+                      }
+                  },
+              }),
               createActionsColumn<Reserve>({
                   id: 'delete',
                   header: t('ui.reserves.columns.delete') || 'Actions',
@@ -223,12 +248,12 @@ export default function ReservesIndex() {
 
                 <div className="flex flex-col sm:flex-row gap-2">
 
-                    <Link href="/reserves/create">
+                    {/* <Link href="/reserves/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
                               {t('ui.reserves.buttons.new')}
                           </Button>
-                      </Link>
+                      </Link> */}
                 </div>
                 </div>
 
@@ -271,7 +296,7 @@ export default function ReservesIndex() {
                                     id: 'status',
                                     label: t('ui.reserves.filters.status'),
                                     type: 'select',
-                                    options:[{value:'true', label: t('ui.reserves.filters.contacted')}, {value:'false', label: t('ui.reserves.filters.waiting')}],
+                                    options:[{value:'waiting', label: t('ui.reserves.filters.waiting')}, {value:'contacted', label: t('ui.reserves.filters.contacted')}, {value:'finished', label: t('ui.reserves.filters.finished')}],
                                     placeholder: t('ui.reserves.placeholders.status'),
                                     },
                               ] as FilterConfig[]

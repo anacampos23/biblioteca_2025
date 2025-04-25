@@ -41,11 +41,11 @@ export default function CreateLoan({initialData, users, books, ISBN_available, b
     return (
         <LoanLayout title={t('ui.loans.card.new')}>
             <div className="flex max-w-screen items-center self-center">
-                <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
+                <Card className="max-w-70% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1 mt-5">
-                                <BookUp  color="#2762c2" />
+                                <BookUp  className="text-indigo-700" />
                                 {t('ui.loans.card.create')}
                             </div>
                         </CardTitle>

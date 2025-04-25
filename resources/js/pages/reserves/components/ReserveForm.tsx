@@ -136,7 +136,7 @@ export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
                             {(field) => (
                                 <>
                                     <Label htmlFor={field.name}>
-                                        <div className="mb-1 flex items-center gap-1">
+                                        <div className="m-2 flex items-center gap-1">
                                             <Barcode  color="grey" size={18} />
                                             {t('ui.reserves.fields.ISBN')}
                                         </div>
@@ -179,7 +179,7 @@ export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
                             {(field) => (
                                 <>
                                     <Label htmlFor={field.name}>
-                                        <div className="mb-1 flex items-center gap-1">
+                                        <div className="m-2 flex items-center gap-1">
                                             <Mail color="grey" size={18} />
                                             {t('ui.users.fields.email')}
                                         </div>
@@ -208,6 +208,7 @@ export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
                     <Button
                         type="button"
                         variant="outline"
+                        className=" hover:bg-gray-200"
                         onClick={() => {
                             let url = '/reserves';
                             if (page) {
@@ -226,7 +227,7 @@ export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
 
                     <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
                         {([canSubmit, isSubmitting]) => (
-                            <Button type="submit" disabled={!canSubmit}>
+                            <Button type="submit" disabled={!canSubmit} className="bg-indigo-700 hover:bg-indigo-900">
                                 <Save />
                                 {isSubmitting
                                     ? t('ui.reserves.buttons.saving')
