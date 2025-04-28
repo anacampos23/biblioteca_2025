@@ -28,6 +28,8 @@ interface ReserveFormProps {
         author: string;
         ISBN: number;
     };
+    users: { id: string; name: string; email:string; }[];
+    ISBN_email: {ISBN: number, email: string}[];
     page?: string;
     perPage?: string;
 }
@@ -44,7 +46,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
+export function ReserveForm({ initialData, users, ISBN_email, page, perPage }: ReserveFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const url=window.location.href;
@@ -52,6 +54,8 @@ export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
 
     const bookId = param.get('book_id');
     const bookISBN = param.get('ISBN');
+
+    const userEmails = users.map(user => user.email);
 
     // TanStack Form setup
     const form = useForm({
@@ -120,87 +124,95 @@ export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
-                {/* Capacity_zones field */}
-                    <div>
-                        <form.Field
-                            name="ISBN"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.reserves.fields.ISBN')})
-                                            : undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>
-                                        <div className="m-2 flex items-center gap-1">
-                                            <Barcode  color="grey" size={18} />
-                                            {t('ui.reserves.fields.ISBN')}
-                                        </div>
-                                    </Label>
+                {/* ISBN field */}
+                <div>
+                    <form.Field
+                        name="ISBN"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value ? t('ui.validation.required', { attribute: t('ui.reserves.fields.ISBN') }) : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="m-2 flex items-center gap-1">
+                                        <Barcode color="grey" size={18} />
+                                        {t('ui.reserves.fields.ISBN')}
+                                    </div>
+                                </Label>
 
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        type='number'
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(Number(e.target.value))}
-                                        onBlur={field.handleBlur}
-                                        placeholder={t('ui.reserves.placeholders.ISBN')}
-                                        disabled={form.state.isSubmitting}
-                                        required={false}
-                                        autoComplete="off"
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="number"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.reserves.placeholders.ISBN')}
+                                    disabled={form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
 
                 {/* Email field */}
-                    <div className= 'mt-4 mb-6'>
-                        <form.Field
-                            name="email"
-                            validators={{
-                                onChangeAsync: async ({ value }) => {
-                                    await new Promise((resolve) => setTimeout(resolve, 500));
-                                    return !value
-                                        ? t('ui.validation.required', { attribute: t('ui.users.fields.email').toLowerCase() })
-                                        : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-                                            ? t('ui.validation.email', { attribute: t('ui.users.fields.email').toLowerCase() })
-                                            : undefined;
-                                },
-                            }}
-                        >
-                            {(field) => (
-                                <>
-                                    <Label htmlFor={field.name}>
-                                        <div className="m-2 flex items-center gap-1">
-                                            <Mail color="grey" size={18} />
-                                            {t('ui.users.fields.email')}
-                                        </div>
-                                    </Label>
-                                    <Input
-                                        id={field.name}
-                                        name={field.name}
-                                        type="text"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        onBlur={field.handleBlur}
-                                        placeholder={t('ui.users.placeholders.email')}
-                                        disabled={form.state.isSubmitting}
-                                        required={false}
-                                        autoComplete="off"
-                                    />
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
+                <div className="mt-4 mb-6">
+                    <form.Field
+                        name="email"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                // Obtener el valor de ISBN
+                                const isbnValue = form.state.values.ISBN;
+
+                                return !value
+                                    ? t('ui.validation.required', { attribute: t('ui.users.fields.email').toLowerCase() })
+                                    : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                                      ? t('ui.validation.email', { attribute: t('ui.users.fields.email').toLowerCase() })
+                                      : !userEmails.includes(value)
+                                        ? t('ui.validation.email_not_exist', {
+                                              attribute: t('ui.users.fields.email').toLowerCase(),
+                                          })
+                                        : ISBN_email.some((loan) => `${loan.email}-${loan.ISBN}` === `${value}-${isbnValue}`)
+                                          ? t('ui.validation.email_isbn_exists', {
+                                                attribute: `${t('ui.users.fields.email').toLowerCase()} y ${t('ui.books.fields.ISBN').toLowerCase()}`,
+                                            })
+                                          : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="m-2 flex items-center gap-1">
+                                        <Mail color="grey" size={18} />
+                                        {t('ui.users.fields.email')}
+                                    </div>
+                                </Label>
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="text"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.users.placeholders.email')}
+                                    disabled={form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
                 <Separator className="mt-3" />
 
                 {/* Form buttons */}
@@ -208,7 +220,7 @@ export function ReserveForm({ initialData, page, perPage }: ReserveFormProps) {
                     <Button
                         type="button"
                         variant="outline"
-                        className=" hover:bg-gray-200"
+                        className="hover:bg-gray-200"
                         onClick={() => {
                             let url = '/reserves';
                             if (page) {

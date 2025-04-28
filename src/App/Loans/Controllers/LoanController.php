@@ -48,11 +48,26 @@ class LoanController extends Controller
             ->get()
             ->toArray();
 
+        // Obtener los préstamos con los usuarios y los libros relacionados
+        $ISBN_email = Loan::select('book_id', 'user_id')
+            ->where('active', true)
+            ->with(['book:id,ISBN', 'user:id,email'])
+            ->get()
+            ->map(function ($loan) {
+                // Transformamos el resultado en un array con 'email' e 'ISBN'
+                return [
+                    'email' => $loan->user->email,
+                    'ISBN' => $loan->book->ISBN,
+                ];
+            })
+            ->toArray();
+
         return Inertia::render('loans/Create', [
             'users' => $users,
             'books' => $books,
             'ISBN_available' => $ISBN_available,
             'booksAvailable' => $booksAvailable,
+            'ISBN_email' => $ISBN_email,
         ]);
     }
 

@@ -37,6 +37,7 @@ interface LoanFormProps {
     booksAvailable: { id: string; title: string; author:string; ISBN: number; }[];
     users: { id: string; name: string; email:string; }[];
     ISBN_available: { id: string; ISBN: number; }[];
+    ISBN_email: {ISBN: number, email: string}[];
     page?: string;
     perPage?: string;
 }
@@ -53,7 +54,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function LoanForm({ initialData, page, perPage, users, books, ISBN_available, booksAvailable }: LoanFormProps) {
+export function LoanForm({ initialData, page, perPage, users, books, ISBN_available, booksAvailable, ISBN_email }: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const url=window.location.href;
@@ -68,6 +69,8 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
     const bookISBNs = books.map(book => book.ISBN);
     const booksAvailableISBNs = booksAvailable.map(book => book.ISBN);
     const userEmails = users.map(user => user.email);
+    // // Crear un Set de combinaciones email-ISBN
+    // const emailISBNSet = ISBN_email.map(loan => `${loan.email}-${loan.ISBN}`);
 
     // TanStack Form setup
     const form = useForm({
@@ -195,6 +198,8 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
+                                // Obtener el valor de ISBN
+                                const isbnValue = form.state.values.ISBN;
                                 return !value
                                     ? t('ui.validation.required', { attribute: t('ui.users.fields.email').toLowerCase() })
                                     : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -203,7 +208,11 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
                                         ? t('ui.validation.email_not_exist', {
                                               attribute: t('ui.users.fields.email').toLowerCase(),
                                           })
-                                        : undefined;
+                                        : ISBN_email.some((loan) => `${loan.email}-${loan.ISBN}` === `${value}-${isbnValue}`)
+                                          ? t('ui.validation.email_isbn_exists', {
+                                                attribute: `${t('ui.users.fields.email').toLowerCase()} y ${t('ui.books.fields.ISBN').toLowerCase()}`,
+                                            })
+                                          : undefined;
                             },
                         }}
                     >
@@ -239,7 +248,7 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
                     <Button
                         type="button"
                         variant="outline"
-                        className=" hover:bg-gray-200"
+                        className="hover:bg-gray-200"
                         onClick={() => {
                             let url = '/loans';
                             if (page) {

@@ -92,7 +92,8 @@ return [
             'floor' => 'The floor shoul be from 0 to 20.',
             'zone_floor' => 'The zone already exists in this floor.',
             'capacity_zones' => 'The floor capacity should be a positive number',
-            'zone_overload'=> 'There floor is full, there is not enough space.'
+            'zone_overload'=> 'There floor is full, there is not enough space.',
+            'email_isbn_exists' => 'This user already has the book loaned'
     ],
     'common' => [
         'buttons' => [
@@ -564,6 +565,7 @@ return [
             'retry' => 'Retry',
             'return' => 'Return the book',
             'renew' => 'Renew the loan',
+
         ],
         'columns' => [
             'title' => 'Title',
