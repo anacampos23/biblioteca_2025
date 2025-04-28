@@ -3,6 +3,7 @@
 namespace App\Reserves\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Notifications\Disponible;
 use Domain\Reserves\Actions\ReserveDestroyAction;
 use Domain\Reserves\Actions\ReserveIndexAction;
 use Domain\Reserves\Actions\ReserveStoreAction;
@@ -15,6 +16,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Domain\Users\Models\User;
 use Domain\Books\Models\Book;
+use Domain\Loans\Models\Loan;
 
 class ReserveController extends Controller
 {
@@ -29,9 +31,25 @@ class ReserveController extends Controller
         $books = Book::select(['id', 'title', 'author', 'ISBN']) ->withTrashed()->get() -> toArray();
         $users = User::select(['id', 'name', 'email']) ->withTrashed() ->orderBy('name', 'asc') ->get() -> toArray();
 
+        // Obtener los préstamos con los usuarios y los libros relacionados
+        $ISBN_email = Loan::select('book_id', 'user_id')
+            ->where('active', true)
+            ->with(['book:id,ISBN', 'user:id,email'])
+            ->get()
+            ->map(function ($loan) {
+                // Transformamos el resultado en un array con 'email' e 'ISBN'
+                return [
+                    'email' => $loan->user->email,
+                    'ISBN' => $loan->book->ISBN,
+                ];
+            })
+            ->toArray();
+
+
         return Inertia::render('reserves/Create', [
             'users' => $users,
             'books' => $books,
+            'ISBN_email' => $ISBN_email,
         ]);
     }
 
@@ -107,15 +125,6 @@ class ReserveController extends Controller
     public function destroy(Reserve $reserve, ReserveDestroyAction $action)
     {
         $action($reserve);
-
-        // // Obtener el libro asociado a la reserva
-        // $book = Book::find($reserve->book_id);
-
-        // if ($book) {
-        //     // Marcar el libro como NO reservado
-        //     $book->reserved = false;
-        //     $book->save();
-        // }
 
 
         return redirect()->route('reserves.index')

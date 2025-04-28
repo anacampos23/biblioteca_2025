@@ -93,7 +93,8 @@ return [
             'floor' => 'El piso debe estar entre 0 y 20.',
             'zone_floor' => 'Ya existe esa zona en este piso.',
             'capacity_zones'=> 'La capacidad del piso debe ser un número positivo',
-            'zone_overload'=> 'El piso está lleno, ya no caben más zonas.'
+            'zone_overload'=> 'El piso está lleno, ya no caben más zonas.',
+            'email_isbn_exists' => 'El usuario ya tiene prestado este libro'
     ],
     'common' => [
         'buttons' => [
@@ -543,6 +544,7 @@ return [
                  'title' => 'Título...',
                  'author' => 'Autor...',
                  'ISBN' => 'ISBN...',
+                 'active' => 'En progreso/Terminado',
                  'start_loan' => 'Fecha de inicio del préstamo',
                  'due_date' => 'Fecha de vencimiento',
                 'end_loan' => 'Fecha final del préstamo',
