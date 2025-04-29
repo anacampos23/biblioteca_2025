@@ -124,13 +124,14 @@ export default function BooksIndex() {
                                   handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available);
                               }}
                               className={`${
-                                  book.available
-                                      ? 'bg-green-500 text-white hover:bg-green-600'
-                                      :
-                                        'bg-white-300 text-gray-500 hover:bg-gray-100'
+                                  book.available ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-white-300 text-gray-500 hover:bg-gray-100'
                               }`}
                           >
-                              {book.available ? <BookUp className="h-4 w-4" /> : <BookmarkCheck className="h-4 w-4" />}
+                              {book.available ? (
+                                  <BookUp className="h-4 w-4" />
+                              ) : (
+                                  <BookmarkCheck className={`h-4 w-4 ${book.reserved ? 'text-orange-500' : 'text-gray-500'}`} />
+                              )}
                           </Button>
                       </>
                   ),

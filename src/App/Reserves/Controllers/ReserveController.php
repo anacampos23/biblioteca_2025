@@ -45,11 +45,25 @@ class ReserveController extends Controller
             })
             ->toArray();
 
+        // Obtener los préstamos con los usuarios y los libros relacionados
+        $ISBN_email_reserve = Reserve::select('book_id', 'user_id')
+            ->where('status', '!=', 'finished')
+            ->with(['book:id,ISBN', 'user:id,email'])
+            ->get()
+            ->map(function ($loan) {
+                // Transformamos el resultado en un array con 'email' e 'ISBN'
+                return [
+                    'email' => $loan->user->email,
+                    'ISBN' => $loan->book->ISBN,
+                ];
+            })
+            ->toArray();
 
         return Inertia::render('reserves/Create', [
             'users' => $users,
             'books' => $books,
             'ISBN_email' => $ISBN_email,
+            'ISBN_email_reserve' => $ISBN_email_reserve,
         ]);
     }
 

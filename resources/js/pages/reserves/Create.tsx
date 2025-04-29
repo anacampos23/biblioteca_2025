@@ -20,11 +20,12 @@ interface ReserveFormProps {
     };
     users: { id: string; name: string; email:string; }[];
     ISBN_email: {ISBN: number, email: string}[];
+    ISBN_email_reserve: {ISBN: number, email: string}[];
     page?: string;
     perPage?: string;
 }
 
-export default function CreateReserve({initialData, users, ISBN_email, page, perPage}: ReserveFormProps) {
+export default function CreateReserve({initialData, users, ISBN_email, ISBN_email_reserve, page, perPage}: ReserveFormProps) {
     const { t } = useTranslations();
     const url=window.location.href;
     const param = new URLSearchParams(window.location.search);
@@ -50,7 +51,7 @@ export default function CreateReserve({initialData, users, ISBN_email, page, per
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <ReserveForm users={users} ISBN_email={ISBN_email}/>
+                        <ReserveForm users={users} ISBN_email={ISBN_email} ISBN_email_reserve={ISBN_email_reserve}/>
                     </CardContent>
                 </Card>
             </div>
