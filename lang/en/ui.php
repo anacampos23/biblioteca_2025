@@ -27,6 +27,7 @@ return [
     'settings' => [
         'title' => 'Settings',
         'description' => 'Manage your profile and account settings',
+        'statistics' => 'User statistics',
         'navigation' => [
             'profile' => 'Profile',
             'password' => 'Password',

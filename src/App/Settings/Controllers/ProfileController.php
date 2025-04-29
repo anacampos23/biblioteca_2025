@@ -4,6 +4,8 @@ namespace App\Settings\Controllers;
 
 use App\Core\Controllers\Controller;
 use App\Settings\Requests\ProfileUpdateRequest;
+use Domain\Loans\Models\Loan;
+use Domain\Users\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,9 +20,18 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->withTrashed()->get()->toArray();
+        $loans = Loan::withTrashed()
+            ->with(['book:id,title,author'])
+            ->select(['id', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
+            ->get()
+            ->toArray();
+
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
+            'users' => $users,
+            'loans' => $loans,
         ]);
     }
 
