@@ -21,7 +21,7 @@ class LoanFactory extends Factory
 
     public function definition(): array
     {
-        $startLoan = $this->faker->dateTimeBetween('2024-09-01', 'now');
+        $startLoan = $this->faker->dateTimeBetween('2024-09-01', '2025-03-27');
         $due_date = (clone $startLoan)->modify('+1 month');
 
         // $active = $this->faker->boolean();
@@ -65,16 +65,25 @@ class LoanFactory extends Factory
             $startLoan = $this->faker->dateTimeBetween('2024-01-01', '-1 month');
             $due_date = (clone $startLoan)->modify('+1 month');
         }
+        //Obtenemos el libro y lo marcamos como no disponible
+        $book = Book::where('available', true)->inRandomOrder()->first();
 
+        if ($active) {
+            $book->available = false;
+            $book->save();
+        }
+
+
+        //Obtenemos el usuario
+        $user = User::inRandomOrder()->first() ?? User::factory()->create();
 
         return [
             'start_loan' => $startLoan->format('Y-m-d'),
             'due_date' => $due_date->format('Y-m-d'),
             'end_loan' => $endLoan ? $endLoan->format('Y-m-d') : null,
-            // 'days_overdue' => $this->calculateDaysOverdue($endLoan, $active),
             'active' => $active,
-            'book_id' => Book::inRandomOrder()->value('id') ?? Book::factory()->create()->id,
-            'user_id' => User::inRandomOrder()->value('id') ?? User::factory()->create()->id,
+            'book_id' => $book->id,
+            'user_id' => $user->id,
         ];
     }
 

@@ -24,13 +24,16 @@ class ReserveDestroyAction
                 // Primero borramos la reserva
                 $reserve->delete();
 
+                // dd($reserve->book_id);
+
                 // Ahora buscamos si quedan otras reservas de ESE MISMO libro (por book_id)
-                $otherReserve = Reserve::where('book_id', $reserve->book_id)  // Aquí filtramos directamente por book_id
+                $otherReserve = Reserve::where('book_id', '=', $reserve->book_id)  // Aquí filtramos directamente por book_id
                     ->where('status', '!=', 'finished')
+                    ->where('id', '!=', $reserve->id)
                     ->withoutTrashed()
                     ->exists();
 
-                    // dd($otherReserve);
+                // dd($otherReserve);
 
                 if (!$otherReserve) {
                     $book = $reserve->book;
@@ -38,8 +41,6 @@ class ReserveDestroyAction
                     $book->save();
                 }
                 break;
-
-
 
             case 'contacted':
                 $reserve->delete();

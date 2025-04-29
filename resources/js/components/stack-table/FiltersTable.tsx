@@ -36,6 +36,7 @@ dayjs.locale("es"); // Establecer español como idioma predeterminado
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { enUS, es } from 'date-fns/locale';
 
 /**
  * Tipos de filtros disponibles
@@ -138,7 +139,14 @@ export interface FiltersTableProps {
   filtersButtonText?: string;
   /** Texto para el botón de limpiar filtros */
   clearFiltersText?: string;
+  /**Lenguaje */
+  lang?: string;
 }
+
+const langMap = {
+    en: enUS,
+    es: es,
+  }
 
 /**
  * Componente para filtrar datos de una tabla
@@ -151,6 +159,7 @@ export function FiltersTable({
   filtersTitle,
   filtersButtonText,
   clearFiltersText,
+  lang,
 }: FiltersTableProps) {
   const { t } = useTranslations();
   const [open, setOpen] = useState(false);
@@ -240,6 +249,7 @@ export function FiltersTable({
                       {renderFilterInput(
                         filter,
                         field,
+                        lang,
                         (value) => handleFilterChange(filter.id, value)
                       )}
                     </FormControl>
@@ -340,6 +350,7 @@ export function FiltersTable({
 function renderFilterInput(
   filter: FilterConfig,
   field: any,
+  lang: string,
   onChange: (value: any) => void
 ) {
   switch (filter.type) {
@@ -400,6 +411,7 @@ function renderFilterInput(
             <Calendar
                 timeZone="Europe/Madrid"
               mode="single"
+              locale= {langMap[lang]}
               selected={field.value}
               onSelect={(date: Date | undefined) => {
                 field.onChange(date);

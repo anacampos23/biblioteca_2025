@@ -94,7 +94,8 @@ return [
             'zone_floor' => 'Ya existe esa zona en este piso.',
             'capacity_zones'=> 'La capacidad del piso debe ser un número positivo',
             'zone_overload'=> 'El piso está lleno, ya no caben más zonas.',
-            'email_isbn_exists' => 'El usuario ya tiene prestado este libro'
+            'email_isbn_exists' => 'El usuario ya tiene prestado este libro',
+            'email_isbn_reserved' => 'El usuario ya tiene este libro reservado'
     ],
     'common' => [
         'buttons' => [
@@ -533,7 +534,7 @@ return [
                 'name' => 'Nombre de usuario',
                 'start_loan' => 'Inicio del préstamo',
                 'due_date' => 'Vencimiento del préstamo',
-                'end_loan' => 'Final del préstamo',
+                'end_loan' => 'Fecha de devolución',
                 'days_overdue' => 'Días de retraso',
                 'active' => 'Estado del préstamo',
                 'active_status' => 'En progreso',
@@ -547,7 +548,7 @@ return [
                  'active' => 'En progreso/Terminado',
                  'start_loan' => 'Fecha de inicio del préstamo',
                  'due_date' => 'Fecha de vencimiento',
-                'end_loan' => 'Fecha final del préstamo',
+                'end_loan' => 'Fecha de devolución',
                 'days_overdue' => 'Días de retraso...',
              ],
              'buttons' => [

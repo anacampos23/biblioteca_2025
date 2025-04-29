@@ -93,7 +93,8 @@ return [
             'zone_floor' => 'The zone already exists in this floor.',
             'capacity_zones' => 'The floor capacity should be a positive number',
             'zone_overload'=> 'There floor is full, there is not enough space.',
-            'email_isbn_exists' => 'This user already has the book loaned'
+            'email_isbn_exists' => 'This user has already the book loaned',
+            'email_isbn_reserved' => 'This user has already the book reserved'
     ],
     'common' => [
         'buttons' => [
@@ -536,7 +537,7 @@ return [
             'name' => 'User name',
             'start_loan' => 'Start loan',
             'due_date' => 'Due date',
-            'end_loan' => 'End loan',
+            'end_loan' => 'Return date',
             'days_overdue' => 'Days overdue',
             'active' => 'Loan status',
             'active_status' => 'In progress',
@@ -548,7 +549,7 @@ return [
                 'ISBN' => 'ISBN...',
                 'start_loan' => 'Date Start loan',
                 'due_date' => 'Due date',
-                'end_loan' => 'Date End loan',
+                'end_loan' => 'Return date',
                 'days_overdue' => 'Days overdue...',
                 'active' => 'In progress/Finished loan...',
                 'selectISBN' => 'Select the book ISBN',

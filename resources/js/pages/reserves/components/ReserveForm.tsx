@@ -30,6 +30,7 @@ interface ReserveFormProps {
     };
     users: { id: string; name: string; email:string; }[];
     ISBN_email: {ISBN: number, email: string}[];
+    ISBN_email_reserve: {ISBN: number, email: string}[];
     page?: string;
     perPage?: string;
 }
@@ -46,7 +47,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function ReserveForm({ initialData, users, ISBN_email, page, perPage }: ReserveFormProps) {
+export function ReserveForm({ initialData, users, ISBN_email, ISBN_email_reserve, page, perPage }: ReserveFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const url=window.location.href;
@@ -184,6 +185,8 @@ export function ReserveForm({ initialData, users, ISBN_email, page, perPage }: R
                                           ? t('ui.validation.email_isbn_exists', {
                                                 attribute: `${t('ui.users.fields.email').toLowerCase()} y ${t('ui.books.fields.ISBN').toLowerCase()}`,
                                             })
+                                        :ISBN_email_reserve.some((loan) => `${loan.email}-${loan.ISBN}` === `${value}-${isbnValue}`)
+                                        ? t('ui.validation.email_isbn_reserved')
                                           : undefined;
                             },
                         }}

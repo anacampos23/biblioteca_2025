@@ -23,8 +23,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PageProps } from "@/types";
 
-export default function LoansIndex() {
+interface indexprops extends PageProps {
+    lang:string,
+}
+
+export default function LoansIndex({ lang }:indexprops) {
   const { t } = useTranslations();
   const { url } = usePage();
 
@@ -48,7 +53,7 @@ export default function LoansIndex() {
     filters.start_loan ? filters.start_loan : "null",
     filters.end_loan ? filters.end_loan : "null",
     filters.due_date ? filters.due_date : "null",
-    filters.days_overdue === 0 ? 0 : (filters.days_overdue ? filters.days_overdue : "null"),
+    filters.days_overdue !== undefined && filters.days_overdue !== null ? filters.days_overdue : "null",
     filters.active ? filters.active : "null",
   ]
 
@@ -118,6 +123,7 @@ export default function LoansIndex() {
 
     //Search active/inactive
     const [showOnlyActive, setShowOnlyActive] = useState(false);
+
 
   const columns = useMemo(() => ([
     createActionsColumn<Loan>({
@@ -266,6 +272,7 @@ export default function LoansIndex() {
 
                   <div className="space-y-4">
                       <FiltersTable
+                        lang={lang}
                           filters={
                               [
                                   {
