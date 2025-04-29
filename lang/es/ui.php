@@ -28,6 +28,7 @@ return [
     'settings' => [
         'title' => 'Configuración',
         'description' => 'Gestiona tu perfil y configuración de cuenta',
+        'statistics' => 'Estadísticas del usuario',
         'navigation' => [
             'profile' => 'Perfil',
             'password' => 'Contraseña',
