@@ -57,8 +57,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                 asChild
                                 className={cn('w-full justify-start', {
                                     'bg-muted': currentPath === item.url,
-                                })}
-                            >
+                                })}>
                                 <Link href={item.url} prefetch>
                                     {item.title}
                                 </Link>
@@ -96,9 +95,9 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                     </Popover>
                 </div>
 
-                {/* Contenido principal */}
-                <div className="flex-1 md:max-w-2xl">
-                    <section className="max-w-xl space-y-12">{children}</section>
+                {/* Contenido principal ocupando toda la pantalla */}
+                <div className="flex-1 w-full">
+                    <section className="w-full space-y-12">{children}</section>
                 </div>
             </div>
         </div>
