@@ -1,13 +1,4 @@
 import HeadingSmall from '@/components/heading-small';
-import {
-    Timeline,
-    TimelineConnector,
-    TimelineContent,
-    TimelineDot,
-    TimelineItem,
-    TimelineOppositeContent,
-    TimelineSeparator,
-} from '@/components/ui/timeline';
 import { useTranslations } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
@@ -15,7 +6,8 @@ import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { BookUp, BookmarkCheck } from 'lucide-react';
 import { useState } from 'react';
-import { Button } from "@/components/ui/button";
+import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
 
 type CombinedLoan = {
     id: string;
@@ -92,18 +84,18 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
     // Filtrar los elementos por fecha (tanto préstamos como reservas)
     const filteredUserItems = selectedDate
         ? userItems.filter((item) => {
-            // Filtrar por fecha para préstamos
-            if (item.type === 'loan') {
-                const loanDate = new Date(item.start_loan);
-                return loanDate.toDateString() === selectedDate.toDateString();
-            }
-            // Filtrar por fecha para reservas
-            if (item.type === 'reserve') {
-                const reserveDate = new Date(item.created_at);
-                return reserveDate.toDateString() === selectedDate.toDateString();
-            }
-            return false;
-        })
+              // Filtrar por fecha para préstamos
+              if (item.type === 'loan') {
+                  const loanDate = new Date(item.start_loan);
+                  return loanDate.toDateString() === selectedDate.toDateString();
+              }
+              // Filtrar por fecha para reservas
+              if (item.type === 'reserve') {
+                  const reserveDate = new Date(item.created_at);
+                  return reserveDate.toDateString() === selectedDate.toDateString();
+              }
+              return false;
+          })
         : userItems;
 
     return (
@@ -116,7 +108,7 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
                     <h2>{activeUser.name}</h2>
 
                     {/* Filtro de fecha */}
-                    <div className="mb-10 flex flex-col sm:flex-row sm:items-end sm:gap-4">
+                    <div className="mb-10 flex w-full flex-col sm:w-[40%] sm:flex-row sm:items-end sm:gap-4">
                         <div className="w-full sm:flex-1">
                             <label htmlFor="dateSelect" className="mb-1 block text-sm font-medium text-gray-700">
                                 {t('ui.settings.profile.select_date')}
@@ -139,35 +131,12 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
                         </div>
                     </div>
                     <div key={activeUser.id}>
-                        <Timeline position="alternate">
-                            {filteredUserItems.map((item) => (
-                                <TimelineItem key={item.id}>
-                                    <TimelineOppositeContent sx={{ m: 'auto 0' }} align="right" variant="body2" color="text.secondary">
-                                        {item.type === 'loan' ? (
-                                            <>
-                                                <div>{new Date(item.start_loan!).toLocaleDateString()} - </div>
-                                                <div>
-                                                    {item.end_loan ? new Date(item.end_loan).toLocaleDateString() : t('ui.settings.profile.active')}
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <div>{new Date(item.created_at!).toLocaleDateString()} - </div>
-                                                <div>
-                                                    {t('ui.settings.profile.status.title') + ' '}
-                                                    {item.status === 'waiting'
-                                                        ? t('ui.settings.profile.status.waiting')
-                                                        : item.status === 'contacted'
-                                                          ? t('ui.settings.profile.status.contacted')
-                                                          : t('ui.settings.profile.status.finished')}
-                                                </div>
-                                            </>
-                                        )}
-                                    </TimelineOppositeContent>
-                                    <TimelineSeparator>
-                                        <TimelineConnector />
-                                        <TimelineDot
-                                            sx={{
+                                <VerticalTimeline lineColor="#d1d5db">
+                                    {filteredUserItems.map((item) => (
+                                        <VerticalTimelineElement
+                                            key={item.id}
+                                            date={new Date(item.type === 'loan' ? item.start_loan : item.created_at).toLocaleDateString()}
+                                            iconStyle={{
                                                 backgroundColor:
                                                     item.type === 'reserve' && item.status === 'waiting'
                                                         ? '#ffaf3a'
@@ -178,31 +147,37 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
                                                             : item.type === 'loan' && item.active === true
                                                               ? '#1976d2'
                                                               : '#c1c1c1', // Azul para 'loan' y Naranja para 'reserve'
+                                                color: '#fff',
+                                                boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.05)',
                                             }}
+                                            contentStyle={{
+                                                background: '#f9fafb', // gris muy claro
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                                                borderRadius: '12px',
+                                                padding: '20px',
+                                                border: '1px solid #e5e7eb',
+                                            }}
+                                            contentArrowStyle={{ borderRight: '7px solid #f9fafb' }}
+                                            icon={item.type === 'loan' ? <BookUp /> : <BookmarkCheck />}
                                         >
-                                            {item.type === 'loan' ? <BookUp /> : <BookmarkCheck />}
-                                        </TimelineDot>
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-
-                                    <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                        {item.type === 'loan' ? (
-                                            <>
-                                                <div className="text-m font-bold">{t('ui.settings.profile.loan')}</div>
-                                                <div className="text-sm">{item.book.title}</div>
-                                                <div className="text-sm">ISBN: {item.book.ISBN}</div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <div className="text-m font-bold">{t('ui.settings.profile.reserve')}</div>
-                                                <div className="text-sm">{item.book.title}</div>
-                                                <div className="text-sm">ISBN: {item.book.ISBN}</div>
-                                            </>
-                                        )}
-                                    </TimelineContent>
-                                </TimelineItem>
-                            ))}
-                        </Timeline>
+                                            <h3 className="mb-1 text-lg font-semibold text-stone-800">
+                                                {item.type === 'loan' ? t('ui.settings.profile.loan') : t('ui.settings.profile.reserve')}
+                                            </h3>
+                                            <p className="text-sm text-stone-700">{item.book.title}</p>
+                                            <p className="text-xs text-stone-500">ISBN: {item.book.ISBN}</p>
+                                            {item.type === 'loan' ? (
+                                                <p className="mt-1 text-sm text-stone-600">
+                                                    {new Date(item.start_loan).toLocaleDateString()} -{' '}
+                                                    {item.end_loan ? new Date(item.end_loan).toLocaleDateString() : t('ui.settings.profile.active')}
+                                                </p>
+                                            ) : (
+                                                <p className="mt-1 text-sm text-stone-600">
+                                                    {t('ui.settings.profile.status.title')} {item.status}
+                                                </p>
+                                            )}
+                                        </VerticalTimelineElement>
+                                    ))}
+                                </VerticalTimeline>
                     </div>
                 </div>
             </SettingsLayout>
