@@ -47,6 +47,15 @@ return [
             'verification_sent' => 'A new verification link has been sent to your email address.',
             'save_button' => 'Save',
             'saved_message' => 'Saved',
+            'loan' => 'Loan:',
+            'reserve' => 'Reserve:',
+            'active' => 'Current active loan',
+            'status' => [
+                'title' => 'Status: ',
+                'waiting' => 'Waiting',
+                'contacted' => 'Contacted',
+                'finished' => 'Finished',
+            ],
         ],
         'password' => [
             'title' => 'Password settings',

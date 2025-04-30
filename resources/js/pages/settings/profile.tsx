@@ -1,126 +1,149 @@
-import { type BreadcrumbItem, type SharedData } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
-import { useTranslations } from '@/hooks/use-translations';
 import HeadingSmall from '@/components/heading-small';
-import AppLayout from '@/layouts/app-layout';
-import SettingsLayout from '@/layouts/settings/layout';
 import {
     Timeline,
+    TimelineConnector,
+    TimelineContent,
+    TimelineDot,
     TimelineItem,
     TimelineOppositeContent,
     TimelineSeparator,
-    TimelineConnector,
-    TimelineDot,
-    TimelineContent,
 } from '@/components/ui/timeline';
+import { useTranslations } from '@/hooks/use-translations';
+import AppLayout from '@/layouts/app-layout';
+import SettingsLayout from '@/layouts/settings/layout';
+import { type BreadcrumbItem, type SharedData } from '@/types';
+import { Head, usePage } from '@inertiajs/react';
+import { BookUp } from 'lucide-react';
 
+// 👇 Esto va justo después de los imports
+type CombinedLoan = {
+    id: string;
+    type: 'loan';
+    user_id: string;
+    book_id: string;
+    book: {
+        title: string;
+        author: string;
+        ISBN: number;
+    };
+    start_loan: Date;
+    end_loan: Date | null;
+    due_date: Date;
+    active: boolean;
+};
 
+type CombinedReserve = {
+    id: string;
+    type: 'reserve';
+    status: string;
+    created_at: Date;
+    deleted_at: Date;
+    user_id: string;
+    book_id: string;
+    book: {
+        title: string;
+        author: string;
+        ISBN: number;
+    };
+};
+
+type CombinedItem = CombinedLoan | CombinedReserve;
+
+// 👇 Actualizas tu interface profileProps con este tipo
 interface profileProps {
-    users: { id: string; name: string; email:string; }[];
-    loans: { id: string; end_loan: Date; due_date:Date; active:boolean; user_id:string; book_id: string; }[];
+    users: { id: string; name: string; email: string }[];
+    loans: CombinedLoan[];
+    reserves: CombinedReserve[];
+    combined: CombinedItem[];
 }
 
-
-
-
-export default function Profile({ users, loans }:profileProps) {
+export default function Profile({ users, loans, reserves, combined }: profileProps) {
     const { t } = useTranslations();
     const page = usePage<SharedData>();
     const { auth } = page.props;
-    console.log(loans);
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('ui.settings.profile.title'),
             href: '/settings/profile',
         },
     ];
+    //Obtener los préstamos de un usuario
+    const getUserCombined = (userId: string) => {
+        return combined.filter((item) => item.user_id === userId);
+    };
+
+    // Obtener el usuario autenticado (por ejemplo, usando el auth prop)
+    const activeUser = users.find((user) => user.name === auth.user.name);
+
+    if (!activeUser) {
+        return <div>{t('ui.settings.profile.no_user_found')}</div>; // Si no se encuentra el usuario
+    }
+
+    const userItems = getUserCombined(activeUser.id);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={t('ui.settings.profile.title')} />
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall
-                        title={t('ui.settings.statistics')}
-                        description={t('')}
-                    />
-                    <Timeline position="alternate">
-                          <TimelineItem>
-                            <TimelineOppositeContent
-                              sx={{ m: 'auto 0' }}
-                              align="right"
-                              variant="body2"
-                              color="text.secondary"
-                            >
-                              9:30 am
-                            </TimelineOppositeContent>
-                            <TimelineSeparator>
-                              <TimelineConnector />
-                              <TimelineDot>
+                    <HeadingSmall title={t('ui.settings.statistics')} description={t('')} />
 
-                              </TimelineDot>
-                              <TimelineConnector />
-                            </TimelineSeparator>
-                            <TimelineContent sx={{ py: '12px', px: 2 }}>
+                    <div key={activeUser.id}>
+                        <h2>{activeUser.name}</h2> {/* Nombre del usuario */}
+                        <Timeline position="alternate">
+                            {userItems.map((item) => (
+                                <TimelineItem key={item.id}>
+                                    <TimelineOppositeContent sx={{ m: 'auto 0' }} align="right" variant="body2" color="text.secondary">
+                                        {item.type === 'loan' ? (
+                                            <>
+                                                <div>{new Date(item.start_loan!).toLocaleDateString()} - </div>
+                                                <div>
+                                                    {item.end_loan ? new Date(item.end_loan).toLocaleDateString() : t('ui.settings.profile.active')}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div>{new Date(item.created_at!).toLocaleDateString()} - </div>
+                                                <div>
+                                                    {t('ui.settings.profile.status.title')+ ' '}
+                                                    {item.status === 'waiting'
+                                                        ? t('ui.settings.profile.status.waiting')
+                                                        : item.status === 'contacted'
+                                                          ? t('ui.settings.profile.status.contacted')
+                                                          : t('ui.settings.profile.status.finished')}
+                                                </div>
+                                            </>
+                                        )}
+                                    </TimelineOppositeContent>
+                                    <TimelineSeparator>
+                                        <TimelineConnector />
+                                        <TimelineDot color="primary">
+                                            <BookUp />
+                                        </TimelineDot>
+                                        <TimelineConnector />
+                                    </TimelineSeparator>
 
-
-                            </TimelineContent>
-                          </TimelineItem>
-                          <TimelineItem>
-                            <TimelineOppositeContent
-                              sx={{ m: 'auto 0' }}
-                              variant="body2"
-                              color="text.secondary"
-                            >
-                              10:00 am
-                            </TimelineOppositeContent>
-                            <TimelineSeparator>
-                              <TimelineConnector />
-                              <TimelineDot color="primary">
-
-                              </TimelineDot>
-                              <TimelineConnector />
-                            </TimelineSeparator>
-                            <TimelineContent sx={{ py: '12px', px: 2 }}>
-
-                                Code
-
-                            Because it&apos;s awesome!
-                            </TimelineContent>
-                          </TimelineItem>
-                          <TimelineItem>
-                            <TimelineSeparator>
-                              <TimelineConnector />
-                              <TimelineDot color="primary" variant="outlined">
-
-                              </TimelineDot>
-                              <TimelineConnector sx={{ bgcolor: 'secondary.main' }} />
-                            </TimelineSeparator>
-                            <TimelineContent sx={{ py: '12px', px: 2 }}>
-
-                                Sleep
-                              Because you need rest
-                            </TimelineContent>
-                          </TimelineItem>
-                          <TimelineItem>
-                            <TimelineSeparator>
-                              <TimelineConnector sx={{ bgcolor: 'secondary.main' }} />
-                              <TimelineDot color="secondary">
-
-                              </TimelineDot>
-                              <TimelineConnector />
-                            </TimelineSeparator>
-                            <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                Repeat
-                              Because this is the life you love!
-                            </TimelineContent>
-                          </TimelineItem>
+                                    <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                        {item.type === 'loan' ? (
+                                            <>
+                                                <div className="text-m font-bold">{t('ui.settings.profile.loan')}</div>
+                                                <div className="text-sm">{item.book.title}</div>
+                                                <div className="text-sm">ISBN: {item.book.ISBN}</div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="text-m font-bold">{t('ui.settings.profile.reserve')}</div>
+                                                <div className="text-sm">{item.book.title}</div>
+                                                <div className="text-sm">ISBN: {item.book.ISBN}</div>
+                                            </>
+                                        )}
+                                    </TimelineContent>
+                                </TimelineItem>
+                            ))}
                         </Timeline>
-
-
+                    </div>
                 </div>
-
-
             </SettingsLayout>
         </AppLayout>
     );

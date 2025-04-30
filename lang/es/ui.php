@@ -48,6 +48,16 @@ return [
             'verification_sent' => 'Se ha enviado un nuevo enlace de verificación a tu dirección de correo.',
             'save_button' => 'Guardar',
             'saved_message' => 'Guardado',
+            'loan' => 'Préstamo:',
+            'reserve' => 'Reserva:',
+            'active' => 'Préstamo activo actualmente',
+            'status' => [
+                'title' => 'Estado: ',
+                'waiting' => 'En espera',
+                'contacted' => 'Contactado',
+                'finished' => 'Terminada',
+            ],
+
         ],
         'password' => [
             'title' => 'Configuración de contraseña',
