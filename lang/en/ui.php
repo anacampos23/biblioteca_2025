@@ -33,6 +33,7 @@ return [
             'password' => 'Password',
             'appearance' => 'Appearance',
             'languages' => 'Languages',
+            'all'=> 'All settings'
         ],
         'profile' => [
             'title' => 'Profile settings',
@@ -50,12 +51,14 @@ return [
             'loan' => 'Loan:',
             'reserve' => 'Reserve:',
             'active' => 'Current active loan',
+            'all' => 'All records',
             'status' => [
                 'title' => 'Status: ',
-                'waiting' => 'Waiting',
-                'contacted' => 'Contacted',
-                'finished' => 'Finished',
+                'waiting' => '"Waiting"',
+                'contacted' => '"Contacted"',
+                'finished' => '"Finished"',
             ],
+            'select_date' => 'Select by date'
         ],
         'password' => [
             'title' => 'Password settings',
