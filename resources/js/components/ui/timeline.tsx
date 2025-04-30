@@ -49,7 +49,6 @@ export default function CustomizedTimeline() {
           <TimelineConnector />
         </TimelineSeparator>
         <TimelineContent sx={{ py: '12px', px: 2 }}>
-
             Code
 
         Because it&apos;s awesome!

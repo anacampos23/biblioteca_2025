@@ -5,6 +5,7 @@ namespace App\Settings\Controllers;
 use App\Core\Controllers\Controller;
 use App\Settings\Requests\ProfileUpdateRequest;
 use Domain\Loans\Models\Loan;
+use Domain\Reserves\Models\Reserve;
 use Domain\Users\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -22,9 +23,32 @@ class ProfileController extends Controller
     {
         $users = User::select(['id', 'name', 'email'])->orderBy('name', 'asc')->withTrashed()->get()->toArray();
         $loans = Loan::withTrashed()
-            ->with(['book:id,title,author'])
-            ->select(['id', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
+            ->with(['book:id,title,author,ISBN'])
+            ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
+            ->orderBy('start_loan', 'desc')
             ->get()
+            ->toArray();
+
+        $reserves = Reserve::withTrashed()
+            ->with(['book:id,title,author,ISBN'])
+            ->select(['id', 'status', 'user_id', 'book_id', 'created_at', 'deleted_at'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->toArray();
+
+            $loansAndReserves = collect(array_merge($loans, $reserves))
+            ->map(function ($item) {
+                if (isset($item['start_loan'])) {
+                    $item['type'] = 'loan';
+                    $item['sort_date'] = $item['start_loan'];
+                } else {
+                    $item['type'] = 'reserve';
+                    $item['sort_date'] = $item['created_at'];
+                }
+                return $item;
+            })
+            ->sortByDesc('sort_date') // Orden descendente
+            ->values() // Reindexar
             ->toArray();
 
         return Inertia::render('settings/profile', [
@@ -32,6 +56,8 @@ class ProfileController extends Controller
             'status' => $request->session()->get('status'),
             'users' => $users,
             'loans' => $loans,
+            'reserves' => $reserves,
+            'combined' => $loansAndReserves,
         ]);
     }
 
