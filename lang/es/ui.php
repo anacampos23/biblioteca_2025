@@ -34,6 +34,7 @@ return [
             'password' => 'Contraseña',
             'appearance' => 'Apariencia',
             'languages' => 'Idiomas',
+            'all' => 'Todas las configuraciones',
         ],
         'profile' => [
             'title' => 'Configuración del perfil',
@@ -51,12 +52,14 @@ return [
             'loan' => 'Préstamo:',
             'reserve' => 'Reserva:',
             'active' => 'Préstamo activo actualmente',
+            'all' => 'Todos los registros',
             'status' => [
                 'title' => 'Estado: ',
-                'waiting' => 'En espera',
-                'contacted' => 'Contactado',
-                'finished' => 'Terminada',
+                'waiting' => '"En espera"',
+                'contacted' => '"Contactado"',
+                'finished' => '"Terminada"',
             ],
+            'select_date' => 'Selecciona por fecha',
 
         ],
         'password' => [

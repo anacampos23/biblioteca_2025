@@ -56,10 +56,10 @@ export default function Profile({ users, loans }: profileProps) {
         },
     ];
 
-    // Estado para el usuario seleccionado
+    // Estado para la fecha seleccionada
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
-    // Función para manejar el cambio del usuario seleccionado
+    // Función para manejar el cambio de la fecha seleccionado
     const handleDateSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const dateValue = new Date(event.target.value); // convierte el string a Date
         setSelectedDate(dateValue);
