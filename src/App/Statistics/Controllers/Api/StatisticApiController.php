@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Statistics\Api;
+namespace App\Statistics\Controllers\Api;
 
 use App\Core\Controllers\Controller;
 use Domain\Loans\Actions\LoanDestroyAction;

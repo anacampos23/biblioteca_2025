@@ -139,6 +139,7 @@ return [
         'description' => 'Manage the system users',
         'create' => 'Create User',
         'edit' => 'Edit User',
+        'timeline' => 'Timeline',
         'fields' => [
             'name' => 'Name',
             'email' => 'Email',

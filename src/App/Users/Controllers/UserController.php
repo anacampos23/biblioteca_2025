@@ -3,7 +3,9 @@
 namespace App\Users\Controllers;
 
 use App\Core\Controllers\Controller;
+use Domain\Loans\Models\Loan;
 use Domain\Permissions\Models\Permission;
+use Domain\Reserves\Models\Reserve;
 use Domain\Roles\Models\Role;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
@@ -22,7 +24,49 @@ class UserController extends Controller
     {
         return Inertia::render('users/Index');
     }
+    public function show(Request $request, User $user)
+    {
+        $loans = Loan::withTrashed()
+            ->with(['book:id,title,author,ISBN'])
+            ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
+            ->orderBy('start_loan', 'desc')
+            ->get()
+            ->map(function ($loan) {
+                // Calcular days_overdue para cada préstamo
+                $loan->days_overdue = $loan->days_overdue; // Este es el accesor que ya calculaste en el modelo
+                return $loan;
+            })
+            ->toArray();
 
+        $reserves = Reserve::withTrashed()
+            ->with(['book:id,title,author,ISBN'])
+            ->select(['id', 'status', 'user_id', 'book_id', 'created_at', 'deleted_at'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->toArray();
+
+        $loansAndReserves = collect(array_merge($loans, $reserves))
+            ->map(function ($item) {
+                if (isset($item['start_loan'])) {
+                    $item['type'] = 'loan';
+                    $item['sort_date'] = $item['start_loan'];
+                } else {
+                    $item['type'] = 'reserve';
+                    $item['sort_date'] = $item['created_at'];
+                }
+                return $item;
+            })
+            ->sortByDesc('sort_date') // Orden descendente
+            ->values() // Reindexar
+            ->toArray();
+        return Inertia::render('users/Show', [
+            'user' => $user,
+            'status' => $request->session()->get('status'),
+            'loans' => $loans,
+            'reserves' => $reserves,
+            'combined' => $loansAndReserves,
+        ]);
+    }
     public function create()
     {
         $allRolesInDatabase = Role::all();

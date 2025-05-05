@@ -140,6 +140,7 @@ return [
         'create' => 'Crear Usuario',
         'description' => 'Gestiona los usuarios del sistema',
         'edit' => 'Editar Usuario',
+        'timeline' => 'Línea temporal',
         'fields' => [
             'name' => 'Nombre',
             'email' => 'Email',
