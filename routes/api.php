@@ -65,3 +65,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::delete('/reserves/{reserve}', [ReserveApiController::class, 'destroy']);
 });
 
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/statistics', [StatisticApiController::class, 'index']);
+});
+

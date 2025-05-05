@@ -70,7 +70,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 <div className="lg:hidden">
                     <Popover open={isPopoverOpen} onOpenChange={setPopoverOpen}>
                         <PopoverTrigger asChild>
-                            <Button variant="outline" className="w-full mb-4 bg-stone-200">
+                            <Button variant="outline" className="w-full bg-stone-200 dark:bg-stone-800">
                                 {t('ui.settings.navigation.all')}
                             </Button>
                         </PopoverTrigger>

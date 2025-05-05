@@ -27,6 +27,11 @@ class ProfileController extends Controller
             ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
             ->orderBy('start_loan', 'desc')
             ->get()
+            ->map(function ($loan) {
+                // Calcular days_overdue para cada préstamo
+                $loan->days_overdue = $loan->days_overdue; // Este es el accesor que ya calculaste en el modelo
+                return $loan;
+            })
             ->toArray();
 
         $reserves = Reserve::withTrashed()
@@ -36,7 +41,7 @@ class ProfileController extends Controller
             ->get()
             ->toArray();
 
-            $loansAndReserves = collect(array_merge($loans, $reserves))
+        $loansAndReserves = collect(array_merge($loans, $reserves))
             ->map(function ($item) {
                 if (isset($item['start_loan'])) {
                     $item['type'] = 'loan';

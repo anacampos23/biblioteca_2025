@@ -20,6 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('books/{book}', [\App\Books\Controllers\BookController::class, 'show'])->name('books.show');
     Route::resource('loans', \App\Loans\Controllers\LoanController::class);
     Route::resource('reserves', \App\Reserves\Controllers\ReserveController::class);
+    Route::get('statistics', [\App\Statistics\Controllers\StatisticController::class, 'index'])->name('statistics.index');
+
 
 });
 
