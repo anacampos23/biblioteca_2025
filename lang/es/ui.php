@@ -60,7 +60,8 @@ return [
                 'finished' => '"Terminada"',
             ],
             'select_date' => 'Selecciona por fecha',
-
+            'days_overdue' => 'Días de retraso:',
+            'days' => 'días'
         ],
         'password' => [
             'title' => 'Configuración de contraseña',
