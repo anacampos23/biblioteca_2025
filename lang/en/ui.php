@@ -140,6 +140,7 @@ return [
         'create' => 'Create User',
         'edit' => 'Edit User',
         'timeline' => 'Timeline',
+        'no_loans_reserves' => 'This user has no loans or reservations yet',
         'fields' => [
             'name' => 'Name',
             'email' => 'Email',

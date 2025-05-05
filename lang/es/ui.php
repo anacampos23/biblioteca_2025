@@ -141,6 +141,7 @@ return [
         'description' => 'Gestiona los usuarios del sistema',
         'edit' => 'Editar Usuario',
         'timeline' => 'Línea temporal',
+        'no_loans_reserves' => 'Este usuario aún no tiene préstamos o reservas',
         'fields' => [
             'name' => 'Nombre',
             'email' => 'Email',
