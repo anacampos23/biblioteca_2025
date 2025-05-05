@@ -3,6 +3,8 @@
 namespace App\Users\Controllers\Api;
 
 use App\Core\Controllers\Controller;
+use Domain\Loans\Models\Loan;
+use Domain\Reserves\Models\Reserve;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;
@@ -16,12 +18,54 @@ class UserApiController extends Controller
 {
     public function index(Request $request, UserIndexAction $action)
     {
-        return response()->json($action($request->search, $request->name, $request->email, $request->integer('per_page', 10)));
+        return response()->json($action($request->search,  $request->integer('per_page', 10)));
     }
+
+
 
     public function show(User $user)
     {
-        return response()->json(['user' => $user]);
+        $loans = Loan::withTrashed()
+            ->with(['book:id,title,author,ISBN'])
+            ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
+            ->orderBy('start_loan', 'desc')
+            ->get()
+            ->map(function ($loan) {
+                // Calcular days_overdue para cada préstamo
+                $loan->days_overdue = $loan->days_overdue; // Este es el accesor que ya calculaste en el modelo
+                return $loan;
+            })
+            ->toArray();
+
+        $reserves = Reserve::withTrashed()
+            ->with(['book:id,title,author,ISBN'])
+            ->select(['id', 'status', 'user_id', 'book_id', 'created_at', 'deleted_at'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->toArray();
+
+        $loansAndReserves = collect(array_merge($loans, $reserves))
+            ->map(function ($item) {
+                if (isset($item['start_loan'])) {
+                    $item['type'] = 'loan';
+                    $item['sort_date'] = $item['start_loan'];
+                } else {
+                    $item['type'] = 'reserve';
+                    $item['sort_date'] = $item['created_at'];
+                }
+                return $item;
+            })
+            ->sortByDesc('sort_date') // Orden descendente
+            ->values() // Reindexar
+            ->toArray();
+
+            return response()->json([
+                'user' => $user,
+            'loans' => $loans,
+            'reserves' => $reserves,
+            'combined' => $loansAndReserves,
+            ]);
+
     }
 
     public function store(Request $request, UserStoreAction $action)

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Domain\Loans\Models\Loan;
+use Domain\Reserves\Models\Reserve;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;
@@ -19,6 +21,7 @@ class UserController extends Controller
     {
         return Inertia::render('users/Index');
     }
+
 
     public function create()
     {

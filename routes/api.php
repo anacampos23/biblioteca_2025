@@ -7,6 +7,7 @@ use App\Bookcases\Controllers\Api\BookcaseApiController;
 use App\Books\Controllers\Api\BookApiController;
 use App\Loans\Controllers\Api\LoanApiController;
 use App\Reserves\Controllers\Api\ReserveApiController;
+use App\Statistics\Controllers\Api\StatisticApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web', 'auth'])->group(function () {
