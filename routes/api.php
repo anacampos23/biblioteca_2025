@@ -68,5 +68,8 @@ Route::middleware(['web', 'auth'])->group(function () {
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/statistics', [StatisticApiController::class, 'index']);
+    Route::get('/statistics/userIndex', [StatisticApiController::class, 'userIndex']);
+
+
 });
 

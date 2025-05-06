@@ -66,7 +66,7 @@ export default function Dashboard() {
                 <DashboardCard
                     title={t('ui.statistics.title')}
                     description= {t('ui.statistics.description')}
-                    href="/statistics"
+                    href="/statistics/bookIndex"
                     icon={ChartPie }
                 />
 
