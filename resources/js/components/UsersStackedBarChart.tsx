@@ -30,10 +30,10 @@ import {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                     dataKey="name"
-                    angle={-45} // Rota las etiquetas
-                    textAnchor="end" // Alinea el texto al final
-                    height={170} // Ajusta la altura para más espacio
-                    tick={{ fontSize: 12 }} // Opcional: puedes ajustar el tamaño de las letras
+                    angle={-45} // Rotar las etiquetas
+                    textAnchor="end" // Alinear el texto al final
+                    height={170} // Ajustar la altura para más espacio
+                    tick={{ fontSize: 12 }} // Ajustar el tamaño de las letras
                     dy={10} // Ajuste vertical para evitar solapamientos
                 />
                 <YAxis />

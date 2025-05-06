@@ -61,7 +61,9 @@ return [
             ],
             'select_date' => 'Select by date',
             'days_overdue' => 'Days overdue:',
-            'days' => 'days'
+            'days' => 'days',
+            'loans' => 'Loans',
+            'reserves' => 'Reservations'
         ],
         'password' => [
             'title' => 'Password settings',

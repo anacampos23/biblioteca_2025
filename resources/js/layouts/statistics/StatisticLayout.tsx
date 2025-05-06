@@ -52,7 +52,7 @@ export default function StatisticLayout({ children }: PropsWithChildren) {
                                 asChild
                                 className={cn('w-full justify-start', {
                                     'bg-gray-300': currentPath === item.url,
-                                        'text-blue-800': currentPath === item.url,
+                                    'text-gray-800': currentPath === item.url,
                                 })}>
                                 <Link href={item.url} prefetch>
                                     {item.title}
