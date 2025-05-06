@@ -2,9 +2,7 @@ import React from 'react';
 import { useTranslations } from '@/hooks/use-translations';
 import StatisticLayout from "@/layouts/statistics/StatisticLayout";
 import { type BreadcrumbItem, type SharedData } from '@/types';
-import BooksSimpleBarChart from '@/pages/statistics/BooksSimpleBarChart';
-import UsersSimpleBarChart from '@/pages/statistics/UsersSimpleBarChart';
-import ZonesSimpleBarChart from '@/pages/statistics/ZonesSimpleBarChart';
+import ZonesStackedBarChart from '@/components/ZonesStackedBarChart';
 import { PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import HeadingSmall from '@/components/heading-small';
@@ -16,23 +14,29 @@ interface ZoneIndexStatisticsProps extends PageProps {
 }
 
 export default function ZoneIndexStatistics({zones_movement }: ZoneIndexStatisticsProps) {
-  const { t } = useTranslations();
-  const { url } = usePage();
+    const { t } = useTranslations();
+    const { url } = usePage();
 
-  const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: t('ui.statistics.zoneIndex.title'),
-        href: '/statistics/zoneIndex',
-    },
-  ];
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('ui.statistics.navigation.zoneIndex'),
+            href: '/statistics/zoneIndex',
+        },
+    ];
 
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={t('ui.statistics.book.title')} />
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title={t('ui.statistics.navigation.zoneIndex')} />
 
-      <StatisticLayout className="p-4">
-      <ZonesSimpleBarChart zones_movement={zones_movement}/>
-      </StatisticLayout>
-    </AppLayout>
-  );
+            <StatisticLayout>
+                <div>
+                    {/* Encabezado */}
+                    <div className="space-y-2 text-center">
+                        <h2 className="mb-6 text-2xl font-semibold text-stone-800 dark:text-white">{t('ui.statistics.zones.title')}</h2>
+                    </div>
+                    <ZonesStackedBarChart zones_movement={zones_movement} />
+                </div>
+            </StatisticLayout>
+        </AppLayout>
+    );
 }

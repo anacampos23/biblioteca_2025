@@ -11,11 +11,11 @@ import {
 
 import { useTranslations } from '@/hooks/use-translations';
 
-interface simpleBarChartProps {
+interface stackedBarChartProps {
     zones_movement: { ISBN: number; zone_id: string; loans_count: number; reserves_count:number; zone_name: string }[];
 }
 
-const ZonesSimpleBarChart = ({ zones_movement }: simpleBarChartProps) => {
+const ZonesStackedBarChart = ({ zones_movement }: stackedBarChartProps) => {
     // Aquí es donde debes llamar a useTranslations
     const { t } = useTranslations();
 
@@ -52,11 +52,11 @@ const ZonesSimpleBarChart = ({ zones_movement }: simpleBarChartProps) => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="loans" fill="#2563eb" name={t('ui.statistics.loans.legend')} />
-                <Bar dataKey="reserves" fill="#f59e0b" name={t('ui.statistics.reserves.legend')} />
+                <Bar dataKey="loans" fill="#2563eb" stackId="a" name={t('ui.statistics.loans.legend')} />
+                <Bar dataKey="reserves" fill="#f59e0b" stackId="a" name={t('ui.statistics.reserves.legend')} />
             </BarChart>
         </ResponsiveContainer>
     );
 };
 
-export default ZonesSimpleBarChart;
+export default ZonesStackedBarChart;
