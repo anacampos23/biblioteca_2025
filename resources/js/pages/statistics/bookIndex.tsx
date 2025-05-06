@@ -11,32 +11,28 @@ import HeadingSmall from '@/components/heading-small';
 import AppLayout from '@/layouts/app-layout';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 
-interface IndexStatisticsProps extends PageProps {
+interface bookIndexStatisticsProps extends PageProps {
     books: { ISBN: number; title: string; loans_count: number }[];
     loans: { id: string; start_loan: Date; book_id: string }[];
-    users: { name: string; email: string; loans_count: number; reserves_count: number }[];
-    zones_movement: { ISBN: number; zone_id: string; loans_count: number; reserves_count: number; zone_name: string }[];
 }
 
-export default function IndexStatistics({ books, users, loans, zones_movement }: IndexStatisticsProps) {
+export default function UserIndexStatistics({ books, loans, }: bookIndexStatisticsProps) {
   const { t } = useTranslations();
   const { url } = usePage();
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: t('ui.statistics.profile.title'),
-        href: '/statistics/Index',
+        title: t('ui.statistics.bookIndex.title'),
+        href: '/statistics/bookIndex',
     },
   ];
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={t('ui.settings.profile.title')} />
+      <Head title={t('ui.statistics.book.title')} />
 
       <StatisticLayout className="p-4">
           <BooksSimpleBarChart books={books} loans={loans}/>
-          <UsersSimpleBarChart users={users}/>
-          <ZonesSimpleBarChart zones_movement={zones_movement}/>
       </StatisticLayout>
     </AppLayout>
   );

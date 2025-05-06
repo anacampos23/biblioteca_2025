@@ -28,7 +28,37 @@ use function Laravel\Prompts\alert;
 
 class StatisticController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     $books = DB::table('books')
+    //         ->leftJoin('loans', 'books.id', '=', 'loans.book_id')
+    //         ->select('books.ISBN', 'books.title', DB::raw('COUNT(loans.id) as loans_count'))
+    //         ->groupBy('books.ISBN', 'books.title')
+    //         ->orderByDesc('loans_count')
+    //         ->get();
+
+
+
+
+    //     $loans = Loan::withTrashed()
+    //         ->with(['book:id,title,author,ISBN'])
+    //         ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
+    //         ->orderBy('start_loan', 'desc')
+    //         ->get()
+    //         ->toArray();
+
+
+
+    //     return Inertia::render('statistics/Index', [
+    //         'loans' => $loans,
+    //         'users' => $users,
+    //         'books' => $books,
+    //         'zones_movement' => $zones_movement,
+    //     ]);
+    // }
+
+    // Método para mostrar estadísticas de libros
+    public function bookIndex()
     {
         $books = DB::table('books')
             ->leftJoin('loans', 'books.id', '=', 'loans.book_id')
@@ -37,7 +67,24 @@ class StatisticController extends Controller
             ->orderByDesc('loans_count')
             ->get();
 
-        $users = DB::table('users')
+            $loans = Loan::withTrashed()
+            ->with(['book:id,title,author,ISBN'])
+            ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
+            ->orderBy('start_loan', 'desc')
+            ->get()
+            ->toArray();
+
+
+        return Inertia::render('statistics/bookIndex', [
+            'books' => $books,
+            'loans' => $loans,
+        ]);
+    }
+
+        // Método para mostrar estadísticas de usuarios
+        public function userIndex()
+        {
+            $users = DB::table('users')
             ->leftJoin('loans', 'users.id', '=', 'loans.user_id')
             ->leftJoin('reserves', 'users.id', '=', 'reserves.user_id')
             ->select(
@@ -51,33 +98,30 @@ class StatisticController extends Controller
             ->orderByDesc('loans_count')
             ->get();
 
+            return Inertia::render('statistics/userIndex', [
+                'users' => $users,
+            ]);
+        }
 
-        $loans = Loan::withTrashed()
-            ->with(['book:id,title,author,ISBN'])
-            ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
-            ->orderBy('start_loan', 'desc')
-            ->get()
-            ->toArray();
 
+    // Método para mostrar estadísticas de zonas
+    public function zoneIndex()
+    {
         $zones_movement = Zone::withTrashed()
-            ->leftJoin('books', 'zones.id', '=', 'books.zone_id')
-            ->leftJoin('loans', 'books.id', '=', 'loans.book_id')
-            ->leftJoin('reserves', 'books.id', '=', 'reserves.book_id')
-            ->select(
-                'books.zone_id',
-                'zones.name as zone_name',
-                DB::raw('COUNT(loans.id) as loans_count'),
-                DB::raw('COUNT(DISTINCT reserves.id) as reserves_count')
-            )
-            ->groupBy('books.zone_id', 'zones.name')
-            ->orderByDesc('loans_count')
-            ->get();
+        ->leftJoin('books', 'zones.id', '=', 'books.zone_id')
+        ->leftJoin('loans', 'books.id', '=', 'loans.book_id')
+        ->leftJoin('reserves', 'books.id', '=', 'reserves.book_id')
+        ->select(
+            'books.zone_id',
+            'zones.name as zone_name',
+            DB::raw('COUNT(loans.id) as loans_count'),
+            DB::raw('COUNT(DISTINCT reserves.id) as reserves_count')
+        )
+        ->groupBy('books.zone_id', 'zones.name')
+        ->orderByDesc('loans_count')
+        ->get();
 
-
-        return Inertia::render('statistics/Index', [
-            'loans' => $loans,
-            'users' => $users,
-            'books' => $books,
+        return Inertia::render('statistics/zoneIndex', [
             'zones_movement' => $zones_movement,
         ]);
     }

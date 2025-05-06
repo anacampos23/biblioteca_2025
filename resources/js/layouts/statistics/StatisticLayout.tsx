@@ -1,59 +1,102 @@
-import { useTranslations } from "@/hooks/use-translations";
-import AppLayout from "@/layouts/app-layout";
-import { BreadcrumbItem } from "@/types";
-import { Head, usePage } from "@inertiajs/react";
-import { PropsWithChildren, useEffect } from "react";
-import { toast } from "sonner";
+import Heading from '@/components/heading';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { useTranslations } from '@/hooks/use-translations';
+import { cn } from '@/lib/utils';
+import { type NavItem } from '@/types';
+import { Link } from '@inertiajs/react';
+import { type PropsWithChildren } from 'react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useEffect, useState } from "react";
 
-interface FlashMessages {
-  success?: string;
-  error?: string;
-}
-
-interface PageProps {
-  flash: FlashMessages;
-  [key: string]: unknown;
-}
-
-interface StatisticLayoutProps extends PropsWithChildren {
-  title: string;
-}
-
-export function StatisticLayout({ title, children }: StatisticLayoutProps) {
+export default function StatisticLayout({ children }: PropsWithChildren) {
     const { t } = useTranslations();
-    const { flash } = usePage<PageProps>().props;
+    const currentPath = window.location.pathname;
 
-  useEffect(() => {
-    if (flash.success) {
-      toast.success(flash.success);
-    }
-    if (flash.error) {
-      toast.error(flash.error);
-    }
-  }, [flash]);
+    const sidebarNavItems: NavItem[] = [
+        {
+            title: t('ui.statistics.navigation.bookIndex'),
+            url: '/statistics/bookIndex',
+            icon: undefined,
+        },
+        {
+            title: t('ui.statistics.navigation.userIndex'),
+            url: '/statistics/userIndex',
+            icon: undefined,
+        },
+        {
+            title: t('ui.statistics.navigation.zoneIndex'),
+            url: '/statistics/zoneIndex',
+            icon: undefined,
+        },
+    ];
 
-  const breadcrumbs: BreadcrumbItem[] = [
-    {
-      title: "Dashboard",
-      href: "/dashboard",
-    },
-    {
-      title: t("ui.statistics.statistics"),
-      href: "/statistics",
-    },
-  ];
+    const [isPopoverOpen, setPopoverOpen] = useState(false); // Estado para controlar la visibilidad del popover
 
-  if (title !== "Estadística") {
-    breadcrumbs.push({
-      title,
-      href: "#",
-    });
-  }
+    return (
+        <div className="px-4 py-6">
+            <Heading title={t('ui.statistics.title')} description={t('ui.statistics.description')} />
+            <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
+                {/* Parte del sidebar que aparece solo en pantallas grandes */}
+                <aside className="hidden lg:block w-full max-w-xl lg:w-48">
+                    <nav className="flex flex-col space-y-1 space-x-0">
+                        {sidebarNavItems.map((item) => (
+                            <Button
+                                key={item.url}
+                                size="sm"
+                                variant="ghost"
+                                asChild
+                                className={cn('w-full justify-start', {
+                                    'bg-gray-300': currentPath === item.url,
+                                        'text-blue-800': currentPath === item.url,
+                                })}>
+                                <Link href={item.url} prefetch>
+                                    {item.title}
+                                </Link>
+                            </Button>
+                        ))}
+                    </nav>
+                </aside>
 
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={title} />
-      {children}
-    </AppLayout>
-  );
+                {/* Popover en móvil */}
+                <div className="lg:hidden">
+                    <Popover open={isPopoverOpen} onOpenChange={setPopoverOpen}>
+                        <PopoverTrigger asChild>
+                            <Button variant="outline" className="w-full bg-stone-200 dark:bg-stone-800">
+                                {t('ui.statistics.navigation.all')}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full max-w-xs space-y-2">
+                            {sidebarNavItems.map((item) => (
+                                <Button
+                                    key={item.url}
+                                    variant="ghost"
+                                    size="sm"
+                                    asChild
+                                    className={cn('w-full justify-start', {
+                                        'bg-gray-300': currentPath === item.url,
+                                        'text-blue-800': currentPath === item.url,
+                                    })}
+                                    onClick={() => setPopoverOpen(false)}
+                                >
+                                    <Link href={item.url} prefetch>
+                                        {item.title}
+                                    </Link>
+                                </Button>
+                            ))}
+                        </PopoverContent>
+                    </Popover>
+                </div>
+
+                {/* Contenido principal ocupando toda la pantalla */}
+                <div className="flex-1 w-full">
+                    <section className="w-full space-y-12">{children}</section>
+                </div>
+            </div>
+        </div>
+    );
 }

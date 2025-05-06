@@ -20,7 +20,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('books/{book}', [\App\Books\Controllers\BookController::class, 'show'])->name('books.show');
     Route::resource('loans', \App\Loans\Controllers\LoanController::class);
     Route::resource('reserves', \App\Reserves\Controllers\ReserveController::class);
+
+    //Statistics routes
     Route::get('statistics', [\App\Statistics\Controllers\StatisticController::class, 'index'])->name('statistics.index');
+    Route::get('statistics/userIndex', [\App\Statistics\Controllers\StatisticController::class, 'userIndex'])->name('statistics.userIndex');
+    Route::get('statistics/bookIndex', [\App\Statistics\Controllers\StatisticController::class, 'bookIndex'])->name('statistics.bookIndex');
+    Route::get('statistics/zoneIndex', [\App\Statistics\Controllers\StatisticController::class, 'zoneIndex'])->name('statistics.zoneIndex');
 
 
 });
