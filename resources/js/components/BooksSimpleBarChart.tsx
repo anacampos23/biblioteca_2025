@@ -29,7 +29,7 @@ import {
         <BarChart
           data={chartData}
           layout="vertical"
-          margin={{ top: 20, right: 30, left: 150, bottom: 20 }}
+          margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
         >
           <CartesianGrid strokeDasharray="4 1 2" />
           <XAxis type="number" />

@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslations } from '@/hooks/use-translations';
 import StatisticLayout from "@/layouts/statistics/StatisticLayout";
 import { type BreadcrumbItem, type SharedData } from '@/types';
-import BooksSimpleBarChart from '@/pages/statistics/BooksSimpleBarChart';
-import UsersSimpleBarChart from '@/pages/statistics/UsersSimpleBarChart';
-import ZonesSimpleBarChart from '@/pages/statistics/ZonesSimpleBarChart';
+import BooksSimpleBarChart from '@/components/BooksSimpleBarChart';
+import UsersSimpleBarChart from '@/components/UsersStackedBarChart';
+import ZonesSimpleBarChart from '@/components/ZonesStackedBarChart';
 import { PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import HeadingSmall from '@/components/heading-small';
@@ -16,24 +16,30 @@ interface bookIndexStatisticsProps extends PageProps {
     loans: { id: string; start_loan: Date; book_id: string }[];
 }
 
-export default function UserIndexStatistics({ books, loans, }: bookIndexStatisticsProps) {
-  const { t } = useTranslations();
-  const { url } = usePage();
+export default function UserIndexStatistics({ books, loans }: bookIndexStatisticsProps) {
+    const { t } = useTranslations();
+    const { url } = usePage();
 
-  const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: t('ui.statistics.bookIndex.title'),
-        href: '/statistics/bookIndex',
-    },
-  ];
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('ui.statistics.navigation.bookIndex'),
+            href: '/statistics/bookIndex',
+        },
+    ];
 
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={t('ui.statistics.book.title')} />
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title={t('ui.statistics.navigation.bookIndex')} />
 
-      <StatisticLayout className="p-4">
-          <BooksSimpleBarChart books={books} loans={loans}/>
-      </StatisticLayout>
-    </AppLayout>
-  );
+            <StatisticLayout>
+                <div>
+                {/* Encabezado */}
+                <div className="space-y-2 text-center">
+                    <h2 className="text-2xl font-semibold text-stone-800 mb-2 dark:text-white">{t('ui.statistics.books.title')}</h2>
+                </div>
+                <BooksSimpleBarChart books={books} loans={loans} />
+                </div>
+            </StatisticLayout>
+        </AppLayout>
+    );
 }

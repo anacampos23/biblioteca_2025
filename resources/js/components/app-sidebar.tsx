@@ -51,7 +51,7 @@ const mainNavItems = (t: (key: string) => string): NavItem[] => [
     },
     {
         title: t('ui.navigation.items.statistics'),
-        url: '/statistics',
+        url: '/statistics/bookIndex',
         icon: ChartPie ,
     },
 ];

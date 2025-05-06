@@ -28,35 +28,6 @@ use function Laravel\Prompts\alert;
 
 class StatisticController extends Controller
 {
-    // public function index()
-    // {
-    //     $books = DB::table('books')
-    //         ->leftJoin('loans', 'books.id', '=', 'loans.book_id')
-    //         ->select('books.ISBN', 'books.title', DB::raw('COUNT(loans.id) as loans_count'))
-    //         ->groupBy('books.ISBN', 'books.title')
-    //         ->orderByDesc('loans_count')
-    //         ->get();
-
-
-
-
-    //     $loans = Loan::withTrashed()
-    //         ->with(['book:id,title,author,ISBN'])
-    //         ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
-    //         ->orderBy('start_loan', 'desc')
-    //         ->get()
-    //         ->toArray();
-
-
-
-    //     return Inertia::render('statistics/Index', [
-    //         'loans' => $loans,
-    //         'users' => $users,
-    //         'books' => $books,
-    //         'zones_movement' => $zones_movement,
-    //     ]);
-    // }
-
     // Método para mostrar estadísticas de libros
     public function bookIndex()
     {

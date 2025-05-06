@@ -680,5 +680,21 @@ return [
         'reserves' => [
             'legend' => 'Reserves'
         ],
+        'navigation' => [
+            'bookIndex' => 'Books statistics',
+            'userIndex' => 'Users statistics',
+            'zoneIndex' => 'Zones statistics',
+            'all'=> 'Statistics'
+        ],
+        'books'=> [
+            'title' => 'More read books',
+        ],
+        'users'=> [
+            'title' => 'More active users',
+        ],
+        'zones'=> [
+            'title' => 'More moved zones',
+        ]
+
     ]
 ];

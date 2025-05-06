@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslations } from '@/hooks/use-translations';
 import StatisticLayout from "@/layouts/statistics/StatisticLayout";
 import { type BreadcrumbItem, type SharedData } from '@/types';
-import BooksSimpleBarChart from '@/pages/statistics/BooksSimpleBarChart';
-import UsersSimpleBarChart from '@/pages/statistics/UsersSimpleBarChart';
-import ZonesSimpleBarChart from '@/pages/statistics/ZonesSimpleBarChart';
+import BooksSimpleBarChart from '@/components/BooksSimpleBarChart';
+import UsersStackedBarChart from '@/components/UsersStackedBarChart';
+import ZonesSimpleBarChart from '@/components/ZonesStackedBarChart';
 import { PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import HeadingSmall from '@/components/heading-small';
@@ -19,23 +19,29 @@ interface userIndexStatisticsProps extends PageProps {
 }
 
 export default function UserIndexStatistics({ books, users, loans, zones_movement }: userIndexStatisticsProps) {
-  const { t } = useTranslations();
-  const { url } = usePage();
+    const { t } = useTranslations();
+    const { url } = usePage();
 
-  const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: t('ui.statistics.userIndex.title'),
-        href: '/statistics/userIndex',
-    },
-  ];
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('ui.statistics.navigation.userIndex'),
+            href: '/statistics/userIndex',
+        },
+    ];
 
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={t('ui.settings.profile.title')} />
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title={t('ui.statistics.navigation.userIndex')} />
 
-      <StatisticLayout className="p-4">
-          <UsersSimpleBarChart users={users}/>
-      </StatisticLayout>
-    </AppLayout>
-  );
+            <StatisticLayout>
+                <div className="mb-6">
+                    {/* Encabezado */}
+                    <div className="space-y-2 text-center">
+                        <h2 className="mb-6 text-2xl font-semibold text-stone-800 dark:text-white">{t('ui.statistics.users.title')}</h2>
+                    </div>
+                    <UsersStackedBarChart users={users} />
+                </div>
+            </StatisticLayout>
+        </AppLayout>
+    );
 }

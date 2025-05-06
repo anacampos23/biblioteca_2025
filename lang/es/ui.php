@@ -679,5 +679,21 @@ return [
         'reserves' => [
             'legend' => 'Reservas'
         ],
+        'navigation' => [
+            'bookIndex' => 'Estadísticas de libros',
+            'userIndex' => 'Estadísticas de usuarios',
+            'zoneIndex' => 'Estadísticas de zonas',
+            'all' => 'Estadísticas'
+        ],
+        'books'=> [
+            'title' => 'Libros más leídos',
+        ],
+        'users'=> [
+            'title' => 'Usuarios más activos',
+        ],
+        'zones'=> [
+            'title' => 'Zonas con más movimiento',
+        ]
+
     ],
 ];
