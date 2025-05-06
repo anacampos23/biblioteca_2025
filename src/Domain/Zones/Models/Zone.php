@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Domain\Floors\Models\Floor;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Database\Factories\ZoneFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Zone extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
     /**
      * Create a new factory instance for the model.
      */

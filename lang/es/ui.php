@@ -14,7 +14,8 @@ return [
             'loans'=> 'Préstamos',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
-            'reserves' => 'Reservas'
+            'reserves' => 'Reservas',
+            'statistics'=> 'Estadísticas',
         ],
     ],
     'user_menu' => [
@@ -646,27 +647,37 @@ return [
             'author' => 'Autor',
             'ISBN' => 'ISBN',
             'name' => 'Nombre de usuario',
-            'email'=>'Email del usuario',
+            'email' => 'Email del usuario',
             'delete' => 'Eliminar',
-            'edit'=> 'Editar préstamo',
+            'edit' => 'Editar préstamo',
             'loan' => 'Realizar préstamo',
             'status' => 'En espera/Contactado',
         ],
-        'fields'=> [
+        'fields' => [
             'ISBN' => 'ISBN',
         ],
-        'messages'=>[
-            'title'=> '¿Quieres coger prestado el libro?',
+        'messages' => [
+            'title' => '¿Quieres coger prestado el libro?',
             'description' => 'El libro ya está disponible',
         ],
-        'status'=>[
+        'status' => [
             'waiting' => 'En espera',
             'contacted' => 'Usuario contactado',
             'finished' => 'Terminada'
         ],
-        'delete'=> [
+        'delete' => [
             'title' => '¿Estás seguro/a de que quieres eliminar esta reserva?',
             'description' => 'La información se mantendrá en la base de datos'
         ]
-    ]
+    ],
+    'statistics' => [
+        'title'=> 'Estadísticas',
+        'description' => 'Revisa las estadísticas',
+        'loans' => [
+            'legend' => 'Préstamos'
+        ],
+        'reserves' => [
+            'legend' => 'Reservas'
+        ],
+    ],
 ];

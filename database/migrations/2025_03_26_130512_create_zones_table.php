@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignUuid('floor_id')->constrained('floors')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
