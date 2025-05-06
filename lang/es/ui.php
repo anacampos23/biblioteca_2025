@@ -62,7 +62,9 @@ return [
             ],
             'select_date' => 'Selecciona por fecha',
             'days_overdue' => 'Días de retraso:',
-            'days' => 'días'
+            'days' => 'días',
+            'loans' => 'Préstamos',
+            'reserves' => 'Reservas'
         ],
         'password' => [
             'title' => 'Configuración de contraseña',
