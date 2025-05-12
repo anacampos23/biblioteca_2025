@@ -36,7 +36,7 @@ export function BookcaseLayout({ title, children }: BookcaseLayoutProps) {
       href: "/dashboard",
     },
     {
-      title: "Usuarios",
+      title: "Estanterías",
       href: "/bookcases",
     },
   ];

@@ -46,7 +46,7 @@ export interface PaginatedResponse<T> {
 }
 
 interface UseBookcasesParams {
-  search?: string;
+  search?: any[];
   bookcase_name?: number;
   zone_id?: string;
   floor_id?: string;
