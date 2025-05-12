@@ -4,20 +4,46 @@ namespace Domain\Bookcases\Actions;
 
 use Domain\Bookcases\Data\Resources\BookcaseResource;
 use Domain\Bookcases\Models\Bookcase;
+use Domain\Floors\Models\Floor;
+use Domain\Zones\Models\Zone;
 
 class BookcaseIndexAction
 {
-    public function __invoke(?string $search = null, int $perPage = 10)
+    public function __invoke(?array $search = null, int $perPage = 10)
     {
-        $bookcases = Bookcase::query()
-        ->when($search, function ($query, $search) {
-            $query->where('bookcase_name', 'like', "%{$search}%")
-                ->orWhere('zone_id', 'like', "%{$search}%")
-                ->orWhere('floor_id', 'like', "%{$search}%");
-        })
-        ->latest()
-        ->paginate($perPage);
+        $bookcase_name = $search[0];
+        $name = $search[1];
+        $floor_number = $search[2];
 
-        return $bookcases->through(fn ($bookcase) => BookcaseResource::fromModel($bookcase));
+         //Une el nombre de la zona con el registro que tenemos del id
+        $bookcaseZone = Zone::query() -> when($name != "null", function ($query) use ($name){
+            $query -> where('zone', 'ILIKE', "%".$name."%");
+        })->first();
+
+        $zone_id= $bookcaseZone -> id;
+
+        //Une el nombre del floor
+        $bookcaseFloor = Floor::query() -> when($floor_number != "null", function ($query) use ($floor_number){
+            $query -> where('floor_number', 'like', $floor_number);
+        })-> first();
+
+        $floor_id = $bookcaseFloor->id;
+
+
+        $bookcase = Bookcase::query()
+            ->when($bookcase_name !== "null", function ($query) use ($bookcase_name) {
+                $query->where('bookcase_name', 'ILIKE', "%" . $bookcase_name . "%");
+            })
+            ->when($name !== "null", function ($query) use ($zone_id) {
+                $query->where('zone_id', 'like', $zone_id);
+            })
+            ->when($floor_number !== "null", function ($query) use ($floor_id) {
+                $query->where('floor_id', 'ILIKE', $floor_id);
+            })
+
+            ->latest()
+            ->paginate($perPage);
+
+        return $bookcase->through(fn ($bookcase) => BookcaseResource::fromModel($bookcase));
     }
 }

@@ -10,11 +10,11 @@ return [
             'zones' => 'Zones',
             'bookcases' => 'Bookcases',
             'books' => 'Books',
-            'loans'=> 'Loans',
+            'loans' => 'Loans',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
             'reserves' => 'Reservations',
-            'statistics'=>'Statistics',
+            'statistics' => 'Statistics',
         ],
     ],
     'user_menu' => [
@@ -34,7 +34,7 @@ return [
             'password' => 'Password',
             'appearance' => 'Appearance',
             'languages' => 'Languages',
-            'all'=> 'All settings'
+            'all' => 'All settings'
         ],
         'profile' => [
             'title' => 'Profile settings',
@@ -93,26 +93,26 @@ return [
         ],
     ],
     'validation' => [
-           'required' => 'The :attribute field is required.',
-            'email' => 'The :attribute field must be a valid email address.',
-            'email_not_exist' => 'The email is not in the data base',
-            'ISBN_not_exist'=> 'This ISBN does not exist.',
-            'book_not_available'=> 'This book is not available to be loaned.',
-            'min' => [
-                'string' => 'The :attribute field must be at least :min characters.',
-            ],
-            'max' => [
-                'string' => 'The :attribute field must not be greater than :max characters.',
-            ],
-            'unique' => 'The :attribute has already been taken.',
-            'confirmed' => 'The :attribute confirmation does not match.',
-            'must_be_numeric' => 'The :attribute must be numeric.',
-            'floor' => 'The floor shoul be from 0 to 20.',
-            'zone_floor' => 'The zone already exists in this floor.',
-            'capacity_zones' => 'The floor capacity should be a positive number',
-            'zone_overload'=> 'There floor is full, there is not enough space.',
-            'email_isbn_exists' => 'This user has already the book loaned',
-            'email_isbn_reserved' => 'This user has already the book reserved'
+        'required' => 'The :attribute field is required.',
+        'email' => 'The :attribute field must be a valid email address.',
+        'email_not_exist' => 'The email is not in the data base',
+        'ISBN_not_exist' => 'This ISBN does not exist.',
+        'book_not_available' => 'This book is not available to be loaned.',
+        'min' => [
+            'string' => 'The :attribute field must be at least :min characters.',
+        ],
+        'max' => [
+            'string' => 'The :attribute field must not be greater than :max characters.',
+        ],
+        'unique' => 'The :attribute has already been taken.',
+        'confirmed' => 'The :attribute confirmation does not match.',
+        'must_be_numeric' => 'The :attribute must be numeric.',
+        'floor' => 'The floor shoul be from 0 to 20.',
+        'zone_floor' => 'The zone already exists in this floor.',
+        'capacity_zones' => 'The floor capacity should be a positive number',
+        'zone_overload' => 'There floor is full, there is not enough space.',
+        'email_isbn_exists' => 'This user has already the book loaned',
+        'email_isbn_reserved' => 'This user has already the book reserved'
     ],
     'common' => [
         'buttons' => [
@@ -120,7 +120,7 @@ return [
             'delete' => 'Delete',
             'close' => 'Close',
         ],
-        'filters'=> [
+        'filters' => [
             'title' => 'Filters',
             'clear' => 'Clear',
         ],
@@ -263,75 +263,75 @@ return [
         ],
     ],
     'floors' => [
-            'title' => 'Floors',
-            'title_sing' => 'Floor :number',
-            'description' => 'Manage the building floors',
-            'buttons' => [
-                'new' => 'New Floor',
-                'edit' => 'Edit',
-                'save' => 'Save',
-                'update' => 'Update',
-                'cancel' => 'Cancel',
-                'delete' => 'Delete',
-                'deleting' => 'Deleting...',
-                'saving' => 'Saving...',
-                'retry' => 'Retry',
-            ],
-            'delete' => [
-                'title' => 'Are you sure?',
-                'description' => 'This action cannot be undone. The user will be permanently deleted from the system.',
-            ],
-            'filters' => [
-                'search' => 'Search',
-                'floor_number' => 'Floor number',
-                'capacity_zones' => "Zone's capacity",
-            ],
-            'placeholders' => [
-                'floor_number' => 'Floor No. ...',
-                'capacity_zones' => "Zone's capacity...",
-            ],
-            'cards' => [
-                'title' => 'Create New Floor',
-                'description' => 'Input the information to create a new floor in the system.'
-            ],
-            'fields' => [
-                'floor_number' =>'Floor No. :',
-                'floor' => 'floor',
-                'capacity_zones' => [
-                    'name'=> 'zone capacity',
-                    'title'=> 'Zone capacity',
-                ]
-            ],
-            'columns' => [
-                'floor_number' =>'Floor No. :',
-                'capacity_zones' => 'Zone capacity',
-                'actions' => 'Actions',
-                'floor'=> 'Floor',
-            ],
-            'edit' =>[
-                'name' => 'Edit Floor',
-                'description' => 'Input the information to edit the floor.'
+        'title' => 'Floors',
+        'title_sing' => 'Floor :number',
+        'description' => 'Manage the building floors',
+        'buttons' => [
+            'new' => 'New Floor',
+            'edit' => 'Edit',
+            'save' => 'Save',
+            'update' => 'Update',
+            'cancel' => 'Cancel',
+            'delete' => 'Delete',
+            'deleting' => 'Deleting...',
+            'saving' => 'Saving...',
+            'retry' => 'Retry',
+        ],
+        'delete' => [
+            'title' => 'Are you sure?',
+            'description' => 'This action cannot be undone. The user will be permanently deleted from the system.',
+        ],
+        'filters' => [
+            'search' => 'Search',
+            'floor_number' => 'Floor number',
+            'capacity_zones' => "Zone's capacity",
+        ],
+        'placeholders' => [
+            'floor_number' => 'Floor No. ...',
+            'capacity_zones' => "Zone's capacity...",
+        ],
+        'cards' => [
+            'title' => 'Create New Floor',
+            'description' => 'Input the information to create a new floor in the system.'
+        ],
+        'fields' => [
+            'floor_number' => 'Floor No. :',
+            'floor' => 'floor',
+            'capacity_zones' => [
+                'name' => 'zone capacity',
+                'title' => 'Zone capacity',
             ]
+        ],
+        'columns' => [
+            'floor_number' => 'Floor No. :',
+            'capacity_zones' => 'Zone capacity',
+            'actions' => 'Actions',
+            'floor' => 'Floor',
+        ],
+        'edit' => [
+            'name' => 'Edit Floor',
+            'description' => 'Input the information to edit the floor.'
+        ]
     ],
 
-    'zones'=> [
+    'zones' => [
         'title' => 'Zones',
         'description' => 'Manage the zones',
         'columns' => [
-            'name' =>'Zone',
+            'name' => 'Zone',
             'floor' => 'Floor No.',
             'actions' => 'Actions',
-            'floor_number'=> 'Floor',
+            'floor_number' => 'Floor',
         ],
-        'list'=> [
-            'Literature'=>'Literature',
-            'Novel'=> 'Novel',
-            'Science and Technology'=> 'Science and Technology',
-            'Humanities'=> 'Humanities',
-            'Art'=> 'Art',
-            'Lifestyle'=> 'Lifestyle',
-            'Children'=> 'Children',
-            'Young Adult'=> 'Young Adult',
+        'list' => [
+            'Literature' => 'Literature',
+            'Novel' => 'Novel',
+            'Science and Technology' => 'Science and Technology',
+            'Humanities' => 'Humanities',
+            'Art' => 'Art',
+            'Lifestyle' => 'Lifestyle',
+            'Children' => 'Children',
+            'Young Adult' => 'Young Adult',
         ],
         'buttons' => [
             'new' => 'New Zone',
@@ -353,20 +353,20 @@ return [
             'name' => "Zone's name",
             'floor' => 'Floor number',
             'selectFloor' => "Select the floor",
-            'selectZone'=> 'Select zone name',
+            'selectZone' => 'Select zone name',
         ],
-        'edit' =>[
+        'edit' => [
             'name' => 'Edit Zone',
             'description' => 'Input the information to edit the zone.'
         ],
         'fields' => [
-            'title' =>'Zone:',
+            'title' => 'Zone:',
             'name' => 'zone',
             'floor_title' => 'Floor:',
             'floor_name' => 'floor',
             'description' => [
-                'name'=> 'description...',
-                'title'=> 'Description:',
+                'name' => 'description...',
+                'title' => 'Description:',
             ]
         ],
         'cards' => [
@@ -392,38 +392,47 @@ return [
         ],
     ],
 
-    'bookcases'=> [
+    'bookcases' => [
         'title' => 'Bookcases',
         'description' => 'Manage the bookcases',
         'columns' => [
-            'name' =>'Bookcase',
+            'name' => 'Bookcase',
+            'zone' => 'Zone',
+            'floor_number' => 'Floor No.',
+            'actions' => 'Actions',
+        ],
+        'filters' => [
+            'name' => 'Bookcase',
             'zone' => 'Zone',
             'floor' => 'Floor No.',
             'actions' => 'Actions',
         ],
-    ],
-    'bookcases'=> [
-        'title' => 'Bookcases',
-        'description' => 'Manage the books',
-        'columns' => [
-            'name' =>'Book',
-            'title' => 'Title',
-            'genre'=> 'Genres',
-            'ISBN'=> 'ISBN',
-            'editorial'=> 'Editorial',
-            'quantity'=> 'Quantity',
-            'status'=> 'Status',
-            'bookcase'=> 'Bookcase',
-            'zone' => 'Zone',
-            'floor' => 'Floor No.',
-            'actions' => 'Actions',
+        'placeholders' => [
+            'name' => 'Bookcase No. ...',
+            'zone' => 'Zone...',
+            'floor' => 'Floor No. ...',
         ],
+        'buttons' => [
+            'new' => 'New Bookcase',
+            'edit' => 'Edit',
+            'save' => 'Save',
+            'update' => 'Update',
+            'cancel' => 'Cancel',
+            'delete' => 'Delete',
+            'deleting' => 'Deleting...',
+            'saving' => 'Saving...',
+            'retry' => 'Retry',
+        ],
+        'delete'=> [
+            'title'=> 'Delete bookcase',
+            'description' => 'Are you sure you want to delete this bookcase?'
+        ]
     ],
-    "books"=>[
+    "books" => [
         'title' => 'Books',
         'description' => 'Manage the books',
-        'book'=> 'Book',
-        'books'=> 'Books',
+        'book' => 'Book',
+        'books' => 'Books',
         'filters' => [
             'title' => 'Title',
             'author' => 'Author',
@@ -442,19 +451,19 @@ return [
             'not_reserved' => 'Not reserved',
         ],
         'placeholders' => [
-             'title' => 'Title...',
-             'author' => 'Author...',
-             'genre' => 'Genre...',
-             'ISBN' => 'ISBN...',
-             'editorial' => 'Editorial...',
-             'quantity' => 'Units...',
-             'available' => 'Available/Not available',
-             'bookcase_name' => 'Bookcase...',
-             'name' => 'Zone...',
-             'floor_number' => 'Floor...',
-             'reserved' => 'Reserved/Not reserved'
-         ],
-         'buttons' => [
+            'title' => 'Title...',
+            'author' => 'Author...',
+            'genre' => 'Genre...',
+            'ISBN' => 'ISBN...',
+            'editorial' => 'Editorial...',
+            'quantity' => 'Units...',
+            'available' => 'Available/Not available',
+            'bookcase_name' => 'Bookcase...',
+            'name' => 'Zone...',
+            'floor_number' => 'Floor...',
+            'reserved' => 'Reserved/Not reserved'
+        ],
+        'buttons' => [
             'new' => 'New Book',
             'edit' => 'Edit',
             'save' => 'Save',
@@ -482,7 +491,7 @@ return [
             'borrow' => 'Make loan',
             'created_at' => 'Created at',
         ],
-        'show' =>[
+        'show' => [
             'title' => 'Title',
             'author' => 'Author',
             'genre' => 'Genre',
@@ -674,7 +683,7 @@ return [
         ]
     ],
     'statistics' => [
-        'title'=> 'Statistics',
+        'title' => 'Statistics',
         'description' => 'Check the statistics',
         'loans' => [
             'legend' => 'Loans'
@@ -686,15 +695,15 @@ return [
             'bookIndex' => 'Books statistics',
             'userIndex' => 'Users statistics',
             'zoneIndex' => 'Zones statistics',
-            'all'=> 'Statistics'
+            'all' => 'Statistics'
         ],
-        'books'=> [
+        'books' => [
             'title' => 'More read books',
         ],
-        'users'=> [
+        'users' => [
             'title' => 'More active users',
         ],
-        'zones'=> [
+        'zones' => [
             'title' => 'More moved zones',
         ]
 

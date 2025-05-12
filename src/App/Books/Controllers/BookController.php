@@ -47,7 +47,7 @@ class BookController extends Controller
 
         $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
-        $bookcases = Bookcase::select(['id', 'bookcase_name']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
+        $bookcases = Bookcase::select(['id', 'bookcase_name']) ->orderBy('bookcase_name', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
 
 

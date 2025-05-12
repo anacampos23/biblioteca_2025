@@ -30,10 +30,10 @@ export default function BookcasesIndex() {
   const [filters, setFilters] = useState<Record<string, any>>({});
   // Combine name and email filters into a single search string if they exist
   const combinedSearch = [
-    filters.search,
-    filters.bookcase_name ? `bookcase_name:${filters.bookcase_name}` : null,
-    filters.zone_id ? `zone_id:${filters.zone_id}` : null
-  ].filter(Boolean).join(' ');
+   filters.bookcase_name ? filters.bookcase_name : "null",
+    filters.name ? filters.name : "null",
+    filters.floor_number ? filters.floor_number : "null",
+  ]
 
 
   const { data: bookcases, isLoading, isError, refetch } = useBookcases({
@@ -88,11 +88,6 @@ export default function BookcasesIndex() {
         header: t("ui.bookcases.columns.floor_number") || "name",
         accessorKey: "floor_number",
       }),
-    createDateColumn<Bookcase>({
-      id: "floor_number",
-      header: t("ui.users.columns.floor_number") || "floor_number",
-      accessorKey: "floor_number",
-    }),
     createActionsColumn<Bookcase>({
       id: "actions",
       header: t("ui.bookcases.columns.actions") || "Actions",
@@ -120,11 +115,11 @@ export default function BookcasesIndex() {
   ] as ColumnDef<Bookcase>[]), [t, handleDeleteBookcase]);
 
   return (
-      <BookcaseLayout title={t('ui.bookcase.title')}>
+      <BookcaseLayout title={t('ui.bookcases.title')}>
           <div className="p-6">
               <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                      <h1 className="text-3xl font-bold">{t('ui.bookcase.title')}</h1>
+                      <h1 className="text-3xl font-bold">{t('ui.bookcases.title')}</h1>
                       <Link href="/bookcases/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
@@ -145,15 +140,15 @@ export default function BookcasesIndex() {
                                       placeholder: t('ui.bookcases.placeholders.name') || 'Nombre...',
                                   },
                                   {
-                                      id: 'zone',
+                                      id: 'name',
                                       label: t('ui.bookcases.filters.zone') || 'Email',
                                       type: 'text',
                                       placeholder: t('ui.bookcases.placeholders.zone') || 'Email...',
                                   },
                                   {
-                                    id: 'floor',
+                                    id: 'floor_number',
                                     label: t('ui.bookcases.filters.floor') || 'Email',
-                                    type: 'text',
+                                    type: 'number',
                                     placeholder: t('ui.bookcases.placeholders.floor') || 'Email...',
                                 },
                               ] as FilterConfig[]
