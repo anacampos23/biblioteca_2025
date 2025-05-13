@@ -56,6 +56,8 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
     const url = window.location.href;
     const param = new URLSearchParams(window.location.search);
 
+    console.log('valores iniciales', initialData);
+
     const bookBookcase_name = param.get('bookcase_name');
     const zone_name = param.get('name');
     const bookFloor_number = param.get('floor_number');
@@ -66,12 +68,17 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
     let bookcaseNow = undefined;
     const [selectedFloor, setSelectedFloor] = useState<string | undefined>(floorNow ?? undefined);
     const [selectedZone, setSelectedZone] = useState<string | undefined>(zoneNow ?? undefined);
-    const [selectedBookcase, setSelectedBookcase] = useState<string | undefined>(zoneNow ?? undefined);
-    // Filtrar zonas por el piso seleccionado
-    const filteredZones = zones?.filter((zone) => zone.floor_id === selectedFloor);
+    const [selectedBookcase, setSelectedBookcase] = useState<string | undefined>(bookcaseNow ?? undefined);
 
-    //Filtrar estanterías por zona y piso
-    const filteredBookcases = bookcases?.filter((bookcase) => bookcase.floor_id === selectedFloor && bookcase.zone_id === selectedZone);
+    // Considerar el valor seleccionado o el valor inicial al editar
+    const floorId = selectedFloor ?? initialData?.floor_id;
+    const zoneId = selectedZone ?? initialData?.zone_id;
+
+    // Filtrar zonas por el piso seleccionado
+    const filteredZones = zones?.filter((zone) => zone.floor_id === floorId);
+
+    // Filtrar estanterías por zona y piso
+    const filteredBookcases = bookcases?.filter((bookcase) => bookcase.floor_id === floorId && bookcase.zone_id === zoneId);
 
     // Estado para manejar la zona personalizada
     const [customZone, setCustomZone] = useState<string>('');
@@ -141,11 +148,11 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
             title: initialData?.title ?? '',
             author: initialData?.author ?? '',
             ISBN: initialData?.ISBN ?? '',
-            genre: initialData?.genre ?? '',
+            genre: initialData?.genre ? JSON.parse(initialData.genre) : [],
             editorial: initialData?.editorial ?? '',
-            bookcase_name: initialData?.bookcase_name ?? bookBookcase_name ?? '',
-            name: initialData?.name ?? zone_name ?? '',
-            floor_number: initialData?.floor_number ?? bookFloor_number ?? '',
+            bookcase_id: initialData?.bookcase_id ?? '',
+            zone_id: initialData?.zone_id ?? '',
+            floor_id: initialData?.floor_id ?? '',
         },
         onSubmit: async ({ value }) => {
             const bookData = {
@@ -428,9 +435,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
-                                return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.books.fields.zone').toLowerCase() })
-                                      : undefined;
+                                return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.zone').toLowerCase() }) : undefined;
                             },
                         }}
                     >

@@ -2,7 +2,7 @@ import { DashboardCard } from '@/components/dashboard/DashboardCard';
 import { Users, User, Building2, MapPin, LibraryBig, Book, ArrowUpRight, BookmarkCheck, ChartPie  } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import CardFlip from "@/components/ui/card-flip";
 import { Icon } from '@/components/icon';
 import { useTranslations } from '@/hooks/use-translations';
@@ -15,8 +15,19 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+interface PageProps{
+    auth: {
+        user:any,
+        permissions:string[],
+    }
+}
+
 export default function Dashboard() {
     const { t } = useTranslations();
+
+    const page = usePage<{props: PageProps}>();
+    const auth = page.props.auth;
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />

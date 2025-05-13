@@ -440,9 +440,12 @@ return [
         'book' => 'Libro',
         'books' => 'Libros',
         'create'=> 'Crear libro',
+        'edit'=> 'Editar libro',
         'cards'=>[
             'title'=> 'Nuevo libro',
-            'description' => 'Añade los datos del nuevo libro'
+            'description' => 'Añade los datos del nuevo libro',
+            'editTitle' => 'Editar libro',
+            'editDescription' => 'Modifica la información del libro'
         ],
         'filters' => [
             'title' => 'Título',
@@ -580,6 +583,8 @@ return [
         'card' => [
             'create' => 'Realizar un préstamo:',
             'new' => 'Nuevo préstamo',
+            'editTitle'=> 'Edita el libro',
+            'editDescription'=> 'Edita la información del libro',
         ],
         'filters' => [
             'title' => 'Título',

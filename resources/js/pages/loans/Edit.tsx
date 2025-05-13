@@ -38,10 +38,10 @@ export default function EditLoan({ loan, users, ISBN_available, page, perPage }:
                         <CardTitle>
                             <div className="flex items-center gap-1">
                                 <User color="#2762c2" />
-                                {t('ui.loans.cards.title')}
+                                {t('ui.loans.card.title')}
                             </div>
                         </CardTitle>
-                        <CardDescription>{t('ui.loans.cards.description')}</CardDescription>
+                        <CardDescription>{t('ui.loans.card.description')}</CardDescription>
                     </CardHeader>
                     <Separator />
                     <CardContent>

@@ -32,17 +32,6 @@ class BookUpdateAction
             $updateData['editorial'] = $data['editorial'];
         }
 
-        if (isset($data['quantity'])) {
-            $updateData['quantity'] = $data['quantity'];
-        }
-
-        if (isset($data['available'])) {
-            $updateData['available'] = $data['available'];
-        }
-        if (isset($data['reserved'])) {
-            $updateData['reserved'] = $data['reserved'];
-        }
-
         if (isset($data['bookcase_id'])) {
             $updateData['bookcase_id'] = $data['bookcase_id'];
         }
@@ -54,11 +43,6 @@ class BookUpdateAction
         if (isset($data['floor_id'])) {
             $updateData['floor_id'] = $data['floor_id'];
         }
-
-        if (isset($data['newReservationStatus'])) {
-            $updateData['newReservationStatus'] = $data['newReservationStatus'];
-        }
-
 
         $book->update($updateData);
 
