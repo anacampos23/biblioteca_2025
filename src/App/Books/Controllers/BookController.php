@@ -47,7 +47,7 @@ class BookController extends Controller
 
         $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
-        $bookcases = Bookcase::select(['id', 'bookcase_name']) ->orderBy('bookcase_name', 'asc') ->get() -> toArray();
+        $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id']) ->orderBy('bookcase_name', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
 
 
@@ -63,16 +63,14 @@ class BookController extends Controller
     public function store(Request $request, BookStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'bookcase_id' => ['required', 'exists:bookcases, id'],
-            'zone_id' => ['required', 'exists:zones, id'],
-            'floor_id' => ['required', 'exists:floors, id'],
-            'title' => ['required', 'string', 'max:255'],
-            'author' => ['required', 'string', 'max:255'],
-            'genre' => ['required', 'string', 'max:255'],
-            'ISBN' => ['required', 'numeric', 'max:255'],
-            'editorial' => ['required', 'string', 'max:255'],
-            'quantity' => ['required', 'numeric', 'max:255'],
-            'available' => ['required', 'boolean'],
+            'title' => ['required'],
+            'author' => ['required'],
+            'ISBN' => ['required'],
+            'genre' => [],
+            'editorial' => ['required'],
+            'bookcase_id' => [],
+            'zone_id' => [],
+            'floor_id' => [],
         ]);
 
         if ($validator->fails()) {
@@ -81,7 +79,7 @@ class BookController extends Controller
 
         $action($validator->validated());
 
-        return redirect()->route('book.index')
+        return redirect()->route('books.index')
             ->with('success', __('messages.books.created'));
     }
 
