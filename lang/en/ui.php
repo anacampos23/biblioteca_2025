@@ -435,9 +435,12 @@ return [
         'book' => 'Book',
         'books' => 'Books',
         'create'=> 'Create book',
+        'edit'=> 'Edit book',
         'cards'=>[
             'title'=> 'New book',
-            'description' => 'Add information from the new book'
+            'description' => 'Add information from the new book',
+            'editTitle'=> 'Edit book',
+            'editDescription'=> 'Edit the information from the book',
         ],
         'filters' => [
             'title' => 'Title',

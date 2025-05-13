@@ -86,13 +86,16 @@ class BookController extends Controller
     public function edit(Request $request, Book $book)
     {
 
-        $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
+       $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
+        $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id']) ->orderBy('bookcase_name', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
 
         return Inertia::render('books/Edit', [
+            'book' => $book,
             'zones' => $zones,
             'floors' => $floors,
+            'bookcases' => $bookcases,
             'floor_zone_id' => $floor_zone_id,
         ]);
     }
@@ -100,17 +103,15 @@ class BookController extends Controller
     public function update(Request $request, Book $book, BookUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            // 'bookcase_id' => ['exists:bookcases, id'],
-            // 'zone_id' => ['exists:zones, id'],
-            // 'floor_id' => ['exists:floors, id'],
-            // 'title' => ['string', 'max:255'],
-            // 'author' => ['string', 'max:255'],
-            // 'genre' => ['string', 'max:255'],
-            // 'ISBN' => ['numeric', 'max:255'],
-            // 'editorial' => ['string', 'max:255'],
-            // 'quantity' => ['numeric', 'max:255'],
-            // 'available' => ['boolean'],
-            'newReservationStatus' => [],
+            'title' => ['required'],
+            'author' => ['required'],
+            'ISBN' => ['required'],
+            'genre' => [],
+            'editorial' => ['required'],
+            'bookcase_id' => [],
+            'zone_id' => [],
+            'floor_id' => [],
+
         ]);
 
         if ($validator->fails()) {
