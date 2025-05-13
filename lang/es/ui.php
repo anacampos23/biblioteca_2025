@@ -113,7 +113,8 @@ return [
         'capacity_zones' => 'La capacidad del piso debe ser un número positivo',
         'zone_overload' => 'El piso está lleno, ya no caben más zonas.',
         'email_isbn_exists' => 'El usuario ya tiene prestado este libro',
-        'email_isbn_reserved' => 'El usuario ya tiene este libro reservado'
+        'email_isbn_reserved' => 'El usuario ya tiene este libro reservado',
+        'ISBNlenght' => 'The ISBN value should has 13 characters',
     ],
     'common' => [
         'buttons' => [
@@ -438,6 +439,11 @@ return [
         'description' => 'Gestiona los libros',
         'book' => 'Libro',
         'books' => 'Libros',
+        'create'=> 'Crear libro',
+        'cards'=>[
+            'title'=> 'Nuevo libro',
+            'description' => 'Añade los datos del nuevo libro'
+        ],
         'filters' => [
             'title' => 'Título',
             'author' => 'Autor',
@@ -466,7 +472,8 @@ return [
             'bookcase_name' => 'Estantería...',
             'name' => 'Zona...',
             'floor_number' => 'Piso...',
-            'reserved' => 'Reservado/No reservado'
+            'reserved' => 'Reservado/No reservado',
+            'selectGenre' => 'Selecciona los géneros',
         ],
         'buttons' => [
             'new' => 'Nuevo Libro',
@@ -554,6 +561,15 @@ return [
             'Young Adult Fantasy' => 'Fantasía Juvenil',
             'Young Adult Thriller' => 'Suspenso Juvenil',
         ],
+        'fields'=>[
+            'title'=> 'Título',
+            'author'=> 'Autor',
+            'genre' => 'Género',
+            'editorial' => 'Editorial',
+            'floor' => 'Piso',
+            'zone' => 'Zona',
+            'bookcase'=> 'Estantería'
+        ]
 
     ],
     'loans' => [

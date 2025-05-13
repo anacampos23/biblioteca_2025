@@ -21,11 +21,16 @@ class BookcaseFactory extends Factory
 
     public function definition(): array
     {
+        // Seleccionamos un floor_id aleatorio
+        $floor = Floor::inRandomOrder()->first();
+
+        // Buscamos las zonas que pertenecen a este floor_id
+        $zone = Zone::where('floor_id', $floor->id)->inRandomOrder()->first();
         return [
             'id' => $this->faker->uuid(),
             'bookcase_name' => $this->faker->randomNumber(1, false),
-            'zone_id' => Zone::inRandomOrder()->value('id') ?? Zone::factory()->create()->id,
-            'floor_id' => Floor::inRandomOrder()->value('id') ?? Floor::factory()->create()->id,
+            'zone_id' => $zone->id,
+            'floor_id' => $floor->id,
         ];
     }
 }

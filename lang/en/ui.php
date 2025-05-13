@@ -112,7 +112,8 @@ return [
         'capacity_zones' => 'The floor capacity should be a positive number',
         'zone_overload' => 'There floor is full, there is not enough space.',
         'email_isbn_exists' => 'This user has already the book loaned',
-        'email_isbn_reserved' => 'This user has already the book reserved'
+        'email_isbn_reserved' => 'This user has already the book reserved',
+        'ISBNlenght' => 'The ISBN value should has 13 characters',
     ],
     'common' => [
         'buttons' => [
@@ -433,6 +434,11 @@ return [
         'description' => 'Manage the books',
         'book' => 'Book',
         'books' => 'Books',
+        'create'=> 'Create book',
+        'cards'=>[
+            'title'=> 'New book',
+            'description' => 'Add information from the new book'
+        ],
         'filters' => [
             'title' => 'Title',
             'author' => 'Author',
@@ -446,7 +452,7 @@ return [
             'floor_number' => 'Floor',
             'available' => 'Available',
             'not_available' => 'Not available',
-            'reserve' => 'Reserva',
+            'reserve' => 'Reservation',
             'reserved' => 'Reserved',
             'not_reserved' => 'Not reserved',
         ],
@@ -461,7 +467,8 @@ return [
             'bookcase_name' => 'Bookcase...',
             'name' => 'Zone...',
             'floor_number' => 'Floor...',
-            'reserved' => 'Reserved/Not reserved'
+            'reserved' => 'Reserved/Not reserved',
+            'selectGenre' => 'Select genres'
         ],
         'buttons' => [
             'new' => 'New Book',
@@ -548,6 +555,15 @@ return [
             'Young Adult Novel' => 'Young Adult Novel',
             'Young Adult Fantasy' => 'Young Adult Fantasy',
             'Young Adult Thriller' => 'Young Adult Thriller',
+        ],
+        'fields'=>[
+            'title'=> 'Title',
+            'author'=> 'Author',
+            'genre' => 'Genre',
+            'editorial'=> 'Editorial',
+            'floor' => 'Floor',
+            'zone' => 'Zone',
+            'bookcase'=> 'Bookcase'
         ]
     ],
     'loans' => [

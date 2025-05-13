@@ -22,6 +22,16 @@ class BookFactory extends Factory
 
     public function definition(): array
     {
+
+          // Seleccionamos un floor_id aleatorio
+        $bookcase = Bookcase::inRandomOrder()->first();
+
+          // Buscamos las zonas que pertenecen a esta estantería
+        $zone = Zone::where('id', $bookcase->zone_id)->inRandomOrder()->first();
+
+        // Buscamos las zonas que pertenecen a este floor_id
+        $floor = Floor::where('id', $bookcase->floor_id)->inRandomOrder()->first();
+
         $genresByZone = [
             'Literature' => ['Poetry', 'Theater', 'Essay', 'Short Story', 'Classics'],
             'Novel' => ['Historical Novel', 'Crime Novel', 'Science Fiction Novel', 'Romantic Novel'],
@@ -32,10 +42,6 @@ class BookFactory extends Factory
             'Children' => ['Children\'s Stories', 'Illustrated Books', 'Educational Books'],
             'Young Adult' => ['Young Adult Novel', 'Young Adult Fantasy', 'Young Adult Thriller']
         ];
-
-
-        // Selecciona una zona al azar
-        $zone = Zone::inRandomOrder()->first();
 
         // Asegura que la zona tiene un género asociado
         $zoneName = $zone->name;
@@ -51,9 +57,9 @@ class BookFactory extends Factory
             'editorial' => $this->faker->sentence(2),
             'available' => true,
             'reserved' => false,
-            'bookcase_id' => Bookcase::inRandomOrder()->value('id') ?? Bookcase::factory()->create()->id,
-            'zone_id' => Zone::inRandomOrder()->value('id') ?? Zone::factory()->create()->id,
-            'floor_id' => Floor::inRandomOrder()->value('id'),
+            'bookcase_id' =>$bookcase->id,
+            'zone_id' => $zone->id,
+            'floor_id' => $floor->id,
         ];
     }
 }

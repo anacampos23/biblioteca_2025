@@ -85,6 +85,7 @@ class LoanController extends Controller
             'ISBN' => ['required'],
         ]);
 
+
         // Si la validación falla, devolvemos los errores
         if ($validator->fails()) {
             return back()->withErrors($validator);

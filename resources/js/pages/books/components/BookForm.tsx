@@ -9,6 +9,7 @@ import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Save, X } from 'lucide-react';
+import { MultiSelect } from 'primereact/multiselect';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -17,8 +18,8 @@ interface BookFormProps {
         id: string;
         title: string;
         author: string;
-        genre: string;
         ISBN: number;
+        genre: string;
         editorial: string;
         bookcase_id: string;
         zone_id: string;
@@ -27,7 +28,7 @@ interface BookFormProps {
         name: string;
         floor_number: number;
     };
-    bookcases?: { id: string; bookcase_name: number }[];
+    bookcases?: { id: string; bookcase_name: number; floor_id: string; zone_id: string }[];
     zones?: { id: string; name: string; floor_id: string }[];
     floors?: { id: string; floor_number: number; capacity_zones: number }[];
     floor_zone_id: { floor_id: string; name: string }[];
@@ -59,11 +60,61 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
     const zone_name = param.get('name');
     const bookFloor_number = param.get('floor_number');
 
+    //Manejar las zonas por piso seleccionado y las librerias por zona y piso
+    let floorNow = undefined;
+    let zoneNow = undefined;
+    let bookcaseNow = undefined;
+    const [selectedFloor, setSelectedFloor] = useState<string | undefined>(floorNow ?? undefined);
+    const [selectedZone, setSelectedZone] = useState<string | undefined>(zoneNow ?? undefined);
+    const [selectedBookcase, setSelectedBookcase] = useState<string | undefined>(zoneNow ?? undefined);
+    // Filtrar zonas por el piso seleccionado
+    const filteredZones = zones?.filter((zone) => zone.floor_id === selectedFloor);
+
+    //Filtrar estanterías por zona y piso
+    const filteredBookcases = bookcases?.filter((bookcase) => bookcase.floor_id === selectedFloor && bookcase.zone_id === selectedZone);
+
     // Estado para manejar la zona personalizada
     const [customZone, setCustomZone] = useState<string>('');
 
     // Lista de zonas predefinidas
-    const zoneNames = ['Literature', 'Novel', 'Science and Technology', 'Humanities', 'Art', 'Lifestyle', 'Children', 'Young Adult'];
+    // const zoneNames = ['Literature', 'Novel', 'Science and Technology', 'Humanities', 'Art', 'Lifestyle', 'Children', 'Young Adult'];
+
+    //Lista de géneros según la zona
+    const genres = [
+        'Poetry',
+        'Theater',
+        'Essay',
+        'Short Story',
+        'Classics',
+        'Historical Novel',
+        'Crime Novel',
+        'Science Fiction Novel',
+        'Romantic Novel',
+        'Mathematics',
+        'Physics',
+        'Biology',
+        'Computer Science',
+        'Philosophy',
+        'Psychology',
+        'Sociology',
+        'History',
+        'Politics',
+        'Painting',
+        'Photography',
+        'Architecture',
+        'Music',
+        'Cinema',
+        'Health and Wellness',
+        'Nutrition',
+        'Sport',
+        'Travel',
+        "Children's Stories",
+        'Illustrated Books',
+        'Educational Books',
+        'Young Adult Novel',
+        'Young Adult Fantasy',
+        'Young Adult Thriller',
+    ];
 
     //Manejador unique floor_zone
     function unique_floor_zone(floor_id: string, name: string) {
@@ -89,8 +140,8 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
         defaultValues: {
             title: initialData?.title ?? '',
             author: initialData?.author ?? '',
-            genre: initialData?.genre ?? '',
             ISBN: initialData?.ISBN ?? '',
+            genre: initialData?.genre ?? '',
             editorial: initialData?.editorial ?? '',
             bookcase_name: initialData?.bookcase_name ?? bookBookcase_name ?? '',
             name: initialData?.name ?? zone_name ?? '',
@@ -104,7 +155,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
             const options = {
                 // preserveState:true,
                 onSuccess: () => {
-                    console.log('Usuario creado con éxito.');
+                    console.log('Libro creado con éxito.');
 
                     queryClient.invalidateQueries({ queryKey: ['books'] });
 
@@ -152,17 +203,14 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
-                                return !value ? 'El título es obligatorio' : undefined;
+                                return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.title').toLowerCase() }) : undefined;
                             },
                         }}
                     >
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1">
-
-                                        {t('ui.books.fields.title')}
-                                    </div>
+                                    <div className="mb-3 flex items-center gap-1">{t('ui.books.fields.title')}</div>
                                 </Label>
 
                                 <Input
@@ -185,21 +233,18 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                 {/* Author field */}
                 <div>
                     <form.Field
-                        name="title"
+                        name="author"
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
-                                return !value ? 'El autor es obligatorio' : undefined;
+                                return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.author').toLowerCase() }) : undefined;
                             },
                         }}
                     >
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1">
-
-                                        {t('ui.books.fields.title')}
-                                    </div>
+                                    <div className="mt-6 mb-3 flex items-center gap-1">{t('ui.books.fields.author')}</div>
                                 </Label>
 
                                 <Input
@@ -209,7 +254,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
                                     onBlur={field.handleBlur}
-                                    placeholder={t('ui.books.placeholders.title')}
+                                    placeholder={t('ui.books.placeholders.author')}
                                     disabled={form.state.isSubmitting}
                                     required
                                     autoComplete="off"
@@ -227,17 +272,15 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
-                                return !value ? 'holi' : undefined;
+                                const valueStr = value.toString();
+                                return valueStr.length < 13 || valueStr.length > 13 ? t('ui.validation.ISBNlenght') : undefined;
                             },
                         }}
                     >
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="mb-1 flex items-center gap-1">
-
-                                        {t('ui.loans.fields.ISBN')}
-                                    </div>
+                                    <div className="mt-6 mb-3 flex items-center gap-1">{t('ui.loans.fields.ISBN')}</div>
                                 </Label>
 
                                 <Input
@@ -258,34 +301,115 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                     </form.Field>
                 </div>
 
-                {/* Zones field */}
+                {/* Genre field */}
+                <div className="mt-6 mb-6">
+                    <form.Field
+                        name="genre"
+                        validators={{
+                            onChange: ({ value }) =>
+                                !value || value.length === 0
+                                    ? t('ui.validation.required', {
+                                          attribute: t('ui.books.fields.genre').toLowerCase(),
+                                      })
+                                    : undefined,
+                        }}
+                    >
+                        {(field) => (
+                            <div className="space-y-4">
+                                <Label htmlFor={field.name} className="mb-1 flex items-center gap-1">
+                                    {t('ui.books.fields.genre')}
+                                </Label>
+
+                                <MultiSelect
+                                    id={field.name}
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(e.value)}
+                                    options={genres.map((genre) => ({
+                                        label: t(`ui.books.genres.${genre}`),
+                                        value: genre,
+                                    }))}
+                                    display="chip"
+                                    placeholder={t('ui.books.placeholders.selectGenre')}
+                                    className="mt-2 mb-1 w-full rounded-md border border-gray-200 bg-gray-50 p-2"
+                                    panelClassName="bg-white shadow-lg border border-gray-200 rounded-md"
+                                    itemTemplate={(option) => <div className="ml-2 py-1">{t(`ui.books.genres.${option.value}`)}</div>}
+                                    disabled={form.state.isSubmitting}
+                                />
+
+                                <FieldInfo field={field} />
+                            </div>
+                        )}
+                    </form.Field>
+                </div>
+
+                {/* Editorial field */}
                 <div>
                     <form.Field
-                        name="name"
+                        name="editorial"
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
-                                return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.zones.fields.name').toLowerCase() })
-                                    : value.length < 2
-                                      ? t('ui.validation.min.string', { attribute: t('ui.zones.fields.name').toLowerCase(), min: '2' })
-                                      : undefined;
+                                return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.editorial').toLowerCase() }) : undefined;
                             },
                         }}
                     >
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="mt-3 mb-1 flex items-center gap-1">{t('ui.zones.fields.title')}</div>
+                                    <div className="mt-6 mb-3 flex items-center gap-1">{t('ui.books.fields.editorial')}</div>
                                 </Label>
-                                <Select required={true} value={field.state.value} onValueChange={(value) => field.handleChange(value)}>
+
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="text"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.books.placeholders.editorial')}
+                                    disabled={form.state.isSubmitting}
+                                    required
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
+                {/* Floor_number field */}
+                <div>
+                    <form.Field
+                        name="floor_id"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.floor').toLowerCase() }) : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="mt-6 mb-3 flex items-center gap-1">{t('ui.books.fields.floor')}</div>
+                                </Label>
+                                {/* Select dropdown para elegir el piso */}
+                                <Select
+                                    required={true}
+                                    value={field.state.value ?? ''}
+                                    onValueChange={(value) => {
+                                        field.handleChange(value); // actualiza el valor del formulario
+                                        setSelectedFloor(value); // actualiza tu estado local
+                                        setSelectedZone(undefined);
+                                        setSelectedBookcase(undefined);
+                                    }}
+                                >
                                     <SelectTrigger>
-                                        <SelectValue placeholder={t('ui.zones.placeholders.selectZone')} />
+                                        <SelectValue placeholder={t('ui.zones.placeholders.selectFloor')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {zoneNames.map((zone) => (
-                                            <SelectItem key={zone} value={zone}>
-                                                {t(`ui.zones.list.${zone}`)} {/* Traducimos cada zona con t() */}
+                                        {floors?.map((floor) => (
+                                            <SelectItem key={floor.id} value={floor.id}>
+                                                {t('ui.floors.title_sing', { number: floor.floor_number })}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -297,18 +421,15 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                     </form.Field>
                 </div>
 
-                {/* Floor_number field */}
+                {/* Zones field*/}
                 <div>
                     <form.Field
-                        name="floor_number"
+                        name="zone_id"
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
-                                console.log('Validando:', { value, name: form.state.values.name, existing: floor_zone_id });
                                 return !value
-                                    ? t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() })
-                                    : !unique_floor_zone(value, form.state.values.name) && value != initialData?.floor_id
-                                      ? t('ui.validation.zone_floor', { attribute: t('ui.floors.fields.floor') })
+                                    ? t('ui.validation.required', { attribute: t('ui.books.fields.zone').toLowerCase() })
                                       : undefined;
                             },
                         }}
@@ -316,21 +437,66 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="mt-3 mb-1 flex items-center gap-1">{t('ui.zones.fields.floor_title')}</div>
+                                    <div className="mt-6 mb-3 flex items-center gap-1">{t('ui.books.fields.zone')}</div>
                                 </Label>
-                                {/* Select dropdown para elegir el piso */}
                                 <Select
                                     required={true}
-                                    value={field.state.value?.toString()} // Por si `field.state.value` es number
-                                    onValueChange={(value) => field.handleChange(Number(value))} // Convertimos el string a número
+                                    value={field.state.value ?? ''}
+                                    onValueChange={(value) => {
+                                        field.handleChange(value);
+                                        setSelectedZone(value);
+                                        setSelectedBookcase(undefined);
+                                    }}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder={t('ui.zones.placeholders.selectFloor')} />
+                                        <SelectValue placeholder={t('ui.zones.placeholders.selectZone')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {floors?.map((floor) => (
-                                            <SelectItem key={floor.id} value={floor.id.toString()}>
-                                                {t('ui.floors.title_sing', { number: floor.floor_number })}
+                                        {filteredZones?.map((zone) => (
+                                            <SelectItem key={zone.id} value={zone.id}>
+                                                {zone.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
+
+                {/* Bookcases field*/}
+                <div>
+                    <form.Field
+                        name="bookcase_id"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value ? t('ui.validation.required', { attribute: t('ui.books.fields.bookcase').toLowerCase() }) : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label htmlFor={field.name}>
+                                    <div className="mt-6 mb-3 flex items-center gap-1">{t('ui.books.fields.bookcase')}</div>
+                                </Label>
+                                <Select
+                                    required={true}
+                                    value={field.state.value ?? ''}
+                                    onValueChange={(value) => {
+                                        field.handleChange(value);
+                                        setSelectedBookcase(value);
+                                    }}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={t('ui.zones.placeholders.selectZone')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {filteredBookcases?.map((bookcase) => (
+                                            <SelectItem key={bookcase.id} value={bookcase.id}>
+                                                {bookcase.bookcase_name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
