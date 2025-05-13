@@ -1,3 +1,4 @@
+import { MultiSelect } from '@/components/multi-select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,8 +10,7 @@ import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Save, X } from 'lucide-react';
-import { MultiSelect } from 'primereact/multiselect';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 
 interface BookFormProps {
@@ -56,6 +56,8 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
     const url = window.location.href;
     const param = new URLSearchParams(window.location.search);
 
+
+
     console.log('valores iniciales', initialData);
 
     const bookBookcase_name = param.get('bookcase_name');
@@ -70,6 +72,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
     const [selectedZone, setSelectedZone] = useState<string | undefined>(zoneNow ?? undefined);
     const [selectedBookcase, setSelectedBookcase] = useState<string | undefined>(bookcaseNow ?? undefined);
 
+
     // Considerar el valor seleccionado o el valor inicial al editar
     const floorId = selectedFloor ?? initialData?.floor_id;
     const zoneId = selectedZone ?? initialData?.zone_id;
@@ -82,6 +85,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
 
     // Estado para manejar la zona personalizada
     const [customZone, setCustomZone] = useState<string>('');
+
 
     // Lista de zonas predefinidas
     // const zoneNames = ['Literature', 'Novel', 'Science and Technology', 'Humanities', 'Art', 'Lifestyle', 'Children', 'Young Adult'];
@@ -148,7 +152,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
             title: initialData?.title ?? '',
             author: initialData?.author ?? '',
             ISBN: initialData?.ISBN ?? '',
-            genre: initialData?.genre ? JSON.parse(initialData.genre) : [],
+             genre: initialData?.genre ? JSON.parse(initialData?.genre) : [],
             editorial: initialData?.editorial ?? '',
             bookcase_id: initialData?.bookcase_id ?? '',
             zone_id: initialData?.zone_id ?? '',
@@ -199,7 +203,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
         e.stopPropagation();
         form.handleSubmit();
     };
-
+    console.log('Initial Data Genre:', initialData?.genre);
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
@@ -327,7 +331,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                     {t('ui.books.fields.genre')}
                                 </Label>
 
-                                <MultiSelect
+                                {/* <MultiSelect
                                     id={field.name}
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.value)}
@@ -341,6 +345,18 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                     panelClassName="bg-white shadow-lg border border-gray-200 rounded-md"
                                     itemTemplate={(option) => <div className="ml-2 py-1">{t(`ui.books.genres.${option.value}`)}</div>}
                                     disabled={form.state.isSubmitting}
+                                /> */}
+
+                                <MultiSelect
+                                    id={field.name}
+                                    value={field.state.value} // Asegúrate de que este valor esté vinculado al estado del formulario
+                                    options={genres.map((genre) => ({
+                                        label: t(`ui.books.genres.${genre}`),
+                                        value: genre,
+                                    }))}
+                                    onValueChange={(value) => field.handleChange(value)} // onValueChange es el evento correcto
+                                    placeholder={t('ui.books.placeholders.selectGenre')}
+                                    variant="inverted"
                                 />
 
                                 <FieldInfo field={field} />
