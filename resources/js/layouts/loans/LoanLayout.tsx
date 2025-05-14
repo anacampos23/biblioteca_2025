@@ -34,16 +34,16 @@ const { flash } = usePage<PageProps>().props;
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
-      title: "Dashboard",
+      title: t("ui.navigation.items.dashboard"),
       href: "/dashboard",
     },
     {
-        title: t("ui.loans.title"),
+        title: t("ui.navigation.items.loans"),
         href: "/loans",
       },
   ];
 
-  if (title !== "Loans") {
+  if (title !== t("ui.navigation.items.loans")) {
     breadcrumbs.push({
       title,
       href: "#",

@@ -1,3 +1,4 @@
+import { useTranslations } from "@/hooks/use-translations";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
 import { Head, usePage } from "@inertiajs/react";
@@ -19,6 +20,7 @@ interface BookcaseLayoutProps extends PropsWithChildren {
 }
 
 export function BookcaseLayout({ title, children }: BookcaseLayoutProps) {
+    const { t } = useTranslations();
   const { flash } = usePage<PageProps>().props;
 
   useEffect(() => {
@@ -32,16 +34,16 @@ export function BookcaseLayout({ title, children }: BookcaseLayoutProps) {
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
-      title: "Dashboard",
+      title: t("ui.navigation.items.dashboard"),
       href: "/dashboard",
     },
     {
-      title: "Estanterías",
+      title:  t("ui.navigation.items.bookcases"),
       href: "/bookcases",
     },
   ];
 
-  if (title !== "Estanterías") {
+  if (title !==  t("ui.navigation.items.bookcases")) {
     breadcrumbs.push({
       title,
       href: "#",

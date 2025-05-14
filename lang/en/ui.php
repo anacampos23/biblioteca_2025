@@ -11,6 +11,7 @@ return [
             'bookcases' => 'Bookcases',
             'books' => 'Books',
             'loans' => 'Loans',
+            'reserves'=> 'Reservations',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
             'reserves' => 'Reservations',
@@ -441,6 +442,10 @@ return [
             'description' => 'Add information from the new book',
             'editTitle'=> 'Edit book',
             'editDescription'=> 'Edit the information from the book',
+        ],
+        'tabs' =>[
+            'bookForm' => 'Book information',
+            'locationForm' => 'Book ubication'
         ],
         'filters' => [
             'title' => 'Title',

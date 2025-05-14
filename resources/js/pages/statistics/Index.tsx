@@ -24,7 +24,11 @@ export default function IndexStatistics({ books, users, loans, zones_movement }:
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: t('ui.statistics.profile.title'),
+        title: t('ui.navigation.items.dashboard'),
+        href: '/dashboard',
+    },
+    {
+        title: t('ui.navigation.items.dashboard'),
         href: '/statistics/Index',
     },
   ];
@@ -33,7 +37,7 @@ export default function IndexStatistics({ books, users, loans, zones_movement }:
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={t('ui.settings.profile.title')} />
 
-      <StatisticLayout className="p-4">
+      <StatisticLayout breadcrumbs={breadcrumbs}>
           <BooksSimpleBarChart books={books} loans={loans}/>
           <UsersSimpleBarChart users={users}/>
           <ZonesSimpleBarChart zones_movement={zones_movement}/>

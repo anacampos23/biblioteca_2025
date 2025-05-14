@@ -34,7 +34,7 @@ export function BookLayout({ title, children }: BookLayoutProps) {
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
-      title: "Dashboard",
+      title: t("ui.navigation.items.dashboard"),
       href: "/dashboard",
     },
     {
@@ -43,7 +43,7 @@ export function BookLayout({ title, children }: BookLayoutProps) {
     },
   ];
 
-  if (title !== "Libros") {
+  if (title !== t("ui.books.books")) {
     breadcrumbs.push({
       title,
       href: "#",

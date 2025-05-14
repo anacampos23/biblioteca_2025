@@ -34,16 +34,16 @@ export function ReserveLayout({ title, children }: ReserveLayoutProps) {
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
-      title: "Dashboard",
+      title: t("ui.navigation.items.dashboard"),
       href: "/dashboard",
     },
     {
-      title: t("ui.reserves.title"),
+      title: t("ui.navigation.items.reserves"),
       href: "/reserves",
     },
   ];
 
-  if (title !== "Reserves") {
+  if (title !== t("ui.navigation.items.reserves")) {
     breadcrumbs.push({
       title,
       href: "#",
