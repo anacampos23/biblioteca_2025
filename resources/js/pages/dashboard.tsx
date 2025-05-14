@@ -1,25 +1,15 @@
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
-import { Users, User, Building2, MapPin, LibraryBig, Book, ArrowUpRight, BookmarkCheck, ChartPie  } from 'lucide-react';
+import { useTranslations } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import CardFlip from "@/components/ui/card-flip";
-import { Icon } from '@/components/icon';
-import { useTranslations } from '@/hooks/use-translations';
+import { ArrowUpRight, Book, BookmarkCheck, Building2, ChartPie, LibraryBig, MapPin, Users } from 'lucide-react';
 
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-];
-
-interface PageProps{
+interface PageProps {
     auth: {
-        user:any;
-        permissions:string[];
-    }
+        user: any;
+        permissions: string[];
+    };
     [key: string]: unknown;
 }
 
@@ -27,70 +17,50 @@ export default function Dashboard() {
     const { t } = useTranslations();
 
     const { auth } = usePage<PageProps>().props;
-    console.log("Permisos del usuario:", auth.permissions);
+    console.log('Permisos del usuario:', auth.permissions);
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('ui.navigation.items.dashboard'),
+            href: '/dashboard',
+        },
+    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard" />
+            <Head title={t('ui.navigation.items.dashboard')} />
             <div className="grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
-                {auth.permissions.includes('users.view') &&
-                <DashboardCard
-                    title={t('ui.users.title')}
-                    description={t('ui.users.description')}
-                    href="/users"
-                    icon={Users}
-                />}
-                {auth.permissions.includes('users.view') &&
-                <DashboardCard
-                    title={t('ui.floors.title')}
-                    description= {t('ui.floors.description')}
-                    href="/floors"
-                    icon={Building2}
-                />}
-                {auth.permissions.includes('users.view') &&
-                <DashboardCard
-                    title={t('ui.zones.title')}
-                    description= {t('ui.zones.description')}
-                    href="/zones"
-                    icon={MapPin}
-                />}
-                {auth.permissions.includes('users.view') &&
-                <DashboardCard
-                    title={t('ui.bookcases.title')}
-                    description= {t('ui.bookcases.description')}
-                    href="/bookcases"
-                    icon={LibraryBig}
-                />}
-                {auth.permissions.includes('products.view') &&
-                <DashboardCard
-                    title={t('ui.books.title')}
-                    description= {t('ui.books.description')}
-                    href="/books"
-                    icon={Book}
-                />}
-                {auth.permissions.includes('users.view') &&
-                <DashboardCard
-                    title={t('ui.loans.title')}
-                    description= {t('ui.loans.description')}
-                    href="/loans"
-                    icon={ArrowUpRight }
-                />}
-                {auth.permissions.includes('users.view') &&
-                <DashboardCard
-                    title={t('ui.reserves.title')}
-                    description= {t('ui.reserves.description')}
-                    href="/reserves"
-                    icon={BookmarkCheck  }
-                />}
-                {auth.permissions.includes('reports.view') &&
-                <DashboardCard
-                    title={t('ui.statistics.title')}
-                    description= {t('ui.statistics.description')}
-                    href="/statistics/bookIndex"
-                    icon={ChartPie }
-                />}
+                {auth.permissions.includes('users.view') && (
+                    <DashboardCard title={t('ui.users.title')} description={t('ui.users.description')} href="/users" icon={Users} />
+                )}
+                {auth.permissions.includes('users.view') && (
+                    <DashboardCard title={t('ui.floors.title')} description={t('ui.floors.description')} href="/floors" icon={Building2} />
+                )}
+                {auth.permissions.includes('users.view') && (
+                    <DashboardCard title={t('ui.zones.title')} description={t('ui.zones.description')} href="/zones" icon={MapPin} />
+                )}
+                {auth.permissions.includes('users.view') && (
+                    <DashboardCard title={t('ui.bookcases.title')} description={t('ui.bookcases.description')} href="/bookcases" icon={LibraryBig} />
+                )}
+                {auth.permissions.includes('products.view') && (
+                    <DashboardCard title={t('ui.books.title')} description={t('ui.books.description')} href="/books" icon={Book} />
+                )}
+                {auth.permissions.includes('users.view') && (
+                    <DashboardCard title={t('ui.loans.title')} description={t('ui.loans.description')} href="/loans" icon={ArrowUpRight} />
+                )}
+                {auth.permissions.includes('users.view') && (
+                    <DashboardCard title={t('ui.reserves.title')} description={t('ui.reserves.description')} href="/reserves" icon={BookmarkCheck} />
+                )}
+                {auth.permissions.includes('reports.view') && (
+                    <DashboardCard
+                        title={t('ui.statistics.title')}
+                        description={t('ui.statistics.description')}
+                        href="/statistics/bookIndex"
+                        icon={ChartPie}
+                    />
+                )}
 
-                <CardFlip
+                {/* <CardFlip
                     contentFront={
                         <div className="flex items-center gap-4">
                             <div className="rounded-lg bg-primary/10 p-2">
@@ -114,8 +84,7 @@ export default function Dashboard() {
                             </div>
                         </div>
                     }
-                />
-
+                /> */}
             </div>
         </AppLayout>
     );

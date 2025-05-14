@@ -36,6 +36,7 @@ class StatisticController extends Controller
             ->select('books.ISBN', 'books.title', DB::raw('COUNT(loans.id) as loans_count'))
             ->groupBy('books.ISBN', 'books.title')
             ->orderByDesc('loans_count')
+            ->take(10)
             ->get();
 
             $loans = Loan::withTrashed()
@@ -67,6 +68,7 @@ class StatisticController extends Controller
             ->groupBy('users.email', 'users.name')
             ->havingRaw('COUNT(DISTINCT loans.id) > 0 OR COUNT(DISTINCT reserves.id) > 0')
             ->orderByDesc('loans_count')
+            ->take(10)
             ->get();
 
             return Inertia::render('statistics/userIndex', [
@@ -86,10 +88,11 @@ class StatisticController extends Controller
             'books.zone_id',
             'zones.name as zone_name',
             DB::raw('COUNT(loans.id) as loans_count'),
-            DB::raw('COUNT(DISTINCT reserves.id) as reserves_count')
+            DB::raw('COUNT(DISTINCT reserves.id) as reserves_count'),
+            DB::raw('(COUNT(loans.id) + COUNT(DISTINCT reserves.id)) as total_count')
         )
         ->groupBy('books.zone_id', 'zones.name')
-        ->orderByDesc('loans_count')
+        ->orderByDesc(DB::raw('(COUNT(loans.id) + COUNT(DISTINCT reserves.id))'))
         ->get();
 
         return Inertia::render('statistics/zoneIndex', [

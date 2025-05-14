@@ -1,60 +1,98 @@
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem  } from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { useTranslations } from '@/hooks/use-translations';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users, Building2, MapPin, LibraryBig, Book, ArrowUpRight, BookmarkCheck,ChartPie  } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { BookOpen, Folder, LayoutGrid, Users, Building2, MapPin, LibraryBig, Book, ArrowUpRight, BookmarkCheck, ChartPie } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems = (t: (key: string) => string): NavItem[] => [
-    {
+interface PageProps {
+    auth: {
+        user: any;
+        permissions: string[];
+    };
+    [key: string]: unknown;
+}
+
+const mainNavItems = (t: (key: string) => string, permissions: string[]): NavItem[] => {
+    const items: NavItem[] = [];
+
+    // Siempre mostrar el Dashboard
+    items.push({
         title: t('ui.navigation.items.dashboard'),
         url: '/dashboard',
         icon: LayoutGrid,
-    },
-    {
-        title: t('ui.navigation.items.users'),
-        url: '/users',
-        icon: Users,
-    },
-    {
-        title: t('ui.navigation.items.floors'),
-        url: '/floors',
-        icon: Building2,
-    },
-    {
-        title: t('ui.navigation.items.zones'),
-        url: '/zones',
-        icon: MapPin ,
-    },
-    {
-        title: t('ui.navigation.items.bookcases'),
-        url: '/bookcases',
-        icon: LibraryBig  ,
-    },
-    {
-        title: t('ui.navigation.items.books'),
-        url: '/books',
-        icon: Book,
-    },
-    {
-        title: t('ui.navigation.items.loans'),
-        url: '/loans',
-        icon: ArrowUpRight ,
-    },
-    {
-        title: t('ui.navigation.items.reserves'),
-        url: '/reserves',
-        icon: BookmarkCheck  ,
-    },
-    {
-        title: t('ui.navigation.items.statistics'),
-        url: '/statistics/bookIndex',
-        icon: ChartPie ,
-    },
-];
+    });
+
+    // Agregar los ítems condicionalmente según los permisos
+    if (permissions.includes('users.view')) {
+        items.push({
+            title: t('ui.navigation.items.users'),
+            url: '/users',
+            icon: Users,
+        });
+    }
+
+    if (permissions.includes('users.view')) {
+        items.push({
+            title: t('ui.navigation.items.floors'),
+            url: '/floors',
+            icon: Building2,
+        });
+    }
+
+    if (permissions.includes('users.view')) {
+        items.push({
+            title: t('ui.navigation.items.zones'),
+            url: '/zones',
+            icon: MapPin,
+        });
+    }
+
+    if (permissions.includes('users.view')) {
+        items.push({
+            title: t('ui.navigation.items.bookcases'),
+            url: '/bookcases',
+            icon: LibraryBig,
+        });
+    }
+
+    if (permissions.includes('products.view')) {
+        items.push({
+            title: t('ui.navigation.items.books'),
+            url: '/books',
+            icon: Book,
+        });
+    }
+
+    if (permissions.includes('users.view')) {
+        items.push({
+            title: t('ui.navigation.items.loans'),
+            url: '/loans',
+            icon: ArrowUpRight,
+        });
+    }
+
+    if (permissions.includes('users.view')) {
+        items.push({
+            title: t('ui.navigation.items.reserves'),
+            url: '/reserves',
+            icon: BookmarkCheck,
+        });
+    }
+
+    if (permissions.includes('reports.view')) {
+        items.push({
+            title: t('ui.navigation.items.statistics'),
+            url: '/statistics/bookIndex',
+            icon: ChartPie,
+        });
+    }
+
+    return items;
+};
 
 const footerNavItems = (t: (key: string) => string): NavItem[] => [
     {
@@ -71,6 +109,8 @@ const footerNavItems = (t: (key: string) => string): NavItem[] => [
 
 export function AppSidebar() {
     const { t } = useTranslations();
+    const { auth } = usePage<PageProps>().props;
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -86,7 +126,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems(t)} />
+                <NavMain items={mainNavItems(t, auth.permissions)} />
             </SidebarContent>
 
             <SidebarFooter>

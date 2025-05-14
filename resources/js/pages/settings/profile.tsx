@@ -141,7 +141,7 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
 
                     {/* Tabs para los diferentes tipos de contenido */}
                     <Tabs defaultValue="all">
-                        <TabsList className="flex gap-4 justify-center bg-gray-300">
+                        <TabsList className="flex gap-4 justify-center">
                             <TabsTrigger value="all">{t('ui.settings.profile.all')}</TabsTrigger>
                             <TabsTrigger value="loans">{t('ui.settings.profile.loans')}</TabsTrigger>
                             <TabsTrigger value="reserves" className="ml-3">{t('ui.settings.profile.reserves')}</TabsTrigger>

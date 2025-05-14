@@ -12,6 +12,7 @@ return [
             'bookcases' => 'Estanterías',
             'books' => 'Libros',
             'loans' => 'Préstamos',
+            'reserves'=> 'Reservas',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
             'reserves' => 'Reservas',
@@ -386,17 +387,6 @@ return [
             'next' => 'Siguiente',
         ],
     ],
-
-    'bookcases' => [
-        'title' => 'Estanterías',
-        'description' => 'Gestiona las estanterías',
-        'columns' => [
-            'name' => 'Estantería',
-            'zone' => 'Zona',
-            'floor' => 'Piso nº',
-            'actions' => 'Acciones',
-        ],
-    ],
     'bookcases' => [
         'title' => 'Estanterías',
         'description' => 'Gestiona los libros',
@@ -446,6 +436,10 @@ return [
             'description' => 'Añade los datos del nuevo libro',
             'editTitle' => 'Editar libro',
             'editDescription' => 'Modifica la información del libro'
+        ],
+        'tabs' =>[
+            'bookForm' => 'Información del libro',
+            'locationForm' => 'Ubicación del libro'
         ],
         'filters' => [
             'title' => 'Título',

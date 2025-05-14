@@ -34,11 +34,11 @@ export default function CreateBook({ bookcases, zones, floors, floor_zone_id }: 
 
     return (
         <BookLayout title={t('ui.books.create')}>
-            <div className="flex max-w-screen items-center self-center">
-                <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
+            <div className="flex justify-center items-start px-2 sm:px-4 py-4 min-h-screen">
+                <Card className="md:max-w-4xl shadow-lg dark:shadow-xs dark:shadow-white p-4 sm:p-6">
                     <CardHeader>
                         <CardTitle>
-                            <div className="flex items-center gap-1 mt-6 mb-2">
+                            <div className="gap-2 mt-4 mb-2 text-lg sm:text-xl">
                                 <Book color="#2762c2" />
                                 {t('ui.books.cards.title')}
                             </div>

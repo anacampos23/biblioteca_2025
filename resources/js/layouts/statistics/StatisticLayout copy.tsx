@@ -15,6 +15,23 @@ export default function StatisticLayout({ title, children }: StatisticLayoutProp
     const { t } = useTranslations();
     const currentPath = window.location.pathname;
 
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('ui.navigation.items.dashboard'),
+            href: '/dashboard',
+        },
+        {
+            title: t('ui.navigation.items.statistics'),
+            href: '/floors',
+        },
+    ];
+    if (title !== t('ui.navigation.items.statistics')) {
+        breadcrumbs.push({
+            title,
+            href: '#',
+        });
+    }
+
     const sidebarNavItems: NavItem[] = [
         {
             title: t('ui.statistics.navigation.bookIndex'),

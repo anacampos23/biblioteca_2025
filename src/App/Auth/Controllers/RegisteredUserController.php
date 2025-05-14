@@ -3,7 +3,7 @@
 namespace App\Auth\Controllers;
 
 use App\Core\Controllers\Controller;
-use App\Models\User;
+use Domain\Users\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,6 +41,8 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $user->syncPermissions(['products.view']);
 
         event(new Registered($user));
 
