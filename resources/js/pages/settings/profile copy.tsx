@@ -1,22 +1,14 @@
 import HeadingSmall from '@/components/heading-small';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslations } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Barcode, Book, BookUp, BookmarkCheck, CalendarIcon, ChevronRight, Clock4, ClockAlert } from 'lucide-react';
+import { BookUp, BookmarkCheck, Book, Barcode, Clock4, ClockAlert, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
-import { DateRange } from 'react-day-picker';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type CombinedLoan = {
     id: string;
@@ -82,15 +74,31 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
 
     const userItems = getUserCombined(activeUser.id);
 
-    const [date, setDate] = useState<DateRange | undefined>(undefined);
+    // Estado para la fecha seleccionada
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
-    const filteredUserItems =
-        date?.from && date?.to
-            ? userItems.filter((item) => {
-                  const itemDate = new Date(item.type === 'loan' ? item.start_loan : item.created_at);
-                  return itemDate >= date.from! && itemDate <= date.to!;
-              })
-            : userItems;
+    // Función para manejar el cambio de la fecha seleccionada
+    const handleDateSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const dateValue = new Date(event.target.value); // convierte el string a Date
+        setSelectedDate(dateValue);
+    };
+
+    // Filtrar los elementos por fecha (tanto préstamos como reservas)
+    const filteredUserItems = selectedDate
+        ? userItems.filter((item) => {
+              // Filtrar por fecha para préstamos
+              if (item.type === 'loan') {
+                  const loanDate = new Date(item.start_loan);
+                  return loanDate.toDateString() === selectedDate.toDateString();
+              }
+              // Filtrar por fecha para reservas
+              if (item.type === 'reserve') {
+                  const reserveDate = new Date(item.created_at);
+                  return reserveDate.toDateString() === selectedDate.toDateString();
+              }
+              return false;
+          })
+        : userItems;
 
     const loansItems = filteredUserItems.filter((item) => item.type === 'loan');
     const reservesItems = filteredUserItems.filter((item) => item.type === 'reserve');
@@ -107,67 +115,36 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
                         <h2 className="text-2xl font-semibold text-stone-800 dark:text-white">{activeUser.name}</h2>
                     </div>
 
-                    {/* Selector de rango de fecha */}
-                    <div className="flex justify-center">
-                        <div className="flex w-full max-w-sm flex-col items-start gap-2">
-                            <label className="text-sm font-medium text-gray-700 dark:text-white">{t('ui.settings.profile.select_date')}</label>
-
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        id="date"
-                                        variant={'outline'}
-                                        className={cn(
-                                            'w-full justify-start text-left font-normal dark:bg-stone-100 dark:text-black',
-                                            !date && 'text-muted-foreground',
-                                        )}
-                                    >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {date?.from ? (
-                                            date.to ? (
-                                                <>
-                                                    {format(date.from, 'PPP')} - {format(date.to, 'PPP')}
-                                                </>
-                                            ) : (
-                                                format(date.from, 'PPP')
-                                            )
-                                        ) : (
-                                            <span>{t('ui.settings.profile.select_date')}</span>
-                                        )}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                        initialFocus
-                                        mode="range"
-                                        defaultMonth={date?.from}
-                                        selected={date}
-                                        onSelect={setDate}
-                                        numberOfMonths={2}
-                                        locale={es}
-                                    />
-                                </PopoverContent>
-                            </Popover>
-
-                            {date?.from || date?.to ? (
-                                <Button
-                                    className="w-full rounded-lg bg-stone-800 px-4 py-2 font-medium text-white shadow transition hover:bg-stone-700"
-                                    onClick={() => setDate(undefined)}
-                                >
-                                    {t('ui.settings.profile.all')}
-                                </Button>
-                            ) : null}
+                    {/* Selector de fecha */}
+                    <div className="mx-auto flex max-w-2xl flex-col gap-4 lg:flex-row lg:items-end lg:gap-6">
+                        <div className="w-full">
+                            <label htmlFor="dateSelect" className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
+                                {t('ui.settings.profile.select_date')}
+                            </label>
+                            <input
+                                type="date"
+                                id="dateSelect"
+                                onChange={handleDateSelect}
+                                className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-stone-600 focus:ring-stone-600 dark:bg-stone-100 dark:text-black"
+                            />
+                        </div>
+                        <div className="w-full lg:w-[40%]">
+                            <label className="mb-2 block text-sm opacity-0 select-none">.</label>
+                            <button
+                                className="w-full rounded-lg bg-stone-800 px-4 py-2 font-medium text-white shadow transition hover:bg-stone-700"
+                                onClick={() => setSelectedDate(undefined)}
+                            >
+                                {t('ui.settings.profile.all')}
+                            </button>
                         </div>
                     </div>
 
                     {/* Tabs para los diferentes tipos de contenido */}
                     <Tabs defaultValue="all">
-                        <TabsList className="flex justify-center gap-4">
+                        <TabsList className="flex gap-4 justify-center">
                             <TabsTrigger value="all">{t('ui.settings.profile.all')}</TabsTrigger>
                             <TabsTrigger value="loans">{t('ui.settings.profile.loans')}</TabsTrigger>
-                            <TabsTrigger value="reserves" className="ml-3">
-                                {t('ui.settings.profile.reserves')}
-                            </TabsTrigger>
+                            <TabsTrigger value="reserves" className="ml-3">{t('ui.settings.profile.reserves')}</TabsTrigger>
                         </TabsList>
 
                         {/* TabsContent para todos los elementos */}
@@ -178,12 +155,12 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
                                         item.type === 'reserve' && item.status === 'waiting'
                                             ? '#f59e0b'
                                             : item.type === 'reserve' && item.status === 'contacted'
-                                              ? '#ea580c'
-                                              : item.type === 'reserve' && item.status === 'finished'
-                                                ? '#6b7280'
-                                                : item.type === 'loan' && item.active === true
-                                                  ? '#2563eb'
-                                                  : '#9ca3af';
+                                            ? '#ea580c'
+                                            : item.type === 'reserve' && item.status === 'finished'
+                                              ? '#6b7280'
+                                              : item.type === 'loan' && item.active === true
+                                                ? '#2563eb'
+                                                : '#9ca3af';
 
                                     return (
                                         <VerticalTimelineElement
@@ -224,9 +201,7 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
                                                     <div className="flex items-center gap-2">
                                                         <Clock4 size={20} />
                                                         {new Date(item.start_loan).toLocaleDateString()} –{' '}
-                                                        {item.end_loan
-                                                            ? new Date(item.end_loan).toLocaleDateString()
-                                                            : t('ui.settings.profile.active')}
+                                                        {item.end_loan ? new Date(item.end_loan).toLocaleDateString() : t('ui.settings.profile.active')}
                                                     </div>
                                                     <div
                                                         className={`flex items-center gap-2 ${item.days_overdue === 0 ? 'text-gray-800 dark:text-white' : 'text-red-500'}`}
@@ -256,7 +231,8 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
                         <TabsContent value="loans">
                             <VerticalTimeline lineColor="#e5e7eb">
                                 {loansItems.map((item) => {
-                                    const elementColor = item.type === 'loan' && item.active === true ? '#2563eb' : '#9ca3af';
+                                    const elementColor =
+                                        item.type === 'loan' && item.active === true ? '#2563eb' : '#9ca3af';
                                     return (
                                         <VerticalTimelineElement
                                             key={item.id}
@@ -314,7 +290,12 @@ export default function Profile({ users, loans, reserves, combined }: profilePro
                         <TabsContent value="reserves">
                             <VerticalTimeline lineColor="#e5e7eb">
                                 {reservesItems.map((item) => {
-                                    const elementColor = item.status === 'waiting' ? '#f59e0b' : item.status === 'contacted' ? '#ea580c' : '#6b7280';
+                                    const elementColor =
+                                        item.status === 'waiting'
+                                            ? '#f59e0b'
+                                            : item.status === 'contacted'
+                                            ? '#ea580c'
+                                            : '#6b7280';
                                     return (
                                         <VerticalTimelineElement
                                             key={item.id}

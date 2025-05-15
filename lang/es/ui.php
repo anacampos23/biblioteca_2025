@@ -61,7 +61,7 @@ return [
                 'contacted' => '"Contactado"',
                 'finished' => '"Terminada"',
             ],
-            'select_date' => 'Selecciona por fecha',
+            'select_date' => 'Filtra por fecha',
             'days_overdue' => 'Días de retraso:',
             'days' => 'días',
             'loans' => 'Préstamos',
