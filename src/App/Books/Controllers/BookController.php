@@ -44,11 +44,11 @@ class BookController extends Controller
 
     public function create()
     {
-
         $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
         $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id']) ->orderBy('bookcase_name', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
+        $books = Book::select(['title', 'author', 'ISBN', 'genre', 'editorial', 'bookcase_id', 'zone_id', 'floor_id'])->get() -> toArray();
 
 
         return Inertia::render('books/Create', [
@@ -56,6 +56,7 @@ class BookController extends Controller
             'floors' => $floors,
             'bookcases' => $bookcases,
             'floor_zone_id' => $floor_zone_id,
+            'books' => $books,
 
         ]);
     }
@@ -86,7 +87,7 @@ class BookController extends Controller
     public function edit(Request $request, Book $book)
     {
 
-       $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
+        $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
         $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id']) ->orderBy('bookcase_name', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
@@ -103,11 +104,11 @@ class BookController extends Controller
     public function update(Request $request, Book $book, BookUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'title' => ['required'],
-            'author' => ['required'],
-            'ISBN' => ['required'],
+            'title' => [],
+            'author' => [],
+            'ISBN' => [],
             'genre' => [],
-            'editorial' => ['required'],
+            'editorial' => [],
             'bookcase_id' => [],
             'zone_id' => [],
             'floor_id' => [],

@@ -15,19 +15,15 @@ import { Bolt, Eye, EyeOff, FileText, Lock, Mail, PackageOpen, Save, Shield, Use
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-interface UserFormProps {
+interface BookcaseFormProps {
     initialData?: {
         id: string;
-        name: string;
-        email: string;
+        bookcase_name: number;
+        zone_id: string;
+        floor_id:string;
     };
     page?: string;
     perPage?: string;
-    roles?: string[];
-    rolesConPermisos: Record<string, string[]>;
-    permisos?: string[];
-    permisosAgrupados: Record<string, string[]>;
-    permisosDelUsuario?: string[];
 }
 
 // Field error display component
@@ -42,48 +38,21 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-const iconComponents = {
-    Users: Users,
-    Products: PackageOpen,
-    Reports: FileText,
-    Config: Bolt,
-};
 
-const categorias = [
-    { id: 1, icon: 'Users', label: 'users', perms: 'users' },
-    { id: 2, icon: 'Products', label: 'products', perms: 'products' },
-    { id: 3, icon: 'Reports', label: 'reports', perms: 'reports' },
-    { id: 4, icon: 'Config', label: 'configurations', perms: 'config' },
-];
-
-var permisosUsuarioFinal: string[] = [];
-
-export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, permisosAgrupados, permisosDelUsuario }: UserFormProps) {
+export function BookcaseForm({ initialData, page, perPage }: BookcaseFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    const [arrayPermisosState, setArrayPermisosState] = useState(permisosUsuarioFinal);
-
-    useEffect(() => {
-        if (permisosDelUsuario && initialData) {
-            permisosUsuarioFinal = permisosDelUsuario;
-            setArrayPermisosState(permisosDelUsuario);
-        } else {
-            permisosUsuarioFinal = [];
-            setArrayPermisosState(permisosUsuarioFinal);
-        }
-    }, [permisosDelUsuario]);
 
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
-            name: initialData?.name ?? '',
-            email: initialData?.email ?? '',
-            password: '',
+        bookcase_name: initialData?.bookcase_name ?? '',
+        zone_id: initialData?.floor_id ?? '',
+        floor_id: initialData?.floor_id ?? '',
         },
         onSubmit: async ({ value }) => {
-            const userData = {
+            const bookcaseData = {
                 ...value,
-                permisos: arrayPermisosState,
             };
 
             const options = {
@@ -91,10 +60,10 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                 onSuccess: () => {
                     console.log('Usuario creado con éxito.');
 
-                    queryClient.invalidateQueries({ queryKey: ['users'] });
+                    queryClient.invalidateQueries({ queryKey: ['bookcases'] });
 
                     // Construct URL with page parameters
-                    let url = '/users';
+                    let url = '/bookcases';
                     if (page) {
                         url += `?page=${page}`;
                         if (perPage) {
@@ -106,59 +75,19 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                 },
                 onError: (errors: Record<string, string>) => {
                     if (Object.keys(errors).length === 0) {
-                        toast.error(initialData ? t('messages.users.error.update') : t('messages.users.error.create'));
+                        toast.error(initialData ? t('messages.bookcases.error.update') : t('messages.bookcases.error.create'));
                     }
                 },
             };
 
             // Submit with Inertia
             if (initialData) {
-                router.put(`/users/${initialData.id}`, userData, options);
+                router.put(`/bookcases/${initialData.id}`, bookcaseData, options);
             } else {
-                router.post('/users', userData, options);
+                router.post('/bookcases', bookcaseData, options);
             }
         },
     });
-
-    // Manejador de dependencias
-
-    function comprobadorDependencias(permiso: string, parent: string) {
-        if (permiso == 'users.view' || permiso == 'products.view' || permiso == 'reports.view' || permiso == 'config.access') {
-            return false;
-        } else {
-            return !permisosUsuarioFinal.includes(parent);
-        }
-    }
-
-    // Manejador de checkboxes
-
-    function togglePermiso(permiso: string) {
-        if (permisosUsuarioFinal.includes(permiso)) {
-            switch (permiso) {
-                case 'users.view':
-                    permisosUsuarioFinal = permisosUsuarioFinal.filter(
-                        (permiso) => !['users.edit', 'users.delete', 'users.create'].includes(permiso),
-                    );
-                    break;
-                case 'products.view':
-                    permisosUsuarioFinal = permisosUsuarioFinal.filter(
-                        (permiso) => !['products.edit', 'products.delete', 'products.create'].includes(permiso),
-                    );
-                    break;
-                case 'reports.view':
-                    permisosUsuarioFinal = permisosUsuarioFinal.filter((permiso) => !['reports.print', 'reports.export'].includes(permiso));
-                    break;
-                case 'config.access':
-                    permisosUsuarioFinal = permisosUsuarioFinal.filter((permiso) => !['config.modify'].includes(permiso));
-                    break;
-            }
-            permisosUsuarioFinal = permisosUsuarioFinal.filter((element) => element !== permiso);
-            setArrayPermisosState(permisosUsuarioFinal);
-        } else {
-            permisosUsuarioFinal = [...permisosUsuarioFinal, permiso];
-            setArrayPermisosState(permisosUsuarioFinal);
-        }
-    }
 
     // Manejador del select
 

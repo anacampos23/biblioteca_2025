@@ -1,19 +1,13 @@
-
-
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
 import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { Bolt, Eye, EyeOff, FileText, Lock, Mail, PackageOpen, Save, Shield, Building2, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Save, X, Building, MapPin} from 'lucide-react';
 import { toast } from 'sonner';
 
 interface FloorFormProps {
@@ -88,7 +82,6 @@ export function FloorForm({ initialData, page, perPage, floor_number_list }: Flo
         },
     });
 
-
     // Form submission handler
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -96,97 +89,95 @@ export function FloorForm({ initialData, page, perPage, floor_number_list }: Flo
         form.handleSubmit();
     };
 
-
     const accesoPermisos = false;
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
-                        {/* Floor Number field */}
-                        <div className= 'mt-5'>
-                            <form.Field
-                                name="floor_number"
-                                validators={{
-                                    onChangeAsync: async ({ value }) => {
-                                        await new Promise((resolve) => setTimeout(resolve, 500));
-                                        // Verifica que floor_number_list es un array y haz el log
-                                        return !value && value!=0
-                                            ? t('ui.validation.required', { attribute: t('ui.floors.fields.floor')})
-                                            : floor_number_list.includes(value) && value!=initialData?.floor_number ? t('ui.validation.unique', { attribute: t('ui.floors.fields.floor')})
-                                            : value < 0 || value > 20
-                                              ? t('ui.validation.floor', { attribute: t('ui.floors.fields.floor') })
-                                            : undefined;
-                                    },
-                                }}
-                            >
-                                {(field) => (
-                                    <>
-                                        <Label htmlFor={field.name}>
-                                            <div className="mb-1 flex items-center gap-1">
-                                                {t('ui.floors.fields.floor_number')}
-                                            </div>
-                                        </Label>
+                {/* Floor Number field */}
+                <div className="mt-2">
+                    <form.Field
+                        name="floor_number"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                // Verifica que floor_number_list es un array y haz el log
+                                return !value && value != 0
+                                    ? t('ui.validation.required', { attribute: t('ui.floors.fields.floor') })
+                                    : floor_number_list.includes(value) && value != initialData?.floor_number
+                                      ? t('ui.validation.unique', { attribute: t('ui.floors.fields.floor') })
+                                      : value < 0 || value > 20
+                                        ? t('ui.validation.floor', { attribute: t('ui.floors.fields.floor') })
+                                        : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label className="mb-3 flex items-center gap-1" htmlFor={field.name}>
+                                     <Building color="grey" size={18} />
+                                    <div className=" flex items-center gap-1">{t('ui.floors.fields.floor_number')}</div>
+                                </Label>
 
-                                        <Input
-                                            id={field.name}
-                                            name={field.name}
-                                            type='number'
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                                            onBlur={field.handleBlur}
-                                            placeholder={t('ui.floors.placeholders.floor_number')}
-                                            disabled={form.state.isSubmitting}
-                                            required={false}
-                                            autoComplete="off"
-                                        />
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            </form.Field>
-                        </div>
-                        {/* Capacity_zones field */}
-                        <div className= 'mt-5'>
-                            <form.Field
-                                name="capacity_zones"
-                                validators={{
-                                    onChangeAsync: async ({ value }) => {
-                                        await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value && value!=0
-                                            ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name')})
-                                            : value < 0
-                                              ? t('ui.validation.capacity_zones', { attribute: t('ui.floors.fields.capacity_zones') })
-                                              : undefined;
-                                    },
-                                }}
-                            >
-                                {(field) => (
-                                    <>
-                                        <Label htmlFor={field.name}>
-                                            <div className="mb-1 flex items-center gap-1">
-                                                {t('ui.floors.fields.capacity_zones.title')}
-                                            </div>
-                                        </Label>
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="number"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(parseInt(e.target.value))}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.floors.placeholders.floor_number')}
+                                    disabled={form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
+                {/* Capacity_zones field */}
+                <div className="mt-8 mb-6">
+                    <form.Field
+                        name="capacity_zones"
+                        validators={{
+                            onChangeAsync: async ({ value }) => {
+                                await new Promise((resolve) => setTimeout(resolve, 500));
+                                return !value && value != 0
+                                    ? t('ui.validation.required', { attribute: t('ui.floors.fields.capacity_zones.name') })
+                                    : value < 0
+                                      ? t('ui.validation.capacity_zones', { attribute: t('ui.floors.fields.capacity_zones') })
+                                      : undefined;
+                            },
+                        }}
+                    >
+                        {(field) => (
+                            <>
+                                <Label className="mb-3 flex items-center gap-1" htmlFor={field.name}>
+                                    <MapPin color="grey" size={18} />
+                                    <div className=" flex items-center gap-1">{t('ui.floors.fields.capacity_zones.title')}</div>
+                                </Label>
 
-                                        <Input
-                                            id={field.name}
-                                            name={field.name}
-                                            type='number'
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(Number(e.target.value))}
-                                            onBlur={field.handleBlur}
-                                            placeholder={t('ui.floors.placeholders.capacity_zones')}
-                                            disabled={form.state.isSubmitting}
-                                            required={false}
-                                            autoComplete="off"
-                                        />
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            </form.Field>
-                        </div>
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type="number"
+                                    value={field.state.value}
+                                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                                    onBlur={field.handleBlur}
+                                    placeholder={t('ui.floors.placeholders.capacity_zones')}
+                                    disabled={form.state.isSubmitting}
+                                    required={false}
+                                    autoComplete="off"
+                                />
+                                <FieldInfo field={field} />
+                            </>
+                        )}
+                    </form.Field>
+                </div>
                 <Separator className="mt-3" />
                 {/* Form buttons */}
-                <div className="mt-3 mt-4 flex justify-center gap-100">
+                <div className="mt-3 mt-4 flex justify-between  sm:gap-2 lg:gap-64">
                     <Button
                         type="button"
                         variant="outline"
