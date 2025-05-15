@@ -91,16 +91,25 @@ class LoanController extends Controller
             return back()->withErrors($validator);
         }
 
-        $loan = $action($validator->validated());
+        $data = $validator->validated();
 
-        // Buscar el libro con el ISBN
-        $book = Book::where('id', $request->book_id)
-            ->first();
 
-        // Si no se encuentra el libro disponible con ese ISBN, lanzamos un error
-        if (!$book) {
-            return back()->withErrors(['ISBN' => 'El libro con ese ISBN no está disponible.']);
+        if (!empty($request->book_id)) {
+            // Buscar el libro con el ISBN
+            $book = Book::where('id', $request->book_id)
+                ->first();
+
+            // Si no se encuentra el libro disponible con ese ISBN, lanzamos un error
+            if (!$book) {
+                return back()->withErrors(['ISBN' => 'El libro con ese ISBN no está disponible.']);
+            }
+        } else {
+            $book = Book::where('ISBN', $request->ISBN)->where('available', true)
+                ->first();
         }
+
+        //Paso el book al action para que me coja el id que necesito
+        $loan = $action($data, $book);
 
         // Marcar el libro como no disponible
         $book->available = false;
@@ -121,7 +130,7 @@ class LoanController extends Controller
         // Si existe una reserva, podrías hacer algo con ella (por ejemplo, marcarla como "terminada")
         if ($reserve) {
             $reserve->status = 'finished';
-            $reserve->book->reserved=false;
+            $reserve->book->reserved = false;
             $reserve->book->save();
             $reserve->save();
         }
@@ -134,6 +143,7 @@ class LoanController extends Controller
             $user->notify(new Préstamo($book, $user));
         }
 
+        dd('Llegó hasta aquí, antes del redirect');
         // Redirigir después de crear el préstamo
         return redirect()->route('loans.index')
             ->with('success', __('messages.loans.created'));
@@ -201,12 +211,11 @@ class LoanController extends Controller
                 $reserve->status = 'contacted';
                 $book->save();
                 $reserve->save();
-            }else {
+            } else {
                 // Marcar el libro como disponible
                 $book->available = true;
                 $book->save();
             }
-
         }
 
         // //Marcar el préstamo cono terminado

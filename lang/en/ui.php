@@ -60,7 +60,7 @@ return [
                 'contacted' => '"Contacted"',
                 'finished' => '"Finished"',
             ],
-            'select_date' => 'Select by date',
+            'select_date' => 'Filter by date',
             'days_overdue' => 'Days overdue:',
             'days' => 'days',
             'loans' => 'Loans',
