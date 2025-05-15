@@ -24,21 +24,22 @@ interface BookFormProps {
     bookcases?: {id: string; bookcase_name:number; floor_id:string; zone_id:string} [];
     zones?: {id: string; name: string; floor_id: string;} [];
     floors?: {id:string; floor_number: number; capacity_zones: number;}[];
-     floor_zone_id:{ floor_id: string; name: string }[];
+    floor_zone_id:{ floor_id: string; name: string }[];
+    books?:{title:string, author:string; ISBN:number; editorial:string; bookcase_id:string; zone_id:string; floor_id:string}[];
     page?: string;
     perPage?: string;
 }
 
-export default function CreateBook({ bookcases, zones, floors, floor_zone_id }: BookFormProps) {
+export default function CreateBook({ bookcases, zones, floors, floor_zone_id, books }: BookFormProps) {
     const { t } = useTranslations();
 
     return (
         <BookLayout title={t('ui.books.create')}>
-            <div className="flex justify-center items-start px-2 sm:px-4 py-4 min-h-screen">
-                <Card className="md:max-w-4xl shadow-lg dark:shadow-xs dark:shadow-white p-4 sm:p-6">
+            <div className="flex w-full justify-center self-center md:w-[70%] lg:w-[50%]">
+                <Card className="w-full m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white ">
                     <CardHeader>
                         <CardTitle>
-                            <div className="gap-2 mt-4 mb-2 text-lg sm:text-xl">
+                            <div className="flex items-center gap-1 mt-5">
                                 <Book color="#2762c2" />
                                 {t('ui.books.cards.title')}
                             </div>
@@ -47,7 +48,7 @@ export default function CreateBook({ bookcases, zones, floors, floor_zone_id }: 
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <BookForm bookcases={bookcases} zones={zones} floors={floors} floor_zone_id={floor_zone_id}/>
+                        <BookForm bookcases={bookcases} zones={zones} floors={floors} floor_zone_id={floor_zone_id} books={books}/>
                     </CardContent>
                 </Card>
             </div>

@@ -1,46 +1,43 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useTranslations } from '@/hooks/use-translations';
-import { UserLayout } from '@/layouts/users/UserLayout';
-import { UserForm } from '@/pages/users/components/UserForm';
-import { User } from 'lucide-react';
+import { BookcaseLayout } from '@/layouts/bookcases/BookcaseLayout';
+import { BookcaseForm } from '@/pages/bookcases/components/BookcaseForm';
+import { Book } from 'lucide-react';
 
-interface UserFormProps {
+interface BookcaseFormProps {
     initialData?: {
         id: string;
-        name: string;
-        email: string;
-    };
+        bookcase_name: number;
+        zone_id: string;
+        floor_id:string;
     page?: string;
     perPage?: string;
-    roles?: string[];
-    rolesConPermisos: Record<string, string[]>;
-    permisos?: string[];
-    permisosAgrupados: Record<string, string[]>;
+};
 }
 
-export default function CreateUser({ roles, rolesConPermisos, permisos, permisosAgrupados }: UserFormProps) {
+export default function CreateUser() {
     const { t } = useTranslations();
 
     return (
-        <UserLayout title={t('ui.users.create')}>
+        <BookcaseLayout title={t('ui.bookcases.create')}>
             <div className="flex max-w-screen items-center self-center">
                 <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1">
-                                <User color="#2762c2" />
-                                {t('ui.users.cards.title')}
+                                <Book color="#2762c2" />
+                                {t('ui.bookcases.cards.title')}
                             </div>
                         </CardTitle>
-                        <CardDescription>{t('ui.users.cards.description')}</CardDescription>
+                        <CardDescription>{t('ui.bookcases.cards.description')}</CardDescription>
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <UserForm roles={roles} rolesConPermisos={rolesConPermisos} permisos={permisos} permisosAgrupados={permisosAgrupados} />
+                        <BookcaseForm  />
                     </CardContent>
                 </Card>
             </div>
-        </UserLayout>
+        </BookcaseLayout>
     );
 }
