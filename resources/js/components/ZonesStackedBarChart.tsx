@@ -2,6 +2,8 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 
 import { useTranslations } from '@/hooks/use-translations';
 import { useState } from 'react';
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import * as React from "react";
 
 interface stackedBarChartProps {
     zones_movement: { ISBN: number; zone_id: string; loans_count: number; reserves_count: number; zone_name: string }[];
@@ -54,7 +56,9 @@ const ZonesStackedBarChart = ({ zones_movement }: stackedBarChartProps) => {
     };
 
     return (
-        <ResponsiveContainer width="100%" height={500}>
+        <ScrollArea className="w-96 rounded-md border sm:w-full">
+            <div className="min-w-[800px] p-4">
+                <ResponsiveContainer width="100%" height={500}>
             <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="4 1 2" />
                 <XAxis
@@ -81,6 +85,9 @@ const ZonesStackedBarChart = ({ zones_movement }: stackedBarChartProps) => {
                 ))}
             </BarChart>
         </ResponsiveContainer>
+            </div>
+            <ScrollBar orientation="horizontal" />
+        </ScrollArea>
     );
 };
 

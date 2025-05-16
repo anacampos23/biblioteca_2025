@@ -25,7 +25,11 @@ class ZoneController extends Controller
      */
     public function index()
     {
-        return Inertia::render('zones/Index');
+        $zonesArray = Zone::select(['id','name'])->get()->toArray();
+
+        return Inertia::render('zones/Index', [
+            'zonesArray' => $zonesArray,
+        ]);
     }
 
     /**
