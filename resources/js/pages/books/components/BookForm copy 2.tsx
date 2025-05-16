@@ -73,6 +73,9 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
     const [selectedBookcase, setSelectedBookcase] = useState<string | undefined>(bookcaseNow ?? undefined);
     const [genreValue, setGenreValue] = useState<string[]>(initialData?.genre ? JSON.parse(initialData.genre) : []);
 
+
+
+
     // Considerar el valor seleccionado o el valor inicial al editar
     const floorId = selectedFloor ?? initialData?.floor_id;
     const zoneId = selectedZone ?? initialData?.zone_id;
@@ -151,7 +154,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
             title: initialData?.title ?? '',
             author: initialData?.author ?? '',
             ISBN: initialData?.ISBN ?? '',
-            genre: initialData?.genre ? JSON.parse(initialData?.genre) : (genreValue ?? []),
+            genre: initialData?.genre ? JSON.parse(initialData?.genre) : genreValue ?? [],
             editorial: initialData?.editorial ?? '',
             bookcase_id: initialData?.bookcase_id ?? '',
             zone_id: initialData?.zone_id ?? '',
@@ -200,44 +203,30 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        form.setFieldValue('genre', genreValue);
         form.handleSubmit();
     };
 
+
+
     //Autocompletar si hay otro ejemplar con el mismo ISBN
-    function handleISBNMatched(books: BookFormProps['books'], ISBN: number | string) {
-        const isbnStr = String(ISBN); // Convertir a string para comprobar longitud
+function handleISBNMatched(books: BookFormProps["books"], ISBN: number) {
+  const matchedBook = books?.find(book => Number(book.ISBN) === Number(ISBN));
 
-        if (isbnStr.length !== 13) {
-            // Si no tiene 13 caracteres, no hacemos nada
-            return;
-        }
+  if (matchedBook) {
+    form.setFieldValue('title', matchedBook.title);
+    form.setFieldValue('author', matchedBook.author);
+    const parsedGenres = JSON.parse(matchedBook.genre);
+      setGenreValue(parsedGenres);
+      form.setFieldValue('genre', parsedGenres);
+    form.setFieldValue('editorial', matchedBook.editorial);
+    form.setFieldValue('bookcase_id', matchedBook.bookcase_id);
+    form.setFieldValue('zone_id', matchedBook.zone_id);
+    form.setFieldValue('floor_id', matchedBook.floor_id);
+  }
+}
+console.log("Valor de genreValue:", genreValue);
 
-        const matchedBook = books?.find((book) => String(book.ISBN) === isbnStr);
-
-        if (matchedBook) {
-            form.setFieldValue('title', matchedBook.title);
-            form.setFieldValue('author', matchedBook.author);
-            const parsedGenres = JSON.parse(matchedBook.genre);
-            setGenreValue(parsedGenres);
-            form.setFieldValue('genre', parsedGenres);
-            form.setFieldValue('editorial', matchedBook.editorial);
-            // form.setFieldValue('floor_id', matchedBook.floor_id);
-            // setSelectedFloor(matchedBook.floor_id);
-            // form.setFieldValue('zone_id', matchedBook.zone_id);
-            // setSelectedZone(matchedBook.zone_id);
-            // form.setFieldValue('bookcase_id', matchedBook.bookcase_id);
-            // setSelectedBookcase(matchedBook.bookcase_id);
-        }
-    }
-
-    console.log('Valor de genreValue:', genreValue);
-        console.log('FLOOOR:', selectedFloor);
-        console.log('ZONAAAA:', selectedZone);
-        console.log('BOOOOKCASE:', selectedBookcase);
-
-
-    console.log('Valor form.state.values.genre:', form.state.values.genre);
+console.log('Valor form.state.values.genre:', form.state.values.genre);
     console.log('Initial Data Genre:', initialData?.genre);
 
     return (
@@ -464,6 +453,8 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                             onValueChange={(value) => {
                                                 field.handleChange(value); // actualiza el valor del formulario
                                                 setSelectedFloor(value); // actualiza tu estado local
+                                                setSelectedZone(undefined);
+                                                setSelectedBookcase(undefined);
                                             }}
                                         >
                                             <SelectTrigger>
@@ -504,10 +495,11 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                         </Label>
                                         <Select
                                             required={true}
-                                            value={field.state.value}
+                                            value={field.state.value ?? ''}
                                             onValueChange={(value) => {
                                                 field.handleChange(value);
                                                 setSelectedZone(value);
+                                                setSelectedBookcase(undefined);
                                             }}
                                         >
                                             <SelectTrigger>
@@ -708,14 +700,19 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                         <Label htmlFor={field.name} className="mb-1 flex items-center gap-1">
                                             {t('ui.books.fields.genre')}
                                         </Label>
-                                       <MultiSelect
+                                        <MultiSelect
                                             id={field.name}
                                             value={genreValue}
+                                            defaultValue={genreValue}
+                                            // ?? initialData?.genre ?? form.state.values.genre
                                             options={genres.map((genre) => ({
                                                 label: t(`ui.books.genres.${genre}`),
                                                 value: genre,
                                             }))}
-                                            onValueChange={setGenreValue}
+                                            onValueChange={(e: any) => {
+                                                setGenreValue(e.value);
+                                                form.setFieldValue('genre', e.value);
+                                            }}
                                             placeholder={t('ui.books.placeholders.selectGenre')}
                                             variant="inverted"
                                         />
@@ -789,6 +786,8 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                             onValueChange={(value) => {
                                                 field.handleChange(value); // actualiza el valor del formulario
                                                 setSelectedFloor(value); // actualiza tu estado local
+                                                setSelectedZone(undefined);
+                                                setSelectedBookcase(undefined);
                                             }}
                                         >
                                             <SelectTrigger>
@@ -833,6 +832,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                             onValueChange={(value) => {
                                                 field.handleChange(value);
                                                 setSelectedZone(value);
+                                                setSelectedBookcase(undefined);
                                             }}
                                         >
                                             <SelectTrigger>

@@ -177,7 +177,7 @@ export function FloorForm({ initialData, page, perPage, floor_number_list }: Flo
                 </div>
                 <Separator className="mt-3" />
                 {/* Form buttons */}
-                <div className="mt-3 mt-4 flex justify-between  sm:gap-2 lg:gap-64">
+                <div className="mt-3 mt-4 flex justify-between sm:gap-2 md:gap-10">
                     <Button
                         type="button"
                         variant="outline"

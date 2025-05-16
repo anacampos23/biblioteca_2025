@@ -36,7 +36,7 @@ export default function StatisticLayout({ title, children }: StatisticLayoutProp
     const [isPopoverOpen, setPopoverOpen] = useState(false); // Estado para controlar la visibilidad del popover
 
     return (
-        <div className="px-4 py-6">
+        <div className="ml-5 mr-2">
             <Heading title={t('ui.statistics.title')} description={t('ui.statistics.description')} />
             <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
                 {/* Parte del sidebar que aparece solo en pantallas grandes */}

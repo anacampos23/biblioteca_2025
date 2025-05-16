@@ -143,7 +143,6 @@ class LoanController extends Controller
             $user->notify(new Préstamo($book, $user));
         }
 
-        dd('Llegó hasta aquí, antes del redirect');
         // Redirigir después de crear el préstamo
         return redirect()->route('loans.index')
             ->with('success', __('messages.loans.created'));

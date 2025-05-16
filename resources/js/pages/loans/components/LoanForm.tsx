@@ -181,7 +181,9 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
                                     onChange={(e) => field.handleChange(Number(e.target.value))}
                                     onBlur={field.handleBlur}
                                     placeholder={t('ui.loans.placeholders.ISBN')}
-                                    disabled={form.state.isSubmitting}
+                                    disabled={
+                                        initialData?.ISBN !== undefined || (bookISBN !== null && bookISBN !== undefined) || form.state.isSubmitting
+                                    }
                                     required={false}
                                     autoComplete="off"
                                 />
@@ -244,7 +246,7 @@ export function LoanForm({ initialData, page, perPage, users, books, ISBN_availa
                 <Separator className="mt-3" />
 
                 {/* Form buttons */}
-                <div className="mt-3 mt-4 flex justify-center gap-100">
+                <div className="mt-3 mt-4 flex justify-between sm:gap-2 md:gap-10">
                     <Button
                         type="button"
                         variant="outline"

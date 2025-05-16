@@ -35,8 +35,8 @@ export default function CreateReserve({initialData, users, ISBN_email, ISBN_emai
 
     return (
         <ReserveLayout title={t('ui.reserves.card.new')}>
-            <div className="flex max-w-screen items-center self-center">
-                <Card className="max-w-70% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white ">
+            <div className="flex w-full justify-center self-center md:w-[70%] lg:w-[50%]">
+                <Card className="mw-full m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white  ">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1 mt-5">

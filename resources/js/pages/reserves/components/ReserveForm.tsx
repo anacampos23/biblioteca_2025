@@ -194,7 +194,7 @@ export function ReserveForm({ initialData, users, ISBN_email, ISBN_email_reserve
                         {(field) => (
                             <>
                                 <Label htmlFor={field.name}>
-                                    <div className="m-2 flex items-center gap-1">
+                                    <div className="mb-2 mt-5 ml-2 flex items-center gap-1">
                                         <Mail color="grey" size={18} />
                                         {t('ui.users.fields.email')}
                                     </div>
@@ -219,7 +219,7 @@ export function ReserveForm({ initialData, users, ISBN_email, ISBN_email_reserve
                 <Separator className="mt-3" />
 
                 {/* Form buttons */}
-                <div className="mt-3 mt-4 flex justify-center gap-100">
+                <div className="mt-3 mt-4 flex justify-between sm:gap-2 md:gap-10">
                     <Button
                         type="button"
                         variant="outline"
