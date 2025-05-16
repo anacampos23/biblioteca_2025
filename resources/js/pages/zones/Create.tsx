@@ -23,8 +23,8 @@ export default function CreateZone({initialData, page, perPage, floors, floor_zo
 
     return (
         <ZoneLayout title={t('ui.zones.cards.title')}>
-            <div className="flex max-w-screen items-center self-center">
-                <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
+            <div className="flex w-full justify-center self-center md:w-[70%] lg:w-[50%]">
+                <Card className="w-full m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white ">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1 mt-5">

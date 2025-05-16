@@ -25,7 +25,7 @@ interface BookFormProps {
     zones?: {id: string; name: string; floor_id: string;} [];
     floors?: {id:string; floor_number: number; capacity_zones: number;}[];
     floor_zone_id:{ floor_id: string; name: string }[];
-    books?:{title:string, author:string; ISBN:number; editorial:string; bookcase_id:string; zone_id:string; floor_id:string}[];
+    books?:{title:string, author:string; ISBN:number; genre:string; editorial:string; bookcase_id:string; zone_id:string; floor_id:string}[];
     page?: string;
     perPage?: string;
 }

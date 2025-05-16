@@ -209,7 +209,7 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
 
                 <Separator className="mt-3" />
                 {/* Form buttons */}
-                <div className="mt-3 mt-4 flex justify-center gap-100">
+                <div className="mt-3 mt-4 flex justify-center gap-1">
                     <Button
                         type="button"
                         variant="outline"

@@ -216,7 +216,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                                 {(field) => (
                                     <>
                                         <Label htmlFor={field.name}>
-                                            <div className="mb-1 flex items-center gap-1">
+                                            <div className="mb-2 mt-5 flex items-center gap-1">
                                                 <User color="grey" size={18} />
                                                 {t('ui.users.fields.name')}
                                             </div>
@@ -255,7 +255,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                                 {(field) => (
                                     <>
                                         <Label htmlFor={field.name}>
-                                            <div className="mb-1 flex items-center gap-1">
+                                            <div className="mb-2 mt-5 flex items-center gap-1">
                                                 <Mail color="grey" size={18} />
                                                 {t('ui.users.fields.email')}
                                             </div>
@@ -279,7 +279,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                         </div>
 
                         {/* Password field */}
-                        <div>
+                        <div className="mb-5">
                             <form.Field
                                 name="password"
                                 validators={{
@@ -302,7 +302,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                                     return (
                                         <>
                                             <Label htmlFor={field.name}>
-                                                <div className="mb-1 flex items-center gap-1">
+                                                <div className="mb-2 mt-5 flex items-center gap-1">
                                                     <Lock color="grey" size={18} />
                                                     {initialData ? t('ui.users.fields.password_optional') : t('ui.users.fields.password')}
                                                 </div>
@@ -347,7 +347,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                         {/* Pre-selections field */}
                         <div>
                             <Label>
-                                <div className="mb-1 flex items-center gap-1">
+                                <div className="mb-2 mt-5 flex items-center gap-1">
                                     <Shield color="grey" size={18} />
                                     {t('ui.users.fields.rolPpal')}
                                 </div>
@@ -375,7 +375,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                                 <Shield color="#2762c2" size={18} />
                                 {t('ui.users.fields.permisos')}
                             </div>
-                            <div className="mt-2 flex grid grid-cols-2 gap-4">
+                            <div className="mt-2 flex grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 {categorias.map((categoria) => {
                                     const permisosCat = permisosAgrupados[categoria.perms];
                                     const permisoPadre = permisosCat[0];
@@ -425,7 +425,7 @@ export function UserForm({ initialData, page, perPage, roles, rolesConPermisos, 
                 </Tabs>
                 <Separator className="mt-3" />
                 {/* Form buttons */}
-                <div className="mt-3 mt-4 flex justify-center gap-100">
+                <div className="mt-3 mt-4 flex justify-between sm:gap-2 md:gap-10">
                     <Button
                         type="button"
                         variant="outline"
