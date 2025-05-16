@@ -20,7 +20,11 @@ class BookcaseController extends Controller
 {
     public function index()
     {
-        return Inertia::render('bookcases/Index');
+        $zonesArray = Zone::select(['id','name'])->get()->toArray();
+
+        return Inertia::render('bookcases/Index', [
+            'zonesArray' => $zonesArray,
+        ]);
     }
 
     public function create()

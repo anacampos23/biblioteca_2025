@@ -15,7 +15,11 @@ import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { ZoneLayout } from "@/layouts/zones/ZoneLayout";
 
-export default function ZonesIndex() {
+interface ZoneIndexProps {
+    zonesArray?: { id: string; name: string;}[];
+}
+
+export default function ZonesIndex({zonesArray}: ZoneIndexProps)  {
   const { t } = useTranslations();
   const { url } = usePage();
 
@@ -71,51 +75,69 @@ export default function ZonesIndex() {
     setFilters(newFilters);
     };
 
-  const columns = useMemo(() => ([
-    createTextColumn<Zone>({
-      id: "name",
-      header: t("ui.zones.columns.name"),
-      accessorKey: "name",
-      format: (value) => {
-        if (Array.isArray(value)) {
-          return value
-            .map((name) => t(`ui.zones.list.${name}`) ||  name)
-            .join(", ");
-        }
-        return typeof value === "string" ? t(`ui.zones.list.${value}`) || value : "";
-      },
-    }),
-    createTextColumn<Zone>({
-      id: "floor_number",
-      header: t("ui.zones.columns.floor"),
-      accessorKey: "floor_number",
-      format: (value)=>t("ui.zones.columns.floor_number")+' '+value,
-    }),
-    createActionsColumn<Zone>({
-      id: "actions",
-      header: t("ui.zones.columns.actions") || "Actions",
-      renderActions: (zone) => (
-        <>
-          <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.zones.buttons.edit") || "Edit zone"}>
-              <PencilIcon className="h-4 w-4" />
-            </Button>
-          </Link>
-          <DeleteDialog
-            id={zone.id}
-            onDelete={handleDeleteZone}
-            title={t("ui.zones.delete.title") || "Delete zopne"}
-            description={t("ui.zones.delete.description") || "Are you sure you want to delete this zone? This action cannot be undone."}
-            trigger={
-              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.users.buttons.delete") || "Delete user"}>
-                <TrashIcon className="h-4 w-4" />
-              </Button>
-            }
-          />
-        </>
-      ),
-    }),
-  ] as ColumnDef<Zone>[]), [t, handleDeleteZone]);
+  const columns = useMemo(
+      () =>
+          [
+              createTextColumn<Zone>({
+                  id: 'name',
+                  header: t('ui.zones.columns.name'),
+                  accessorKey: 'name',
+                  format: (value) => {
+                      const translateOrFallback = (name: string) => {
+                          const key = `ui.zones.list.${name}`;
+                          const translated = t(key);
+                          return translated === key ? name : translated;
+                      };
+
+                      if (Array.isArray(value)) {
+                          return value.map(translateOrFallback).join(', ');
+                      }
+
+                      return typeof value === 'string' ? translateOrFallback(value) : '';
+                  },
+              }),
+
+              createTextColumn<Zone>({
+                  id: 'floor_number',
+                  header: t('ui.zones.columns.floor'),
+                  accessorKey: 'floor_number',
+                  format: (value) => t('ui.zones.columns.floor_number') + ' ' + value,
+              }),
+              createActionsColumn<Zone>({
+                  id: 'actions',
+                  header: t('ui.zones.columns.actions') || 'Actions',
+                  renderActions: (zone) => (
+                      <>
+                          <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                              <Button variant="outline" size="icon" title={t('ui.zones.buttons.edit') || 'Edit zone'}>
+                                  <PencilIcon className="h-4 w-4" />
+                              </Button>
+                          </Link>
+                          <DeleteDialog
+                              id={zone.id}
+                              onDelete={handleDeleteZone}
+                              title={t('ui.zones.delete.title') || 'Delete zopne'}
+                              description={
+                                  t('ui.zones.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
+                              }
+                              trigger={
+                                  <Button
+                                      variant="outline"
+                                      size="icon"
+                                      className="text-destructive hover:text-destructive"
+                                      title={t('ui.users.buttons.delete') || 'Delete user'}
+                                  >
+                                      <TrashIcon className="h-4 w-4" />
+                                  </Button>
+                              }
+                          />
+                      </>
+                  ),
+              }),
+          ] as ColumnDef<Zone>[],
+      [t, handleDeleteZone],
+  );
+  console.log(zonesArray);
 
   return (
       <ZoneLayout title={t('ui.zones.title')}>
@@ -139,15 +161,19 @@ export default function ZonesIndex() {
                                   {
                                       id: 'name',
                                       label: t('ui.zones.filters.name'),
-                                      type: 'text',
+                                      type: 'select',
+                                      options: zonesArray.map((zone) => ({
+                                          label: t(`ui.zones.list.${zone.name}`),
+                                          value: zone.name,
+                                      })),
                                       placeholder: t('ui.zones.placeholders.name'),
                                   },
                                   {
-                                    id: 'floor_number',
-                                    label: t('ui.zones.filters.floor'),
-                                    type: 'number',
-                                    placeholder: t('ui.zones.placeholders.floor')
-                                }
+                                      id: 'floor_number',
+                                      label: t('ui.zones.filters.floor'),
+                                      type: 'number',
+                                      placeholder: t('ui.zones.placeholders.floor'),
+                                  },
                               ] as FilterConfig[]
                           }
                           onFilterChange={handleFilterChange}

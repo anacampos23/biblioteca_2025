@@ -13,7 +13,12 @@ import { BookUp, BookmarkCheck, PencilIcon, PlusIcon, TrashIcon } from 'lucide-r
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function BooksIndex() {
+interface BookIndexProps {
+    genresList?: { id: string; genre_name: string;}[];
+}
+
+
+export default function BooksIndex({genresList}: BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -221,11 +226,11 @@ export default function BooksIndex() {
                         );
                     },
                 }),
-                createDateColumn<Book>({
-                    id: 'created_at',
-                    header: t('ui.books.columns.created_at') || 'Created At',
-                    accessorKey: 'created_at',
-                }),
+                // createDateColumn<Book>({
+                //     id: 'created_at',
+                //     header: t('ui.books.columns.created_at') || 'Created At',
+                //     accessorKey: 'created_at',
+                // }),
                 createActionsColumn<Book>({
                     id: 'actions',
                     header: t('ui.books.columns.actions') || 'Actions',
@@ -295,7 +300,11 @@ export default function BooksIndex() {
                                     {
                                         id: 'genre',
                                         label: t('ui.books.filters.genre'),
-                                        type: 'text',
+                                        type: 'select',
+                                      options: genresList.map((genre) => ({
+                                            label: t(`ui.zones.list.${genresList.genre_name}`),
+                                            value: genresList.genre_name,
+                                        })),
                                         placeholder: t('ui.books.placeholders.genre'),
                                     },
                                     {

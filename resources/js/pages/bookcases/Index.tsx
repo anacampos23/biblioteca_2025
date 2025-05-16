@@ -15,7 +15,11 @@ import { FiltersTable, FilterConfig } from "@/components/stack-table/FiltersTabl
 import { toast } from "sonner";
 import { ColumnDef, Row } from "@tanstack/react-table";
 
-export default function BookcasesIndex() {
+interface BookcaseIndexProps {
+    zonesArray?: { id: string; name: string }[];
+}
+
+export default function BookcasesIndex({ zonesArray }: BookcaseIndexProps) {
   const { t } = useTranslations();
   const { url } = usePage();
 
@@ -82,6 +86,14 @@ export default function BookcasesIndex() {
       id: "name",
       header: t("ui.bookcases.columns.zone") || "name",
       accessorKey: "name",
+      format: (value) => {
+        if (Array.isArray(value)) {
+          return value
+            .map((name) => t(`ui.zones.list.${name}`) ||  name)
+            .join(", ");
+        }
+        return typeof value === "string" ? t(`ui.zones.list.${value}`) || value : "";
+      },
     }),
     createTextColumn<Bookcase>({
         id: "floor_number",
@@ -142,7 +154,11 @@ export default function BookcasesIndex() {
                                   {
                                       id: 'name',
                                       label: t('ui.bookcases.filters.zone') || 'Email',
-                                      type: 'text',
+                                      type: 'select',
+                                      options: zonesArray.map((zone) => ({
+                                            label: t(`ui.zones.list.${zone.name}`),
+                                            value: zone.id,
+                                        })),
                                       placeholder: t('ui.bookcases.placeholders.zone') || 'Email...',
                                   },
                                   {
