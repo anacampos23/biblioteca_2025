@@ -29,11 +29,22 @@ class BookcaseController extends Controller
 
     public function create()
     {
-        $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
+        $zones = Zone::withCount('bookcases')
+            ->get()
+            ->map(function ($zone) {
+            return [
+                'id' => $zone->id,
+                'name' => $zone->name,
+                'floor_id' => $zone->floor_id,
+                'bookcases_count' => $zone->bookcases_count,
+            ];
+        })
+            -> toArray();
+
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
 
-        return Inertia::render('zones/Create', [
+        return Inertia::render('bookcases/Create', [
             'zones' => $zones,
             'floors' => $floors,
             'floor_zone_id' => $floor_zone_id,
@@ -45,16 +56,17 @@ class BookcaseController extends Controller
         $validator = Validator::make($request->all(), [
             'zone_id' => ['required', 'exists:zones,id'],
             'floor_id' => ['required', 'exists:floors,id'],
-            'bookcase_name' => [
-                'required',
-                'number',
-                Rule::unique('bookcases', 'bookcase_name')
-                    ->where(function ($query) use ($request) {
-                        $query->where('floor_id', $request->floor_id)
-                            ->where('zone_id', $request->zone_id);
-                    })
-                    ->ignore($bookcase->id),
-            ],
+            // 'bookcase_name' => [
+            //     'required',
+            //     'number',
+            //     Rule::unique('bookcases', 'bookcase_name')
+            //         ->where(function ($query) use ($request) {
+            //             $query->where('floor_id', $request->floor_id)
+            //                 ->where('zone_id', $request->zone_id);
+            //         })
+            //         ->ignore($bookcase->id),
+            // ],
+            'bookcase_name' => [],
         ]);
 
         if ($validator->fails()) {
@@ -64,17 +76,32 @@ class BookcaseController extends Controller
         $action($validator->validated());
 
         return redirect()->route('bookcases.index')
-            ->with('success', __('messages.zones.created'));
+            ->with('success', __('messages.bookcases.created'));
     }
 
-    public function edit(Request $request, Bookcase $user)
+    public function show(string $id)
     {
+        //
+    }
 
-        $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
+    public function edit(Request $request, Bookcase $bookcase)
+    {
+        $zones = Zone::withCount('bookcases')
+            ->get()
+            ->map(function ($zone) {
+            return [
+                'id' => $zone->id,
+                'name' => $zone->name,
+                'floor_id' => $zone->floor_id,
+                'bookcases_count' => $zone->bookcases_count,
+            ];
+        })
+            -> toArray();
+
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
 
-        return Inertia::render('zones/Edit', [
+        return Inertia::render('bookcases/Edit', [
             'zones' => $zones,
             'floors' => $floors,
             'floor_zone_id' => $floor_zone_id,
@@ -86,16 +113,7 @@ class BookcaseController extends Controller
         $validator = Validator::make($request->all(), [
             'zone_id' => ['required', 'exists:zones,id'],
             'floor_id' => ['required', 'exists:floors,id'],
-            'bookcase_name' => [
-                'required',
-                'number',
-                Rule::unique('bookcases', 'bookcase_name')
-                    ->where(function ($query) use ($request) {
-                        $query->where('floor_id', $request->floor_id)
-                            ->where('zone_id', $request->zone_id);
-                    })
-                    ->ignore($bookcase->id),
-            ],
+            'bookcase_name' => [],
         ]);
 
         if ($validator->fails()) {
@@ -104,7 +122,7 @@ class BookcaseController extends Controller
 
         $action($bookcase, $validator->validated());
 
-        $redirectUrl = route('zones.index');
+        $redirectUrl = route('bookcases.index');
 
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {
@@ -115,7 +133,7 @@ class BookcaseController extends Controller
         }
 
         return redirect($redirectUrl)
-            ->with('success', __('messages.zones.updated'));
+            ->with('success', __('messages.bookcases.updated'));
     }
 
     public function destroy(Bookcase $bookcase, BookcaseDestroyAction $action)
@@ -123,6 +141,6 @@ class BookcaseController extends Controller
         $action($bookcase);
 
         return redirect()->route('bookcases.index')
-            ->with('success', __('messages.users.deleted'));
+            ->with('success', __('messages.bookcases.deleted'));
     }
 }

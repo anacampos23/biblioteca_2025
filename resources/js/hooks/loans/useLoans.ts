@@ -15,6 +15,7 @@ export interface Loan {
   author: string;
   ISBN: string;
   created_at: string;
+  days_overdue:number;
 }
 
 // Interface representing the actual API response structure
@@ -66,12 +67,13 @@ interface UseLoansParams {
   ISBN?: string;
   page?: number;
   perPage?: number;
+  days_overdue?:number;
 }
 
-export function useLoans({ search, start_loan, end_loan, due_date, active, book_id, user_id, name, email, title, author, ISBN, page = 1, perPage = 10 }:
+export function useLoans({ search, start_loan, end_loan, due_date, active, book_id, user_id, name, email, title, days_overdue, author, ISBN, page = 1, perPage = 10 }:
     UseLoansParams = {}) {
   return useQuery({
-    queryKey: ["loans", { search, start_loan, end_loan, due_date, active, book_id, user_id, name, email, title, author, ISBN, page, perPage }],
+    queryKey: ["loans", { search, start_loan, end_loan, due_date, active, book_id, user_id, name, email, title, author, days_overdue, ISBN, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Loan>>("/api/loans", {
         params: {
@@ -87,6 +89,7 @@ export function useLoans({ search, start_loan, end_loan, due_date, active, book_
           title,
           author,
           ISBN,
+          days_overdue,
           page,
           per_page: perPage,
         },
@@ -126,6 +129,7 @@ export function useCreateLoan() {
     title?: string;
     author?: string;
     ISBN?: string;
+    days_overdue?:number;
 
     }) => {
       const response = await axios.post("/api/loans", data, {
@@ -152,6 +156,7 @@ export function useUpdateLoan(loanId: string) {
         email?: string;
         title?: string;
         author?: string;
+        days_overdue?:number;
         ISBN?: string;}) => {
       const response = await axios.put(`/api/loans/${loanId}`, data, {
         headers: {

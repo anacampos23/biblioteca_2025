@@ -53,7 +53,7 @@ export default function LoansIndex({ lang }:indexprops) {
     filters.start_loan ? filters.start_loan : "null",
     filters.end_loan ? filters.end_loan : "null",
     filters.due_date ? filters.due_date : "null",
-    filters.days_overdue !== undefined && filters.days_overdue !== null ? filters.days_overdue : "null",
+    filters.days_overdue !== null && filters.days_overdue !== undefined ? filters.days_overdue : "null",
     filters.active ? filters.active : "null",
   ]
 

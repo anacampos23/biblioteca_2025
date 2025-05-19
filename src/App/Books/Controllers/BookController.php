@@ -25,9 +25,11 @@ class BookController extends Controller
     public function index()
     {
         $genresList = Genre::select(['id','genre_name'])->get()->toArray();
+         $zonesArray = Zone::select(['id','name'])->get()->toArray();
 
         return Inertia::render('books/Index', [
             'genresList'=> $genresList,
+            'zonesArray' => $zonesArray,
         ]);
     }
 

@@ -56,20 +56,22 @@ class StatisticController extends Controller
         // Método para mostrar estadísticas de usuarios
         public function userIndex()
         {
-            $users = DB::table('users')
+        $users = DB::table('users')
             ->leftJoin('loans', 'users.id', '=', 'loans.user_id')
             ->leftJoin('reserves', 'users.id', '=', 'reserves.user_id')
             ->select(
                 'users.email',
                 'users.name',
                 DB::raw('COUNT(DISTINCT loans.id) as loans_count'),
-                DB::raw('COUNT(DISTINCT reserves.id) as reserves_count')
+                DB::raw('COUNT(DISTINCT reserves.id) as reserves_count'),
+                DB::raw('(COUNT(DISTINCT loans.id) + COUNT(DISTINCT reserves.id)) as total_count')
             )
             ->groupBy('users.email', 'users.name')
             ->havingRaw('COUNT(DISTINCT loans.id) > 0 OR COUNT(DISTINCT reserves.id) > 0')
-            ->orderByDesc('loans_count')
+            ->orderByDesc('total_count')
             ->take(10)
             ->get();
+
 
             return Inertia::render('statistics/userIndex', [
                 'users' => $users,

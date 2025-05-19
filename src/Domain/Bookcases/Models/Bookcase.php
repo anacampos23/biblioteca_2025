@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Domain\Zones\Models\Zone;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Database\Factories\BookcaseFactory;
-
+use Domain\Books\Models\Book;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bookcase extends Model
 {
@@ -39,5 +40,10 @@ class Bookcase extends Model
     public function zone(): BelongsTo
     {
         return $this->belongsTo(Zone::class);
+    }
+
+    public function books(): HasMany
+    {
+        return $this->hasMany(Book::class);
     }
 }

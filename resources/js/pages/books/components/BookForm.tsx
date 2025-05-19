@@ -231,13 +231,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
         }
     }
 
-    console.log('Valor de genreValue:', genreValue);
-        console.log('FLOOOR:', selectedFloor);
-        console.log('ZONAAAA:', selectedZone);
-        console.log('BOOOOKCASE:', selectedBookcase);
 
-
-    console.log('Valor form.state.values.genre:', form.state.values.genre);
     console.log('Initial Data Genre:', initialData?.genre);
 
     return (

@@ -11,7 +11,7 @@ class BookcaseStoreAction
     public function __invoke(array $data): BookcaseResource
     {
         $bookcase = Bookcase::create([
-            'bookcase_name' => $data['name'],
+            'bookcase_name' => $data['bookcase_name'],
             'zone_id' => $data['zone_id'],
             'floor_id' => $data['floor_id'],
         ]);

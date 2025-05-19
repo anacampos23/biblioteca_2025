@@ -15,10 +15,11 @@ import { toast } from 'sonner';
 
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string;}[];
+     zonesArray?: { id: string; name: string;}[];
 }
 
 
-export default function BooksIndex({genresList}: BookIndexProps) {
+export default function BooksIndex({genresList, zonesArray}: BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -301,8 +302,8 @@ export default function BooksIndex({genresList}: BookIndexProps) {
                                         id: 'genre',
                                         label: t('ui.books.filters.genre'),
                                         type: 'select',
-                                      options: genresList.map((genre) => ({
-                                            label: t(`ui.zones.list.${genresList.genre_name}`),
+                                        options: genresList.map((genresList) => ({
+                                            label: t(`ui.books.genres.${genresList.genre_name}`),
                                             value: genresList.genre_name,
                                         })),
                                         placeholder: t('ui.books.placeholders.genre'),
@@ -348,7 +349,11 @@ export default function BooksIndex({genresList}: BookIndexProps) {
                                     {
                                         id: 'name',
                                         label: t('ui.books.filters.name'),
-                                        type: 'text',
+                                        type: 'select',
+                                        options: zonesArray.map((zone) => ({
+                                          label: t(`ui.zones.list.${zone.name}`),
+                                          value: zone.name,
+                                      })),
                                         placeholder: t('ui.books.placeholders.name'),
                                     },
                                     {

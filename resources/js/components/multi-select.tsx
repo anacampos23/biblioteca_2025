@@ -208,7 +208,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Command>
-            <CommandInput placeholder={t('ui.genres.search')} onKeyDown={handleInputKeyDown} />
+            <CommandInput placeholder={t('ui.books.placeholders.genre')} onKeyDown={handleInputKeyDown} />
             <CommandList>
               <CommandEmpty>{t('ui.books.no_results')}</CommandEmpty>
               <CommandGroup>
@@ -223,7 +223,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                   >
                     <CheckIcon className="h-4 w-4" />
                   </div>
-                  <span>{t('ui.genres.select_all')}</span>
+                  <span>{t('ui.books.genres.select_all')}</span>
                 </CommandItem>
                 {options.map((option) => {
                   const isSelected = selectedValues.includes(option.value);

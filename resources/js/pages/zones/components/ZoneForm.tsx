@@ -82,7 +82,7 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
 
     function validateFloorCapacity(floorId: string): boolean | undefined {
         const selectedFloor = floors?.find(floor => floor.id === floorId);
-        if (selectedFloor && selectedFloor.zones_count > selectedFloor.capacity_zones) {
+        if (selectedFloor && selectedFloor.zones_count >= selectedFloor.capacity_zones) {
             return true;
         }
         return undefined;
