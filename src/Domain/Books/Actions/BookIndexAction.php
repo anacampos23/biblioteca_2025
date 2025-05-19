@@ -79,7 +79,7 @@ class BookIndexAction
                 $query->where('zone_id', 'like', $zone_id);
             })
             ->when($floor_number !== "null", function ($query) use ($floor_id) {
-                $query->where('floor_id', 'ILIKE', $floor_id);
+                $query->where('floor_id', '=', $floor_id);
             })
 
             ->latest()

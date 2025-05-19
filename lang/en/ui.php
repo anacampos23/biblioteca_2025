@@ -413,6 +413,7 @@ return [
             'name' => 'Bookcase No. ...',
             'zone' => 'Zone...',
             'floor' => 'Floor No. ...',
+            'bookcase_number'=> 'Bookcase number...'
         ],
         'buttons' => [
             'new' => 'New Bookcase',
@@ -428,6 +429,14 @@ return [
         'delete'=> [
             'title'=> 'Delete bookcase',
             'description' => 'Are you sure you want to delete this bookcase?'
+        ],
+        'cards' =>[
+            'title'=>'Create a new bookcase',
+            'create'=>'Create',
+            'description'=>'Data from the new bookcase',
+        ],
+        'fields'=> [
+            'bookcase_number'=> 'Bookcase number'
         ]
     ],
     "books" => [
@@ -530,6 +539,7 @@ return [
             'Young Adult' => 'Young Adult',
         ],
         'genres' => [
+            'select_all' => 'Select all',
             'Poetry' => 'Poetry',
             'Theater' => 'Theater',
             'Essay' => 'Essay',
@@ -713,7 +723,7 @@ return [
             'legend' => 'Loans'
         ],
         'reserves' => [
-            'legend' => 'Reserves'
+            'legend' => 'Reservations'
         ],
         'navigation' => [
             'bookIndex' => 'Books statistics',

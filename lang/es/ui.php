@@ -405,6 +405,7 @@ return [
             'name' => 'Estantería nº...',
             'zone' => 'Zona...',
             'floor' => 'Piso nº...',
+            'bookcase_number'=> 'Estantería número...'
         ],
         'buttons' => [
             'new' => 'Nueva estantería',
@@ -420,6 +421,14 @@ return [
         'delete'=> [
             'title'=> 'Eliminar estantería',
             'description' => '¿Estás seguro de que quieres eliminar esta estantería?'
+        ],
+        'cards' =>[
+            'title'=>'Crear una nueva estantería',
+            'create'=>'Crear estantería',
+            'description'=> 'Introduce los datos de la nueva estantería',
+        ],
+        'fields'=> [
+            'bookcase_number'=> 'Número de la estantería'
         ]
 
     ],
@@ -524,6 +533,7 @@ return [
             'Young Adult' => 'Juvenil',
         ],
         'genres' => [
+            'select_all' => 'Selecciona todos',
             'Poetry' => 'Poesía',
             'Theater' => 'Teatro',
             'Essay' => 'Ensayo',

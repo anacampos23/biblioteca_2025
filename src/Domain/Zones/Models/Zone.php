@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Domain\Floors\Models\Floor;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Database\Factories\ZoneFactory;
+use Domain\Bookcases\Models\Bookcase;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Zone extends Model
@@ -31,6 +33,10 @@ class Zone extends Model
         'floor_id',
     ];
 
+     public function bookcases(): HasMany
+    {
+        return $this->hasMany(Bookcase::class);
+    }
 
       /**
      * Get the floors associated with the zones.

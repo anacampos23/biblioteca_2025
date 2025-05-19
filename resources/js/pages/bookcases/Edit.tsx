@@ -1,57 +1,51 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useTranslations } from '@/hooks/use-translations';
-import { UserLayout } from '@/layouts/users/UserLayout';
-import { UserForm } from '@/pages/users/components/UserForm';
+import { BookcaseLayout } from '@/layouts/bookcases/BookcaseLayout';
+import { BookcaseForm } from '@/pages/bookcases/components/BookcaseForm';
 import { PageProps } from '@inertiajs/core';
-import { User } from 'lucide-react';
+import { Book } from 'lucide-react';
 
-interface EditUserProps extends PageProps {
-    user: {
+
+interface EditBookcaseProps extends PageProps {
+    bookcase: {
         id: string;
-        name: string;
-        email: string;
-    };
+        bookcase_name: number;
+        zone_id: string;
+        floor_id:string;
+};
+    zones?: {id: string; name: string; floor_id: string; bookcases_count:number;} [];
+    floors?: {id:string; floor_number: number; capacity_zones: number;}[];
+    floor_zone_id:{ floor_id: string; name: string }[];
     page?: string;
     perPage?: string;
-    roles?: string[];
-    rolesConPermisos: Record<string, string[]>;
-    permisos?: string[];
-    permisosAgrupados: Record<string, string[]>;
-    permisosDelUsuario?: string[];
+
 }
 
-export default function EditUser({ user, page, perPage, roles, rolesConPermisos, permisos, permisosAgrupados, permisosDelUsuario }: EditUserProps) {
+export default function EditBookcase({ bookcase, zones, floors, floor_zone_id }: EditBookcaseProps) {
     const { t } = useTranslations();
 
     return (
-        <UserLayout title={t('ui.users.edit')}>
+        <BookcaseLayout title={t('ui.bookcases.edit')}>
             <div className="flex max-w-screen items-center self-center">
                 <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
                             <div className="flex items-center gap-1">
-                                <User color="#2762c2" />
-                                {t('ui.users.cards.title')}
+                                <Book color="#2762c2" />
+                                {t('ui.bookcases.cards.title')}
                             </div>
                         </CardTitle>
-                        <CardDescription>{t('ui.users.cards.description')}</CardDescription>
+                        <CardDescription>{t('ui.bookcases.cards.description')}</CardDescription>
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <UserForm
-                            initialData={user}
-                            page={page}
-                            perPage={perPage}
-                            roles={roles}
-                            rolesConPermisos={rolesConPermisos}
-                            permisos={permisos}
-                            permisosAgrupados={permisosAgrupados}
-                            permisosDelUsuario={permisosDelUsuario}
+                        <BookcaseForm
+                            initialData={bookcase} zones={zones} floors={floors} floor_zone_id={floor_zone_id}
                         />
                     </CardContent>
                 </Card>
             </div>
-        </UserLayout>
+        </BookcaseLayout>
     );
 }

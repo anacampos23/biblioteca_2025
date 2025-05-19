@@ -427,7 +427,7 @@ function renderFilterInput(
         <Input
           type="number"
           placeholder={filter.placeholder}
-          value={field.value || ""}
+          value={field.value ?? ""}
           onChange={(e) => {
             const val = e.target.value ? Number(e.target.value) : undefined;
             field.onChange(val);
