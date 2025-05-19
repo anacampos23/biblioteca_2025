@@ -99,6 +99,7 @@ export default function BookcasesIndex({ zonesArray }: BookcaseIndexProps) {
         id: "floor_number",
         header: t("ui.bookcases.columns.floor_number") || "name",
         accessorKey: "floor_number",
+        format: (value) => t('ui.zones.columns.floor_number') + ' ' + value,
       }),
     createActionsColumn<Bookcase>({
       id: "actions",

@@ -42,8 +42,8 @@ class Préstamo extends Notification implements ShouldQueue
         return (new MailMessage)
             ->greeting('¡Hola ' . $this->user->name . '!')
             ->line('Este es un correo de confirmación del préstamo.')
-            ->line('Actualmente has cogido prestado el libro: '. $this->book->title . '"'. ' de ' . $this->book->author)
-            ->line('Recuerda que tienes 30 días para poder disfrutarlo.')
+            ->line('Actualmente has cogido prestado el libro: "'.  $this->book->title . '"'. ' de ' . $this->book->author)
+            ->line('Recuerda que tienes hasta 30 días para poder disfrutarlo.')
             ->action('Biblioteca', url('/'))
             ->line('Cualquier duda estamos a tu disposición.')
             ->line('Gracias por utilizar nuestros servicios.');

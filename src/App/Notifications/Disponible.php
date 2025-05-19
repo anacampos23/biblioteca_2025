@@ -43,7 +43,6 @@ class Disponible extends Notification implements ShouldQueue
             ->greeting('¡Hola ' . $this->user->name . '!')
             ->line('Tu libro ya está disponible.')
             ->line('"'. $this->book->title . '"'. ' de ' . $this->book->author)
-            ->line('Tienes 15 días para pasarte por la biblioteca para recogerlo.')
             ->action('Biblioteca', url('/'))
             ->line('Gracias por utilizar nuestros servicios');
     }
