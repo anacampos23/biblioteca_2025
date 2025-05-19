@@ -21,7 +21,7 @@ interface BookcaseFormProps {
     };
     zones?: { id: string; name: string; floor_id: string; bookcases_count: number }[];
     floors?: { id: string; floor_number: number; capacity_zones: number }[];
-    floor_zone_id: { floor_id: string; name: string }[];
+    bookcases?:{ id:string; bookcase_name: string; floor_id: string; zone_id: string; }[];
     page?: string;
     perPage?: string;
 }
@@ -38,7 +38,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function BookcaseForm({ initialData, floors, zones, floor_zone_id, page, perPage }: BookcaseFormProps) {
+export function BookcaseForm({ initialData, floors, zones, bookcases, page, perPage }: BookcaseFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
 
@@ -65,13 +65,24 @@ export function BookcaseForm({ initialData, floors, zones, floor_zone_id, page, 
     // Filtrar zonas por el piso seleccionado
     const filteredZones = zones?.filter((zone) => zone.floor_id === floorId);
 
+    //Evitar bookcase_name duplicado en el mismo piso y zona
+//    const isDuplicated = bookcases?.filter((bookcase) => {
+//   const sameName = bookcase.bookcase_name === form.getFieldValue('bookcase_name');
+//   const sameFloor = bookcase.floor_id === form.getFieldValue('floor_id');
+//   const sameZone = bookcase.zone_id === form.getFieldValue('zone_id');
+//   const isSameBookcase = bookcase.id === initialData?.id;
+
+//   return sameName && sameFloor && sameZone && !isSameBookcase;
+// });
+
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
             bookcase_name: initialData?.bookcase_name ?? bookBookcase_name ?? '',
-            zone_id: initialData?.floor_id ?? '',
+            zone_id: initialData?.zone_id ?? '',
             floor_id: initialData?.floor_id ?? '',
         },
+
         onSubmit: async ({ value }) => {
             const bookcaseData = {
                 ...value,
@@ -206,14 +217,29 @@ export function BookcaseForm({ initialData, floors, zones, floor_zone_id, page, 
                     </form.Field>
                 </div>
 
-                 {/* Bookcase Name field */}
+                {/* Bookcase Name field */}
                 <div className="mt-5">
                     <form.Field
                         name="bookcase_name"
                         validators={{
                             onChangeAsync: async ({ value }) => {
                                 await new Promise((resolve) => setTimeout(resolve, 500));
-                                return !value ? value : undefined;
+                                if (!value) return value;
+
+                                const currentName = String(value).trim();
+                                const floorId = form.getFieldValue('floor_id');
+                                const zoneId = form.getFieldValue('zone_id');
+
+                                const isDuplicated = bookcases?.some((bookcase) => {
+                                    const sameName = String(bookcase.bookcase_name).trim() === currentName;
+                                    const sameFloor = bookcase.floor_id === floorId;
+                                    const sameZone = bookcase.zone_id === zoneId;
+                                    const isSameBookcase = bookcase.id === initialData?.id;
+
+                                    return sameName && sameFloor && sameZone && !isSameBookcase;
+                                });
+
+                                return isDuplicated ? t('ui.bookcases.same_name_error') : undefined;
                             },
                         }}
                     >

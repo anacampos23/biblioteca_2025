@@ -31,6 +31,16 @@ return [
             'delete' => 'Error al eliminar la zona',
         ],
     ],
+       'bookcases' => [
+        'created' => 'Estantería creada correctamente',
+        'updated' => 'Estantería actualizada correctamente',
+        'deleted' => 'Estantería eliminada correctamente',
+        'error' => [
+            'create' => 'Error al crear la Estantería',
+            'update' => 'Error al actualizar la Estantería',
+            'delete' => 'Error al eliminar la Estantería',
+        ],
+    ],
     'books' => [
         'created' => 'Libro creado correctamente',
         'updated' => 'Libro actualizado correctamente',

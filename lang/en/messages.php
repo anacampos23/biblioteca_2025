@@ -42,6 +42,16 @@ return [
         ],
         'loan_reserve' => 'The book is available. You can already loan it.'
     ],
+    'bookcases' => [
+        'created' => 'Bookcase created successfully',
+        'updated' => 'Bookcase updated successfully',
+        'deleted' => 'Bookcase deleted successfully',
+        'error' => [
+            'create' => 'Error creating bookcase',
+            'update' => 'Error updating bookcase',
+            'delete' => 'Error deleting bookcase',
+        ],
+    ],
     'loans' => [
         'created' => 'Loan created successfully',
         'updated' => 'Loan updated successfully',

@@ -42,12 +42,13 @@ class BookcaseController extends Controller
             -> toArray();
 
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
-        $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
+        $bookcases = Bookcase::select(['id', 'bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
+
 
         return Inertia::render('bookcases/Create', [
             'zones' => $zones,
             'floors' => $floors,
-            'floor_zone_id' => $floor_zone_id,
+            'bookcases' => $bookcases,
         ]);
     }
 
@@ -56,16 +57,16 @@ class BookcaseController extends Controller
         $validator = Validator::make($request->all(), [
             'zone_id' => ['required', 'exists:zones,id'],
             'floor_id' => ['required', 'exists:floors,id'],
-            // 'bookcase_name' => [
-            //     'required',
-            //     'number',
-            //     Rule::unique('bookcases', 'bookcase_name')
-            //         ->where(function ($query) use ($request) {
-            //             $query->where('floor_id', $request->floor_id)
-            //                 ->where('zone_id', $request->zone_id);
-            //         })
-            //         ->ignore($bookcase->id),
-            // ],
+            'bookcase_name' => [
+                'required',
+                'numeric',
+                Rule::unique('bookcases', 'bookcase_name')
+                    ->where(function ($query) use ($request) {
+                        $query->where('floor_id', $request->floor_id)
+                            ->where('zone_id', $request->zone_id);
+                    })
+                    ->ignore($bookcase->id),
+            ],
             'bookcase_name' => [],
         ]);
 
@@ -99,12 +100,15 @@ class BookcaseController extends Controller
             -> toArray();
 
         $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
-        $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
+        $bookcases = Bookcase::select(['id', 'bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
 
         return Inertia::render('bookcases/Edit', [
+            'bookcase' => $bookcase,
             'zones' => $zones,
             'floors' => $floors,
-            'floor_zone_id' => $floor_zone_id,
+            'bookcases' => $bookcases,
+            'page' => $request->query('page'),
+            'perPage' => $request->query('perPage'),
         ]);
     }
 
