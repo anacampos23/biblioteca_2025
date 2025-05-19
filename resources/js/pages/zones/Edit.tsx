@@ -23,11 +23,11 @@ export default function EditZone({ zone, page, perPage, floors, floor_zone_id }:
     const { t } = useTranslations();
     return (
         <ZoneLayout title={t('ui.zones.edit.name')}>
-            <div className="flex max-w-screen items-center self-center">
-                <Card className="w-100% m-6 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
+            <div className="flex w-full justify-center self-center md:w-[70%] lg:w-[50%]">
+                <Card className="w-full m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white ">
                     <CardHeader>
                         <CardTitle>
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1 mt-5">
                                 <Building2 color="#2762c2" />
                                 {t('ui.zones.edit.name')}
                             </div>

@@ -422,14 +422,22 @@ return [
             'title'=> 'Eliminar estantería',
             'description' => '¿Estás seguro de que quieres eliminar esta estantería?'
         ],
-        'cards' =>[
-            'title'=>'Crear una nueva estantería',
-            'create'=>'Crear estantería',
-            'description'=> 'Introduce los datos de la nueva estantería',
+        'cards' => [
+            'create' => [
+                'title' => 'Crear una nueva estantería',
+                'create' => 'Crear estantería',
+                'description' => 'Introduce los datos de la nueva estantería',
+            ],
+            'edit' => [
+                'title' => 'Editar la estantería',
+                'edit' => 'Editar estantería',
+                'description' => 'Modifica los datos de la estantería',
+            ]
         ],
         'fields'=> [
             'bookcase_number'=> 'Número de la estantería'
-        ]
+        ],
+        'same_name_error'=> 'Ya existe una estantería con ese número en esta zona y piso',
 
     ],
     'books' => [

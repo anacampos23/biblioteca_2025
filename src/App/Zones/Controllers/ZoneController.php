@@ -98,7 +98,7 @@ class ZoneController extends Controller
      */
     public function edit(Request $request, Zone $zone)
     {
-        $floors = Floor::withCount('zones') // <- añadimos el withCount aquí también
+        $floors = Floor::withCount('zones')
         ->select(['id', 'floor_number', 'capacity_zones'])
         ->orderBy('floor_number', 'asc')
         ->get()

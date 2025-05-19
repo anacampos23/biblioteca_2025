@@ -32,11 +32,11 @@ export default function EditLoan({ loan, users, ISBN_available, page, perPage }:
 
     return (
         <LoanLayout title={t('ui.loans.edit')}>
-            <div className="flex max-w-screen items-center self-center">
-                <Card className="w-100% m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
+            <div className="flex w-full justify-center self-center md:w-[70%] lg:w-[50%]">
+                <Card className="w-full m-4 p-4 shadow-lg dark:shadow-xs dark:shadow-white">
                     <CardHeader>
                         <CardTitle>
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1 mt-5">
                                 <User color="#2762c2" />
                                 {t('ui.loans.card.title')}
                             </div>

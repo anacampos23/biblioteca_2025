@@ -430,14 +430,22 @@ return [
             'title'=> 'Delete bookcase',
             'description' => 'Are you sure you want to delete this bookcase?'
         ],
-        'cards' =>[
-            'title'=>'Create a new bookcase',
-            'create'=>'Create',
-            'description'=>'Data from the new bookcase',
+        'cards' => [
+            'create' => [
+                'title' => 'Create a new bookcase',
+                'create' => 'Create Bookcase',
+                'description' => 'Data from the new bookcase',
+            ],
+            'edit' => [
+                'title' => 'Edit a bookcase',
+                'edit' => 'Edit Bookcase',
+                'description'=>'Modificate data from the bookcase',
+            ]
         ],
         'fields'=> [
             'bookcase_number'=> 'Bookcase number'
-        ]
+        ],
+        'same_name_error'=> 'There is already a bookcase with this number in this zone and floor'
     ],
     "books" => [
         'title' => 'Books',
