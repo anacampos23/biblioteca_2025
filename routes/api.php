@@ -5,9 +5,11 @@ use App\Users\Controllers\Api\UserApiController;
 use App\Zones\Controllers\Api\ZoneApiController;
 use App\Bookcases\Controllers\Api\BookcaseApiController;
 use App\Books\Controllers\Api\BookApiController;
+use App\Books\Controllers\BookPostmanController;
 use App\Loans\Controllers\Api\LoanApiController;
 use App\Reserves\Controllers\Api\ReserveApiController;
 use App\Statistics\Controllers\Api\StatisticApiController;
+use App\Users\Controllers\UserPostmanController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web', 'auth'])->group(function () {
@@ -72,4 +74,8 @@ Route::middleware(['web', 'auth'])->group(function () {
 
 
 });
+
+//API tester Postman
+Route::get('/jsonBooks', [BookPostmanController::class, 'jsonBooks']);
+Route::get('/jsonUsers', [UserPostmanController::class, 'jsonUsers']);
 

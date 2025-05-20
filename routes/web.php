@@ -26,16 +26,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Rutas agrupadas por permiso 'products.view'
      Route::group(['middleware' => ['permission:products.view']], function () {
         Route::resource('books', \App\Books\Controllers\BookController::class);
+        Route::get('statistics', [\App\Statistics\Controllers\StatisticController::class, 'index']);
     });
 
      //Rutas agrupadas por permiso 'reports.view'
      Route::group(['middleware' => ['permission:reports.view']], function () {
-         Route::get('statistics', [\App\Statistics\Controllers\StatisticController::class, 'index'])->name('statistics.index');
         Route::get('statistics/userIndex', [\App\Statistics\Controllers\StatisticController::class, 'userIndex'])->name('statistics.userIndex');
         Route::get('statistics/bookIndex', [\App\Statistics\Controllers\StatisticController::class, 'bookIndex'])->name('statistics.bookIndex');
         Route::get('statistics/zoneIndex', [\App\Statistics\Controllers\StatisticController::class, 'zoneIndex'])->name('statistics.zoneIndex');
     });
 });
+
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
