@@ -11,7 +11,7 @@ import type { AnyFieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Save, X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 
 interface BookFormProps {
@@ -33,7 +33,17 @@ interface BookFormProps {
     zones?: { id: string; name: string; floor_id: string }[];
     floors?: { id: string; floor_number: number; capacity_zones: number }[];
     floor_zone_id: { floor_id: string; name: string }[];
-    books?:{title:string, author:string; ISBN:number; genre:string; editorial:string; bookcase_id:string; zone_id:string; floor_id:string}[];
+    books?: {
+        title: string;
+        author: string;
+        ISBN: number;
+        genre: string;
+        editorial: string;
+        bookcase_id: string;
+        zone_id: string;
+        floor_id: string;
+    }[];
+    image_path?: string;
     page?: string;
     perPage?: string;
 }
@@ -52,7 +62,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 
 var permisosUsuarioFinal: string[] = [];
 
-export function BookForm({ initialData, page, perPage, bookcases, zones, floors, floor_zone_id, books }: BookFormProps) {
+export function BookForm({ initialData, page, perPage, bookcases, zones, floors, floor_zone_id, books, image_path }: BookFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const url = window.location.href;
@@ -126,6 +136,13 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
         'Young Adult Thriller',
     ];
 
+    //Images
+    const [imageState, setImageState] = useState<File | null>(null);
+
+    function selectImage(value: File) {
+        setImageState(value);
+    }
+
     //Manejador unique floor_zone
     function unique_floor_zone(floor_id: string, name: string) {
         if (!floor_zone_id || !Array.isArray(floor_zone_id)) {
@@ -156,20 +173,25 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
             bookcase_id: initialData?.bookcase_id ?? '',
             zone_id: initialData?.zone_id ?? '',
             floor_id: initialData?.floor_id ?? '',
+            image: undefined,
         },
         onSubmit: async ({ value }) => {
-            const bookData = {
-                ...value,
-            };
-
+            const formData = new FormData();
+            formData.append('title', value.title);
+            formData.append('author', value.author);
+            formData.append('ISBN', value.ISBN);
+            formData.append('genre', JSON.stringify(value.genre));
+            formData.append('editorial', value.editorial);
+            formData.append('bookcase_id', value.bookcase_id);
+            formData.append('floor_id', value.floor_id);
+            formData.append('zone_id', value.zone_id);
+            formData.append('image', imageState);
+            formData.append('_method', 'PUT');
             const options = {
-                // preserveState:true,
                 onSuccess: () => {
                     console.log('Libro creado con éxito.');
-
                     queryClient.invalidateQueries({ queryKey: ['books'] });
 
-                    // Construct URL with page parameters
                     let url = '/books';
                     if (page) {
                         url += `?page=${page}`;
@@ -189,9 +211,9 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
 
             // Submit with Inertia
             if (initialData) {
-                router.put(`/books/${initialData.id}`, bookData, options);
+                router.post(`/books/${initialData.id}`, formData, options);
             } else {
-                router.post('/books', bookData, options);
+                router.post('/books', value, options);
             }
         },
     });
@@ -230,7 +252,6 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
             // setSelectedBookcase(matchedBook.bookcase_id);
         }
     }
-
 
     console.log('Initial Data Genre:', initialData?.genre);
 
@@ -362,14 +383,16 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                         <div className="mt-6 mb-6">
                             <form.Field
                                 name="genre"
-                                validators={{
-                                    onChange: ({ value }) =>
-                                        !value || value.length === 0
-                                            ? t('ui.validation.required', {
-                                                  attribute: t('ui.books.fields.genre').toLowerCase(),
-                                              })
-                                            : undefined,
-                                }}
+                                validators={
+                                    {
+                                        // onChange: ({ value }) =>
+                                        //     !value || value.length === 0
+                                        //         ? t('ui.validation.required', {
+                                        //               attribute: t('ui.books.fields.genre').toLowerCase(),
+                                        //           })
+                                        //         : undefined,
+                                    }
+                                }
                             >
                                 {(field) => (
                                     <div className="space-y-4">
@@ -427,6 +450,41 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                             autoComplete="off"
                                         />
                                         <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
+                        {/* Image field */}
+                        <div className="mt-2">
+                            <form.Field name="image">
+                                {(field) => (
+                                    <>
+                                        <div className="flex flex-row items-center">
+                                            <Label htmlFor={field.name}>{t('ui.books.fields.image')}</Label>
+                                        </div>
+
+                                        <Input
+                                            id={field.name}
+                                            type="file"
+                                            name={field.name}
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                setImageState(file);
+                                                field.handleChange(file);
+                                            }}
+                                            onBlur={field.handleBlur}
+                                            placeholder={t('ui.books.placeholders.image')}
+                                            disabled={form.state.isSubmitting}
+                                            required={false}
+                                            autoComplete="off"
+                                            accept="image/*"
+                                        />
+                                        {imageState && <img src={URL.createObjectURL(imageState)}></img>}
+                                        {image_path && !imageState && (
+                                            <span id="preview">
+                                                <img src={image_path} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
+                                            </span>
+                                        )}
                                     </>
                                 )}
                             </form.Field>
@@ -688,21 +746,23 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                         <div className="mt-6 mb-6">
                             <form.Field
                                 name="genre"
-                                validators={{
-                                    onChange: ({ value }) =>
-                                        !value || value.length === 0
-                                            ? t('ui.validation.required', {
-                                                  attribute: t('ui.books.fields.genre').toLowerCase(),
-                                              })
-                                            : undefined,
-                                }}
+                                validators={
+                                    {
+                                        // onChange: ({ value }) =>
+                                        //     !value || value.length === 0
+                                        //         ? t('ui.validation.required', {
+                                        //               attribute: t('ui.books.fields.genre').toLowerCase(),
+                                        //           })
+                                        //         : undefined,
+                                    }
+                                }
                             >
                                 {(field) => (
                                     <div className="space-y-4">
                                         <Label htmlFor={field.name} className="mb-1 flex items-center gap-1">
                                             {t('ui.books.fields.genre')}
                                         </Label>
-                                       <MultiSelect
+                                        <MultiSelect
                                             id={field.name}
                                             value={genreValue}
                                             options={genres.map((genre) => ({
@@ -751,6 +811,42 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                             required
                                             autoComplete="off"
                                         />
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
+                        {/* Image field */}
+                        <div className="mt-2">
+                            <form.Field name="image">
+                                {(field) => (
+                                    <>
+                                        <div className="flex flex-row items-center">
+                                            <Label htmlFor={field.name}>{t('ui.books.fields.image')}</Label>
+                                        </div>
+
+                                        <Input
+                                            id={field.name}
+                                            type="file"
+                                            name={field.name}
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                setImageState(file);
+                                                field.handleChange(file);
+                                            }}
+                                            onBlur={field.handleBlur}
+                                            placeholder={t('ui.books.placeholders.image')}
+                                            disabled={form.state.isSubmitting}
+                                            required={false}
+                                            autoComplete="off"
+                                            accept="image/*"
+                                        />
+                                        {imageState && <img src={URL.createObjectURL(imageState)}></img>}
+                                        {image_path && !imageState && (
+                                            <span id="preview">
+                                                <img src={image_path} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
+                                            </span>
+                                        )}
                                         <FieldInfo field={field} />
                                     </>
                                 )}
