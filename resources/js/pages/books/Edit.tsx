@@ -25,11 +25,12 @@ interface EditBookProps extends PageProps {
     zones?: {id: string; name: string; floor_id: string;} [];
     floors?: {id:string; floor_number: number; capacity_zones: number;}[];
      floor_zone_id:{ floor_id: string; name: string }[];
+     image_path?:string;
     page?: string;
     perPage?: string;
 }
 
-export default function EditBook({ book, bookcases, zones, floors, floor_zone_id }: EditBookProps) {
+export default function EditBook({ book, bookcases, zones, floors, floor_zone_id, image_path }: EditBookProps) {
     const { t } = useTranslations();
 
     return (
@@ -48,7 +49,7 @@ export default function EditBook({ book, bookcases, zones, floors, floor_zone_id
                     <Separator />
                     <CardContent>
                         <BookForm
-                           initialData={book} bookcases={bookcases} zones={zones} floors={floors} floor_zone_id={floor_zone_id}
+                           initialData={book} bookcases={bookcases} zones={zones} floors={floors} floor_zone_id={floor_zone_id} image_path={image_path}
                         />
                     </CardContent>
                 </Card>

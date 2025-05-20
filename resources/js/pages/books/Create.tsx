@@ -25,12 +25,13 @@ interface BookFormProps {
     zones?: {id: string; name: string; floor_id: string;} [];
     floors?: {id:string; floor_number: number; capacity_zones: number;}[];
     floor_zone_id:{ floor_id: string; name: string }[];
+    image_path: string;
     books?:{title:string, author:string; ISBN:number; genre:string; editorial:string; bookcase_id:string; zone_id:string; floor_id:string}[];
     page?: string;
     perPage?: string;
 }
 
-export default function CreateBook({ bookcases, zones, floors, floor_zone_id, books }: BookFormProps) {
+export default function CreateBook({ bookcases, zones, floors, floor_zone_id, books, image_path }: BookFormProps) {
     const { t } = useTranslations();
 
     return (
@@ -48,7 +49,7 @@ export default function CreateBook({ bookcases, zones, floors, floor_zone_id, bo
                     </CardHeader>
                     <Separator />
                     <CardContent>
-                        <BookForm bookcases={bookcases} zones={zones} floors={floors} floor_zone_id={floor_zone_id} books={books}/>
+                        <BookForm bookcases={bookcases} zones={zones} floors={floors} floor_zone_id={floor_zone_id} books={books} image_path={image_path}/>
                     </CardContent>
                 </Card>
             </div>

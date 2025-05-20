@@ -84,7 +84,8 @@ class BookController extends Controller
             return back()->withErrors($validator);
         }
 
-        $action($validator->validated());
+
+        $action($validator->validated(), $request->files);
 
         return redirect()->route('books.index')
             ->with('success', __('messages.books.created'));
@@ -98,17 +99,22 @@ class BookController extends Controller
         $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id']) ->orderBy('bookcase_name', 'asc') ->get() -> toArray();
         $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
 
+        $image_path = $book->getFirstMediaUrl('images');
+
         return Inertia::render('books/Edit', [
             'book' => $book,
             'zones' => $zones,
             'floors' => $floors,
             'bookcases' => $bookcases,
             'floor_zone_id' => $floor_zone_id,
+            'image_path' => $image_path,
         ]);
     }
 
     public function update(Request $request, Book $book, BookUpdateAction $action)
     {
+
+
         $validator = Validator::make($request->all(), [
             'title' => [],
             'author' => [],
@@ -121,13 +127,17 @@ class BookController extends Controller
 
         ]);
 
-        if ($validator->fails()) {
+       if ($validator->fails()) {
+        return back()->withErrors($validator);
+    }
 
-            return back()->withErrors($validator);
+        $data = $validator->validated();
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image');
         }
 
-        $action($book, $validator->validated());
-
+        $action($book, $data);
         $redirectUrl = route('books.index');
 
         //No dejar reservar si ya existe un libro con el mismo ISBN disponible
