@@ -13,6 +13,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
+        //Rutas agrupadas por permiso 'products.view'
+    Route::group(['middleware' => ['permission:products.view']], function () {
+        Route::get('books/search', [\App\Books\Controllers\BookController::class, 'searchBook']);
+    });
+
     // Rutas agrupadas por permiso 'users.view'
     Route::group(['middleware' => ['permission:users.view']], function () {
         Route::resource('users', \App\Users\Controllers\UserController::class);
@@ -23,11 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('reserves', \App\Reserves\Controllers\ReserveController::class);
         Route::resource('books', \App\Books\Controllers\BookController::class);
         Route::get('statistics', [\App\Statistics\Controllers\StatisticController::class, 'index']);
-    });
 
-    //Rutas agrupadas por permiso 'products.view'
-    Route::group(['middleware' => ['permission:products.view']], function () {
-        Route::get('/books/search', [\App\Books\Controllers\BookController::class, 'SearchBook'])->name('books.search');
     });
 
     //Rutas agrupadas por permiso 'reports.view'

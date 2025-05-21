@@ -12,6 +12,7 @@ import {
   LibraryBig,
   MapPin,
   Users,
+  BookOpenText,
 } from 'lucide-react';
 
 interface PageProps {
@@ -70,11 +71,11 @@ export default function Dashboard() {
       icon: Book,
     },
     {
-      permission: 'users.view',
+      permission: 'products.view',
       title: t('ui.books.searchBook'),
       description: t('ui.books.description'),
       href: '/books/search',
-      icon: Book,
+      icon: BookOpenText ,
     },
     {
       permission: 'users.view',

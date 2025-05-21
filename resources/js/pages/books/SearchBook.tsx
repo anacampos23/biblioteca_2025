@@ -118,31 +118,6 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
     const columns = useMemo(
         () =>
             [
-                createActionsColumn<Book>({
-                    id: 'action_loan',
-                    header: t('ui.books.columns.borrow') || 'Actions',
-                    renderActions: (book) => (
-                        <>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                title={t('ui.books.buttons.reserve') || 'Reserve book'}
-                                onClick={() => {
-                                    handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available);
-                                }}
-                                className={`${
-                                    book.available ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-white-300 text-gray-500 hover:bg-gray-100'
-                                }`}
-                            >
-                                {book.available ? (
-                                    <BookUp className="h-4 w-4" />
-                                ) : (
-                                    <BookmarkCheck className={`h-4 w-4 ${book.reserved ? 'text-orange-500' : 'text-gray-500'}`} />
-                                )}
-                            </Button>
-                        </>
-                    ),
-                }),
                 createTextColumn<Book>({
                     id: 'title',
                     header: t('ui.books.columns.title') || 'Title',
@@ -227,42 +202,6 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
                         );
                     },
                 }),
-                // createDateColumn<Book>({
-                //     id: 'created_at',
-                //     header: t('ui.books.columns.created_at') || 'Created At',
-                //     accessorKey: 'created_at',
-                // }),
-                createActionsColumn<Book>({
-                    id: 'actions',
-                    header: t('ui.books.columns.actions') || 'Actions',
-                    renderActions: (book) => (
-                        <>
-                            <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.books.buttons.edit') || 'Edit book'}>
-                                    <PencilIcon className="h-4 w-4" />
-                                </Button>
-                            </Link>
-                            <DeleteDialog
-                                id={book.id}
-                                onDelete={handleDeleteBook}
-                                title={t('ui.books.delete.title') || 'Delete book'}
-                                description={
-                                    t('ui.books.delete.description') || 'Are you sure you want to delete this book? This action cannot be undone.'
-                                }
-                                trigger={
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        className="text-destructive hover:text-destructive"
-                                        title={t('ui.books.buttons.delete') || 'Delete book'}
-                                    >
-                                        <TrashIcon className="h-4 w-4" />
-                                    </Button>
-                                }
-                            />
-                        </>
-                    ),
-                }),
             ] as ColumnDef<Book>[],
         [t, handleDeleteBook],
     );
@@ -273,12 +212,6 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
-                        <Link href="/books/create">
-                            <Button>
-                                <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.books.buttons.new')}
-                            </Button>
-                        </Link>
                     </div>
                     <div></div>
 
