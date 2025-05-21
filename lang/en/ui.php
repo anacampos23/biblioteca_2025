@@ -589,7 +589,8 @@ return [
             'editorial'=> 'Editorial',
             'floor' => 'Floor',
             'zone' => 'Zone',
-            'bookcase'=> 'Bookcase'
+            'bookcase'=> 'Bookcase',
+            'image'=> 'Cover Image',
         ]
     ],
     'loans' => [

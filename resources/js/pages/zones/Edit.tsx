@@ -12,7 +12,7 @@ interface EditZoneProps extends PageProps {
         name: string;
         floor_id: string;
     };
-    floors?: { id: string; floor_number: number; capacity_zones: number; }[];
+    floors: { id: string; floor_number: number; capacity_zones: number; }[];
     floor_zone_id:{ floor_id: string; name: string }[];
     page?: string;
     perPage?: string;

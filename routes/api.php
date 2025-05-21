@@ -46,6 +46,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/books', [BookApiController::class, 'index']);
+    Route::get('/books/search', [BookApiController::class, 'searchBook']);
     Route::get('/books/{book}', [BookApiController::class, 'show']);
     Route::post('/books', [BookApiController::class, 'store']);
     Route::put('/books/{book}', [BookApiController::class, 'update']);

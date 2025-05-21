@@ -583,7 +583,8 @@ return [
             'editorial' => 'Editorial',
             'floor' => 'Piso',
             'zone' => 'Zona',
-            'bookcase'=> 'Estantería'
+            'bookcase'=> 'Estantería',
+            'image'=> 'Imagen de portada'
         ]
 
     ],

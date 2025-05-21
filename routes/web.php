@@ -21,16 +21,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('bookcases', \App\Bookcases\Controllers\BookcaseController::class);
         Route::resource('loans', \App\Loans\Controllers\LoanController::class);
         Route::resource('reserves', \App\Reserves\Controllers\ReserveController::class);
-    });
-
-    //Rutas agrupadas por permiso 'products.view'
-     Route::group(['middleware' => ['permission:products.view']], function () {
         Route::resource('books', \App\Books\Controllers\BookController::class);
         Route::get('statistics', [\App\Statistics\Controllers\StatisticController::class, 'index']);
     });
 
-     //Rutas agrupadas por permiso 'reports.view'
-     Route::group(['middleware' => ['permission:reports.view']], function () {
+    //Rutas agrupadas por permiso 'products.view'
+    Route::group(['middleware' => ['permission:products.view']], function () {
+        Route::get('/books/search', [\App\Books\Controllers\BookController::class, 'SearchBook'])->name('books.search');
+    });
+
+    //Rutas agrupadas por permiso 'reports.view'
+    Route::group(['middleware' => ['permission:reports.view']], function () {
         Route::get('statistics/userIndex', [\App\Statistics\Controllers\StatisticController::class, 'userIndex'])->name('statistics.userIndex');
         Route::get('statistics/bookIndex', [\App\Statistics\Controllers\StatisticController::class, 'bookIndex'])->name('statistics.bookIndex');
         Route::get('statistics/zoneIndex', [\App\Statistics\Controllers\StatisticController::class, 'zoneIndex'])->name('statistics.zoneIndex');

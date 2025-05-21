@@ -224,7 +224,6 @@ export function ZoneForm({ initialData, page, perPage, floors, floor_zone_id }: 
                                         ))}
                                     </SelectContent>
                                 </Select>
-
                                 <FieldInfo field={field} />
                             </>
                         )}
