@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { useTranslations } from '@/hooks/use-translations';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users, Building2, MapPin, LibraryBig, Book, ArrowUpRight, BookmarkCheck, ChartPie } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Users, Building2, MapPin, LibraryBig, Book, ArrowUpRight, BookmarkCheck, BookOpenText , ChartPie } from 'lucide-react';
 import AppLogo from './app-logo';
 
 interface PageProps {
@@ -61,6 +61,14 @@ const mainNavItems = (t: (key: string) => string, permissions: string[]): NavIte
 
     if (permissions.includes('products.view')) {
         items.push({
+            title: t('ui.navigation.items.booksearch'),
+            url: '/books/search',
+            icon: BookOpenText ,
+        });
+    }
+
+    if (permissions.includes('users.view')) {
+        items.push({
             title: t('ui.navigation.items.books'),
             url: '/books',
             icon: Book,
@@ -95,16 +103,16 @@ const mainNavItems = (t: (key: string) => string, permissions: string[]): NavIte
 };
 
 const footerNavItems = (t: (key: string) => string): NavItem[] => [
-    {
-        title: t('ui.navigation.items.repository'),
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: t('ui.navigation.items.documentation'),
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
+    // {
+    //     title: t('ui.navigation.items.repository'),
+    //     url: 'https://github.com/laravel/react-starter-kit',
+    //     icon: Folder,
+    // },
+    // {
+    //     title: t('ui.navigation.items.documentation'),
+    //     url: 'https://laravel.com/docs/starter-kits',
+    //     icon: BookOpen,
+    // },
 ];
 
 export function AppSidebar() {

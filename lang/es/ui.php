@@ -17,6 +17,7 @@ return [
             'documentation' => 'Documentación',
             'reserves' => 'Reservas',
             'statistics' => 'Estadísticas',
+            'booksearch' => 'Buscador de libros'
         ],
     ],
     'user_menu' => [
@@ -448,6 +449,8 @@ return [
         'books' => 'Libros',
         'create'=> 'Crear libro',
         'edit'=> 'Editar libro',
+        'searchBook' => 'Buscador de libros',
+        'searchBook_description' => 'Encuentra fácilmente cualquier libro en nuestra colección',
         'cards'=>[
             'title'=> 'Nuevo libro',
             'description' => 'Añade los datos del nuevo libro',

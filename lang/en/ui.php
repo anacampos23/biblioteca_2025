@@ -16,6 +16,7 @@ return [
             'documentation' => 'Documentation',
             'reserves' => 'Reservations',
             'statistics' => 'Statistics',
+            'booksearch' => 'Book Search',
         ],
     ],
     'user_menu' => [
@@ -454,6 +455,8 @@ return [
         'books' => 'Books',
         'create'=> 'Create book',
         'edit'=> 'Edit book',
+        'searchBook' => 'Book Search',
+        'searchBook_description' => 'Quickly find any book in our collection',
         'cards'=>[
             'title'=> 'New book',
             'description' => 'Add information from the new book',
