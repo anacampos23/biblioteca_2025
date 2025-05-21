@@ -42,6 +42,7 @@ interface BookFormProps {
         bookcase_id: string;
         zone_id: string;
         floor_id: string;
+        image_path: string;
     }[];
     image_path?: string;
     page?: string;
@@ -59,8 +60,6 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
         </>
     );
 }
-
-var permisosUsuarioFinal: string[] = [];
 
 export function BookForm({ initialData, page, perPage, bookcases, zones, floors, floor_zone_id, books, image_path }: BookFormProps) {
     const { t } = useTranslations();
@@ -138,6 +137,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
 
     //Images
     const [imageState, setImageState] = useState<File | null>(null);
+    const [imagePath, setImagePath] = useState<string | undefined>(undefined);
 
     function selectImage(value: File) {
         setImageState(value);
@@ -162,12 +162,46 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
         return true;
     }
 
+    //Autocompletar si hay otro ejemplar con el mismo ISBN
+    function handleISBNMatched(books: BookFormProps['books'], ISBN: number | string) {
+        const isbnStr = String(ISBN); // Convertir a string para comprobar longitud
+
+
+        if (isbnStr.length !== 13) {
+            // Si no tiene 13 caracteres, no hacemos nada
+            return;
+        }
+
+        const matchedBook = books?.find((book) => String(book.ISBN) === isbnStr);
+
+        if (matchedBook) {
+            console.log(matchedBook.image_path);
+            form.setFieldValue('title', matchedBook.title);
+            form.setFieldValue('author', matchedBook.author);
+            const parsedGenres = JSON.parse(matchedBook.genre);
+            setGenreValue(parsedGenres);
+            form.setFieldValue('genre', parsedGenres);
+            form.setFieldValue('editorial', matchedBook.editorial);
+
+            const imageNew = matchedBook.image_path;
+            setImagePath(imageNew);
+            form.setFieldValue('image', matchedBook.image_path);
+            // form.setFieldValue('image', matchedBook.image_path);
+            // form.setFieldValue('floor_id', matchedBook.floor_id);
+            // setSelectedFloor(matchedBook.floor_id);
+            // form.setFieldValue('zone_id', matchedBook.zone_id);
+            // setSelectedZone(matchedBook.zone_id);
+            // form.setFieldValue('bookcase_id', matchedBook.bookcase_id);
+            // setSelectedBookcase(matchedBook.bookcase_id);
+        }
+    }
+
     // TanStack Form setup
     const form = useForm({
         defaultValues: {
             title: initialData?.title ?? '',
             author: initialData?.author ?? '',
-            ISBN: initialData?.ISBN ?? '',
+            ISBN: String(initialData?.ISBN ?? ''),
             genre: initialData?.genre ? JSON.parse(initialData?.genre) : (genreValue ?? []),
             editorial: initialData?.editorial ?? '',
             bookcase_id: initialData?.bookcase_id ?? '',
@@ -179,7 +213,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
             const formData = new FormData();
             formData.append('title', value.title);
             formData.append('author', value.author);
-            formData.append('ISBN', value.ISBN);
+            formData.append('ISBN', String(value.ISBN));
             formData.append('genre', JSON.stringify(value.genre));
             formData.append('editorial', value.editorial);
             formData.append('bookcase_id', value.bookcase_id);
@@ -226,32 +260,6 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
         form.handleSubmit();
     };
 
-    //Autocompletar si hay otro ejemplar con el mismo ISBN
-    function handleISBNMatched(books: BookFormProps['books'], ISBN: number | string) {
-        const isbnStr = String(ISBN); // Convertir a string para comprobar longitud
-
-        if (isbnStr.length !== 13) {
-            // Si no tiene 13 caracteres, no hacemos nada
-            return;
-        }
-
-        const matchedBook = books?.find((book) => String(book.ISBN) === isbnStr);
-
-        if (matchedBook) {
-            form.setFieldValue('title', matchedBook.title);
-            form.setFieldValue('author', matchedBook.author);
-            const parsedGenres = JSON.parse(matchedBook.genre);
-            setGenreValue(parsedGenres);
-            form.setFieldValue('genre', parsedGenres);
-            form.setFieldValue('editorial', matchedBook.editorial);
-            // form.setFieldValue('floor_id', matchedBook.floor_id);
-            // setSelectedFloor(matchedBook.floor_id);
-            // form.setFieldValue('zone_id', matchedBook.zone_id);
-            // setSelectedZone(matchedBook.zone_id);
-            // form.setFieldValue('bookcase_id', matchedBook.bookcase_id);
-            // setSelectedBookcase(matchedBook.bookcase_id);
-        }
-    }
 
     console.log('Initial Data Genre:', initialData?.genre);
 
@@ -360,7 +368,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                         <Input
                                             id={field.name}
                                             name={field.name}
-                                            type="number"
+                                            type="text"
                                             value={field.state.value}
                                             onChange={(e) => {
                                                 const value = Number(e.target.value);
@@ -419,7 +427,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                         </div>
 
                         {/* Editorial field */}
-                        <div>
+                        <div className='mt-6 mb-6'>
                             <form.Field
                                 name="editorial"
                                 validators={{
@@ -455,7 +463,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                             </form.Field>
                         </div>
                         {/* Image field */}
-                        <div className="mt-2">
+                        <div className='mt-6 mb-6'>
                             <form.Field name="image">
                                 {(field) => (
                                     <>
@@ -479,12 +487,13 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                             autoComplete="off"
                                             accept="image/*"
                                         />
-                                        {imageState && <img src={URL.createObjectURL(imageState)}></img>}
-                                        {image_path && !imageState && (
-                                            <span id="preview">
-                                                <img src={image_path} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
-                                            </span>
-                                        )}
+                                        {imageState ? (
+                                            <img src={URL.createObjectURL(imageState)} alt="Preview" className="mt-4 h-auto w-48 rounded-md" />
+                                        ) : image_path ? (
+                                            <img src={image_path} alt="Current book image" className="mt-4 h-auto w-48 rounded-md" />
+                                        ) : imagePath ? (
+                                            <img src={imagePath} alt="Current book image" className="mt-4 h-auto w-48 rounded-md" />
+                                        ) : null}
                                     </>
                                 )}
                             </form.Field>
@@ -723,7 +732,7 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                         <Input
                                             id={field.name}
                                             name={field.name}
-                                            type="number"
+                                            type="text"
                                             value={field.state.value}
                                             onChange={(e) => {
                                                 const value = Number(e.target.value);
@@ -817,11 +826,11 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                             </form.Field>
                         </div>
                         {/* Image field */}
-                        <div className="mt-2">
+                        <div className='mt-6 mb-6'>
                             <form.Field name="image">
                                 {(field) => (
                                     <>
-                                        <div className="flex flex-row items-center">
+                                        <div  className="mt-6 mb-3 flex items-center gap-1">
                                             <Label htmlFor={field.name}>{t('ui.books.fields.image')}</Label>
                                         </div>
 
@@ -841,12 +850,13 @@ export function BookForm({ initialData, page, perPage, bookcases, zones, floors,
                                             autoComplete="off"
                                             accept="image/*"
                                         />
-                                        {imageState && <img src={URL.createObjectURL(imageState)}></img>}
-                                        {image_path && !imageState && (
-                                            <span id="preview">
-                                                <img src={image_path} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
-                                            </span>
-                                        )}
+                                         {imageState ? (
+                                            <img src={URL.createObjectURL(imageState)} alt="Preview" className="mt-4 h-auto w-48 rounded-md" />
+                                        ) : image_path ? (
+                                            <img src={image_path} alt="Current book image" className="mt-4 h-auto w-48 rounded-md" />
+                                        ) : imagePath ? (
+                                            <img src={imagePath} alt="Current book image" className="mt-4 h-auto w-48 rounded-md" />
+                                        ) : null}
                                         <FieldInfo field={field} />
                                     </>
                                 )}

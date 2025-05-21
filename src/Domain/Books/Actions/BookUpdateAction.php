@@ -5,8 +5,6 @@ namespace Domain\Books\Actions;
 use Domain\Books\Data\Resources\BookResource;
 use Domain\Books\Models\Book;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\FileBag;
 
 class BookUpdateAction
 {

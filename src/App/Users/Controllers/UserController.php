@@ -22,8 +22,15 @@ class UserController extends Controller
 {
     public function index()
     {
-        return Inertia::render('users/Index');
+       $loans = Loan::all();
+        $reserves = Reserve::all();
+
+        return Inertia::render('users/Index', [
+            'loans' => $loans,
+            'reserves' =>$reserves,
+        ]);
     }
+
     public function show(Request $request, User $user)
     {
         $loans = Loan::withTrashed()

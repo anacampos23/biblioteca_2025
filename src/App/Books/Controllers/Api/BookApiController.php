@@ -24,6 +24,11 @@ class BookApiController extends Controller
         return response()->json(['book' => $book]);
     }
 
+        public function searchBook(Request $request,  BookIndexAction $action)
+    {
+         return response()->json($action($request->search, $request->integer('per_page', 10)));
+    }
+
     public function store(Request $request, BookStoreAction $action)
     {
         $validator = Validator::make($request->all(), [

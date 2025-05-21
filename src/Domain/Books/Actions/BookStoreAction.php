@@ -29,10 +29,27 @@ class BookStoreAction
         ]);
 
 
-        foreach($files as $file){
-            $book->addMedia($file)->toMediaCollection('images', 'images');
-        };
+        if ($files->count() > 0) {
+            foreach ($files as $file) {
+                $book->addMedia($file)->toMediaCollection('images', 'images');
+            }
+        } else {
+            // No hay imágenes nuevas, buscar otro libro con la misma ISBN que tenga imagen
+            $otherBookWithImage = Book::where('ISBN', $data['ISBN'])
+                ->where('id', '!=', $book->id)
+                ->whereHas('media', function ($query) {
+                    $query->where('collection_name', 'images');
+                })
+                ->first();
 
+            if ($otherBookWithImage) {
+                $mediaItem = $otherBookWithImage->getFirstMedia('images');
+                if ($mediaItem) {
+                    // Copiar la imagen al libro nuevo
+                    $mediaItem->copy($book, 'images', 'images');
+                }
+            }
+        }
         return BookResource::fromModel($book);
     }
 }
