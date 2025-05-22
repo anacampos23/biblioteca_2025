@@ -4,7 +4,7 @@ import CreateQR from "@/components/CreateQR";
 import  ReadQR  from "@/components/ReadQR";
 
 function App() {
-  const [textoQR, setTextoQR] = useState("https://ejemplo.com");
+  const [textoQR, setTextoQR] = useState("");
 
   return (
     <div className="p-4">
