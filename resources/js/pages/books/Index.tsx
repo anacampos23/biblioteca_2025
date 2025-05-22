@@ -279,6 +279,12 @@ export default function BooksIndex({genresList, zonesArray}: BookIndexProps) {
                                 {t('ui.books.buttons.new')}
                             </Button>
                         </Link>
+                        <Link href="/books/create">
+                            <Button>
+                                <PlusIcon className="mr-2 h-4 w-4" />
+                                {t('ui.books.buttons.new')}
+                            </Button>
+                        </Link>
                     </div>
                     <div></div>
 
