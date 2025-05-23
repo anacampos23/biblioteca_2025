@@ -25,7 +25,7 @@ export default function CreateQR({ value }: CreateQRProps) {
 
     return (
         <div className="mt-4 flex w-full flex-col items-center">
-            <input type="text" className="mt-2 mb-2 w-64 text-center focus:shadow-none focus:outline-none" value={value} readOnly />
+            <input type="text" className="mt-2 mb-2 w-full text-center focus:shadow-none focus:outline-none" value={value} readOnly />
             <div className="flex justify-center">
                 <QRCodeCanvas ref={canvasRef} value={value} size={256} />
             </div>

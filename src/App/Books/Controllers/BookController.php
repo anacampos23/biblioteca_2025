@@ -19,17 +19,48 @@ use Domain\Floors\Models\Floor;
 use Domain\Zones\Models\Zone;
 use Domain\Bookcases\Models\Bookcase;
 use Domain\Genres\Models\Genre;
+use Domain\Loans\Models\Loan;
+use Domain\Reserves\Models\Reserve;
 
 class BookController extends Controller
 {
-    public function index()
+    public function index(Book $book)
     {
         $genresList = Genre::select(['id','genre_name'])->get()->toArray();
-         $zonesArray = Zone::select(['id','name'])->get()->toArray();
+        $bookcasesArray = Bookcase::select(['id','bookcase_name'])->get()->toArray();
+        $zonesArray = Zone::select(['id','name'])->get()->toArray();
+        $floorsArray = Floor::select(['id','floor_number'])->get()->toArray();
+        // Obtener todos los libros
+        $books = Book::all();
+
+        // Añadir la URL de la imagen a cada libro
+        $booksWithImages = $books->map(function($book) {
+            return [
+                'id' => $book->id,
+                'title' => $book->title,
+                'author' => $book->author,
+                'ISBN' => $book->ISBN,
+                'genre' => $book->genre,
+                'available'=> $book->available,
+                'editorial' => $book->editorial,
+                'bookcase_id' => $book->bookcase_id,
+                'zone_id' => $book->zone_id,
+                'floor_id' => $book->floor_id,
+                'image_path' => $book->getFirstMediaUrl('images'),
+            ];
+        })->toArray();
+
+        $loan = Loan::select(['id','book_id', 'user_id', 'active'])->get()->toArray();
+        $reserve = Reserve::select(['id','book_id', 'user_id', 'status'])->get()->toArray();
 
         return Inertia::render('books/Index', [
             'genresList'=> $genresList,
+            'bookcasesArray'=>$bookcasesArray,
             'zonesArray' => $zonesArray,
+            'floorsArray'=>$floorsArray,
+            'booksWithImages'=>$booksWithImages,
+            'loan'=> $loan,
+            'reserve'=> $reserve,
         ]);
     }
 
