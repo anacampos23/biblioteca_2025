@@ -603,6 +603,21 @@ return [
             'book_author'=> 'Author: ',
             'book_ISBN'=> 'ISBN: ',
             'save'=> 'Download it',
+        ],
+        'QR_reader'=> [
+            'title'=> 'QR Code Reader',
+            'description'=> 'Select the image',
+            'book_title'=> 'Title: ',
+            'book_author'=> 'Author: ',
+            'book_ISBN'=> 'ISBN: ',
+            'book_availability'=> 'Availability: ',
+            'bookcase'=> 'Bookcase: ',
+            'zone'=> 'Zone: ',
+            'floor'=> 'Floor: ',
+            'loaned' => 'Loaned',
+            'not_loaned' => 'Not Loaned',
+            'reserved'=> 'Reserved',
+            'not_reserved'=> 'Not Reserved',
         ]
 
     ],

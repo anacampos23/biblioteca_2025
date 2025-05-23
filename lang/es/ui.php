@@ -597,6 +597,21 @@ return [
             'book_author'=> 'Autor: ',
             'book_ISBN'=> 'ISBN: ',
             'save'=> 'Descargarlo'
+        ],
+        'QR_reader'=> [
+            'title'=> 'Lector de código QR',
+            'description'=> 'Selecciona la imagen',
+            'book_title'=> 'Título: ',
+            'book_author'=> 'Autor: ',
+            'book_ISBN'=> 'ISBN: ',
+            'book_availability'=>  'Disponibilidad: ',
+            'bookcase' => 'Estantería: ',
+            'zone'=> 'Zona: ',
+            'floor'=> 'Piso: ',
+             'loaned' => 'Prestado',
+             'not_loaned'=> 'No Prestado',
+             'reserved'=>'Reservado',
+             'not_reserved'=>'No reservado',
         ]
 
     ],

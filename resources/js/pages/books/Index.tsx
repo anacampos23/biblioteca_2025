@@ -11,7 +11,7 @@ import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { BookUp, BookmarkCheck, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon } from 'lucide-react';
+import { BookUp, BookmarkCheck, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon, BookCheck } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -21,9 +21,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string }[];
     zonesArray?: { id: string; name: string }[];
+    floorsArray?: any[],
+    bookcasesArray?:any[];
+    booksWithImages?: any[];
+    loan?: { id: string; book_id: string; user_id:string; active: boolean; }[];
+    reserve?: { id: string; book_id: string; user_id:string; status: string; }[];
 }
 
-export default function BooksIndex({ genresList, zonesArray }: BookIndexProps) {
+export default function BooksIndex({ genresList, zonesArray, booksWithImages, floorsArray, bookcasesArray, loan, reserve}: BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -105,10 +110,17 @@ export default function BooksIndex({ genresList, zonesArray }: BookIndexProps) {
         setFilters(newFilters);
     };
 
-    const [isPopoverOpen, setPopoverOpen] = useState(false); // Estado para controlar la visibilidad del popover
-
     //Escanear QR
     const [textoQR, setTextoQR] = useState('');
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    //Libro seleccionado QR Data
+    const selectedBook = booksWithImages?.find((book) => book.id === textoQR);
+    const selectedBookZone = selectedBook ? zonesArray?.find((zone) => zone.id === selectedBook.zone_id) : null;
+    const selectedBookBookcase = selectedBook ? bookcasesArray?.find((bookcase) => bookcase.id === selectedBook.bookcase_id) : null;
+    const selectedBookFloor = selectedBook ? floorsArray?.find((floor) => floor.id === selectedBook.floor_id) : null;
+    const selectedBookLoan = selectedBook ? loan?.find((loan) => loan.book_id === selectedBook.id && loan.active === true) : null;
+    const selectedBookReserve = selectedBook ? reserve?.find((reserve) => reserve.book_id === selectedBook.id && reserve.status !== "finished") : null;
 
     //ISBN count
     interface BookCount {
@@ -132,7 +144,7 @@ export default function BooksIndex({ genresList, zonesArray }: BookIndexProps) {
                                     handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available);
                                 }}
                                 className={`${
-                                    book.available ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-white-300 text-gray-500 hover:bg-gray-100'
+                                    book.available ? ' cursor-pointer bg-green-500 text-white hover:bg-green-600' : ' cursor-pointer bg-white-300 text-gray-500 hover:bg-gray-100'
                                 }`}
                             >
                                 {book.available ? (
@@ -238,11 +250,7 @@ export default function BooksIndex({ genresList, zonesArray }: BookIndexProps) {
                     header: t('ui.books.columns.actions') || 'Actions',
                     renderActions: (book) => (
                         <>
-                            <Popover
-                                onOpenChange={(open) => {
-                                    console.log(open ? 'Popover is now open' : 'Popover is now closed');
-                                }}
-                            >
+                            <Popover>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" size="icon" className="bg-stone-200 dark:bg-stone-800">
                                         <Menu className="h-4 w-4" />
@@ -265,9 +273,9 @@ export default function BooksIndex({ genresList, zonesArray }: BookIndexProps) {
 
                                         <DialogContent>
                                             <DialogTitle> {t('ui.books.QR_create.title')} </DialogTitle>
-                                            <DialogDescription>
+                                            <div>
                                                 <div className="m-2 rounded-md bg-indigo-100 p-2">
-                                                    <div className='font-semibold'>
+                                                    <div className="font-semibold">
                                                         {t('ui.books.QR_create.book_title')}
                                                         {book.title}
                                                     </div>
@@ -282,7 +290,7 @@ export default function BooksIndex({ genresList, zonesArray }: BookIndexProps) {
                                                 </div>
 
                                                 <CreateQR value={book.id} />
-                                            </DialogDescription>
+                                            </div>
                                         </DialogContent>
                                     </Dialog>
                                     {/*Edit book*/}
@@ -326,24 +334,89 @@ export default function BooksIndex({ genresList, zonesArray }: BookIndexProps) {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
-                        <Dialog>
+                        <Dialog
+                            // Vaciar TextoQR cuando se cierra el diálogo
+                            open={isDialogOpen}
+                            onOpenChange={(open) => {
+                                setIsDialogOpen(open);
+                                if (!open) {
+                                    setTextoQR('');
+                                }
+                            }}
+                        >
                             <DialogTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    className="cursor-pointer bg-indigo-500"
-                                    title={t('ui.books.buttons.QR') || 'Delete reserve'}
-                                >
+                                <Button variant="outline" className="cursor-pointer bg-indigo-500 hover:bg-indigo-400" title={t('ui.books.buttons.QR')}>
                                     <ScanQrCode className="mr-2 h-4 w-4" />
                                     {t('ui.books.buttons.QR')}
                                 </Button>
                             </DialogTrigger>
 
                             <DialogContent>
-                                <DialogTitle> {t('ui.reserves.messages.title') || '¿Quieres coger prestado el libro?'} </DialogTitle>
-                                <DialogDescription>
-                                    {' '}
-                                    {t('ui.reserves.messages.description') || 'El libro ya está disponible para ser prestado'} <ReadQR />
-                                </DialogDescription>
+                                <DialogTitle> {t('ui.books.QR_reader.title')} </DialogTitle>
+                                <div>
+                                    <ReadQR onResult={(result) => setTextoQR(result)} />
+                                    {selectedBook && (
+                                        <div className="flex flex-row gap-4">
+                                            <div>
+                                                {selectedBook.image_path ? (
+                                                    <img src={selectedBook.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
+                                                ) : null}
+                                            </div>
+                                            <div>
+                                                <div className="mt-2 mb-5 flex flex-col font-medium">
+                                                    <div>
+                                                        <label className="underline">{t('ui.books.QR_reader.book_title')}</label>
+                                                        {selectedBook.title}
+                                                    </div>
+                                                    <div>
+                                                        <label className="underline">{t('ui.books.QR_reader.book_author')}</label>
+                                                        {selectedBook.author}
+                                                    </div>
+                                                    <div>
+                                                        <label className="underline">{t('ui.books.QR_reader.book_ISBN')}</label>
+                                                        {selectedBook.ISBN}
+                                                    </div>
+                                                </div>
+                                                <div className="mt-2 bg-indigo-100 p-3">
+                                                    <div className={`font-semibold ${selectedBook.available ? 'text-indigo-600' : 'text-red-600'}`}>
+                                                        {' '}
+                                                        {selectedBook.available
+                                                            ? t('ui.books.filters.available')
+                                                            : t('ui.books.filters.not_available')}
+                                                    </div>
+                                                    <div>
+                                                        {selectedBook.available && (
+                                                            <div>
+                                                                <div>
+                                                                    {t('ui.books.QR_reader.bookcase')} {selectedBookBookcase?.bookcase_name}
+                                                                </div>
+                                                                <div>
+                                                                    {t('ui.books.QR_reader.zone')}
+                                                                    {t(`ui.zones.list.${selectedBookZone?.name}`)}
+                                                                </div>
+                                                                <div>
+                                                                    {t('ui.books.QR_reader.floor')} {selectedBookFloor?.floor_number}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        {!selectedBook.available && (
+                                                            <div>
+                                                                <div className={`flex mt-2  ${selectedBookLoan ? 'text-indigo-600' : 'text-stone-700'}`}>
+                                                                    <BookCheck className="h-4 w-4  mr-2 mt-1" />
+                                                                    {selectedBookLoan ? t('ui.books.QR_reader.loaned') : t('ui.books.QR_reader.not_loaned')}
+                                                                </div>
+                                                                <div className={`flex mt-2  ${selectedBookReserve ? 'text-indigo-600' : 'text-stone-700'}`}>
+                                                                     <BookmarkCheck className="h-4 w-4  mr-2 mt-1" />
+                                                                     {selectedBookReserve ? t('ui.books.QR_reader.reserved') : t('ui.books.QR_reader.not_reserved')}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
 
                                 <DialogFooter>
                                     <DialogClose asChild>
