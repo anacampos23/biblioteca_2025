@@ -54,19 +54,43 @@ class BookController extends Controller
          $zonesArray = Zone::select(['id','name'])->get()->toArray();
 
         return Inertia::render('books/SearchBook', [
-            'genresList'=> $genresList,
+            'genresList' => $genresList,
             'zonesArray' => $zonesArray,
         ]);
     }
 
     public function create(Book $book)
     {
-        $zones = Zone::select(['id', 'name', 'floor_id'])->orderBy('name', 'asc')->get()->toArray();
-        $floors = Floor::select(['id', 'floor_number', 'capacity_zones'])->orderBy('floor_number', 'asc')->get()->toArray();
-        $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id'])->orderBy('bookcase_name', 'asc')->get()->toArray();
-        $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id'])->get()->toArray();
+        $zones = Zone::select(['id', 'name', 'floor_id'])
+            ->orderBy('name', 'asc')
+            ->get()
+            ->toArray();
 
-        $books = Book::select(['id', 'title', 'author', 'ISBN', 'genre', 'editorial', 'bookcase_id', 'zone_id', 'floor_id'])
+        $floors = Floor::select(['id', 'floor_number', 'capacity_zones'])
+            ->orderBy('floor_number', 'asc')
+            ->get()
+            ->toArray();
+
+        $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id'])
+            ->orderBy('bookcase_name', 'asc')
+            ->get()
+            ->toArray();
+
+        $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id'])
+            ->get()
+            ->toArray();
+
+        $books = Book::select([
+            'id',
+            'title',
+            'author',
+            'ISBN',
+            'genre',
+            'editorial',
+            'bookcase_id',
+            'zone_id',
+            'floor_id'
+        ])
             ->get()
             ->map(function ($book) {
                 return [
@@ -75,13 +99,13 @@ class BookController extends Controller
                     'author' => $book->author,
                     'ISBN' => $book->ISBN,
                     'genre' => $book->genre,
-                'editorial' => $book->editorial,
-                'bookcase_id' => $book->bookcase_id,
-                'zone_id' => $book->zone_id,
-                'floor_id' => $book->floor_id,
-                'image_path' => $book->getFirstMediaUrl('images'),
-            ];
-        })->toArray();
+                    'editorial' => $book->editorial,
+                    'bookcase_id' => $book->bookcase_id,
+                    'zone_id' => $book->zone_id,
+                    'floor_id' => $book->floor_id,
+                    'image_path' => $book->getFirstMediaUrl('images'),
+                ];
+            })->toArray();
 
         return Inertia::render('books/Create', [
             'zones' => $zones,
