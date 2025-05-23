@@ -509,6 +509,8 @@ return [
             'saving' => 'Saving...',
             'retry' => 'Retry',
             'reserve' => 'Reserve book',
+            'QR'=> 'QR Code Reader',
+            'QR_create'=> 'Create book QR code',
         ],
         'columns' => [
             'title' => 'Title',
@@ -594,7 +596,15 @@ return [
             'zone' => 'Zone',
             'bookcase'=> 'Bookcase',
             'image'=> 'Cover Image',
+        ],
+        'QR_create'=>[
+            'title'=> 'Create QR Code:',
+            'book_title'=> 'Title: ',
+            'book_author'=> 'Author: ',
+            'book_ISBN'=> 'ISBN: ',
+            'save'=> 'Download it',
         ]
+
     ],
     'loans' => [
         'title' => 'Loans',

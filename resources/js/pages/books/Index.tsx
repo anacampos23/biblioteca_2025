@@ -1,4 +1,6 @@
-import { createActionsColumn, createDateColumn, createTextColumn } from '@/components/stack-table/columnsTable';
+import CreateQR from '@/components/CreateQR';
+import ReadQR from '@/components/ReadQR';
+import { createActionsColumn, createTextColumn } from '@/components/stack-table/columnsTable';
 import { DeleteDialog } from '@/components/stack-table/DeleteDialog';
 import { FilterConfig, FiltersTable } from '@/components/stack-table/FiltersTable';
 import { Table } from '@/components/stack-table/Table';
@@ -9,17 +11,19 @@ import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { BookUp, BookmarkCheck, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { BookUp, BookmarkCheck, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
 interface BookIndexProps {
-    genresList?: { id: string; genre_name: string;}[];
-     zonesArray?: { id: string; name: string;}[];
+    genresList?: { id: string; genre_name: string }[];
+    zonesArray?: { id: string; name: string }[];
 }
 
-
-export default function BooksIndex({genresList, zonesArray}: BookIndexProps) {
+export default function BooksIndex({ genresList, zonesArray }: BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -101,13 +105,10 @@ export default function BooksIndex({genresList, zonesArray}: BookIndexProps) {
         setFilters(newFilters);
     };
 
-    //Boton disponible/no disponible
-    const handleToggleAvailabilityFilter = (availability: boolean) => {
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            available: availability.toString(),
-        }));
-    };
+    const [isPopoverOpen, setPopoverOpen] = useState(false); // Estado para controlar la visibilidad del popover
+
+    //Escanear QR
+    const [textoQR, setTextoQR] = useState('');
 
     //ISBN count
     interface BookCount {
@@ -237,29 +238,81 @@ export default function BooksIndex({genresList, zonesArray}: BookIndexProps) {
                     header: t('ui.books.columns.actions') || 'Actions',
                     renderActions: (book) => (
                         <>
-                            <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.books.buttons.edit') || 'Edit book'}>
-                                    <PencilIcon className="h-4 w-4" />
-                                </Button>
-                            </Link>
-                            <DeleteDialog
-                                id={book.id}
-                                onDelete={handleDeleteBook}
-                                title={t('ui.books.delete.title') || 'Delete book'}
-                                description={
-                                    t('ui.books.delete.description') || 'Are you sure you want to delete this book? This action cannot be undone.'
-                                }
-                                trigger={
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        className="text-destructive hover:text-destructive"
-                                        title={t('ui.books.buttons.delete') || 'Delete book'}
-                                    >
-                                        <TrashIcon className="h-4 w-4" />
+                            <Popover
+                                onOpenChange={(open) => {
+                                    console.log(open ? 'Popover is now open' : 'Popover is now closed');
+                                }}
+                            >
+                                <PopoverTrigger asChild>
+                                    <Button variant="outline" size="icon" className="bg-stone-200 dark:bg-stone-800">
+                                        <Menu className="h-4 w-4" />
                                     </Button>
-                                }
-                            />
+                                </PopoverTrigger>
+
+                                <PopoverContent className="w-full max-w-xs space-y-2">
+                                    {/*Dialog QR Creation*/}
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                className="mr-2"
+                                                size="icon"
+                                                title={t('ui.books.buttons.QR_create') || 'Create QR book'}
+                                            >
+                                                <QrCode className="h-4 w-4" />
+                                            </Button>
+                                        </DialogTrigger>
+
+                                        <DialogContent>
+                                            <DialogTitle> {t('ui.books.QR_create.title')} </DialogTitle>
+                                            <DialogDescription>
+                                                <div className="m-2 rounded-md bg-indigo-100 p-2">
+                                                    <div className='font-semibold'>
+                                                        {t('ui.books.QR_create.book_title')}
+                                                        {book.title}
+                                                    </div>
+                                                    <div>
+                                                        {t('ui.books.QR_create.book_author')}
+                                                        {book.author}
+                                                    </div>
+                                                    <div>
+                                                        {t('ui.books.QR_create.book_ISBN')}
+                                                        {book.ISBN}
+                                                    </div>
+                                                </div>
+
+                                                <CreateQR value={book.id} />
+                                            </DialogDescription>
+                                        </DialogContent>
+                                    </Dialog>
+                                    {/*Edit book*/}
+                                    <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                                        <Button variant="outline" className="mr-2" size="icon" title={t('ui.books.buttons.edit') || 'Edit book'}>
+                                            <PencilIcon className="h-4 w-4" />
+                                        </Button>
+                                    </Link>
+                                    {/*Delete book*/}
+                                    <DeleteDialog
+                                        id={book.id}
+                                        onDelete={handleDeleteBook}
+                                        title={t('ui.books.delete.title') || 'Delete book'}
+                                        description={
+                                            t('ui.books.delete.description') ||
+                                            'Are you sure you want to delete this book? This action cannot be undone.'
+                                        }
+                                        trigger={
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="text-destructive hover:text-destructive"
+                                                title={t('ui.books.buttons.delete') || 'Delete book'}
+                                            >
+                                                <TrashIcon className="h-4 w-4" />
+                                            </Button>
+                                        }
+                                    />
+                                </PopoverContent>
+                            </Popover>
                         </>
                     ),
                 }),
@@ -273,14 +326,46 @@ export default function BooksIndex({genresList, zonesArray}: BookIndexProps) {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
-                        <Link href="/books/create">
-                            <Button>
-                                <PlusIcon className="mr-2 h-4 w-4" />
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    className="cursor-pointer bg-indigo-500"
+                                    title={t('ui.books.buttons.QR') || 'Delete reserve'}
+                                >
+                                    <ScanQrCode className="mr-2 h-4 w-4" />
+                                    {t('ui.books.buttons.QR')}
+                                </Button>
+                            </DialogTrigger>
+
+                            <DialogContent>
+                                <DialogTitle> {t('ui.reserves.messages.title') || '¿Quieres coger prestado el libro?'} </DialogTitle>
+                                <DialogDescription>
+                                    {' '}
+                                    {t('ui.reserves.messages.description') || 'El libro ya está disponible para ser prestado'} <ReadQR />
+                                </DialogDescription>
+
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button variant="outline">{t('ui.reserves.buttons.cancel') || 'Cancel'}</Button>
+                                    </DialogClose>
+
+                                    <DialogClose asChild>
+                                        <Button className="bg-indigo-600">
+                                            {t('ui.reserves.buttons.loan') || 'Loan'}
+                                            <BookUp className="h-4 w-4" />
+                                        </Button>
+                                    </DialogClose>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                        {/* <Button onClick={handleQR}>
+                                <QrCode  className="mr-2 h-4 w-4" />
                                 {t('ui.books.buttons.new')}
-                            </Button>
-                        </Link>
+                            </Button> */}
+
                         <Link href="/books/create">
-                            <Button>
+                            <Button className="cursor-pointer">
                                 <PlusIcon className="mr-2 h-4 w-4" />
                                 {t('ui.books.buttons.new')}
                             </Button>
@@ -357,9 +442,9 @@ export default function BooksIndex({genresList, zonesArray}: BookIndexProps) {
                                         label: t('ui.books.filters.name'),
                                         type: 'select',
                                         options: zonesArray.map((zone) => ({
-                                          label: t(`ui.zones.list.${zone.name}`),
-                                          value: zone.name,
-                                      })),
+                                            label: t(`ui.zones.list.${zone.name}`),
+                                            value: zone.name,
+                                        })),
                                         placeholder: t('ui.books.placeholders.name'),
                                     },
                                     {

@@ -30,7 +30,7 @@ import {
     DialogDescription,
     DialogFooter,
     DialogClose,
-  } from "@/components/ui/dialog"; // tu componente personalizado
+  } from "@/components/ui/dialog";
 
 
 export default function ReservesIndex() {
