@@ -43,6 +43,7 @@ class BookController extends Controller
                 'genre' => $book->genre,
                 'available'=> $book->available,
                 'editorial' => $book->editorial,
+                'reserved' => $book->reserved,
                 'bookcase_id' => $book->bookcase_id,
                 'zone_id' => $book->zone_id,
                 'floor_id' => $book->floor_id,

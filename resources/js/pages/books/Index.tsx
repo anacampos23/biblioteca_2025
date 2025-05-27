@@ -21,11 +21,24 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string }[];
     zonesArray?: { id: string; name: string }[];
-    floorsArray?: any[],
-    bookcasesArray?:any[];
-    booksWithImages?: any[];
-    loan?: { id: string; book_id: string; user_id:string; active: boolean; }[];
-    reserve?: { id: string; book_id: string; user_id:string; status: string; }[];
+    floorsArray?: any[];
+    bookcasesArray?: any[];
+    booksWithImages?: {
+        id: string;
+        title: string;
+        author: string;
+        ISBN: number;
+        genre: string;
+        available: boolean;
+        editorial: string;
+        reserved: boolean;
+        bookcase_id: string;
+        zone_id: string;
+        floor_id: string;
+        image_path: string;
+    }[];
+    loan?: { id: string; book_id: string; user_id: string; active: boolean }[];
+    reserve?: { id: string; book_id: string; user_id: string; status: string }[];
 }
 
 export default function BooksIndex({ genresList, zonesArray, booksWithImages, floorsArray, bookcasesArray, loan, reserve}: BookIndexProps) {
@@ -99,6 +112,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
         // return router.get('/reserves/create', { book_id, title, author, ISBN });
         // }
     }
+
 
     //Filters
     const handleFilterChange = (newFilters: Record<string, any>) => {
@@ -345,7 +359,11 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                             }}
                         >
                             <DialogTrigger asChild>
-                                <Button variant="outline" className="cursor-pointer bg-indigo-500 hover:bg-indigo-400" title={t('ui.books.buttons.QR')}>
+                                <Button
+                                    variant="outline"
+                                    className="cursor-pointer bg-indigo-500 hover:bg-indigo-400"
+                                    title={t('ui.books.buttons.QR')}
+                                >
                                     <ScanQrCode className="mr-2 h-4 w-4" />
                                     {t('ui.books.buttons.QR')}
                                 </Button>
@@ -401,13 +419,21 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                                         )}
                                                         {!selectedBook.available && (
                                                             <div>
-                                                                <div className={`flex mt-2  ${selectedBookLoan ? 'text-indigo-600' : 'text-stone-700'}`}>
-                                                                    <BookCheck className="h-4 w-4  mr-2 mt-1" />
-                                                                    {selectedBookLoan ? t('ui.books.QR_reader.loaned') : t('ui.books.QR_reader.not_loaned')}
+                                                                <div
+                                                                    className={`mt-2 flex ${selectedBookLoan ? 'text-indigo-600' : 'text-stone-700'}`}
+                                                                >
+                                                                    <BookCheck className="mt-1 mr-2 h-4 w-4" />
+                                                                    {selectedBookLoan
+                                                                        ? t('ui.books.QR_reader.loaned')
+                                                                        : t('ui.books.QR_reader.not_loaned')}
                                                                 </div>
-                                                                <div className={`flex mt-2  ${selectedBookReserve ? 'text-indigo-600' : 'text-stone-700'}`}>
-                                                                     <BookmarkCheck className="h-4 w-4  mr-2 mt-1" />
-                                                                     {selectedBookReserve ? t('ui.books.QR_reader.reserved') : t('ui.books.QR_reader.not_reserved')}
+                                                                <div
+                                                                    className={`mt-2 flex ${selectedBookReserve ? 'text-indigo-600' : 'text-stone-700'}`}
+                                                                >
+                                                                    <BookmarkCheck className="mt-1 mr-2 h-4 w-4" />
+                                                                    {selectedBookReserve
+                                                                        ? t('ui.books.QR_reader.reserved')
+                                                                        : t('ui.books.QR_reader.not_reserved')}
                                                                 </div>
                                                             </div>
                                                         )}
@@ -424,18 +450,21 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                     </DialogClose>
 
                                     <DialogClose asChild>
-                                        <Button className="bg-indigo-600">
-                                            {t('ui.reserves.buttons.loan') || 'Loan'}
-                                            <BookUp className="h-4 w-4" />
-                                        </Button>
+                                        {selectedBook?.available === true && selectedBook?.reserved === false ? (
+                                           <Button className="bg-indigo-600" onClick={() => {
+                                    handleCreateLoan_ReserveBook(selectedBook.id, selectedBook.title, selectedBook.author, selectedBook.ISBN, selectedBook.available);
+                                }}>
+                                                {t('ui.reserves.buttons.ji') || 'Loan'}
+                                                <BookUp className="h-4 w-4" />
+                                            </Button>
+                                        ) : <Button className="bg-red-600">
+                                                {t('ui.reserves.buttons.asss') || 'Loan'}
+                                                <BookUp className="h-4 w-4" />
+                                            </Button>}
                                     </DialogClose>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
-                        {/* <Button onClick={handleQR}>
-                                <QrCode  className="mr-2 h-4 w-4" />
-                                {t('ui.books.buttons.new')}
-                            </Button> */}
 
                         <Link href="/books/create">
                             <Button className="cursor-pointer">
