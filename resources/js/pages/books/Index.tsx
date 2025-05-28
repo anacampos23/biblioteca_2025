@@ -11,11 +11,11 @@ import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { BookUp, BookmarkCheck, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon, BookCheck } from 'lucide-react';
+import { BookCheck, BookUp, BookmarkCheck, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface BookIndexProps {
@@ -41,7 +41,7 @@ interface BookIndexProps {
     reserve?: { id: string; book_id: string; user_id: string; status: string }[];
 }
 
-export default function BooksIndex({ genresList, zonesArray, booksWithImages, floorsArray, bookcasesArray, loan, reserve}: BookIndexProps) {
+export default function BooksIndex({ genresList, zonesArray, booksWithImages, floorsArray, bookcasesArray, loan, reserve }: BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -113,7 +113,6 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
         // }
     }
 
-
     //Filters
     const handleFilterChange = (newFilters: Record<string, any>) => {
         const filtersChanged = newFilters !== filters;
@@ -134,7 +133,9 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
     const selectedBookBookcase = selectedBook ? bookcasesArray?.find((bookcase) => bookcase.id === selectedBook.bookcase_id) : null;
     const selectedBookFloor = selectedBook ? floorsArray?.find((floor) => floor.id === selectedBook.floor_id) : null;
     const selectedBookLoan = selectedBook ? loan?.find((loan) => loan.book_id === selectedBook.id && loan.active === true) : null;
-    const selectedBookReserve = selectedBook ? reserve?.find((reserve) => reserve.book_id === selectedBook.id && reserve.status !== "finished") : null;
+    const selectedBookReserve = selectedBook
+        ? reserve?.find((reserve) => reserve.book_id === selectedBook.id && reserve.status !== 'finished')
+        : null;
 
     //ISBN count
     interface BookCount {
@@ -158,7 +159,9 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                     handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available);
                                 }}
                                 className={`${
-                                    book.available ? ' cursor-pointer bg-green-500 text-white hover:bg-green-600' : ' cursor-pointer bg-white-300 text-gray-500 hover:bg-gray-100'
+                                    book.available
+                                        ? 'cursor-pointer bg-green-500 text-white hover:bg-green-600'
+                                        : 'bg-white-300 cursor-pointer text-gray-500 hover:bg-gray-100'
                                 }`}
                             >
                                 {book.available ? (
@@ -304,6 +307,8 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                                 </div>
 
                                                 <CreateQR value={book.id} />
+
+
                                             </div>
                                         </DialogContent>
                                     </Dialog>
@@ -346,7 +351,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
         <BookLayout title={t('ui.books.title')}>
             <div className="p-6">
                 <div className="space-y-6">
-                    <div className="flex items-center justify-between">
+                  <div className="flex flex-col items-center justify-between gap-4 lg:flex-row lg:gap-0">
                         <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
                         <Dialog
                             // Vaciar TextoQR cuando se cierra el diálogo
@@ -374,7 +379,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                 <div>
                                     <ReadQR onResult={(result) => setTextoQR(result)} />
                                     {selectedBook && (
-                                        <div className="flex flex-row gap-4">
+                                        <div className="flex flex-col items-center gap-4 lg:flex-row">
                                             <div>
                                                 {selectedBook.image_path ? (
                                                     <img src={selectedBook.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
@@ -450,17 +455,23 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                     </DialogClose>
 
                                     <DialogClose asChild>
-                                        {selectedBook?.available === true && selectedBook?.reserved === false ? (
-                                           <Button className="bg-indigo-600" onClick={() => {
-                                    handleCreateLoan_ReserveBook(selectedBook.id, selectedBook.title, selectedBook.author, selectedBook.ISBN, selectedBook.available);
-                                }}>
-                                                {t('ui.reserves.buttons.ji') || 'Loan'}
-                                                <BookUp className="h-4 w-4" />
-                                            </Button>
-                                        ) : <Button className="bg-red-600">
-                                                {t('ui.reserves.buttons.asss') || 'Loan'}
-                                                <BookUp className="h-4 w-4" />
-                                            </Button>}
+                                        <Button
+                                            className="bg-indigo-600"
+                                            onClick={() => {
+                                                if (selectedBook) {
+                                                    handleCreateLoan_ReserveBook(
+                                                        selectedBook.id,
+                                                        selectedBook.title,
+                                                        selectedBook.author,
+                                                        selectedBook.ISBN,
+                                                        selectedBook.available,
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            {selectedBook?.available === true ? t('ui.books.columns.borrow') : t('ui.books.buttons.reserve')}
+                                            <BookUp className="h-4 w-4" />
+                                        </Button>
                                     </DialogClose>
                                 </DialogFooter>
                             </DialogContent>
@@ -473,7 +484,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                             </Button>
                         </Link>
                     </div>
-                    <div></div>
+
 
                     <div className="space-y-4">
                         <FiltersTable
