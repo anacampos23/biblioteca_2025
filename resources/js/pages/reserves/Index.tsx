@@ -254,7 +254,7 @@ export default function ReservesIndex() {
                           </Button>
                       </Link> */}
                           <a href="/reserves/export" target="_blank" rel="noopener noreferrer">
-                              <Button className="bg-indigo-500 hover:bg-indigo-800">
+                              <Button className="bg-stone-300 text-stone-900 hover:bg-stone-200">
                                   <FileUp className="mr-2 h-4 w-4" />
                                   {t('ui.reserves.export')}
                               </Button>

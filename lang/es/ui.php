@@ -620,6 +620,13 @@ return [
          'export'=> 'Exportar libros',
          'import'=> 'Importar libros',
          'options'=> 'Opciones',
+         'import_title'=> 'Importa nuevos libros',
+         'import_description' => 'Importa un archivo excel con los datos de los libros',
+          'imported'=> [
+            'select'=> 'Seleccionar archivo',
+            'file'=> 'Archivo seleccionado: ',
+            'button'=> 'Importar libros',
+         ]
 
     ],
     'loans' => [
@@ -652,7 +659,7 @@ return [
             'author' => 'Autor...',
             'ISBN' => 'ISBN...',
             'active' => 'En progreso/Terminado',
-            'start_loan' => 'Fecha de inicio del préstamo',
+            'start_loan' => 'Fecha de inicio',
             'due_date' => 'Fecha de vencimiento',
             'end_loan' => 'Fecha de devolución',
             'days_overdue' => 'Días de retraso...',

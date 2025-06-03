@@ -626,6 +626,13 @@ return [
          'export'=> 'Export books',
          'import'=> 'Import books',
          'options'=> 'Options',
+         'import_title'=> 'Import new books',
+         'import_description' => 'Import an excel file with new books data',
+        'imported'=> [
+            'select'=> 'Select file',
+            'file'=> 'Selected file:  ',
+            'button'=> 'Import books',
+         ]
 
     ],
     'loans' => [

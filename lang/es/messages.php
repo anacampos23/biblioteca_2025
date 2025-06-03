@@ -51,7 +51,7 @@ return [
             'delete' => 'Error al eliminar el libro',
         ],
         'loan_reserve' => 'El libro está disponible. Puedes realizar directamente un préstamo.',
-        'books'=> 'Libros importados con éxito',
+        'imported'=> 'Libros importados con éxito',
     ],
     'loans' => [
         'created' => 'Préstamo creado correctamente',

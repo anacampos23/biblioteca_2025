@@ -19,6 +19,6 @@ class ZonesExport implements FromCollection, WithHeadings
     /** Naming the columns */
       public function headings(): array
     {
-        return ['id', 'Nombre', 'Id del piso', 'Creado el', 'Editado el', 'Eliminado el'];
+        return ['id', 'name', 'floor_id', 'created_at', 'updated_at', 'deleted_at'];
     }
 }
