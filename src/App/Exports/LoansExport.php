@@ -20,7 +20,7 @@ class LoansExport implements FromCollection, WithHeadings
                 $loan->start_loan,
                 $loan->end_loan,
                 $loan->due_date,
-                $loan->active ? 'Verdadero' : 'Falso',
+                $loan->active ? 'True' : 'False',
                 $loan->user_id,
                 $loan->book_id,
                 $loan->updated_date,
@@ -32,6 +32,6 @@ class LoansExport implements FromCollection, WithHeadings
     /** Naming the columns */
       public function headings(): array
     {
-        return ['id', 'Inicio préstamo', 'Final préstamo', 'Día vencimiento', 'Activo', 'Id del usuario', 'Id del libro', 'Editado el', 'Eliminado el'];
+        return ['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id', 'updated_date', 'deleted_at'];
     }
 }

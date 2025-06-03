@@ -159,7 +159,7 @@ export default function UsersIndex({ loans, reserves }: userProps) {
                       </Link> */}
                         <div className="mt-4 flex flex-col gap-2 md:mt-0 md:flex-row">
                             <a href="/users/export" target="_blank" rel="noopener noreferrer">
-                                <Button className="bg-indigo-500 hover:bg-indigo-800">
+                                <Button className="bg-stone-300 text-stone-900 hover:bg-stone-200">
                                     <FileUp className="mr-2 h-4 w-4" />
                                     {t('ui.users.export')}
                                 </Button>

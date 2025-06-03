@@ -19,6 +19,6 @@ class FloorsExport implements FromCollection, WithHeadings
     /** Naming the columns */
       public function headings(): array
     {
-        return ['id', 'Número del piso', 'Capacidad de zonas', 'Creado el', 'Editado el'];
+        return ['id', 'floor_number', 'capacity_zones', 'created_at', 'updated_at'];
     }
 }

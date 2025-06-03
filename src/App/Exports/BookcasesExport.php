@@ -19,6 +19,6 @@ class BookcasesExport implements FromCollection, WithHeadings
     /** Naming the columns */
       public function headings(): array
     {
-        return ['id', 'Nombre de la estantería', 'Id de la zona', 'Id del piso', 'Creado el', 'Editado el'];
+        return ['id', 'bookcase_name', 'zone_id', 'floor_id', 'created_at', 'updated_at'];
     }
 }

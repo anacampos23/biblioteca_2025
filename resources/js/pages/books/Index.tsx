@@ -509,7 +509,8 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                         </DialogTrigger>
 
                                         <DialogContent>
-                                            <DialogTitle> {t('ui.books.QR_create.title')} </DialogTitle>
+                                            <DialogTitle> {t('ui.books.import_title')} </DialogTitle>
+                                            {t('ui.books.import_description')}
                                             <ImportBooksForm />
                                         </DialogContent>
                                     </Dialog>
