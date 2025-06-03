@@ -3,6 +3,7 @@
 namespace App\Reserves\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Exports\ReservesExport;
 use App\Notifications\Disponible;
 use Domain\Reserves\Actions\ReserveDestroyAction;
 use Domain\Reserves\Actions\ReserveIndexAction;
@@ -17,6 +18,7 @@ use Inertia\Response;
 use Domain\Users\Models\User;
 use Domain\Books\Models\Book;
 use Domain\Loans\Models\Loan;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReserveController extends Controller
 {
@@ -143,5 +145,11 @@ class ReserveController extends Controller
 
         return redirect()->route('reserves.index')
             ->with('success', __('messages.reserves.deleted'));
+    }
+
+        public function exportReserves()
+    {
+
+        return Excel::download(new ReservesExport, 'reserves.xlsx');
     }
 }

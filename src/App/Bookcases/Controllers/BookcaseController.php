@@ -3,6 +3,7 @@
 namespace App\Bookcases\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Exports\BookcasesExport;
 use Domain\Floors\Models\Floor;
 use Domain\Zones\Models\Zone;
 use Domain\Bookcases\Actions\BookcaseDestroyAction;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Exports\ZonesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookcaseController extends Controller
 {
@@ -146,5 +149,11 @@ class BookcaseController extends Controller
 
         return redirect()->route('bookcases.index')
             ->with('success', __('messages.bookcases.deleted'));
+    }
+
+    public function exportBookcases()
+    {
+
+        return Excel::download(new BookcasesExport, 'bookcases.xlsx');
     }
 }

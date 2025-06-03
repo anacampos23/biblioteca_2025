@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Loan, useDeleteLoan, useLoans } from "@/hooks/loans/useLoans";
-import { PencilIcon, PlusIcon, TrashIcon, BookCheck , SearchCheck, TimerReset } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, BookCheck , SearchCheck, TimerReset, FileUp } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -251,15 +251,13 @@ export default function LoansIndex({ lang }:indexprops) {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
 
-                <div className="flex flex-col sm:flex-row gap-2">
-                    {/* <Button
-                        onClick={() => setShowOnlyActive(prev => !prev)}
-                        className={`w-full sm:w-auto ${showOnlyActive ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-500 hover:bg-blue-600'}`}
-                        >
-                        <SearchCheck className="mr-2 h-4 w-4" />
-                        {showOnlyActive ? t('ui.loans.active_filtered') || "Showing Active" : t('ui.loans.active') || "Only Active"}
-                        </Button> */}
-
+                <div className="mt-4 flex flex-col gap-2 md:mt-0 md:flex-row">
+                    <a href="/loans/export" target="_blank" rel="noopener noreferrer">
+                          <Button className="bg-indigo-500 hover:bg-indigo-800">
+                              <FileUp className="mr-2 h-4 w-4" />
+                              {t('ui.loans.export')}
+                          </Button>
+                      </a>
                     <Link href="/loans/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />

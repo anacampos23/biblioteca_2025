@@ -264,6 +264,7 @@ return [
             'previous' => 'Previous',
             'next' => 'Next',
         ],
+        'export'=> 'Export users',
     ],
     'floors' => [
         'title' => 'Floors',
@@ -314,7 +315,8 @@ return [
         'edit' => [
             'name' => 'Edit Floor',
             'description' => 'Input the information to edit the floor.'
-        ]
+        ],
+        'export'=> 'Export floors',
     ],
 
     'zones' => [
@@ -393,6 +395,7 @@ return [
             'previous' => 'Previous',
             'next' => 'Next',
         ],
+        'export'=> 'Export zones',
     ],
 
     'bookcases' => [
@@ -446,7 +449,8 @@ return [
         'fields'=> [
             'bookcase_number'=> 'Bookcase number'
         ],
-        'same_name_error'=> 'There is already a bookcase with this number in this zone and floor'
+        'same_name_error'=> 'There is already a bookcase with this number in this zone and floor',
+        'export'=> 'Export bookcases',
     ],
     "books" => [
         'title' => 'Books',
@@ -618,7 +622,8 @@ return [
             'not_loaned' => 'Not Loaned',
             'reserved'=> 'Reserved',
             'not_reserved'=> 'Not Reserved',
-        ]
+        ],
+         'export'=> 'Export books',
 
     ],
     'loans' => [
@@ -686,7 +691,8 @@ return [
             'ISBN' => 'ISBN',
             'not_returned' => 'Not returned yet',
             'returned' => 'Returned: ',
-        ]
+        ],
+        'Export'=> 'Export loans',
     ],
     'reserves' => [
         'title' => 'Reservations',
@@ -751,7 +757,8 @@ return [
         'delete' => [
             'title' => 'Are you sure you want to delete this reservation?',
             'description' => 'Information would be safe on data base'
-        ]
+        ],
+        'export'=> 'Export reservations',
     ],
     'statistics' => [
         'title' => 'Statistics',

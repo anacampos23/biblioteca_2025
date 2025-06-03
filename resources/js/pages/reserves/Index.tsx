@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Reserve, useDeleteReserve, useReserves } from "@/hooks/reserves/useReserves";
-import { PencilIcon, PlusIcon, TrashIcon,  BookUp } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon,  BookUp, FileUp } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -243,62 +243,70 @@ export default function ReservesIndex() {
       <ReserveLayout title={t('ui.reserves.title')}>
           <div className="p-6">
               <div className="space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <h1 className="text-3xl font-bold">{t('ui.reserves.title')}</h1>
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                      <h1 className="text-3xl font-bold">{t('ui.reserves.title')}</h1>
 
-                <div className="flex flex-col sm:flex-row gap-2">
-
-                    {/* <Link href="/reserves/create">
+                      <div className="flex flex-col gap-2 sm:flex-row">
+                          {/* <Link href="/reserves/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
                               {t('ui.reserves.buttons.new')}
                           </Button>
                       </Link> */}
-                </div>
-                </div>
-
+                          <a href="/reserves/export" target="_blank" rel="noopener noreferrer">
+                              <Button className="bg-indigo-500 hover:bg-indigo-800">
+                                  <FileUp className="mr-2 h-4 w-4" />
+                                  {t('ui.reserves.export')}
+                              </Button>
+                          </a>
+                      </div>
+                  </div>
 
                   <div className="space-y-4">
                       <FiltersTable
                           filters={
                               [
                                   {
-                                    id: 'title',
-                                    label: t('ui.reserves.filters.title'),
-                                    type: 'text',
-                                    placeholder: t('ui.reserves.placeholders.title'),
+                                      id: 'title',
+                                      label: t('ui.reserves.filters.title'),
+                                      type: 'text',
+                                      placeholder: t('ui.reserves.placeholders.title'),
                                   },
                                   {
-                                    id: 'author',
-                                    label: t('ui.reserves.filters.author'),
-                                    type: 'text',
-                                    placeholder: t('ui.reserves.placeholders.author'),
-                                },
-                                {
-                                    id: 'ISBN',
-                                    label: t('ui.reserves.filters.ISBN'),
-                                    type: 'number',
-                                    placeholder: t('ui.reserves.placeholders.ISBN'),
-                                },
-                                {
-                                    id: 'name',
-                                    label: t('ui.users.filters.name') || 'Nombre',
-                                    type: 'text',
-                                    placeholder: t('ui.users.placeholders.name') || 'Nombre...',
-                                },
-                                {
-                                    id: 'email',
-                                    label: t('ui.users.filters.email') || 'Email',
-                                    type: 'text',
-                                    placeholder: t('ui.users.placeholders.email') || 'Email...',
-                                },
-                                {
-                                    id: 'status',
-                                    label: t('ui.reserves.filters.status'),
-                                    type: 'select',
-                                    options:[{value:'waiting', label: t('ui.reserves.filters.waiting')}, {value:'contacted', label: t('ui.reserves.filters.contacted')}, {value:'finished', label: t('ui.reserves.filters.finished')}],
-                                    placeholder: t('ui.reserves.placeholders.status'),
-                                    },
+                                      id: 'author',
+                                      label: t('ui.reserves.filters.author'),
+                                      type: 'text',
+                                      placeholder: t('ui.reserves.placeholders.author'),
+                                  },
+                                  {
+                                      id: 'ISBN',
+                                      label: t('ui.reserves.filters.ISBN'),
+                                      type: 'number',
+                                      placeholder: t('ui.reserves.placeholders.ISBN'),
+                                  },
+                                  {
+                                      id: 'name',
+                                      label: t('ui.users.filters.name') || 'Nombre',
+                                      type: 'text',
+                                      placeholder: t('ui.users.placeholders.name') || 'Nombre...',
+                                  },
+                                  {
+                                      id: 'email',
+                                      label: t('ui.users.filters.email') || 'Email',
+                                      type: 'text',
+                                      placeholder: t('ui.users.placeholders.email') || 'Email...',
+                                  },
+                                  {
+                                      id: 'status',
+                                      label: t('ui.reserves.filters.status'),
+                                      type: 'select',
+                                      options: [
+                                          { value: 'waiting', label: t('ui.reserves.filters.waiting') },
+                                          { value: 'contacted', label: t('ui.reserves.filters.contacted') },
+                                          { value: 'finished', label: t('ui.reserves.filters.finished') },
+                                      ],
+                                      placeholder: t('ui.reserves.placeholders.status'),
+                                  },
                               ] as FilterConfig[]
                           }
                           onFilterChange={handleFilterChange}

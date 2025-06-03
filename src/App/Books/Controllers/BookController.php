@@ -3,6 +3,7 @@
 namespace App\Books\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Exports\BooksExport;
 use Domain\Permissions\Models\Permission;
 use Domain\Roles\Models\Role;
 use Domain\Books\Actions\BookDestroyAction;
@@ -21,6 +22,7 @@ use Domain\Bookcases\Models\Bookcase;
 use Domain\Genres\Models\Genre;
 use Domain\Loans\Models\Loan;
 use Domain\Reserves\Models\Reserve;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookController extends Controller
 {
@@ -196,7 +198,6 @@ class BookController extends Controller
     public function update(Request $request, Book $book, BookUpdateAction $action)
     {
 
-
         $validator = Validator::make($request->all(), [
             'title' => [],
             'author' => [],
@@ -282,5 +283,11 @@ class BookController extends Controller
 
         return redirect()->route('books.index')
             ->with('success', __('messages.books.deleted'));
+    }
+
+        public function exportBooks()
+    {
+
+        return Excel::download(new BooksExport, 'books.xlsx');
     }
 }

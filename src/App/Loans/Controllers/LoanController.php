@@ -3,6 +3,7 @@
 namespace App\Loans\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Exports\LoansExport;
 use App\Notifications\Disponible;
 use App\Notifications\Préstamo;
 use Carbon\Carbon;
@@ -20,6 +21,7 @@ use Domain\Users\Models\User;
 use Domain\Books\Models\Book;
 use Domain\Reserves\Models\Reserve;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 use function Laravel\Prompts\alert;
 
@@ -254,5 +256,11 @@ class LoanController extends Controller
 
         return redirect()->route('loans.index')
             ->with('success', __('messages.loans.deleted'));
+    }
+
+        public function exportLoans()
+    {
+
+        return Excel::download(new LoansExport, 'loans.xlsx');
     }
 }

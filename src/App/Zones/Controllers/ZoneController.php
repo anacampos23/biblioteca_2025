@@ -15,6 +15,8 @@ use Domain\Zones\Actions\ZoneUpdateAction;
 use Domain\Zones\Actions\ZoneDestroyAction;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Exports\ZonesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -159,5 +161,11 @@ class ZoneController extends Controller
 
         return redirect()->route('zones.index')
             ->with('success', __('messages.zones.deleted'));
+    }
+
+    public function exportZones()
+    {
+
+        return Excel::download(new ZonesExport, 'zones.xlsx');
     }
 }

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { Floor, useDeleteFloor, useFloors } from "@/hooks/floors/useFloors";
-import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, FileUp } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -72,56 +72,75 @@ export default function FloorsIndex() {
     setFilters(newFilters);
     };
 
-  const columns = useMemo(() => ([
-    createTextColumn<Floor>({
-        id: "floor_number",
-        header: t("ui.floors.columns.floor_number") || "Floor number",
-        accessorKey: "floor_number",
-        format: (value)=>t("ui.floors.columns.floor")+' '+value,
-    }),
-    createTextColumn<Floor>({
-      id: "capacity_zones",
-      header: t("ui.floors.columns.capacity_zones") || "Capacity Zones",
-      accessorKey: "capacity_zones",
-    }),
-    createActionsColumn<Floor>({
-      id: "actions",
-      header: t("ui.floors.columns.actions") || "Actions",
-      renderActions: (floor) => (
-        <>
-          <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-            <Button variant="outline" size="icon" title={t("ui.floors.buttons.edit") || "Edit floor"}>
-              <PencilIcon className="h-4 w-4" />
-            </Button>
-          </Link>
-          <DeleteDialog
-            id={floor.id}
-            onDelete={handleDeleteFloor}
-            title={t("ui.floors.delete.title") || "Delete floor"}
-            description={t("ui.floors.delete.description") || "Are you sure you want to delete this floor? This action cannot be undone."}
-            trigger={
-              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.floors.buttons.delete") || "Delete floors"}>
-                <TrashIcon className="h-4 w-4" />
-              </Button>
-            }
-          />
-        </>
-      ),
-    }),
-  ] as ColumnDef<Floor>[]), [t, handleDeleteFloor]);
+  const columns = useMemo(
+      () =>
+          [
+              createTextColumn<Floor>({
+                  id: 'floor_number',
+                  header: t('ui.floors.columns.floor_number') || 'Floor number',
+                  accessorKey: 'floor_number',
+                  format: (value) => t('ui.floors.columns.floor') + ' ' + value,
+              }),
+              createTextColumn<Floor>({
+                  id: 'capacity_zones',
+                  header: t('ui.floors.columns.capacity_zones') || 'Capacity Zones',
+                  accessorKey: 'capacity_zones',
+              }),
+              createActionsColumn<Floor>({
+                  id: 'actions',
+                  header: t('ui.floors.columns.actions') || 'Actions',
+                  renderActions: (floor) => (
+                      <>
+                          <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                              <Button variant="outline" size="icon" title={t('ui.floors.buttons.edit') || 'Edit floor'}>
+                                  <PencilIcon className="h-4 w-4" />
+                              </Button>
+                          </Link>
+                          <DeleteDialog
+                              id={floor.id}
+                              onDelete={handleDeleteFloor}
+                              title={t('ui.floors.delete.title') || 'Delete floor'}
+                              description={
+                                  t('ui.floors.delete.description') || 'Are you sure you want to delete this floor? This action cannot be undone.'
+                              }
+                              trigger={
+                                  <Button
+                                      variant="outline"
+                                      size="icon"
+                                      className="text-destructive hover:text-destructive"
+                                      title={t('ui.floors.buttons.delete') || 'Delete floors'}
+                                  >
+                                      <TrashIcon className="h-4 w-4" />
+                                  </Button>
+                              }
+                          />
+                      </>
+                  ),
+              }),
+          ] as ColumnDef<Floor>[],
+      [t, handleDeleteFloor],
+  );
 
   return (
       <FloorLayout title={t('ui.floors.title')}>
           <div className="p-6">
               <div className="space-y-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between flex-col md:flex-row">
                       <h1 className="text-3xl font-bold">{t('ui.floors.title')}</h1>
-                      <Link href="/floors/create">
-                          <Button>
-                              <PlusIcon className="mr-2 h-4 w-4" />
-                              {t('ui.floors.buttons.new')}
-                          </Button>
-                      </Link>
+                      <div className="mt-4 flex flex-col gap-2 md:mt-0 md:flex-row">
+                          <a href="/floors/export" target="_blank" rel="noopener noreferrer">
+                              <Button className="bg-indigo-500 hover:bg-indigo-800">
+                                  <FileUp className="mr-2 h-4 w-4" />
+                                  {t('ui.floors.export')}
+                              </Button>
+                          </a>
+                          <Link href="/floors/create">
+                              <Button>
+                                  <PlusIcon className="mr-2 h-4 w-4" />
+                                  {t('ui.floors.buttons.new')}
+                              </Button>
+                          </Link>
+                      </div>
                   </div>
                   <div></div>
 
@@ -136,11 +155,11 @@ export default function FloorsIndex() {
                                       placeholder: t('ui.floors.placeholders.floor_number'),
                                   },
                                   {
-                                    id: 'capacity_zones',
-                                    label: t('ui.floors.filters.capacity_zones'),
-                                    type: 'number',
-                                    placeholder: t('ui.floors.placeholders.capacity_zones'),
-                                }
+                                      id: 'capacity_zones',
+                                      label: t('ui.floors.filters.capacity_zones'),
+                                      type: 'number',
+                                      placeholder: t('ui.floors.placeholders.capacity_zones'),
+                                  },
                               ] as FilterConfig[]
                           }
                           onFilterChange={handleFilterChange}
