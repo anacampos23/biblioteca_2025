@@ -618,6 +618,8 @@ return [
              'not_reserved'=>'No reservado',
         ],
          'export'=> 'Exportar libros',
+         'import'=> 'Importar libros',
+         'options'=> 'Opciones',
 
     ],
     'loans' => [

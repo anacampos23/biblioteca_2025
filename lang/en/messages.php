@@ -40,7 +40,8 @@ return [
             'update' => 'Error updating book',
             'delete' => 'Error deleting book',
         ],
-        'loan_reserve' => 'The book is available. You can already loan it.'
+        'loan_reserve' => 'The book is available. You can already loan it.',
+        'imported'=> 'Books imported successfully',
     ],
     'bookcases' => [
         'created' => 'Bookcase created successfully',

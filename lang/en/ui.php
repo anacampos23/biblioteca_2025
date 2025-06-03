@@ -624,6 +624,8 @@ return [
             'not_reserved'=> 'Not Reserved',
         ],
          'export'=> 'Export books',
+         'import'=> 'Import books',
+         'options'=> 'Options',
 
     ],
     'loans' => [
