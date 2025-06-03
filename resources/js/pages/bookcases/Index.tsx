@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/stack-table/TableSkeleton";
 import { BookcaseLayout } from "@/layouts/bookcases/BookcaseLayout";
 import { Bookcase, useDeleteBookcase, useBookcases } from "@/hooks/bookcases/useBookcases";
-import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, PlusIcon, TrashIcon, FileUp} from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
@@ -131,14 +131,22 @@ export default function BookcasesIndex({ zonesArray }: BookcaseIndexProps) {
       <BookcaseLayout title={t('ui.bookcases.title')}>
           <div className="p-6">
               <div className="space-y-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between flex-col md:flex-row">
                       <h1 className="text-3xl font-bold">{t('ui.bookcases.title')}</h1>
+                      <div className="mt-4 flex flex-col gap-2 md:mt-0 md:flex-row">
+                        <a href="/bookcases/export" target="_blank" rel="noopener noreferrer">
+                          <Button className="bg-indigo-500 hover:bg-indigo-800">
+                              <FileUp className="mr-2 h-4 w-4" />
+                              {t('ui.bookcases.export')}
+                          </Button>
+                      </a>
                       <Link href="/bookcases/create">
                           <Button>
                               <PlusIcon className="mr-2 h-4 w-4" />
                               {t('ui.bookcases.buttons.new')}
                           </Button>
                       </Link>
+                      </div>
                   </div>
                   <div></div>
 
@@ -157,17 +165,17 @@ export default function BookcasesIndex({ zonesArray }: BookcaseIndexProps) {
                                       label: t('ui.bookcases.filters.zone') || 'Email',
                                       type: 'select',
                                       options: zonesArray.map((zone) => ({
-                                            label: t(`ui.zones.list.${zone.name}`),
-                                            value: zone.id,
-                                        })),
+                                          label: t(`ui.zones.list.${zone.name}`),
+                                          value: zone.id,
+                                      })),
                                       placeholder: t('ui.bookcases.placeholders.zone') || 'Email...',
                                   },
                                   {
-                                    id: 'floor_number',
-                                    label: t('ui.bookcases.filters.floor') || 'Email',
-                                    type: 'number',
-                                    placeholder: t('ui.bookcases.placeholders.floor') || 'Email...',
-                                },
+                                      id: 'floor_number',
+                                      label: t('ui.bookcases.filters.floor') || 'Email',
+                                      type: 'number',
+                                      placeholder: t('ui.bookcases.placeholders.floor') || 'Email...',
+                                  },
                               ] as FilterConfig[]
                           }
                           onFilterChange={handleFilterChange}

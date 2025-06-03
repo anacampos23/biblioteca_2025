@@ -9,7 +9,7 @@ import { User, useDeleteUser, useUsers } from '@/hooks/users/useUsers';
 import { UserLayout } from '@/layouts/users/UserLayout';
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { CalendarClock, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { CalendarClock, PencilIcon, PlusIcon, TrashIcon, FileUp  } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -149,7 +149,7 @@ export default function UsersIndex({ loans, reserves }: userProps) {
         <UserLayout title={t('ui.users.title')}>
             <div className="p-6">
                 <div className="space-y-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col items-center justify-between md:flex-row">
                         <h1 className="text-3xl font-bold">{t('ui.users.title')}</h1>
                         {/* <Link href="/users/show">
                           <Button>
@@ -157,12 +157,20 @@ export default function UsersIndex({ loans, reserves }: userProps) {
                               {t('ui.users.buttons.usersTimeline')}
                           </Button>
                       </Link> */}
-                        <Link href="/users/create">
-                            <Button>
-                                <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.users.buttons.new')}
-                            </Button>
-                        </Link>
+                        <div className="mt-4 flex flex-col gap-2 md:mt-0 md:flex-row">
+                            <a href="/users/export" target="_blank" rel="noopener noreferrer">
+                                <Button className="bg-indigo-500 hover:bg-indigo-800">
+                                    <FileUp className="mr-2 h-4 w-4" />
+                                    {t('ui.users.export')}
+                                </Button>
+                            </a>
+                            <Link href="/users/create">
+                                <Button>
+                                    <PlusIcon className="mr-2 h-4 w-4" />
+                                    {t('ui.users.buttons.new')}
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
                     <div></div>
 

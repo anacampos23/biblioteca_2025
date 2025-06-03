@@ -11,7 +11,7 @@ import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { BookCheck, BookUp, BookmarkCheck, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon } from 'lucide-react';
+import { BookCheck, BookUp, BookmarkCheck, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon, FileUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -308,7 +308,6 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
 
                                                 <CreateQR value={book.id} />
 
-
                                             </div>
                                         </DialogContent>
                                     </Dialog>
@@ -351,7 +350,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
         <BookLayout title={t('ui.books.title')}>
             <div className="p-6">
                 <div className="space-y-6">
-                  <div className="flex flex-col items-center justify-between gap-4 lg:flex-row lg:gap-0">
+                    <div className="flex flex-col items-center justify-between gap-4 lg:flex-row lg:gap-0">
                         <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
                         <Dialog
                             // Vaciar TextoQR cuando se cierra el diálogo
@@ -366,7 +365,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                             <DialogTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="cursor-pointer bg-indigo-500 hover:bg-indigo-400"
+                                    className="cursor-pointer bg-stone-300 hover:bg-stone-400"
                                     title={t('ui.books.buttons.QR')}
                                 >
                                     <ScanQrCode className="mr-2 h-4 w-4" />
@@ -477,14 +476,21 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                             </DialogContent>
                         </Dialog>
 
-                        <Link href="/books/create">
-                            <Button className="cursor-pointer">
-                                <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.books.buttons.new')}
-                            </Button>
-                        </Link>
+                        <div className="mt-4 flex flex-col gap-2 md:mt-0 md:flex-row">
+                            <a href="/books/export" target="_blank" rel="noopener noreferrer">
+                                <Button className="bg-indigo-500 hover:bg-indigo-800">
+                                    <FileUp className="mr-2 h-4 w-4" />
+                                    {t('ui.books.export')}
+                                </Button>
+                            </a>
+                            <Link href="/books/create">
+                                <Button className="cursor-pointer">
+                                    <PlusIcon className="mr-2 h-4 w-4" />
+                                    {t('ui.books.buttons.new')}
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
-
 
                     <div className="space-y-4">
                         <FiltersTable

@@ -2,6 +2,7 @@
 
 namespace App\Floors\Controllers;
 
+use App\Exports\FloorsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
@@ -13,7 +14,8 @@ use Domain\Floors\Actions\FloorUpdateAction;
 use Domain\Floors\Actions\FloorDestroyAction;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class FloorController extends Controller
@@ -124,5 +126,10 @@ class FloorController extends Controller
 
         return redirect()->route('floors.index')
             ->with('success', __('messages.floors.deleted'));
+    }
+
+    public function exportFloors()
+    {
+        return Excel::download(new FloorsExport, 'floors.xlsx');
     }
 }

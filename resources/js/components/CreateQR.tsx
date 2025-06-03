@@ -22,7 +22,7 @@ export default function CreateQR({ value }: CreateQRProps) {
         link.download = 'qrcode.png';
         link.click();
     };
-console.log("VALUUUU", value);
+// console.log("VALUUUU", value);
     return (
         <div className="mt-4 flex w-full flex-col items-center">
             <input type="text" className="mt-2 mb-2 w-64 text-center focus:shadow-none focus:outline-none" value={value} readOnly />

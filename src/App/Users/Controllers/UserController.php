@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -182,5 +184,11 @@ class UserController extends Controller
 
         return redirect()->route('users.index')
             ->with('success', __('messages.users.deleted'));
+    }
+
+    public function exportUsers()
+    {
+
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 }

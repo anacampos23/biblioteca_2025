@@ -9,6 +9,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
+
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
@@ -20,6 +22,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rutas agrupadas por permiso 'users.view'
     Route::group(['middleware' => ['permission:users.view']], function () {
+        Route::get('users/export', [\App\Users\Controllers\UserController::class, 'exportUsers'])->name('users.export');
+        Route::get('floors/export', [\App\Floors\Controllers\FloorController::class, 'exportFloors'])->name('floors.export');
+        Route::get('zones/export', [\App\Zones\Controllers\ZoneController::class, 'exportZones'])->name('zones.export');
+        Route::get('bookcases/export', [\App\Bookcases\Controllers\BookcaseController::class, 'exportBookcases'])->name('bookcases.export');
+        Route::get('books/export', [\App\Books\Controllers\BookController::class, 'exportBooks'])->name('books.export');
+        Route::get('loans/export', [\App\Loans\Controllers\LoanController::class, 'exportLoans'])->name('loans.export');
+        Route::get('reserves/export', [\App\Reserves\Controllers\ReserveController::class, 'exportReserves'])->name('reserves.export');
         Route::resource('users', \App\Users\Controllers\UserController::class);
         Route::resource('floors', \App\Floors\Controllers\FloorController::class);
         Route::resource('zones', \App\Zones\Controllers\ZoneController::class);
@@ -37,7 +46,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('statistics/bookIndex', [\App\Statistics\Controllers\StatisticController::class, 'bookIndex'])->name('statistics.bookIndex');
         Route::get('statistics/zoneIndex', [\App\Statistics\Controllers\StatisticController::class, 'zoneIndex'])->name('statistics.zoneIndex');
     });
+
+
+
 });
+
 
 
 require __DIR__ . '/settings.php';

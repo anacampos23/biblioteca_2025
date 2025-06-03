@@ -258,6 +258,7 @@ return [
             'previous' => 'Anterior',
             'next' => 'Siguiente',
         ],
+        'export'=> 'Exportar usuarios',
     ],
     'floors' => [
         'title' => 'Pisos',
@@ -309,7 +310,8 @@ return [
         'edit' => [
             'name' => 'Editar piso',
             'description' => 'Ingresa la información para editar el piso.'
-        ]
+        ],
+        'export'=> 'Exportar pisos'
     ],
     'zones' => [
         'title' => 'Zonas',
@@ -387,6 +389,7 @@ return [
             'previous' => 'Anterior',
             'next' => 'Siguiente',
         ],
+        'export'=> 'Exportar zonas',
     ],
     'bookcases' => [
         'title' => 'Estanterías',
@@ -439,6 +442,7 @@ return [
             'bookcase_number'=> 'Número de la estantería'
         ],
         'same_name_error'=> 'Ya existe una estantería con ese número en esta zona y piso',
+        'export'=> 'Exportar estanterías',
 
     ],
     'books' => [
@@ -612,7 +616,8 @@ return [
              'not_loaned'=> 'No Prestado',
              'reserved'=>'Reservado',
              'not_reserved'=>'No reservado',
-        ]
+        ],
+         'export'=> 'Exportar libros',
 
     ],
     'loans' => [
@@ -682,6 +687,7 @@ return [
             'not_returned' => 'No devuelto',
             'returned' => 'Devuelto el: ',
         ],
+        'export'=> 'Exportar préstamos',
     ],
 
     'reserves' => [
@@ -749,7 +755,8 @@ return [
         'delete' => [
             'title' => '¿Estás seguro/a de que quieres eliminar esta reserva?',
             'description' => 'La información se mantendrá en la base de datos'
-        ]
+        ],
+        'export'=> 'Exportar reservas'
     ],
     'statistics' => [
         'title' => 'Estadísticas',
