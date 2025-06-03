@@ -4,6 +4,7 @@ namespace App\Books\Controllers;
 
 use App\Core\Controllers\Controller;
 use App\Exports\BooksExport;
+use App\Imports\BooksImport;
 use Domain\Permissions\Models\Permission;
 use Domain\Roles\Models\Role;
 use Domain\Books\Actions\BookDestroyAction;
@@ -285,9 +286,16 @@ class BookController extends Controller
             ->with('success', __('messages.books.deleted'));
     }
 
-        public function exportBooks()
+    public function exportBooks()
     {
 
         return Excel::download(new BooksExport, 'books.xlsx');
+    }
+
+    public function importBooks(Request $request)
+    {
+        Excel::import(new BooksImport, $request->file('file'));
+
+        return back()->with('success', __('messages.books.imported'));
     }
 }

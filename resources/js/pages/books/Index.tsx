@@ -11,12 +11,13 @@ import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { BookCheck, BookUp, BookmarkCheck, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon, FileUp } from 'lucide-react';
+import { BookCheck, BookUp, BookmarkCheck, FileUp, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon, FileDown } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import ImportBooksForm from '@/components/import-book-form';
 
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string }[];
@@ -307,7 +308,6 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                                 </div>
 
                                                 <CreateQR value={book.id} />
-
                                             </div>
                                         </DialogContent>
                                     </Dialog>
@@ -365,7 +365,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                             <DialogTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="cursor-pointer bg-stone-300 hover:bg-stone-400"
+                                    className="cursor-pointer bg-indigo-500 text-white hover:bg-indigo-700 hover:text-white"
                                     title={t('ui.books.buttons.QR')}
                                 >
                                     <ScanQrCode className="mr-2 h-4 w-4" />
@@ -476,20 +476,46 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                             </DialogContent>
                         </Dialog>
 
-                        <div className="mt-4 flex flex-col gap-2 md:mt-0 md:flex-row">
-                            <a href="/books/export" target="_blank" rel="noopener noreferrer">
-                                <Button className="bg-indigo-500 hover:bg-indigo-800">
-                                    <FileUp className="mr-2 h-4 w-4" />
-                                    {t('ui.books.export')}
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant="outline" className="bg-stone-200 dark:bg-stone-800">
+                                    <Menu className="h-4 w-4" /> {t('ui.books.options')}
                                 </Button>
-                            </a>
-                            <Link href="/books/create">
-                                <Button className="cursor-pointer">
-                                    <PlusIcon className="mr-2 h-4 w-4" />
-                                    {t('ui.books.buttons.new')}
-                                </Button>
-                            </Link>
-                        </div>
+                            </PopoverTrigger>
+
+                            <PopoverContent className="w-full max-w-xs space-y-2">
+                                <div className="mt-3 mt-4 flex flex-col gap-2">
+                                    {/* Create a new book */}
+                                    <Link href="/books/create">
+                                        <Button className="cursor-pointer">
+                                            <PlusIcon className="mr-2 h-4 w-4" />
+                                            {t('ui.books.buttons.new')}
+                                        </Button>
+                                    </Link>
+                                    {/* Export book data */}
+                                    <a href="/books/export" target="_blank" rel="noopener noreferrer">
+                                        <Button className="cursor-pointer bg-stone-300 text-stone-900 hover:bg-stone-200">
+                                            <FileUp className="mr-2 h-4 w-4" />
+                                            {t('ui.books.export')}
+                                        </Button>
+                                    </a>
+                                    {/* Import book data */}
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="outline" className="cursor-pointer bg-stone-200 text-stone-900 hover:bg-stone-100">
+                                                <FileDown className="mr-2 h-4 w-4" />
+                                                {t('ui.books.import')}
+                                            </Button>
+                                        </DialogTrigger>
+
+                                        <DialogContent>
+                                            <DialogTitle> {t('ui.books.QR_create.title')} </DialogTitle>
+                                            <ImportBooksForm />
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
                     </div>
 
                     <div className="space-y-4">

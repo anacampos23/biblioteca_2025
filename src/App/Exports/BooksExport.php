@@ -18,8 +18,8 @@ class BooksExport implements FromCollection, WithHeadings
                 $book->genre,
                 $book->ISBN,
                 $book->editorial,
-                $book->available ? 'Verdadero' : 'Falso',
-                $book->reserved ? 'Verdadero' : 'Falso',
+                $book->available ? 'True' : 'False',
+                $book->reserved ? 'True' : 'False',
                 $book->bookcase_id,
                 $book->zone_id,
                 $book->floor_id,
@@ -32,7 +32,7 @@ class BooksExport implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        return ['id', 'Título', 'Autor', 'Géneros', 'ISBN', 'Editorial', 'Disponible', 'Reservado', 'Id de la estantería', 'Id de la zona', 'Id del piso', 'Creado el', 'Editado el', 'Eliminado el'];
+        return ['id', 'title', 'author', 'genre', 'ISBN', 'editorial', 'available', 'reserved', 'bookcase_id', 'zone_id', 'floor_id', 'created_at', 'updated_at', 'deleted_at'];
     }
 }
 
