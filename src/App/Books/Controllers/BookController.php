@@ -86,11 +86,33 @@ class BookController extends Controller
     public function searchBook()
     {
         $genresList = Genre::select(['id','genre_name'])->get()->toArray();
-         $zonesArray = Zone::select(['id','name'])->get()->toArray();
+        $zonesArray = Zone::select(['id','name'])->get()->toArray();
+        // Obtener todos los libros
+        $books = Book::all();
+
+        // Añadir la URL de la imagen a cada libro
+        $booksWithImages = $books->map(function($book) {
+            return [
+                'id' => $book->id,
+                'title' => $book->title,
+                'author' => $book->author,
+                'ISBN' => $book->ISBN,
+                'genre' => $book->genre,
+                'available'=> $book->available,
+                'editorial' => $book->editorial,
+                'reserved' => $book->reserved,
+                'bookcase_id' => $book->bookcase_id,
+                'zone_id' => $book->zone_id,
+                'floor_id' => $book->floor_id,
+                'image_path' => $book->getFirstMediaUrl('images'),
+            ];
+        })->toArray();
+
 
         return Inertia::render('books/SearchBook', [
             'genresList' => $genresList,
             'zonesArray' => $zonesArray,
+            'booksWithImages'=>$booksWithImages,
         ]);
     }
 

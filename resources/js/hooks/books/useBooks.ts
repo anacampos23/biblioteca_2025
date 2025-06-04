@@ -20,6 +20,7 @@ export interface Book {
   isbn_count: number;
   isbn_loan_count:number;
   created_at: string;
+   image_path: string;
 }
 
 // Interface representing the actual API response structure
