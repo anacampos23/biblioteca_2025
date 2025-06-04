@@ -31,6 +31,7 @@ class BookResource extends Data
         public readonly int $isbn_count,
         public readonly string $created_at,
         public readonly string $updated_at,
+        public readonly string $image_path,
     ) {
     }
 
@@ -41,6 +42,7 @@ class BookResource extends Data
         $floor = Floor::where('id', $book->floor_id)-> first();
         $book_count = Book::where('ISBN',$book->ISBN) -> pluck('id');
         $loans = Loan::where('active', true)->whereIn('book_id', $book_count);
+        $image_path = $book->getFirstMediaUrl('images') ?: '';
 
 
         return new self(
@@ -62,6 +64,7 @@ class BookResource extends Data
             bookcase_name: $bookcase -> bookcase_name,
             created_at: $book->created_at->format('Y-m-d H:i:s'),
             updated_at: $book->updated_at->format('Y-m-d H:i:s'),
+            image_path: $image_path,
         );
     }
 }

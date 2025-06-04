@@ -1,6 +1,7 @@
 import { Pagination } from '@/components/stack-table';
 import { FilterConfig, FiltersTable } from '@/components/stack-table/FiltersTable';
-import { useDeleteBook } from '@/hooks/books/useBooks';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useBooks } from '@/hooks/books/useBooks';
 import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { usePage } from '@inertiajs/react';
@@ -9,23 +10,9 @@ import { useState } from 'react';
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string }[];
     zonesArray?: { id: string; name: string }[];
-    booksWithImages?: {
-        id: string;
-        title: string;
-        author: string;
-        ISBN: number;
-        genre: string;
-        available: boolean;
-        editorial: string;
-        reserved: boolean;
-        bookcase_id: string;
-        zone_id: string;
-        floor_id: string;
-        image_path: string;
-    }[];
 }
 
-export default function SearchBook({ genresList, zonesArray, booksWithImages }: BookIndexProps) {
+export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -53,17 +40,16 @@ export default function SearchBook({ genresList, zonesArray, booksWithImages }: 
         filters.floor_number ? filters.floor_number : 'null',
     ];
 
-    // const {
-    //     data: books,
-    //     isLoading,
-    //     isError,
-    //     refetch,
-    // } = useBooks({
-    //     search: combinedSearch,
-    //     page: currentPage,
-    //     perPage: perPage,
-    // });
-    const deleteBookMutation = useDeleteBook();
+    const {
+        data: books,
+        isLoading,
+        isError,
+        refetch,
+    } = useBooks({
+        search: combinedSearch,
+        page: currentPage,
+        perPage: perPage,
+    });
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -98,8 +84,8 @@ export default function SearchBook({ genresList, zonesArray, booksWithImages }: 
         isbn_count: number;
     }
 
-    const booksData = {
-        data: booksWithImages ?? [],
+    const booksData = books ?? {
+        data: [],
         meta: {
             current_page: 1,
             from: 0,
@@ -207,40 +193,50 @@ export default function SearchBook({ genresList, zonesArray, booksWithImages }: 
 
                     <div className="grid grid-cols-1 gap-4">
                         {booksData?.data?.map((book) => (
-                            <div key={book.id} className="flex flex-row gap-6 space-y-2 rounded-xl bg-gray-100 p-4 shadow-lg hover:bg-white">
-                                <div className="w-40">
-                                    {book.image_path ? (
-                                        <img src={book.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
-                                    ) : (
-                                        <div className="flex h-40 items-center justify-center">
-                                            <img src="/storage/images/icon_book.png" alt="Book" className="h-auto w-20" />
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <div key={book.id} className="flex flex-row gap-6 space-y-2 rounded-xl bg-gray-100 dark:bg-stone-900 dark:hover:bg-stone-800 p-4 shadow-lg hover:bg-white">
+                                        <div className="w-40">
+                                            {book.image_path ? (
+                                                <img src={book.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
+                                            ) : (
+                                                <div className="flex h-40 items-center justify-center">
+                                                    <img src="/storage/images/icon_book.png" alt="Book" className="h-auto w-20" />
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
-                                <div>
-                                    <h2 className="text-xl font-bold">{book.title}</h2>
-                                    <p>
-                                        <strong>{t('ui.books.columns.author')}:</strong> {book.author}
-                                    </p>
-                                    <p>
-                                        <strong>{t('ui.books.columns.genre')}:</strong>{' '}
-                                        {JSON.parse(book.genre || '[]')
-                                            .map((genre: string) => t(`ui.books.genres.${genre}`))
-                                            .join(', ')}
-                                    </p>
+                                        <div>
+                                            <h2 className="text-xl font-bold">{book.title}</h2>
+                                            <p>
+                                                <strong>{t('ui.books.columns.author')}:</strong> {book.author}
+                                            </p>
+                                            <p>
+                                                <strong>{t('ui.books.columns.genre')}:</strong>{' '}
+                                                {JSON.parse(book.genre || '[]')
+                                                    .map((genre: string) => t(`ui.books.genres.${genre}`))
+                                                    .join(', ')}
+                                            </p>
 
-                                    <p>
-                                        <strong>{t('ui.books.columns.ISBN')}:</strong> {book.ISBN}
-                                    </p>
-                                    <p>
-                                        <strong>{t('ui.books.columns.editorial')}:</strong> {book.editorial}
-                                    </p>
-                                    <p>
-                                        <strong>{t('ui.books.columns.available')}:</strong>{' '}
-                                        {book.available ? t('ui.books.filters.available') : t('ui.books.filters.not_available')}
-                                    </p>
-                                </div>
-                            </div>
+                                            <p>
+                                                <strong>{t('ui.books.columns.ISBN')}:</strong> {book.ISBN}
+                                            </p>
+                                            <p>
+                                                <strong>{t('ui.books.columns.editorial')}:</strong> {book.editorial}
+                                            </p>
+                                            <p>
+                                                <strong>{t('ui.books.columns.available')}:</strong>{' '}
+                                                {book.available ? t('ui.books.filters.available') : t('ui.books.filters.not_available')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </DialogTrigger>
+
+                                <DialogContent>
+                                    <DialogTitle> {t('ui.books.import_title')} </DialogTitle>
+                                    {t('ui.books.import_description')}
+
+                                </DialogContent>
+                            </Dialog>
                         ))}
                     </div>
 

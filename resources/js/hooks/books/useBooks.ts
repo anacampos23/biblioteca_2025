@@ -77,12 +77,13 @@ interface UseBooksParams {
   isbn_loan_count?:number;
   page?: number;
   perPage?: number;
+  image_path?: string;
 }
 
-export function useBooks({ search, title, author, genre, ISBN, editorial, quantity, available, reserved, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, isbn_loan_count, page = 1, perPage = 10 }:
+export function useBooks({ search, title, author, genre, ISBN, editorial, quantity, available, reserved, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, image_path, isbn_loan_count, page = 1, perPage = 10 }:
     UseBooksParams = {}) {
   return useQuery({
-    queryKey: ["books", { search,title, author, genre, ISBN, editorial, quantity, available, reserved, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, isbn_loan_count, page, perPage }],
+    queryKey: ["books", { search,title, author, genre, ISBN, editorial, quantity, available, reserved, bookcase_id, bookcase_name, zone_id, name, floor_id, floor_number, isbn_count, image_path, isbn_loan_count, page, perPage }],
     queryFn: async () => {
       const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Book>>("/api/books", {
         params: {
@@ -102,6 +103,7 @@ export function useBooks({ search, title, author, genre, ISBN, editorial, quanti
           floor_id,
           floor_number,
           isbn_count,
+          image_path,
           isbn_loan_count,
           page,
           per_page: perPage,
@@ -146,6 +148,7 @@ export function useCreateBook() {
         floor_id?: string;
         floor_number?: number;
         isbn_count?: number;
+        image_path?: string;
         isbn_loan_count?: number;}) => {
       const response = await axios.post("/api/books", data, {
         headers: {
@@ -176,6 +179,7 @@ export function useUpdateBook(bookId: string) {
         floor_id?: string;
         floor_number?: number;
         isbn_count?: number;
+        image_path?: string;
         isbn_loan_count:number;}) => {
       const response = await axios.put(`/api/books/${bookId}`, data, {
         headers: {

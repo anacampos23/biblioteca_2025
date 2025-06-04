@@ -108,7 +108,6 @@ class BookController extends Controller
             ];
         })->toArray();
 
-
         return Inertia::render('books/SearchBook', [
             'genresList' => $genresList,
             'zonesArray' => $zonesArray,

@@ -47,8 +47,6 @@ class BookIndexAction
 
         $floor_id= $bookFloor -> id;
 
-        //Disponible/no disponible
-
 
         $book = Book::query()
             ->when($title !== "null", function ($query) use ($title) {
