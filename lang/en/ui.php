@@ -459,8 +459,8 @@ return [
         'books' => 'Books',
         'create'=> 'Create book',
         'edit'=> 'Edit book',
-        'searchBook' => 'Book Search',
-        'searchBook_description' => 'Quickly find any book in our collection',
+        'searchBook' => 'Book Catalogue',
+        'searchBook_description' => 'Quickly find any book in our catalogue',
         'cards'=>[
             'title'=> 'New book',
             'description' => 'Add information from the new book',

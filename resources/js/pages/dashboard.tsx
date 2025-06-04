@@ -73,7 +73,7 @@ export default function Dashboard() {
     {
       permission: 'products.view',
       title: t('ui.books.searchBook'),
-      description: t('ui.books.description'),
+      description: t('ui.books.searchBook_description'),
       href: '/books/search',
       icon: BookOpenText ,
     },
