@@ -1,25 +1,31 @@
-import { createActionsColumn, createDateColumn, createTextColumn } from '@/components/stack-table/columnsTable';
-import { DeleteDialog } from '@/components/stack-table/DeleteDialog';
+import { Pagination } from '@/components/stack-table';
 import { FilterConfig, FiltersTable } from '@/components/stack-table/FiltersTable';
-import { Table } from '@/components/stack-table/Table';
-import { TableSkeleton } from '@/components/stack-table/TableSkeleton';
-import { Button } from '@/components/ui/button';
-import { Book, useBooks, useDeleteBook } from '@/hooks/books/useBooks';
+import { useDeleteBook } from '@/hooks/books/useBooks';
 import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
-import { Link, router, usePage } from '@inertiajs/react';
-import { ColumnDef } from '@tanstack/react-table';
-import { BookUp, BookmarkCheck, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { toast } from 'sonner';
+import { usePage } from '@inertiajs/react';
+import { useState } from 'react';
 
 interface BookIndexProps {
-    genresList?: { id: string; genre_name: string;}[];
-     zonesArray?: { id: string; name: string;}[];
+    genresList?: { id: string; genre_name: string }[];
+    zonesArray?: { id: string; name: string }[];
+    booksWithImages?: {
+        id: string;
+        title: string;
+        author: string;
+        ISBN: number;
+        genre: string;
+        available: boolean;
+        editorial: string;
+        reserved: boolean;
+        bookcase_id: string;
+        zone_id: string;
+        floor_id: string;
+        image_path: string;
+    }[];
 }
 
-
-export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
+export default function SearchBook({ genresList, zonesArray, booksWithImages }: BookIndexProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -47,16 +53,16 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
         filters.floor_number ? filters.floor_number : 'null',
     ];
 
-    const {
-        data: books,
-        isLoading,
-        isError,
-        refetch,
-    } = useBooks({
-        search: combinedSearch,
-        page: currentPage,
-        perPage: perPage,
-    });
+    // const {
+    //     data: books,
+    //     isLoading,
+    //     isError,
+    //     refetch,
+    // } = useBooks({
+    //     search: combinedSearch,
+    //     page: currentPage,
+    //     perPage: perPage,
+    // });
     const deleteBookMutation = useDeleteBook();
 
     const handlePageChange = (page: number) => {
@@ -67,29 +73,6 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
         setPerPage(newPerPage);
         setCurrentPage(1); // Reset to first page when changing items per page
     };
-
-    const handleDeleteBook = async (id: string) => {
-        try {
-            await deleteBookMutation.mutateAsync(id);
-            refetch();
-        } catch (error) {
-            toast.error(t('ui.books.deleted_error') || 'Error deleting book');
-            console.error('Error deleting book:', error);
-        }
-    };
-
-    // Crear préstamo o reserva
-    function handleCreateLoan_ReserveBook(book_id: string, title: string, author: string, ISBN: number, available: boolean) {
-        const informacion = new FormData();
-        informacion.append('newReservationStatus', '1');
-        informacion.append('_method', 'PUT');
-        router.post(`/books/${book_id}`, informacion);
-        // if (available === true) {
-        // return router.get('/loans/create', { book_id, title, author, ISBN });
-        // } else {
-        // return router.get('/reserves/create', { book_id, title, author, ISBN });
-        // }
-    }
 
     //Filters
     const handleFilterChange = (newFilters: Record<string, any>) => {
@@ -115,96 +98,17 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
         isbn_count: number;
     }
 
-    const columns = useMemo(
-        () =>
-            [
-                createTextColumn<Book>({
-                    id: 'title',
-                    header: t('ui.books.columns.title') || 'Title',
-                    accessorKey: 'title',
-                }),
-                createTextColumn<Book>({
-                    id: 'author',
-                    header: t('ui.books.columns.author') || 'author',
-                    accessorKey: 'author',
-                }),
-                createTextColumn<Book>({
-                    id: 'genre',
-                    header: t('ui.books.columns.genre') || 'genre', // Título de la columna traducido
-                    accessorKey: 'genre',
-                    format: (value) => {
-                        let genres = value;
-                        if (typeof value === 'string') {
-                            try {
-                                genres = JSON.parse(value);
-                            } catch (e) {
-                                genres = [];
-                            }
-                        }
-                        // Aquí traducimos cada género
-                        return Array.isArray(genres)
-                            ? genres
-                                  .map((genre) => t(`ui.books.genres.${genre}`) || genre) // Traducción o el género original
-                                  .join(', ')
-                            : value;
-                    },
-                }),
-
-                createTextColumn<Book>({
-                    id: 'ISBN',
-                    header: t('ui.books.columns.ISBN') || 'ISBN',
-                    accessorKey: 'ISBN',
-                }),
-                createTextColumn<Book>({
-                    id: 'editorial',
-                    header: t('ui.books.columns.editorial') || 'editorial',
-                    accessorKey: 'editorial',
-                }),
-                createTextColumn<Book>({
-                    id: 'available',
-                    header: t('ui.books.columns.available') || 'available',
-                    accessorKey: 'available',
-                    format: (value) => (value ? t('ui.books.filters.available') : t('ui.books.filters.not_available')),
-                }),
-                createTextColumn<Book>({
-                    id: 'bookcase_name',
-                    header: t('ui.books.columns.bookcase_name') || 'bookcase_name',
-                    accessorKey: 'bookcase_name',
-                }),
-                createTextColumn<Book>({
-                    id: 'name',
-                    header: t('ui.books.columns.name') || 'name',
-                    accessorKey: 'name',
-                    format: (value) => {
-                        if (Array.isArray(value)) {
-                            return value.map((name) => t(`ui.books.zones.${name}`) || name).join(', ');
-                        }
-                        return typeof value === 'string' ? t(`ui.books.zones.${value}`) || value : '';
-                    },
-                }),
-                createTextColumn<Book>({
-                    id: 'floor_number',
-                    header: t('ui.books.columns.floor_number') || 'floor_number',
-                    accessorKey: 'floor_number',
-                    format: (value) => t('ui.books.columns.floor_number') + ' ' + value,
-                }),
-                createActionsColumn<Book>({
-                    id: 'isbn_loan_count',
-                    header: t('ui.books.columns.isbn_loan_count') || 'Actions',
-                    renderActions: ($book) => {
-                        let $isbn_count = $book.isbn_count;
-                        let $isbn_loan_count = $book.isbn_loan_count;
-                        return (
-                            <span>
-                                {' '}
-                                {$isbn_loan_count}/{$isbn_count}
-                            </span>
-                        );
-                    },
-                }),
-            ] as ColumnDef<Book>[],
-        [t, handleDeleteBook],
-    );
+    const booksData = {
+        data: booksWithImages ?? [],
+        meta: {
+            current_page: 1,
+            from: 0,
+            last_page: 1,
+            per_page: perPage,
+            to: 0,
+            total: 0,
+        },
+    };
 
     return (
         <BookLayout title={t('ui.books.title')}>
@@ -213,7 +117,6 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
                     </div>
-                    <div></div>
 
                     <div className="space-y-4">
                         <FiltersTable
@@ -235,9 +138,9 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
                                         id: 'genre',
                                         label: t('ui.books.filters.genre'),
                                         type: 'select',
-                                        options: genresList.map((genresList) => ({
-                                            label: t(`ui.books.genres.${genresList.genre_name}`),
-                                            value: genresList.genre_name,
+                                        options: genresList?.map((genre) => ({
+                                            label: t(`ui.books.genres.${genre.genre_name}`),
+                                            value: genre.genre_name,
                                         })),
                                         placeholder: t('ui.books.placeholders.genre'),
                                     },
@@ -284,9 +187,9 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
                                         label: t('ui.books.filters.name'),
                                         type: 'select',
                                         options: zonesArray.map((zone) => ({
-                                          label: t(`ui.zones.list.${zone.name}`),
-                                          value: zone.name,
-                                      })),
+                                            label: t(`ui.zones.list.${zone.name}`),
+                                            value: zone.name,
+                                        })),
                                         placeholder: t('ui.books.placeholders.name'),
                                     },
                                     {
@@ -302,41 +205,51 @@ export default function SearchBook({genresList, zonesArray}: BookIndexProps) {
                         />
                     </div>
 
-                    <div className="w-full overflow-hidden">
-                        {isLoading ? (
-                            <TableSkeleton columns={4} rows={10} />
-                        ) : isError ? (
-                            <div className="p-4 text-center">
-                                <div className="mb-4 text-red-500">{t('ui.books.error_loading')}</div>
-                                <Button onClick={() => refetch()} variant="outline">
-                                    {t('ui.books.buttons.retry')}
-                                </Button>
+                    <div className="grid grid-cols-1 gap-4">
+                        {booksData?.data?.map((book) => (
+                            <div key={book.id} className="flex flex-row gap-6 space-y-2 rounded-xl bg-gray-100 p-4 shadow-lg hover:bg-white">
+                                <div className="w-40">
+                                    {book.image_path ? (
+                                        <img src={book.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
+                                    ) : (
+                                        <div className="flex h-40 items-center justify-center">
+                                            <img src="/storage/images/icon_book.png" alt="Book" className="h-auto w-20" />
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold">{book.title}</h2>
+                                    <p>
+                                        <strong>{t('ui.books.columns.author')}:</strong> {book.author}
+                                    </p>
+                                    <p>
+                                        <strong>{t('ui.books.columns.genre')}:</strong>{' '}
+                                        {JSON.parse(book.genre || '[]')
+                                            .map((genre: string) => t(`ui.books.genres.${genre}`))
+                                            .join(', ')}
+                                    </p>
+
+                                    <p>
+                                        <strong>{t('ui.books.columns.ISBN')}:</strong> {book.ISBN}
+                                    </p>
+                                    <p>
+                                        <strong>{t('ui.books.columns.editorial')}:</strong> {book.editorial}
+                                    </p>
+                                    <p>
+                                        <strong>{t('ui.books.columns.available')}:</strong>{' '}
+                                        {book.available ? t('ui.books.filters.available') : t('ui.books.filters.not_available')}
+                                    </p>
+                                </div>
                             </div>
-                        ) : (
-                            <div>
-                                <Table
-                                    data={
-                                        books ?? {
-                                            data: [],
-                                            meta: {
-                                                current_page: 1,
-                                                from: 0,
-                                                last_page: 1,
-                                                per_page: perPage,
-                                                to: 0,
-                                                total: 0,
-                                            },
-                                        }
-                                    }
-                                    columns={columns}
-                                    onPageChange={handlePageChange}
-                                    onPerPageChange={handlePerPageChange}
-                                    perPageOptions={[10, 25, 50, 100]}
-                                    noResultsMessage={t('ui.common.no_results') || 'No books found'}
-                                />
-                            </div>
-                        )}
+                        ))}
                     </div>
+
+                    <Pagination
+                        meta={booksData.meta}
+                        onPageChange={handlePageChange}
+                        onPerPageChange={handlePerPageChange}
+                        perPageOptions={[10, 25, 50, 100]}
+                    />
                 </div>
             </div>
         </BookLayout>
