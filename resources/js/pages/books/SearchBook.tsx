@@ -1,12 +1,13 @@
 import { Pagination } from '@/components/stack-table';
 import { FilterConfig, FiltersTable } from '@/components/stack-table/FiltersTable';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useBooks } from '@/hooks/books/useBooks';
 import { useTranslations } from '@/hooks/use-translations';
-import { BookLayout } from '@/layouts/books/BookLayout';
+import { BooksearchLayout } from '@/layouts/booksearchs/BooksearchLayout';
 import { usePage } from '@inertiajs/react';
+import { ChevronRight, ChevronsDownUp   } from 'lucide-react';
 import { useState } from 'react';
 import { Flipped, Flipper } from 'react-flip-toolkit';
-import { ChevronRight  } from 'lucide-react';
 
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string }[];
@@ -106,8 +107,93 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
         onClick: (index: number) => void;
     }
 
-    const BookCard = ({ book, index, onClick }: BookCardProps) => {
+    // Editar filtros
+    // // Estado para mostrar/ocultar filtros extra
+    // const [showMoreFilters, setShowMoreFilters] = useState(false);
+    // Define filtros visibles siempre
+    const visibleFilters: FilterConfig[] = [
+        {
+            id: 'title',
+            label: t('ui.books.filters.title'),
+            type: 'text',
+            placeholder: t('ui.books.placeholders.title'),
+        },
+        {
+            id: 'author',
+            label: t('ui.books.filters.author'),
+            type: 'text',
+            placeholder: t('ui.books.placeholders.author'),
+        },
+    ];
 
+    // Define filtros ocultos que solo se muestran si showMoreFilters es true
+    const hiddenFilters: FilterConfig[] = [
+        {
+            id: 'genre',
+            label: t('ui.books.filters.genre'),
+            type: 'select',
+            options: genresList?.map((genre) => ({
+                label: t(`ui.books.genres.${genre.genre_name}`),
+                value: genre.genre_name,
+            })),
+            placeholder: t('ui.books.placeholders.genre'),
+        },
+        {
+            id: 'ISBN',
+            label: t('ui.books.filters.ISBN'),
+            type: 'number',
+            placeholder: t('ui.books.placeholders.ISBN'),
+        },
+        {
+            id: 'editorial',
+            label: t('ui.books.filters.editorial'),
+            type: 'text',
+            placeholder: t('ui.books.placeholders.editorial'),
+        },
+        {
+            id: 'available',
+            label: t('ui.books.filters.availability'),
+            type: 'select',
+            options: [
+                { value: 'true', label: t('ui.books.filters.available') },
+                { value: 'false', label: t('ui.books.filters.not_available') },
+            ],
+            placeholder: t('ui.books.placeholders.available'),
+        },
+        {
+            id: 'reserved',
+            label: t('ui.books.filters.reserve'),
+            type: 'select',
+            options: [
+                { value: 'true', label: t('ui.books.filters.reserved') },
+                { value: 'false', label: t('ui.books.filters.not_reserved') },
+            ],
+            placeholder: t('ui.books.placeholders.reserved'),
+        },
+        {
+            id: 'bookcase_name',
+            label: t('ui.books.filters.bookcase_name'),
+            type: 'number',
+            placeholder: t('ui.books.placeholders.bookcase_name'),
+        },
+        {
+            id: 'name',
+            label: t('ui.books.filters.name'),
+            type: 'select',
+            options: zonesArray.map((zone) => ({
+                label: t(`ui.zones.list.${zone.name}`),
+                value: zone.name,
+            })),
+            placeholder: t('ui.books.placeholders.name'),
+        },
+        {
+            id: 'floor_number',
+            label: t('ui.books.filters.floor_number'),
+            type: 'number',
+            placeholder: t('ui.books.placeholders.floor_number'),
+        },
+    ];
+    const BookCard = ({ book, index, onClick }: BookCardProps) => {
         return (
             <Flipped flipId={`book-${book.id}`} stagger="card" shouldInvert={(prev, current) => index === prev || index === current}>
                 <div className="bookCard" onClick={() => onClick(index)}>
@@ -121,12 +207,10 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
                                 {/* Texto */}
                                 <div>
                                     <h2 className="text-xl font-bold">{book.title}</h2>
-                                    <p>
-                                         {book.author}
-                                    </p>
+                                    <p>{book.author}</p>
                                     <p>
                                         {book.available ? (
-                                            <div className='flex flex-row mt-2'>
+                                            <div className="mt-2 flex flex-row">
                                                 <div className="flex flex-row text-green-700">
                                                     {t('ui.books.filters.available')}
                                                     <ChevronRight className="mt-1 ml-1 h-4 w-4" />
@@ -138,7 +222,7 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
                                                 </div>
                                             </div>
                                         ) : (
-                                            <p className="text-red-700 mt-2"> {t('ui.books.filters.not_available')} </p>
+                                            <p className="mt-2 text-red-700"> {t('ui.books.filters.not_available')} </p>
                                         )}
                                     </p>
                                 </div>
@@ -186,24 +270,24 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
                                 <p>
                                     <strong>{t('ui.books.columns.editorial')}:</strong> {book.editorial}
                                 </p>
-                                 <p>
-                                        {book.available ? (
-                                            <div className='flex flex-row mt-2'>
-                                                <div className="flex flex-row text-green-700">
-                                                    {' '}
-                                                    {t('ui.books.filters.available')}
-                                                    <ChevronRight className="mt-1 ml-1 h-4 w-4" />
-                                                </div>
-                                                <div>
-                                                    {t('ui.books.location.floor')} {book.floor_number} , {''}
-                                                    {t(`ui.zones.list.${book.name}`)} , {''}
-                                                    {t('ui.books.location.bookcase')} {book.bookcase_name}
-                                                </div>
+                                <p>
+                                    {book.available ? (
+                                        <div className="mt-2 flex flex-row">
+                                            <div className="flex flex-row text-green-700">
+                                                {' '}
+                                                {t('ui.books.filters.available')}
+                                                <ChevronRight className="mt-1 ml-1 h-4 w-4" />
                                             </div>
-                                        ) : (
-                                            <p className="text-red-700 mt-2"> {t('ui.books.filters.not_available')} </p>
-                                        )}
-                                    </p>
+                                            <div>
+                                                {t('ui.books.location.floor')} {book.floor_number} , {''}
+                                                {t(`ui.zones.list.${book.name}`)} , {''}
+                                                {t('ui.books.location.bookcase')} {book.bookcase_name}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p className="mt-2 text-red-700"> {t('ui.books.filters.not_available')} </p>
+                                    )}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -213,99 +297,27 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
     );
 
     return (
-        <BookLayout title={t('ui.books.title')}>
+        <BooksearchLayout title={t('ui.books.title')}>
             <div className="p-6">
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
+                        <h1 className="text-3xl font-bold">{t('ui.navigation.items.booksearch')}</h1>
                     </div>
 
-                    <div className="space-y-4">
-                        <FiltersTable
-                            filters={
-                                [
-                                    {
-                                        id: 'title',
-                                        label: t('ui.books.filters.title'),
-                                        type: 'text',
-                                        placeholder: t('ui.books.placeholders.title'),
-                                    },
-                                    {
-                                        id: 'author',
-                                        label: t('ui.books.filters.author'),
-                                        type: 'text',
-                                        placeholder: t('ui.books.placeholders.author'),
-                                    },
-                                    {
-                                        id: 'genre',
-                                        label: t('ui.books.filters.genre'),
-                                        type: 'select',
-                                        options: genresList?.map((genre) => ({
-                                            label: t(`ui.books.genres.${genre.genre_name}`),
-                                            value: genre.genre_name,
-                                        })),
-                                        placeholder: t('ui.books.placeholders.genre'),
-                                    },
-                                    {
-                                        id: 'ISBN',
-                                        label: t('ui.books.filters.ISBN'),
-                                        type: 'number',
-                                        placeholder: t('ui.books.placeholders.ISBN'),
-                                    },
-                                    {
-                                        id: 'editorial',
-                                        label: t('ui.books.filters.editorial'),
-                                        type: 'text',
-                                        placeholder: t('ui.books.placeholders.editorial'),
-                                    },
-                                    {
-                                        id: 'available',
-                                        label: t('ui.books.filters.availability'),
-                                        type: 'select',
-                                        options: [
-                                            { value: 'true', label: t('ui.books.filters.available') },
-                                            { value: 'false', label: t('ui.books.filters.not_available') },
-                                        ],
-                                        placeholder: t('ui.books.placeholders.available'),
-                                    },
-                                    {
-                                        id: 'reserved',
-                                        label: t('ui.books.filters.reserve'),
-                                        type: 'select',
-                                        options: [
-                                            { value: 'true', label: t('ui.books.filters.reserved') },
-                                            { value: 'false', label: t('ui.books.filters.not_reserved') },
-                                        ],
-                                        placeholder: t('ui.books.placeholders.reserved'),
-                                    },
-                                    {
-                                        id: 'bookcase_name',
-                                        label: t('ui.books.filters.bookcase_name'),
-                                        type: 'number',
-                                        placeholder: t('ui.books.placeholders.bookcase_name'),
-                                    },
-                                    {
-                                        id: 'name',
-                                        label: t('ui.books.filters.name'),
-                                        type: 'select',
-                                        options: zonesArray.map((zone) => ({
-                                            label: t(`ui.zones.list.${zone.name}`),
-                                            value: zone.name,
-                                        })),
-                                        placeholder: t('ui.books.placeholders.name'),
-                                    },
-                                    {
-                                        id: 'floor_number',
-                                        label: t('ui.books.filters.floor_number'),
-                                        type: 'number',
-                                        placeholder: t('ui.books.placeholders.floor_number'),
-                                    },
-                                ] as FilterConfig[]
-                            }
-                            onFilterChange={handleFilterChange}
-                            initialValues={filters}
-                        />
-                    </div>
+                    <Collapsible>
+                        <FiltersTable filters={[...visibleFilters]} onFilterChange={handleFilterChange} initialValues={filters} />
+                        <CollapsibleTrigger><ChevronsDownUp className="mt-1 ml-1 h-4 w-4" /> </CollapsibleTrigger>
+                        <CollapsibleContent>
+                            <FiltersTable filters={[...hiddenFilters]} onFilterChange={handleFilterChange} initialValues={filters} />
+                        </CollapsibleContent>
+                    </Collapsible>
+                    <div className="mt-6 border-t-1 pt-5 text-xl font-medium"> {t('ui.booksearch.list')} </div>
+                    <Pagination
+                        meta={booksData.meta}
+                        onPageChange={handlePageChange}
+                        onPerPageChange={handlePerPageChange}
+                        perPageOptions={[10, 25, 50, 100]}
+                    />
                     <div>
                         <Flipper flipKey={expandedIndex} decisionData={expandedIndex} spring="gentle">
                             <ul className="bookList">
@@ -321,15 +333,8 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
                             </ul>
                         </Flipper>
                     </div>
-
-                    <Pagination
-                        meta={booksData.meta}
-                        onPageChange={handlePageChange}
-                        onPerPageChange={handlePerPageChange}
-                        perPageOptions={[10, 25, 50, 100]}
-                    />
                 </div>
             </div>
-        </BookLayout>
+        </BooksearchLayout>
     );
 }
