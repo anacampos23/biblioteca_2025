@@ -5,8 +5,6 @@ import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { Flipped, Flipper } from 'react-flip-toolkit';
-import { ChevronRight  } from 'lucide-react';
 
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string }[];
@@ -96,121 +94,6 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
             total: 0,
         },
     };
-
-    //Expandir tarjeta
-    const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-
-    interface BookCardProps {
-        book: any;
-        index: number;
-        onClick: (index: number) => void;
-    }
-
-    const BookCard = ({ book, index, onClick }: BookCardProps) => {
-
-        return (
-            <Flipped flipId={`book-${book.id}`} stagger="card" shouldInvert={(prev, current) => index === prev || index === current}>
-                <div className="bookCard" onClick={() => onClick(index)}>
-                    <Flipped inverseFlipId={`book-${book.id}`}>
-                        {/* Contenido de la tarjeta */}
-                        <div className="my-1 grid grid-cols-1 gap-4">
-                            <div
-                                key={book.id}
-                                className="flex flex-row gap-6 space-y-2 rounded-xl bg-gray-100 p-4 shadow-lg hover:bg-white dark:bg-stone-900 dark:hover:bg-stone-800"
-                            >
-                                {/* Texto */}
-                                <div>
-                                    <h2 className="text-xl font-bold">{book.title}</h2>
-                                    <p>
-                                         {book.author}
-                                    </p>
-                                    <p>
-                                        {book.available ? (
-                                            <div className='flex flex-row mt-2'>
-                                                <div className="flex flex-row text-green-700">
-                                                    {t('ui.books.filters.available')}
-                                                    <ChevronRight className="mt-1 ml-1 h-4 w-4" />
-                                                </div>
-                                                <div>
-                                                    {t('ui.books.location.floor')} {book.floor_number} , {''}
-                                                    {t(`ui.zones.list.${book.name}`)} , {''}
-                                                    {t('ui.books.location.bookcase')} {book.bookcase_name}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <p className="text-red-700 mt-2"> {t('ui.books.filters.not_available')} </p>
-                                        )}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </Flipped>
-                </div>
-            </Flipped>
-        );
-    };
-
-    const ExpandedBookCard = ({ book, index, onClick }: BookCardProps) => (
-        <Flipped flipId={`book-${book.id}`} stagger="card" onStart={(el) => setTimeout(() => el.classList.add('expanded'), 400)}>
-            <div className="expandedBookCard" onClick={() => onClick(index)}>
-                <Flipped inverseFlipId={`book-${book.id}`}>
-                    <div className="my-4 grid grid-cols-1 gap-4">
-                        <div
-                            key={book.id}
-                            className="flex flex-row gap-6 space-y-2 rounded-xl border bg-white p-4 shadow-lg dark:bg-stone-900 dark:hover:bg-stone-800"
-                        >
-                            <div className="w-40">
-                                {book.image_path ? (
-                                    <img src={book.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
-                                ) : (
-                                    <div className="flex h-40 items-center justify-center">
-                                        <img src="/storage/images/icon_book.png" alt="Book" className="h-auto w-20" />
-                                    </div>
-                                )}
-                            </div>
-                            <div>
-                                <h2 className="text-xl font-bold">{book.title}</h2>
-                                <p>
-                                    <strong>{t('ui.books.columns.author')}:</strong> {book.author}
-                                </p>
-                                <p>
-                                    <strong>{t('ui.books.columns.genre')}:</strong>{' '}
-                                    {JSON.parse(book.genre || '[]')
-                                        .map((genre: string) => t(`ui.books.genres.${genre}`))
-                                        .join(', ')}
-                                </p>
-
-                                <p>
-                                    <strong>{t('ui.books.columns.ISBN')}:</strong> {book.ISBN}
-                                </p>
-                                <p>
-                                    <strong>{t('ui.books.columns.editorial')}:</strong> {book.editorial}
-                                </p>
-                                 <p>
-                                        {book.available ? (
-                                            <div className='flex flex-row mt-2'>
-                                                <div className="flex flex-row text-green-700">
-                                                    {' '}
-                                                    {t('ui.books.filters.available')}
-                                                    <ChevronRight className="mt-1 ml-1 h-4 w-4" />
-                                                </div>
-                                                <div>
-                                                    {t('ui.books.location.floor')} {book.floor_number} , {''}
-                                                    {t(`ui.zones.list.${book.name}`)} , {''}
-                                                    {t('ui.books.location.bookcase')} {book.bookcase_name}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <p className="text-red-700 mt-2"> {t('ui.books.filters.not_available')} </p>
-                                        )}
-                                    </p>
-                            </div>
-                        </div>
-                    </div>
-                </Flipped>
-            </div>
-        </Flipped>
-    );
 
     return (
         <BookLayout title={t('ui.books.title')}>
@@ -306,20 +189,47 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
                             initialValues={filters}
                         />
                     </div>
-                    <div>
-                        <Flipper flipKey={expandedIndex} decisionData={expandedIndex} spring="gentle">
-                            <ul className="bookList">
-                                {booksData?.data?.map((book, index) => (
-                                    <li key={book.id}>
-                                        {expandedIndex === index ? (
-                                            <ExpandedBookCard book={book} index={index} onClick={() => setExpandedIndex(null)} />
-                                        ) : (
-                                            <BookCard book={book} index={index} onClick={() => setExpandedIndex(index)} />
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        </Flipper>
+
+                    <div className="grid grid-cols-1 gap-4">
+                        {booksData?.data?.map((book) => (
+                            <div
+                                key={book.id}
+                                className="flex flex-row gap-6 space-y-2 rounded-xl bg-gray-100 p-4 shadow-lg hover:bg-white dark:bg-stone-900 dark:hover:bg-stone-800"
+                            >
+                                <div className="w-40">
+                                    {book.image_path ? (
+                                        <img src={book.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
+                                    ) : (
+                                        <div className="flex h-40 items-center justify-center">
+                                            <img src="/storage/images/icon_book.png" alt="Book" className="h-auto w-20" />
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold">{book.title}</h2>
+                                    <p>
+                                        <strong>{t('ui.books.columns.author')}:</strong> {book.author}
+                                    </p>
+                                    <p>
+                                        <strong>{t('ui.books.columns.genre')}:</strong>{' '}
+                                        {JSON.parse(book.genre || '[]')
+                                            .map((genre: string) => t(`ui.books.genres.${genre}`))
+                                            .join(', ')}
+                                    </p>
+
+                                    <p>
+                                        <strong>{t('ui.books.columns.ISBN')}:</strong> {book.ISBN}
+                                    </p>
+                                    <p>
+                                        <strong>{t('ui.books.columns.editorial')}:</strong> {book.editorial}
+                                    </p>
+                                    <p>
+                                        <strong>{t('ui.books.columns.available')}:</strong>{' '}
+                                        {book.available ? t('ui.books.filters.available') : t('ui.books.filters.not_available')}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
 
                     <Pagination

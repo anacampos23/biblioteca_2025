@@ -52,7 +52,10 @@ return [
         ],
         'loan_reserve' => 'El libro está disponible. Puedes realizar directamente un préstamo.',
         'imported'=> 'Libros importados con éxito',
+        'not_file'=> 'Por favor, selecciona un archivo para importar',
+        'not_excel'=> 'El archivo debe ser formato xlsx o xls o csv',
     ],
+
     'loans' => [
         'created' => 'Préstamo creado correctamente',
         'updated' => 'Préstamo actualizado correctamente',
