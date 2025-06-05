@@ -87,8 +87,6 @@ class BookController extends Controller
     {
         $genresList = Genre::select(['id', 'genre_name'])->get()->toArray();
         $zonesArray = Zone::select(['id', 'name'])->get()->toArray();
-        $floorsArray = Floor::select(['id', 'floor_number'])->get()->toArray();
-        $bookcasesArray = Bookcase::select(['id', 'bookcase_name'])->get()->toArray();
         // Obtener todos los libros
         $books = Book::all();
 

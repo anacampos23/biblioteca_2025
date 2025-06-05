@@ -641,6 +641,14 @@ return [
           ]
 
     ],
+
+    'booksearch'=>[
+        'button'=> [
+            'more'=> 'Show all filters',
+            'hide'=> 'Hide filters'
+        ],
+        'list'=> 'List of books: '
+    ],
     'loans' => [
         'title' => 'Loans',
         'description' => 'Manage the loans',

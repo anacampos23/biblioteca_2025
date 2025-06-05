@@ -635,6 +635,14 @@ return [
           ]
 
     ],
+
+      'booksearch'=>[
+        'button'=> [
+            'more'=> 'Todos los filtros',
+            'hide'=> 'Oculta filtros',
+        ],
+        'list'=> 'Listado de libros: '
+    ],
     'loans' => [
         'title' => 'Préstamos',
         'description' => 'Gestiona los préstamos',
