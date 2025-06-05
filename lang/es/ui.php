@@ -626,7 +626,13 @@ return [
             'select'=> 'Seleccionar archivo',
             'file'=> 'Archivo seleccionado: ',
             'button'=> 'Importar libros',
-         ]
+          ],
+          'location'=> [
+            'in' => ' en ',
+            'floor' => 'Piso',
+            'zone' => 'Zona',
+            'bookcase' => 'Estantería',
+          ]
 
     ],
     'loans' => [

@@ -42,6 +42,8 @@ return [
         ],
         'loan_reserve' => 'The book is available. You can already loan it.',
         'imported'=> 'Books imported successfully',
+        'not_file'=> 'Please, select a file to be imported',
+        'not_excel'=> 'The file should be xlsx or xls or csv',
     ],
     'bookcases' => [
         'created' => 'Bookcase created successfully',

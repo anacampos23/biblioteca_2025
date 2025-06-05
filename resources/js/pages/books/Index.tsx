@@ -11,13 +11,14 @@ import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { BookCheck, BookUp, BookmarkCheck, FileUp, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon, FileDown } from 'lucide-react';
+import { BookCheck, BookUp, BookmarkCheck, FileDown, FileUp, Menu, PencilIcon, PlusIcon, QrCode, ScanQrCode, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
+import ImportBooksForm from '@/components/import-book-form';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import ImportBooksForm from '@/components/import-book-form';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip';
 
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string }[];
@@ -144,6 +145,8 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
         isbn_count: number;
     }
 
+    const [open, setOpen] = useState(false);
+
     const columns = useMemo(
         () =>
             [
@@ -152,25 +155,41 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                     header: t('ui.books.columns.borrow') || 'Actions',
                     renderActions: (book) => (
                         <>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                title={t('ui.books.buttons.reserve') || 'Reserve book'}
-                                onClick={() => {
-                                    handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available);
-                                }}
-                                className={`${
-                                    book.available
-                                        ? 'cursor-pointer bg-green-500 text-white hover:bg-green-600'
-                                        : 'bg-white-300 cursor-pointer text-gray-500 hover:bg-gray-100'
-                                }`}
-                            >
-                                {book.available ? (
-                                    <BookUp className="h-4 w-4" />
-                                ) : (
-                                    <BookmarkCheck className={`h-4 w-4 ${book.reserved ? 'text-orange-500' : 'text-gray-500'}`} />
-                                )}
-                            </Button>
+                            <Tooltip delayDuration={0}>
+                                <TooltipTrigger>
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        title={t('ui.books.buttons.reserve') || 'Reserve book'}
+                                        onClick={() => {
+                                            handleCreateLoan_ReserveBook(book.id, book.title, book.author, book.ISBN, book.available);
+                                        }}
+                                        className={`${
+                                            book.available
+                                                ? 'cursor-pointer bg-green-500 text-white hover:bg-green-600'
+                                                : 'bg-white-300 cursor-pointer text-gray-500 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        {book.available ? (
+                                            <BookUp className="h-4 w-4" />
+                                        ) : (
+                                            <BookmarkCheck className={`h-4 w-4 ${book.reserved ? 'text-orange-500' : 'text-gray-500'}`} />
+                                        )}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {' '}
+                                    <div className="w-20">
+                                        {book.image_path ? (
+                                            <img src={book.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
+                                        ) : (
+                                            <div className="flex h-40 items-center justify-center">
+                                                <img src="/storage/images/white_icon.png" alt="Book" className="h-auto w-20" />
+                                            </div>
+                                        )}
+                                    </div>
+                                </TooltipContent>
+                            </Tooltip>
                         </>
                     ),
                 }),
@@ -500,7 +519,13 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                         </Button>
                                     </a>
                                     {/* Import book data */}
-                                    <Dialog>
+                                    <Dialog
+                                        // Vaciar TextoQR cuando se cierra el diálogo
+                                        open={open}
+                                        onOpenChange={(open) => {
+                                            setOpen(open);
+                                        }}
+                                    >
                                         <DialogTrigger asChild>
                                             <Button variant="outline" className="cursor-pointer bg-stone-200 text-stone-900 hover:bg-stone-100">
                                                 <FileDown className="mr-2 h-4 w-4" />
@@ -511,7 +536,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
                                         <DialogContent>
                                             <DialogTitle> {t('ui.books.import_title')} </DialogTitle>
                                             {t('ui.books.import_description')}
-                                            <ImportBooksForm />
+                                            <ImportBooksForm setOpen={setOpen}/>
                                         </DialogContent>
                                     </Dialog>
                                 </div>

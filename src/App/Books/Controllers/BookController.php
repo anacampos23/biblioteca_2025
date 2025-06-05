@@ -29,22 +29,22 @@ class BookController extends Controller
 {
     public function index(Book $book)
     {
-        $genresList = Genre::select(['id','genre_name'])->get()->toArray();
-        $bookcasesArray = Bookcase::select(['id','bookcase_name'])->get()->toArray();
-        $zonesArray = Zone::select(['id','name'])->get()->toArray();
-        $floorsArray = Floor::select(['id','floor_number'])->get()->toArray();
+        $genresList = Genre::select(['id', 'genre_name'])->get()->toArray();
+        $bookcasesArray = Bookcase::select(['id', 'bookcase_name'])->get()->toArray();
+        $zonesArray = Zone::select(['id', 'name'])->get()->toArray();
+        $floorsArray = Floor::select(['id', 'floor_number'])->get()->toArray();
         // Obtener todos los libros
         $books = Book::all();
 
         // Añadir la URL de la imagen a cada libro
-        $booksWithImages = $books->map(function($book) {
+        $booksWithImages = $books->map(function ($book) {
             return [
                 'id' => $book->id,
                 'title' => $book->title,
                 'author' => $book->author,
                 'ISBN' => $book->ISBN,
                 'genre' => $book->genre,
-                'available'=> $book->available,
+                'available' => $book->available,
                 'editorial' => $book->editorial,
                 'reserved' => $book->reserved,
                 'bookcase_id' => $book->bookcase_id,
@@ -54,17 +54,17 @@ class BookController extends Controller
             ];
         })->toArray();
 
-        $loan = Loan::select(['id','book_id', 'user_id', 'active'])->get()->toArray();
-        $reserve = Reserve::select(['id','book_id', 'user_id', 'status'])->get()->toArray();
+        $loan = Loan::select(['id', 'book_id', 'user_id', 'active'])->get()->toArray();
+        $reserve = Reserve::select(['id', 'book_id', 'user_id', 'status'])->get()->toArray();
 
         return Inertia::render('books/Index', [
-            'genresList'=> $genresList,
-            'bookcasesArray'=>$bookcasesArray,
+            'genresList' => $genresList,
+            'bookcasesArray' => $bookcasesArray,
             'zonesArray' => $zonesArray,
-            'floorsArray'=>$floorsArray,
-            'booksWithImages'=>$booksWithImages,
-            'loan'=> $loan,
-            'reserve'=> $reserve,
+            'floorsArray' => $floorsArray,
+            'booksWithImages' => $booksWithImages,
+            'loan' => $loan,
+            'reserve' => $reserve,
         ]);
     }
 
@@ -85,20 +85,22 @@ class BookController extends Controller
 
     public function searchBook()
     {
-        $genresList = Genre::select(['id','genre_name'])->get()->toArray();
-        $zonesArray = Zone::select(['id','name'])->get()->toArray();
+        $genresList = Genre::select(['id', 'genre_name'])->get()->toArray();
+        $zonesArray = Zone::select(['id', 'name'])->get()->toArray();
+        $floorsArray = Floor::select(['id', 'floor_number'])->get()->toArray();
+        $bookcasesArray = Bookcase::select(['id', 'bookcase_name'])->get()->toArray();
         // Obtener todos los libros
         $books = Book::all();
 
         // Añadir la URL de la imagen a cada libro
-        $booksWithImages = $books->map(function($book) {
+        $booksWithImages = $books->map(function ($book) {
             return [
                 'id' => $book->id,
                 'title' => $book->title,
                 'author' => $book->author,
                 'ISBN' => $book->ISBN,
                 'genre' => $book->genre,
-                'available'=> $book->available,
+                'available' => $book->available,
                 'editorial' => $book->editorial,
                 'reserved' => $book->reserved,
                 'bookcase_id' => $book->bookcase_id,
@@ -111,7 +113,8 @@ class BookController extends Controller
         return Inertia::render('books/SearchBook', [
             'genresList' => $genresList,
             'zonesArray' => $zonesArray,
-            'booksWithImages'=>$booksWithImages,
+            'booksWithImages' => $booksWithImages,
+
         ]);
     }
 
@@ -200,10 +203,10 @@ class BookController extends Controller
     public function edit(Request $request, Book $book)
     {
 
-        $zones = Zone::select(['id', 'name', 'floor_id']) ->orderBy('name', 'asc') ->get() -> toArray();
-        $floors = Floor::select(['id', 'floor_number', 'capacity_zones']) ->orderBy('floor_number', 'asc') ->get() -> toArray();
-        $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id']) ->orderBy('bookcase_name', 'asc') ->get() -> toArray();
-        $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id']) ->get() -> toArray();
+        $zones = Zone::select(['id', 'name', 'floor_id'])->orderBy('name', 'asc')->get()->toArray();
+        $floors = Floor::select(['id', 'floor_number', 'capacity_zones'])->orderBy('floor_number', 'asc')->get()->toArray();
+        $bookcases = Bookcase::select(['id', 'bookcase_name', 'floor_id', 'zone_id'])->orderBy('bookcase_name', 'asc')->get()->toArray();
+        $floor_zone_id = Bookcase::select(['bookcase_name', 'zone_id', 'floor_id'])->get()->toArray();
 
         $image_path = $book->getFirstMediaUrl('images');
 
@@ -232,9 +235,9 @@ class BookController extends Controller
 
         ]);
 
-       if ($validator->fails()) {
-        return back()->withErrors($validator);
-    }
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
 
         $data = $validator->validated();
 
@@ -247,14 +250,14 @@ class BookController extends Controller
 
         //No dejar reservar si ya existe un libro con el mismo ISBN disponible
         $bookISBN = $book->ISBN;
-        $book_availability= $book->available;
+        $book_availability = $book->available;
 
 
         //Seleccionar todos los ISBN iguales
         $bookAvailable = Book::select(['id', 'ISBN', 'available'])
-                ->where('ISBN', $bookISBN)
-                ->where('available', true)
-                ->first();
+            ->where('ISBN', $bookISBN)
+            ->where('available', true)
+            ->first();
 
         if ($request->input('newReservationStatus')) {
             if ($book_availability == true) {
@@ -266,22 +269,22 @@ class BookController extends Controller
                 ]);
             } else {
                 if (!empty($bookAvailable)) {
-                        return redirect()->route('loans.create', [
-                            'book_id' => $bookAvailable->id,
-                            'title' => $book->title,
-                            'author' => $book->author,
-                            'ISBN' => $book->ISBN,
-                        ])->with('success', __('messages.books.loan_reserve'));
-                    } else {
-                        return redirect()->route('reserves.create', [
-                            'book_id' => $book->id,
-                            'title' => $book->title,
-                            'author' => $book->author,
-                            'ISBN' => $book->ISBN,
-                        ]);
-                    }
+                    return redirect()->route('loans.create', [
+                        'book_id' => $bookAvailable->id,
+                        'title' => $book->title,
+                        'author' => $book->author,
+                        'ISBN' => $book->ISBN,
+                    ])->with('success', __('messages.books.loan_reserve'));
+                } else {
+                    return redirect()->route('reserves.create', [
+                        'book_id' => $book->id,
+                        'title' => $book->title,
+                        'author' => $book->author,
+                        'ISBN' => $book->ISBN,
+                    ]);
                 }
             }
+        }
 
 
 
@@ -315,8 +318,15 @@ class BookController extends Controller
 
     public function importBooks(Request $request)
     {
-        Excel::import(new BooksImport, $request->file('file'));
-
-        return back()->with('success', __('messages.books.imported'));
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv'
+        ]);
+        try {
+            Excel::import(new BooksImport, $request->file('file'));
+            return
+            back()->with('success', 'Libros importados correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al importar el archivo: ' . $e->getMessage());
+        }
     }
 }
