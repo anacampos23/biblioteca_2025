@@ -1,13 +1,13 @@
 import { Pagination } from '@/components/stack-table';
 import { FilterConfig, FiltersTable } from '@/components/stack-table/FiltersTable';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useBooks } from '@/hooks/books/useBooks';
 import { useTranslations } from '@/hooks/use-translations';
 import { BooksearchLayout } from '@/layouts/booksearchs/BooksearchLayout';
 import { usePage } from '@inertiajs/react';
-import { ChevronRight, Funnel  } from 'lucide-react';
+import { ChevronRight, ChevronsDownUp } from 'lucide-react';
 import { useState } from 'react';
 import { Flipped, Flipper } from 'react-flip-toolkit';
-import { Button } from '@/components/ui/button';
 
 interface BookIndexProps {
     genresList?: { id: string; genre_name: string }[];
@@ -108,8 +108,8 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
     }
 
     // Editar filtros
-    // Estado para mostrar/ocultar filtros extra
-    const [showMoreFilters, setShowMoreFilters] = useState(false);
+    // // Estado para mostrar/ocultar filtros extra
+    // const [showMoreFilters, setShowMoreFilters] = useState(false);
     // Define filtros visibles siempre
     const visibleFilters: FilterConfig[] = [
         {
@@ -303,23 +303,32 @@ export default function SearchBook({ genresList, zonesArray }: BookIndexProps) {
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.navigation.items.booksearch')}</h1>
                     </div>
+                    {/* Filtros Escritorio*/}
 
-                    <div className="flex justify-center flex-col items-center space-y-4 w-full">
-                        <div className="flex flex-col justify-center p-4 rounded-lg dark:bg-stone-800 shadow-sm space-y-4 border-b-2">
-                            <FiltersTable
-                            filters={[...visibleFilters, ...(showMoreFilters ? hiddenFilters : [])]}
-                            onFilterChange={handleFilterChange}
-                            initialValues={filters}
-                        />
+                        <Collapsible className='flex flex-col items-center justify-center'>
+                        <div className="flex flex-row items-center justify-center">
+                            <FiltersTable filters={[...visibleFilters]} onFilterChange={handleFilterChange} initialValues={filters} />
+
+                            <CollapsibleTrigger className="ml-5 mt-3 cursor-pointer rounded-full bg-stone-100 p-2 shadow-sm hover:shadow-md">
+                                <ChevronsDownUp className="h-6 w-6 text-gray-700" />
+                            </CollapsibleTrigger>
                         </div>
-                        <div className='hidden md:flex  w-full justify-center'>
-                            {/* <Funnel className="mt-1 h-4 w-4" /> */}
-                            <Button className="mt-2 bg-stone-800 p-4 hover:bg-stone-600 dark:bg-stone-400 " onClick={() => setShowMoreFilters(!showMoreFilters)} type="button">
-                            {showMoreFilters ? t('ui.booksearch.button.hide') : t('ui.booksearch.button.more')}
-                        </Button>
-                        </div>
+
+                        <CollapsibleContent className='mt-6'>
+                            <FiltersTable filters={[...hiddenFilters]} onFilterChange={handleFilterChange} initialValues={filters} />
+                        </CollapsibleContent>
+                    </Collapsible>
+
+
+                    {/* Filtros móvil */}
+
+                    <div className='lg:hidden'>
+                        <FiltersTable filters={[...visibleFilters, ...hiddenFilters]} onFilterChange={handleFilterChange} initialValues={filters} />
                     </div>
-                    <div className='mt-6 pt-5 border-t-1 text-xl font-medium'> {t('ui.booksearch.list')} </div>
+
+
+                    <div className="mt-6 border-t-1 pt-5 text-xl font-medium"> {t('ui.booksearch.list')} </div>
+
                     <Pagination
                         meta={booksData.meta}
                         onPageChange={handlePageChange}
