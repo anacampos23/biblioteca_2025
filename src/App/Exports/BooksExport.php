@@ -2,37 +2,71 @@
 
 namespace App\Exports;
 
+use Domain\Books\Actions\BookIndexAction;
 use Domain\Books\Models\Book;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class BooksExport implements FromCollection, WithHeadings
+class BooksExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function collection()
+    use Exportable;
+    protected $filters;
+
+    public function __construct(?array $filters)
     {
-        return Book::all()->map(function ($book) {
-            return [
-                $book->id,
-                $book->title,
-                $book->author,
-                $book->genre,
-                $book->ISBN,
-                $book->editorial,
-                $book->available ? 'True' : 'False',
-                $book->reserved ? 'True' : 'False',
-                $book->bookcase_id,
-                $book->zone_id,
-                $book->floor_id,
-                $book->created_at,
-                $book->updated_at,
-                $book->deleted_at,
-            ];
-        });
+        $this->filters = $filters;
+    }
+
+    public function query()
+    {
+        $action = new BookIndexAction();
+
+        return $action->filteredQuery($this->filters);
     }
 
     public function headings(): array
     {
-        return ['id', 'title', 'author', 'genre', 'ISBN', 'editorial', 'available', 'reserved', 'bookcase_id', 'zone_id', 'floor_id', 'created_at', 'updated_at', 'deleted_at'];
+
+        return [
+            'ID',
+            'Título',
+            'Autor',
+            'Género',
+            'ISBN',
+            'Editorial',
+            'Disponible',
+            'Reservado',
+            'ID Estantería',
+            'ID Zona',
+            'ID Piso',
+            'Creado en',
+            'Actualizado en',
+            'Eliminado en',
+        ];
+    }
+
+     /**
+     * @param Book $book
+     */
+    public function map($book): array
+    {
+        return [
+            $book->id,
+            $book->title,
+            $book->author,
+            $book->genre,
+            $book->isbn,
+            $book->publisher,
+            $book->available ? 'true' : 'false',
+            $book->reserved ? 'true' : 'false',
+            $book->bookcase_id,
+            $book->zone_id,
+            $book->floor_id,
+            $book->created_at,
+            $book->updated_at,
+            $book->deleted_at,
+        ];
     }
 }
-

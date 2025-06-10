@@ -36,17 +36,20 @@ class Book extends Model implements HasMedia
      * @var list<string>
      */
     protected $fillable = [
+        'id',
         'title',
         'author',
         'genre',
         'ISBN',
+        'editorial',
         'available',
         'reserved',
-        'editorial',
         'bookcase_id',
         'zone_id',
         'floor_id',
+        'deleted_at'
     ];
+
 
     /**
      * Register media conversions for the model.
@@ -63,7 +66,7 @@ class Book extends Model implements HasMedia
             ->nonQueued();  // Optionally avoid queuing the conversion (you can remove this if you prefer queuing)
     }
 
-      /**
+    /**
      * Get the floors associated with the zones.
      */
     public function genres(): BelongsToMany
@@ -73,12 +76,12 @@ class Book extends Model implements HasMedia
 
 
     /**
-         * Get the loans.
-         */
-        public function loans(): HasMany
-        {
-            return $this->hasMany(Loan::class);
-        }
+     * Get the loans.
+     */
+    public function loans(): HasMany
+    {
+        return $this->hasMany(Loan::class);
+    }
 
     // /**
     //      * Get the active loans.
@@ -89,11 +92,10 @@ class Book extends Model implements HasMedia
     // }
 
     /**
-         * Get the reserves.
-         */
-        public function reserves(): HasMany
+     * Get the reserves.
+     */
+    public function reserves(): HasMany
     {
         return $this->hasMany(Reserve::class);
     }
-
 }

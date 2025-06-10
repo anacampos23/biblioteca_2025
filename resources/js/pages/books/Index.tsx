@@ -71,6 +71,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
         filters.floor_number ? filters.floor_number : 'null',
     ];
 
+
     const {
         data: books,
         isLoading,
@@ -365,309 +366,318 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
         [t, handleDeleteBook],
     );
 
-    return (
-        <BookLayout title={t('ui.books.title')}>
-            <div className="p-6">
-                <div className="space-y-6">
-                    <div className="flex flex-col items-center justify-between gap-4 lg:flex-row lg:gap-0">
-                        <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
-                        <Dialog
-                            // Vaciar TextoQR cuando se cierra el diálogo
-                            open={isDialogOpen}
-                            onOpenChange={(open) => {
-                                setIsDialogOpen(open);
-                                if (!open) {
-                                    setTextoQR('');
-                                }
-                            }}
-                        >
-                            <DialogTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    className="cursor-pointer bg-indigo-500 text-white hover:bg-indigo-700 hover:text-white"
-                                    title={t('ui.books.buttons.QR')}
-                                >
-                                    <ScanQrCode className="mr-2 h-4 w-4" />
-                                    {t('ui.books.buttons.QR')}
-                                </Button>
-                            </DialogTrigger>
 
-                            <DialogContent>
-                                <DialogTitle> {t('ui.books.QR_reader.title')} </DialogTitle>
-                                <div>
-                                    <ReadQR onResult={(result) => setTextoQR(result)} />
-                                    {selectedBook && (
-                                        <div className="flex flex-col items-center gap-4 lg:flex-row">
-                                            <div>
-                                                {selectedBook.image_path ? (
-                                                    <img src={selectedBook.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
-                                                ) : null}
-                                            </div>
-                                            <div>
-                                                <div className="mt-2 mb-5 flex flex-col font-medium">
-                                                    <div>
-                                                        <label className="underline">{t('ui.books.QR_reader.book_title')}</label>
-                                                        {selectedBook.title}
-                                                    </div>
-                                                    <div>
-                                                        <label className="underline">{t('ui.books.QR_reader.book_author')}</label>
-                                                        {selectedBook.author}
-                                                    </div>
-                                                    <div>
-                                                        <label className="underline">{t('ui.books.QR_reader.book_ISBN')}</label>
-                                                        {selectedBook.ISBN}
-                                                    </div>
-                                                </div>
-                                                <div className="mt-2 bg-indigo-100 p-3">
-                                                    <div className={`font-semibold ${selectedBook.available ? 'text-indigo-600' : 'text-red-600'}`}>
-                                                        {' '}
-                                                        {selectedBook.available
-                                                            ? t('ui.books.filters.available')
-                                                            : t('ui.books.filters.not_available')}
-                                                    </div>
-                                                    <div>
-                                                        {selectedBook.available && (
-                                                            <div>
-                                                                <div>
-                                                                    {t('ui.books.QR_reader.bookcase')} {selectedBookBookcase?.bookcase_name}
-                                                                </div>
-                                                                <div>
-                                                                    {t('ui.books.QR_reader.zone')}
-                                                                    {t(`ui.zones.list.${selectedBookZone?.name}`)}
-                                                                </div>
-                                                                <div>
-                                                                    {t('ui.books.QR_reader.floor')} {selectedBookFloor?.floor_number}
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                        {!selectedBook.available && (
-                                                            <div>
-                                                                <div
-                                                                    className={`mt-2 flex ${selectedBookLoan ? 'text-indigo-600' : 'text-stone-700'}`}
-                                                                >
-                                                                    <BookCheck className="mt-1 mr-2 h-4 w-4" />
-                                                                    {selectedBookLoan
-                                                                        ? t('ui.books.QR_reader.loaned')
-                                                                        : t('ui.books.QR_reader.not_loaned')}
-                                                                </div>
-                                                                <div
-                                                                    className={`mt-2 flex ${selectedBookReserve ? 'text-indigo-600' : 'text-stone-700'}`}
-                                                                >
-                                                                    <BookmarkCheck className="mt-1 mr-2 h-4 w-4" />
-                                                                    {selectedBookReserve
-                                                                        ? t('ui.books.QR_reader.reserved')
-                                                                        : t('ui.books.QR_reader.not_reserved')}
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+    // Exportar con filtros
+     const exportExcel = () => {
 
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button variant="outline">{t('ui.reserves.buttons.cancel') || 'Cancel'}</Button>
-                                    </DialogClose>
+         const query = new URLSearchParams();
+         Object.entries(filters).forEach(([key, value]) => {
+             if (value !== undefined && value !== null && value !== '') {
+                 query.append(key, value.toString());
+             }
+         });
+         window.open(`/books/export?${query.toString()}`, '_blank');
+     };
 
-                                    <DialogClose asChild>
-                                        <Button
-                                            className="bg-indigo-600"
-                                            onClick={() => {
-                                                if (selectedBook) {
-                                                    handleCreateLoan_ReserveBook(
-                                                        selectedBook.id,
-                                                        selectedBook.title,
-                                                        selectedBook.author,
-                                                        selectedBook.ISBN,
-                                                        selectedBook.available,
-                                                    );
-                                                }
-                                            }}
-                                        >
-                                            {selectedBook?.available === true ? t('ui.books.columns.borrow') : t('ui.books.buttons.reserve')}
-                                            <BookUp className="h-4 w-4" />
-                                        </Button>
-                                    </DialogClose>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
+     return (
+         <BookLayout title={t('ui.books.title')}>
+             <div className="p-6">
+                 <div className="space-y-6">
+                     <div className="flex flex-col items-center justify-between gap-4 lg:flex-row lg:gap-0">
+                         <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
+                         <Dialog
+                             // Vaciar TextoQR cuando se cierra el diálogo
+                             open={isDialogOpen}
+                             onOpenChange={(open) => {
+                                 setIsDialogOpen(open);
+                                 if (!open) {
+                                     setTextoQR('');
+                                 }
+                             }}
+                         >
+                             <DialogTrigger asChild>
+                                 <Button
+                                     variant="outline"
+                                     className="cursor-pointer bg-indigo-500 text-white hover:bg-indigo-700 hover:text-white"
+                                     title={t('ui.books.buttons.QR')}
+                                 >
+                                     <ScanQrCode className="mr-2 h-4 w-4" />
+                                     {t('ui.books.buttons.QR')}
+                                 </Button>
+                             </DialogTrigger>
 
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button variant="outline" className="bg-stone-200 dark:bg-stone-800">
-                                    <Menu className="h-4 w-4" /> {t('ui.books.options')}
-                                </Button>
-                            </PopoverTrigger>
+                             <DialogContent>
+                                 <DialogTitle> {t('ui.books.QR_reader.title')} </DialogTitle>
+                                 <div>
+                                     <ReadQR onResult={(result) => setTextoQR(result)} />
+                                     {selectedBook && (
+                                         <div className="flex flex-col items-center gap-4 lg:flex-row">
+                                             <div>
+                                                 {selectedBook.image_path ? (
+                                                     <img src={selectedBook.image_path} alt="Current book image" className="h-auto w-40 rounded-md" />
+                                                 ) : null}
+                                             </div>
+                                             <div>
+                                                 <div className="mt-2 mb-5 flex flex-col font-medium">
+                                                     <div>
+                                                         <label className="underline">{t('ui.books.QR_reader.book_title')}</label>
+                                                         {selectedBook.title}
+                                                     </div>
+                                                     <div>
+                                                         <label className="underline">{t('ui.books.QR_reader.book_author')}</label>
+                                                         {selectedBook.author}
+                                                     </div>
+                                                     <div>
+                                                         <label className="underline">{t('ui.books.QR_reader.book_ISBN')}</label>
+                                                         {selectedBook.ISBN}
+                                                     </div>
+                                                 </div>
+                                                 <div className="mt-2 bg-indigo-100 p-3">
+                                                     <div className={`font-semibold ${selectedBook.available ? 'text-indigo-600' : 'text-red-600'}`}>
+                                                         {' '}
+                                                         {selectedBook.available
+                                                             ? t('ui.books.filters.available')
+                                                             : t('ui.books.filters.not_available')}
+                                                     </div>
+                                                     <div>
+                                                         {selectedBook.available && (
+                                                             <div>
+                                                                 <div>
+                                                                     {t('ui.books.QR_reader.bookcase')} {selectedBookBookcase?.bookcase_name}
+                                                                 </div>
+                                                                 <div>
+                                                                     {t('ui.books.QR_reader.zone')}
+                                                                     {t(`ui.zones.list.${selectedBookZone?.name}`)}
+                                                                 </div>
+                                                                 <div>
+                                                                     {t('ui.books.QR_reader.floor')} {selectedBookFloor?.floor_number}
+                                                                 </div>
+                                                             </div>
+                                                         )}
+                                                         {!selectedBook.available && (
+                                                             <div>
+                                                                 <div
+                                                                     className={`mt-2 flex ${selectedBookLoan ? 'text-indigo-600' : 'text-stone-700'}`}
+                                                                 >
+                                                                     <BookCheck className="mt-1 mr-2 h-4 w-4" />
+                                                                     {selectedBookLoan
+                                                                         ? t('ui.books.QR_reader.loaned')
+                                                                         : t('ui.books.QR_reader.not_loaned')}
+                                                                 </div>
+                                                                 <div
+                                                                     className={`mt-2 flex ${selectedBookReserve ? 'text-indigo-600' : 'text-stone-700'}`}
+                                                                 >
+                                                                     <BookmarkCheck className="mt-1 mr-2 h-4 w-4" />
+                                                                     {selectedBookReserve
+                                                                         ? t('ui.books.QR_reader.reserved')
+                                                                         : t('ui.books.QR_reader.not_reserved')}
+                                                                 </div>
+                                                             </div>
+                                                         )}
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     )}
+                                 </div>
 
-                            <PopoverContent className="w-full max-w-xs space-y-2">
-                                <div className="mt-3 mt-4 flex flex-col gap-2">
-                                    {/* Create a new book */}
-                                    <Link href="/books/create">
-                                        <Button className="cursor-pointer">
-                                            <PlusIcon className="mr-2 h-4 w-4" />
-                                            {t('ui.books.buttons.new')}
-                                        </Button>
-                                    </Link>
-                                    {/* Export book data */}
-                                    <a href="/books/export" target="_blank" rel="noopener noreferrer">
-                                        <Button className="cursor-pointer bg-stone-300 text-stone-900 hover:bg-stone-200">
-                                            <FileUp className="mr-2 h-4 w-4" />
-                                            {t('ui.books.export')}
-                                        </Button>
-                                    </a>
-                                    {/* Import book data */}
-                                    <Dialog
-                                        // Vaciar TextoQR cuando se cierra el diálogo
-                                        open={open}
-                                        onOpenChange={(open) => {
-                                            setOpen(open);
-                                        }}
-                                    >
-                                        <DialogTrigger asChild>
-                                            <Button variant="outline" className="cursor-pointer bg-stone-200 text-stone-900 hover:bg-stone-100">
-                                                <FileDown className="mr-2 h-4 w-4" />
-                                                {t('ui.books.import')}
-                                            </Button>
-                                        </DialogTrigger>
+                                 <DialogFooter>
+                                     <DialogClose asChild>
+                                         <Button variant="outline">{t('ui.reserves.buttons.cancel') || 'Cancel'}</Button>
+                                     </DialogClose>
 
-                                        <DialogContent>
-                                            <DialogTitle> {t('ui.books.import_title')} </DialogTitle>
-                                            {t('ui.books.import_description')}
-                                            <ImportBooksForm setOpen={setOpen}/>
-                                        </DialogContent>
-                                    </Dialog>
-                                </div>
-                            </PopoverContent>
-                        </Popover>
-                    </div>
+                                     <DialogClose asChild>
+                                         <Button
+                                             className="bg-indigo-600"
+                                             onClick={() => {
+                                                 if (selectedBook) {
+                                                     handleCreateLoan_ReserveBook(
+                                                         selectedBook.id,
+                                                         selectedBook.title,
+                                                         selectedBook.author,
+                                                         selectedBook.ISBN,
+                                                         selectedBook.available,
+                                                     );
+                                                 }
+                                             }}
+                                         >
+                                             {selectedBook?.available === true ? t('ui.books.columns.borrow') : t('ui.books.buttons.reserve')}
+                                             <BookUp className="h-4 w-4" />
+                                         </Button>
+                                     </DialogClose>
+                                 </DialogFooter>
+                             </DialogContent>
+                         </Dialog>
 
-                    <div className="space-y-4">
-                        <FiltersTable
-                            filters={
-                                [
-                                    {
-                                        id: 'title',
-                                        label: t('ui.books.filters.title'),
-                                        type: 'text',
-                                        placeholder: t('ui.books.placeholders.title'),
-                                    },
-                                    {
-                                        id: 'author',
-                                        label: t('ui.books.filters.author'),
-                                        type: 'text',
-                                        placeholder: t('ui.books.placeholders.author'),
-                                    },
-                                    {
-                                        id: 'genre',
-                                        label: t('ui.books.filters.genre'),
-                                        type: 'select',
-                                        options: genresList.map((genresList) => ({
-                                            label: t(`ui.books.genres.${genresList.genre_name}`),
-                                            value: genresList.genre_name,
-                                        })),
-                                        placeholder: t('ui.books.placeholders.genre'),
-                                    },
-                                    {
-                                        id: 'ISBN',
-                                        label: t('ui.books.filters.ISBN'),
-                                        type: 'number',
-                                        placeholder: t('ui.books.placeholders.ISBN'),
-                                    },
-                                    {
-                                        id: 'editorial',
-                                        label: t('ui.books.filters.editorial'),
-                                        type: 'text',
-                                        placeholder: t('ui.books.placeholders.editorial'),
-                                    },
-                                    {
-                                        id: 'available',
-                                        label: t('ui.books.filters.availability'),
-                                        type: 'select',
-                                        options: [
-                                            { value: 'true', label: t('ui.books.filters.available') },
-                                            { value: 'false', label: t('ui.books.filters.not_available') },
-                                        ],
-                                        placeholder: t('ui.books.placeholders.available'),
-                                    },
-                                    {
-                                        id: 'reserved',
-                                        label: t('ui.books.filters.reserve'),
-                                        type: 'select',
-                                        options: [
-                                            { value: 'true', label: t('ui.books.filters.reserved') },
-                                            { value: 'false', label: t('ui.books.filters.not_reserved') },
-                                        ],
-                                        placeholder: t('ui.books.placeholders.reserved'),
-                                    },
-                                    {
-                                        id: 'bookcase_name',
-                                        label: t('ui.books.filters.bookcase_name'),
-                                        type: 'number',
-                                        placeholder: t('ui.books.placeholders.bookcase_name'),
-                                    },
-                                    {
-                                        id: 'name',
-                                        label: t('ui.books.filters.name'),
-                                        type: 'select',
-                                        options: zonesArray.map((zone) => ({
-                                            label: t(`ui.zones.list.${zone.name}`),
-                                            value: zone.name,
-                                        })),
-                                        placeholder: t('ui.books.placeholders.name'),
-                                    },
-                                    {
-                                        id: 'floor_number',
-                                        label: t('ui.books.filters.floor_number'),
-                                        type: 'number',
-                                        placeholder: t('ui.books.placeholders.floor_number'),
-                                    },
-                                ] as FilterConfig[]
-                            }
-                            onFilterChange={handleFilterChange}
-                            initialValues={filters}
-                        />
-                    </div>
+                         <Popover>
+                             <PopoverTrigger asChild>
+                                 <Button variant="outline" className="bg-stone-200 dark:bg-stone-800">
+                                     <Menu className="h-4 w-4" /> {t('ui.books.options')}
+                                 </Button>
+                             </PopoverTrigger>
 
-                    <div className="w-full overflow-hidden">
-                        {isLoading ? (
-                            <TableSkeleton columns={4} rows={10} />
-                        ) : isError ? (
-                            <div className="p-4 text-center">
-                                <div className="mb-4 text-red-500">{t('ui.books.error_loading')}</div>
-                                <Button onClick={() => refetch()} variant="outline">
-                                    {t('ui.books.buttons.retry')}
-                                </Button>
-                            </div>
-                        ) : (
-                            <div>
-                                <Table
-                                    data={
-                                        books ?? {
-                                            data: [],
-                                            meta: {
-                                                current_page: 1,
-                                                from: 0,
-                                                last_page: 1,
-                                                per_page: perPage,
-                                                to: 0,
-                                                total: 0,
-                                            },
-                                        }
-                                    }
-                                    columns={columns}
-                                    onPageChange={handlePageChange}
-                                    onPerPageChange={handlePerPageChange}
-                                    perPageOptions={[10, 25, 50, 100]}
-                                    noResultsMessage={t('ui.common.no_results') || 'No books found'}
-                                />
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </BookLayout>
-    );
+                             <PopoverContent className="w-full max-w-xs space-y-2">
+                                 <div className="mt-3 mt-4 flex flex-col gap-2">
+                                     {/* Create a new book */}
+                                     <Link href="/books/create">
+                                         <Button className="cursor-pointer">
+                                             <PlusIcon className="mr-2 h-4 w-4" />
+                                             {t('ui.books.buttons.new')}
+                                         </Button>
+                                     </Link>
+                                     {/* Export book data */}
+                                     <Button  className="cursor-pointer bg-stone-300 text-stone-900 hover:bg-stone-200" onClick={exportExcel}> <FileUp className="mr-2 h-4 w-4" />
+                                             {t('ui.books.export')}</Button>
+                                     {/* Import book data */}
+                                     <Dialog
+                                         // Vaciar TextoQR cuando se cierra el diálogo
+                                         open={open}
+                                         onOpenChange={(open) => {
+                                             setOpen(open);
+                                         }}
+                                     >
+                                         <DialogTrigger asChild>
+                                             <Button variant="outline" className="cursor-pointer bg-stone-200 text-stone-900 hover:bg-stone-100">
+                                                 <FileDown className="mr-2 h-4 w-4" />
+                                                 {t('ui.books.import')}
+                                             </Button>
+                                         </DialogTrigger>
+
+                                         <DialogContent>
+                                             <DialogTitle> {t('ui.books.import_title')} </DialogTitle>
+                                             {t('ui.books.import_description')}
+                                             <ImportBooksForm setOpen={setOpen} />
+                                         </DialogContent>
+                                     </Dialog>
+                                 </div>
+                             </PopoverContent>
+                         </Popover>
+                     </div>
+
+                     <div className="space-y-4">
+                         <FiltersTable
+                             filters={
+                                 [
+                                     {
+                                         id: 'title',
+                                         label: t('ui.books.filters.title'),
+                                         type: 'text',
+                                         placeholder: t('ui.books.placeholders.title'),
+                                     },
+                                     {
+                                         id: 'author',
+                                         label: t('ui.books.filters.author'),
+                                         type: 'text',
+                                         placeholder: t('ui.books.placeholders.author'),
+                                     },
+                                     {
+                                         id: 'genre',
+                                         label: t('ui.books.filters.genre'),
+                                         type: 'select',
+                                         options: genresList.map((genresList) => ({
+                                             label: t(`ui.books.genres.${genresList.genre_name}`),
+                                             value: genresList.genre_name,
+                                         })),
+                                         placeholder: t('ui.books.placeholders.genre'),
+                                     },
+                                     {
+                                         id: 'ISBN',
+                                         label: t('ui.books.filters.ISBN'),
+                                         type: 'number',
+                                         placeholder: t('ui.books.placeholders.ISBN'),
+                                     },
+                                     {
+                                         id: 'editorial',
+                                         label: t('ui.books.filters.editorial'),
+                                         type: 'text',
+                                         placeholder: t('ui.books.placeholders.editorial'),
+                                     },
+                                     {
+                                         id: 'available',
+                                         label: t('ui.books.filters.availability'),
+                                         type: 'select',
+                                         options: [
+                                             { value: 'true', label: t('ui.books.filters.available') },
+                                             { value: 'false', label: t('ui.books.filters.not_available') },
+                                         ],
+                                         placeholder: t('ui.books.placeholders.available'),
+                                     },
+                                     {
+                                         id: 'reserved',
+                                         label: t('ui.books.filters.reserve'),
+                                         type: 'select',
+                                         options: [
+                                             { value: 'true', label: t('ui.books.filters.reserved') },
+                                             { value: 'false', label: t('ui.books.filters.not_reserved') },
+                                         ],
+                                         placeholder: t('ui.books.placeholders.reserved'),
+                                     },
+                                     {
+                                         id: 'bookcase_name',
+                                         label: t('ui.books.filters.bookcase_name'),
+                                         type: 'number',
+                                         placeholder: t('ui.books.placeholders.bookcase_name'),
+                                     },
+                                     {
+                                         id: 'name',
+                                         label: t('ui.books.filters.name'),
+                                         type: 'select',
+                                         options: zonesArray.map((zone) => ({
+                                             label: t(`ui.zones.list.${zone.name}`),
+                                             value: zone.name,
+                                         })),
+                                         placeholder: t('ui.books.placeholders.name'),
+                                     },
+                                     {
+                                         id: 'floor_number',
+                                         label: t('ui.books.filters.floor_number'),
+                                         type: 'number',
+                                         placeholder: t('ui.books.placeholders.floor_number'),
+                                     },
+                                 ] as FilterConfig[]
+                             }
+                             onFilterChange={handleFilterChange}
+                             initialValues={filters}
+                         />
+                     </div>
+
+                     <div className="w-full overflow-hidden">
+                         {isLoading ? (
+                             <TableSkeleton columns={4} rows={10} />
+                         ) : isError ? (
+                             <div className="p-4 text-center">
+                                 <div className="mb-4 text-red-500">{t('ui.books.error_loading')}</div>
+                                 <Button onClick={() => refetch()} variant="outline">
+                                     {t('ui.books.buttons.retry')}
+                                 </Button>
+                             </div>
+                         ) : (
+                             <div>
+                                 <Table
+                                     data={
+                                         books ?? {
+                                             data: [],
+                                             meta: {
+                                                 current_page: 1,
+                                                 from: 0,
+                                                 last_page: 1,
+                                                 per_page: perPage,
+                                                 to: 0,
+                                                 total: 0,
+                                             },
+                                         }
+                                     }
+                                     columns={columns}
+                                     onPageChange={handlePageChange}
+                                     onPerPageChange={handlePerPageChange}
+                                     perPageOptions={[10, 25, 50, 100]}
+                                     noResultsMessage={t('ui.common.no_results') || 'No books found'}
+                                 />
+                             </div>
+                         )}
+                     </div>
+                 </div>
+             </div>
+         </BookLayout>
+     );
 }

@@ -5,25 +5,37 @@ namespace App\Imports;
 use Domain\Books\Models\Book;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\WithUpserts;
 
 class BooksImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
-    {
-        return new Book([
-            'title' => $row['title'],
-            'author' => $row['author'],
-            'genre' => $row['genre'],
-            'ISBN' => $row['isbn'],
-            'editorial' => $row['editorial'],
-            'available' => $row['available'],
-            'reserved' => $row['reserved'],
-            'bookcase_id' => $row['bookcase_id'],
-            'zone_id' => $row['zone_id'],
-            'floor_id' => $row['floor_id'],
-            'created_at' => $row['created_at'],
-            'updated_at' => $row['updated_at'],
-            'deleted_at' => $row['deleted_at'] ?? null,
-        ]);
+{
+    // Ignorar filas sin título, porque es obligatorio
+    if (empty($row['titulo'])) {
+        // Opcional: loguear o simplemente ignorar
+        Log::warning("Fila ignorada por no tener título");
+        return null;
     }
+
+    $id = !empty($row['id']) && !Book::where('id', $row['id'])->exists() ? $row['id'] : Str::uuid()->toString();
+
+    return new Book([
+        'id'=> $id,
+        'title' => $row['titulo'],
+        'author' => $row['autor'],
+        'genre' => $row['genero'],
+        'ISBN' => $row['isbn'],
+        'editorial' => $row['editorial'],
+        'available' => $row['disponible'],
+        'reserved' => $row['reservado'],
+        'bookcase_id' => $row['id_estanteria'],
+        'zone_id' => $row['id_zona'],
+        'floor_id' => $row['id_piso'],
+        'deleted_at' => $row['eliminado_el'] ?? null,
+    ]);
+}
+
 }

@@ -34,4 +34,29 @@ class ZoneIndexAction
 
         return $zone->through(fn ($zone) => ZoneResource::fromModel($zone));
     }
+
+    public function filteredQuery(?array $search = null)
+    {
+        $name = $search[0];
+        $floor_number = $search[1];
+
+        $floorZone = Floor::query() -> when($floor_number != "null", function ($query) use ($floor_number){
+            $query -> where('floor_number', 'like', $floor_number);
+        })-> first();
+
+        $floor_id= $floorZone -> id;
+
+
+        $query = Zone::query()
+            ->when($name !== "null", function ($query) use ($name) {
+                $query->where('name', 'ILIKE', "%".$name."%");
+            })
+            ->when($floor_number !== "null", function ($query) use ($floor_id) {
+                $query->where('floor_id', 'ILIKE', $floor_id);
+            })
+            ->latest();
+
+         return $query;
+
+    }
 }

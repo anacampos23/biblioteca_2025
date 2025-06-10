@@ -32,6 +32,6 @@ class LoansExport implements FromCollection, WithHeadings
     /** Naming the columns */
       public function headings(): array
     {
-        return ['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id', 'updated_date', 'deleted_at'];
+        return ['ID', 'Comienzo Préstamo', 'Final Préstamo', 'Fecha de Vencimiento', 'Activo', 'ID Usuario', 'Id Libro', 'Fecha de Actualización', 'Eliminado el'];
     }
 }

@@ -177,11 +177,11 @@ class BookController extends Controller
     public function store(Request $request, BookStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'title' => ['required'],
-            'author' => ['required'],
+            'title' => [],
+            'author' => [],
             'ISBN' => [],
             'genre' => [],
-            'editorial' => ['required'],
+            'editorial' => [],
             'bookcase_id' => [],
             'zone_id' => [],
             'floor_id' => [],
@@ -308,10 +308,22 @@ class BookController extends Controller
             ->with('success', __('messages.books.deleted'));
     }
 
-    public function exportBooks()
+    public function exportBooks(Request $request)
     {
+        $filters = [
+            $request->input('title', 'null'),
+            $request->input('author', 'null'),
+            $request->input('genre', 'null'),
+            $request->input('ISBN', 'null'),
+            $request->input('editorial', 'null'),
+            $request->input('available', 'null'),
+            $request->input('reserved', 'null'),
+            $request->input('bookcase_name', 'null'),
+            $request->input('name', 'null'),
+            $request->input('floor_number', 'null'),
+        ];
 
-        return Excel::download(new BooksExport, 'books.xlsx');
+        return Excel::download(new BooksExport($filters), 'books.xlsx');
     }
 
     public function importBooks(Request $request)
@@ -319,6 +331,7 @@ class BookController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv'
         ]);
+
         try {
             Excel::import(new BooksImport, $request->file('file'));
             return

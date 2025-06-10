@@ -19,6 +19,6 @@ class ReservesExport implements FromCollection, WithHeadings
     /** Naming the columns */
       public function headings(): array
     {
-        return ['id', 'book_id', 'user_id', 'status', 'created_at', 'updated_at', 'deleted_at'];
+        return ['ID', 'Id Libro', 'Id Usuario', 'Estado', 'Creado el', 'Actualizado el', 'Eliminado el'];
     }
 }

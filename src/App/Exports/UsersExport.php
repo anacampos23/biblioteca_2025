@@ -16,9 +16,10 @@ class UsersExport implements FromCollection, WithHeadings
         return User::all();
     }
 
+
     /** Naming the columns */
       public function headings(): array
     {
-        return ['id', 'name', 'email', 'email_verified_at', 'created_at', 'updated_at', 'deleted_at'];
+        return ['ID', 'Nombre', 'Email', 'Email verificado el', 'Creado el', 'Actualizado el', 'Eliminado el'];
     }
 }
