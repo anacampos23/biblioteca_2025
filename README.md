@@ -1,6 +1,6 @@
 <div align="center">
 
-
+![Vista principal del Gestor de Biblioteca](images/dashboard.png)
 
 # ✍️ Descripción del proyecto 
 
