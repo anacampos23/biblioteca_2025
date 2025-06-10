@@ -17,7 +17,8 @@ return [
             'documentation' => 'Documentación',
             'reserves' => 'Reservas',
             'statistics' => 'Estadísticas',
-            'booksearch' => 'Catálogo de libros'
+            'booksearch' => 'Catálogo de libros',
+            'reports'=> 'Informes',
         ],
     ],
     'user_menu' => [
@@ -807,4 +808,9 @@ return [
         ]
 
     ],
+
+    'reports'=>[
+        'title'=> 'Informes',
+        'description'=> 'Descarga los informes'
+    ]
 ];

@@ -17,6 +17,7 @@ return [
             'reserves' => 'Reservations',
             'statistics' => 'Statistics',
             'booksearch' => 'Book Search',
+            'reports'=> 'Reports'
         ],
     ],
     'user_menu' => [
@@ -808,5 +809,10 @@ return [
             'title' => 'More moved zones',
         ]
 
+        ],
+
+    'reports'=>[
+        'title'=> 'Reports',
+        'description'=> 'Download the reports'
     ]
 ];

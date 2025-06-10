@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { useTranslations } from '@/hooks/use-translations';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users, Building2, MapPin, LibraryBig, Book, ArrowUpRight, BookmarkCheck, BookOpenText , ChartPie } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Users, Building2, MapPin, LibraryBig, Book, ArrowUpRight, BookmarkCheck, BookOpenText , ChartPie, Clipboard  } from 'lucide-react';
 import AppLogo from './app-logo';
 
 interface PageProps {
@@ -98,6 +98,14 @@ const mainNavItems = (t: (key: string) => string, permissions: string[]): NavIte
             icon: ChartPie,
         });
     }
+
+    // if (permissions.includes('reports.view')) {
+    //     items.push({
+    //         title: t('ui.navigation.items.reports'),
+    //         url: '/reports',
+    //         icon: Clipboard ,
+    //     });
+    // }
 
     return items;
 };

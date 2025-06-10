@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('reserves', \App\Reserves\Controllers\ReserveController::class);
         Route::resource('books', \App\Books\Controllers\BookController::class);
         Route::get('statistics', [\App\Statistics\Controllers\StatisticController::class, 'index']);
+         Route::get('reports', [\App\Reports\Controllers\ReportController::class, 'index']);
 
     });
 
