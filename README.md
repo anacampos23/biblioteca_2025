@@ -1,8 +1,10 @@
 <div align="center">
 
-![Vista principal del Gestor de Biblioteca](images/dashboard.png)
+
 
 # ✍️ Descripción del proyecto 
+
+![Vista principal del Gestor de Biblioteca](videos/presentation.mp4)
 
 Este proyecto es un Gestor de Biblioteca completo diseñado para optimizar la administración de la misma y control de los libros. Permite a los usuarios gestionar los libros, las estanterías, las zonas y los pisos, así como llevar un control del estado de disponibilidad, los préstamos y las reservas de cada ejemplar. La aplicación se construye con una arquitectura modelo-vista-controlador, utilizando Laravel para el backend (PHP) y React para el frontend (TypeScript).
 </div>
