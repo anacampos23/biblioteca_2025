@@ -1,22 +1,82 @@
 <div align="center">
 
-
-
-# ✍️ Descripción del proyecto 
+# 📚 Gestor de Biblioteca
 
 ![Vista principal del Gestor de Biblioteca](videos/presentation.mp4)
 
-Este proyecto es un Gestor de Biblioteca completo diseñado para optimizar la administración de la misma y control de los libros. Permite a los usuarios gestionar los libros, las estanterías, las zonas y los pisos, así como llevar un control del estado de disponibilidad, los préstamos y las reservas de cada ejemplar. La aplicación se construye con una arquitectura modelo-vista-controlador, utilizando Laravel para el backend (PHP) y React para el frontend (TypeScript).
+Este proyecto es un gestor de biblioteca completo diseñado para optimizar la administración del catálogo y el control de los libros. Permite a los usuarios gestionar libros, estanterías, zonas y pisos, así como llevar un control del estado de disponibilidad, préstamos y reservas de ejemplares.
+
+La aplicación sigue una arquitectura modelo-vista-controlador, utilizando **Laravel** para el backend (PHP) y **React** para el frontend (TypeScript).
+
 </div>
 
-## ✨ Características Principales
+---
 
-* Gestión de libros: CRUD (Crear, Leer, Actualizar, Eliminar) de libros con detalles como título, autor, género, ISBN, editorial, disponibilidad y estado de reserva.
-* Gestión de préstamos: Registro y administración de información de autores.
-* Control de Disponibilidad y Reserva: Visualización clara del estado de cada libro (disponible o reservado).
-* Búsqueda y Filtrado: Funcionalidades para buscar libros por diversos criterios y aplicar filtros.
-* Interfaz de Usuario Intuitiva: Desarrollada con React para una experiencia de usuario fluida y moderna.
-* API RESTful: Backend robusto y escalable desarrollado en Laravel, siguiendo los principios REST para una comunicación eficiente.
+## ✨ Características principales
 
+- 📚 **Gestión completa** de libros, estanterías, zonas y pisos (CRUD).
+- 🔄 **Control de disponibilidad**: visualización clara del estado (disponible o reservado).
+- 📬 **Notificaciones por email** para usuarios.
+- 📊 **Gráficos estadísticos** para análisis del uso.
+- 📜 **Línea de tiempo** de actividad de cada usuario.
+- 📷 **Lectura y creación de códigos QR** para libros.
+- 🔍 **Búsqueda y filtrado** por múltiples criterios.
+- 🎨 **Interfaz moderna e intuitiva** desarrollada con React.
+- 🔌 **API RESTful** con Laravel para comunicación eficiente y escalable.
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- **Backend**: Laravel + PHP 8
+- **Frontend**: React + TypeScript + Tailwind CSS
+- **Comunicación**: Inertia.js
+- **Formularios**: TanStack Form
+- **Base de datos**: PostgreSQL
+- **Entorno de desarrollo**: Docker + Docker Compose
+- **Panel de BD**: PgAdmin
+
+---
+
+## 🚀 Cómo iniciar el proyecto (Ubuntu + Docker)
+
+### 🐳 Pasos para levantar el entorno
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/anacampos23/biblioteca_2025
+   cd biblioteca_2025
+
+
+2. Copia el archivo .env.example y renómbralo a .env:
+    ```bash
+    cp .env.example .env
+    ```
+
+3. Levanta los contenedores con Docker:
+    ```bash
+    docker-compose up -d --build
+    ```
+
+4. Instala las dependencias de Laravel y del frontend:
+    ```bash
+    docker exec app composer install
+    docker exec app npm install
+    ```
+
+5. Aplica las migraciones:
+    ```bash
+    docker exec app php artisan migrate:fresh --seed
+    ```
+
+## 🔐 Acceso por defecto
+Laravel:
+
+Email: admin@biblioteca.com
+
+Contraseña: password
+
+## 🧑‍💻 Autor
+Desarrollado por Ana Campos Aguilar
 
 
