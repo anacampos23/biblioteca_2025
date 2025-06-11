@@ -2,7 +2,7 @@
 
 # 📚 Gestor de Biblioteca
 
-![Vista principal del Gestor de Biblioteca](videos/presentation.mp4)
+![Vista principal del Gestor de Biblioteca](images/dashboard.png)
 
 Este proyecto es un gestor de biblioteca completo diseñado para optimizar la administración del catálogo y el control de los libros. Permite a los usuarios gestionar libros, estanterías, zonas y pisos, así como llevar un control del estado de disponibilidad, préstamos y reservas de ejemplares.
 
