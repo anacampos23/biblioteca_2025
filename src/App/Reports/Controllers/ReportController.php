@@ -47,7 +47,7 @@ class ReportController extends Controller
             ->toArray();
 
 
-        return Inertia::render('statistics/bookIndex', [
+        return Inertia::render('reports/Index', [
             'books' => $books,
             'loans' => $loans,
         ]);

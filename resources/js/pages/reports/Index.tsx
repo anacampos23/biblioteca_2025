@@ -126,122 +126,25 @@ export default function ReportsIndex({ lang }:indexprops) {
 
 
   const columns = useMemo(() => ([
-    createActionsColumn<Loan>({
-        id: "actions",
-        header: t("ui.loans.columns.edit") || "Edit",
-        renderActions: (loan) => (
-          <>
-              <Button
-                onClick={() => handleChangeStatus(loan.id)}
-                variant="outline"
-                size="icon"
-                title={t("ui.loans.buttons.return") || "View loan"}
-                disabled={!loan.active} // Desactivar el botón si el préstamo está inactivo
-                className={`${loan.active ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-                >
-                  <BookCheck  className="h-4 w-4" />
-              </Button>
-              <Button
-                onClick={() => handleChangeDueDate(loan.id, loan.due_date)}
-                variant="outline"
-                size="icon"
-                title={t("ui.loans.buttons.renew") || "View loan"}
-                disabled={!loan.active} // Desactivar el botón si el préstamo está inactivo
-                className={`${loan.active ? 'bg-orange-400 text-white hover:bg-orange-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-                >
-                  <TimerReset   className="h-4 w-4" />
-              </Button>
-          </>
-        ),
-      }),
     createTextColumn<Loan>({
       id: "title",
       header: t("ui.loans.columns.title") || "Title",
       accessorKey: "title",
     }),
-    createTextColumn<Loan>({
-        id: "author",
-        header: t("ui.loans.columns.author") || "author",
-        accessorKey: "author",
+   createActionsColumn<Loan>({
+        id: "actions",
+        header: t("ui.loans.columns.edit") || "Edit",
+        renderActions: (loan) => (
+          <>
+              <a href="reports/loanDuration/export" target="_blank" rel="noopener noreferrer">
+                          <Button className="bg-stone-300 text-stone-900 hover:bg-stone-200">
+                              <FileUp className="mr-2 h-4 w-4" />
+                              {t('ui.reports.loanduration.button')}
+                          </Button>
+                      </a>
+          </>
+        ),
       }),
-      createTextColumn<Loan>({
-        id: "ISBN",
-        header: t("ui.loans.columns.ISBN") || "ISBN",
-        accessorKey: "ISBN",
-      }),
-      createTextColumn<Loan>({
-        id: "name",
-        header: t("ui.loans.columns.name") || "name",
-        accessorKey: "name",
-      }),
-      createTextColumn<Loan>({
-        id: "email",
-        header: t("ui.loans.columns.email") || "email",
-        accessorKey: "email",
-      }),
-      createTextColumn<Loan>({
-        id: "start_loan",
-        header: t("ui.loans.columns.start_loan") || "start_loan",
-        accessorKey: "start_loan",
-        format: (value) => {
-            const date = new Date(value);
-            return date.toLocaleDateString("es-ES"); // Formato dd/mm/yyyy en España
-          },
-      }),
-      createTextColumn<Loan>({
-        id: "end_loan",
-        header: t("ui.loans.columns.end_loan") || "end_loan",
-        accessorKey: "end_loan",
-        format: (value) => {
-            // Si end_loan es null o no existe, mostramos mensaje
-            if (!value) {
-                return t("ui.loans.fields.not_returned");
-            }
-
-            // Si hay una fecha de devolución, la formateamos
-            const date = new Date(value);
-            return t("ui.loans.fields.returned") + date.toLocaleDateString("es-ES"); // Formato dd/mm/yyyy en España
-        },
-      }),
-      createTextColumn<Loan>({
-        id: "due_date",
-        header: t("ui.loans.columns.due_date") || "due_date",
-        accessorKey: "due_date",
-        format: (value) => {
-            const date = new Date(value);
-            return date.toLocaleDateString("es-ES"); // Formato dd/mm/yyyy en España
-          },
-      }),
-      createTextColumn<Loan>({
-        id: "days_overdue",
-        header: t("ui.loans.columns.days_overdue") || "days_overdue",
-        accessorKey: "days_overdue",
-      }),
-    //   createTextColumn<Loan>({
-    //     id: "active",
-    //     header: t("ui.loans.columns.active") || "active",
-    //     accessorKey: "active",
-    //     format: (value)=>(value? t('ui.loans.filters.active_status') : t('ui.loans.filters.inactive_status'))
-    //   }),
-    createActionsColumn<Loan>({
-      id: "delete",
-      header: t("ui.loans.columns.delete") || "Actions",
-      renderActions: (loan) => (
-        <>
-          <DeleteDialog
-            id={loan.id}
-            onDelete={handleDeleteLoan}
-            title={t("ui.loans.delete.title") || "Delete loan"}
-            description={t("ui.loans.delete.description") || "Are you sure you want to delete this loan? This action cannot be undone."}
-            trigger={
-              <Button variant="outline" size="icon" className="text-destructive hover:text-destructive" title={t("ui.loans.buttons.delete") || "Delete loan"}>
-                <TrashIcon className="h-4 w-4" />
-              </Button>
-            }
-          />
-        </>
-      ),
-    }),
   ] as ColumnDef<Loan>[]), [t, handleDeleteLoan]);
 
   return (

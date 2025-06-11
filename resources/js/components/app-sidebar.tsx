@@ -99,13 +99,13 @@ const mainNavItems = (t: (key: string) => string, permissions: string[]): NavIte
         });
     }
 
-    // if (permissions.includes('reports.view')) {
-    //     items.push({
-    //         title: t('ui.navigation.items.reports'),
-    //         url: '/reports',
-    //         icon: Clipboard ,
-    //     });
-    // }
+    if (permissions.includes('reports.view')) {
+        items.push({
+            title: t('ui.navigation.items.reports'),
+            url: '/reports',
+            icon: Clipboard ,
+        });
+    }
 
     return items;
 };

@@ -3,6 +3,7 @@
 namespace App\Loans\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Exports\LoanDurationsExport;
 use App\Exports\LoansExport;
 use App\Notifications\Disponible;
 use App\Notifications\Préstamo;
@@ -258,9 +259,26 @@ class LoanController extends Controller
             ->with('success', __('messages.loans.deleted'));
     }
 
+    // Exportar
         public function exportLoans()
     {
 
         return Excel::download(new LoansExport, 'loans.xlsx');
+    }
+
+
+    public function DurationExport()
+    {
+        $loans = Loan::whereNotNull('end_loan')->get();
+
+        $days = $loans->map(function ($loan) {
+            $start = Carbon::parse($loan->start_loan);
+            $end = Carbon::parse($loan->end_loan);
+            return $start->diffInDays($end);
+        });
+
+        $averageDays = $days->avg();
+
+        return Excel::download(new LoanDurationsExport($averageDays), 'loansDuration.xlsx', \Maatwebsite\Excel\Excel::XLSX, ['charts' => true]);
     }
 }

@@ -99,13 +99,13 @@ export default function Dashboard() {
       href: '/statistics/bookIndex',
       icon: ChartPie,
     },
-    // {
-    //   permission: 'reports.view',
-    //   title: t('ui.reports.title'),
-    //   description: t('ui.reports.description'),
-    //   href: '/reports',
-    //   icon: Clipboard ,
-    // },
+    {
+      permission: 'reports.view',
+      title: t('ui.reports.title'),
+      description: t('ui.reports.description'),
+      href: '/reports',
+      icon: Clipboard ,
+    },
   ];
 
   return (
