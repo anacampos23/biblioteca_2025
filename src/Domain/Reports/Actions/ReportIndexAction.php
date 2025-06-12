@@ -22,8 +22,11 @@ class ReportIndexAction
     if (!empty($filters['start_loan_to'])) {
         $query->where('start_loan', '<=', $filters['start_loan_to']);
     }
-    if (!empty($filters['end_loan'])) {
-        $query->whereDate('end_loan', $filters['end_loan']);
+    if (!empty($filters['end_loan_from'])) {
+        $query->where('end_loan', '>=', $filters['end_loan_from']);
+    }
+    if (!empty($filters['end_loan_to'])) {
+        $query->where('end_loan', '<=', $filters['end_loan_to']);
     }
 
     return $query;

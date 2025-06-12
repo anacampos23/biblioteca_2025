@@ -28,9 +28,11 @@ class ReportController extends Controller
         $filters = [
             'start_loan_from'=> $request->input('start_loan_from', null),
             'start_loan_to'=> $request->input('start_loan_to', null),
-            'end_loan'=> $request->input('end_loan', null),
+            'end_loan_from'=> $request->input('end_loan_from', null),
+            'end_loan_to'=> $request->input('end_loan_to', null),
         ];
 
+        // dd($filters);
 
         return Excel::download(new LoanDurationsExport($filters), 'loansDuration.xlsx');
     }

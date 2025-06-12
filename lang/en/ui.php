@@ -813,6 +813,22 @@ return [
 
     'reports'=>[
         'title'=> 'Reports',
-        'description'=> 'Download the reports'
+        'description'=> 'Download the reports',
+        'columns' =>[
+            'reports'=> 'Reports',
+            'download' => 'Download',
+            'download_excel'=> 'Download Excel',
+        ],
+        'name'=>[
+            'loanDuration'=> 'Loan duration',
+            'loanedBooks'=> 'Loaned books',
+            'activeUsers'=> 'Active users',
+        ],
+        'filters'=>[
+            'start'=> "Loans' Start Date",
+            'end'=> "Loans' End Date",
+            'from_to'=> 'From - To',
+            'to'=> 'To',
+        ]
     ]
 ];

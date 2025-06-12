@@ -32,11 +32,12 @@ class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithS
 
 
     //Todos los préstamos terminados
-     public function query()
+    public function query()
     {
         $action = new ReportIndexAction();
 
-        return $action->filteredQuery($this->filters);
+        return $action->filteredQuery($this->filters)
+            ->where('active', false);
     }
 
     public function map($loan): array
@@ -86,11 +87,11 @@ class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithS
 
                 $sheet->setCellValue('G9', 'Duración media de los préstamos:');
 
-                 $average = $this->query()->get()->avg(function($loan) {
-                $start = Carbon::parse($loan->start_loan);
-                $end = Carbon::parse($loan->end_loan);
-                return $start->diffInDays($end);
-            });
+                $average = $this->query()->get()->avg(function ($loan) {
+                    $start = Carbon::parse($loan->start_loan);
+                    $end = Carbon::parse($loan->end_loan);
+                    return $start->diffInDays($end);
+                });
 
 
                 $sheet->setCellValue('G10', round($average, 2) . ' días');
@@ -105,12 +106,11 @@ class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithS
                         'startColor' => ['rgb' => 'FFD3D3D3'] // amarillo claro
                     ]
                 ]);
-                 $sheet->getStyle('G9:G10')->applyFromArray([
+                $sheet->getStyle('G9:G10')->applyFromArray([
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
                     ],
                 ]);
-
             }
 
         ];

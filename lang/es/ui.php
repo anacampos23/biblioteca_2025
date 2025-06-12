@@ -811,6 +811,22 @@ return [
 
     'reports'=>[
         'title'=> 'Informes',
-        'description'=> 'Descarga los informes'
+        'description'=> 'Descarga los informes',
+        'columns' =>[
+            'reports'=> 'Informes',
+            'download' => 'Descargas',
+            'download_excel'=> 'Descargar Excel',
+        ],
+        'name'=>[
+            'loanDuration'=> 'Duración de los préstamos',
+            'loanedBooks'=> 'Libros prestados',
+            'activeUsers'=> 'Usuarios activos',
+        ],
+        'filters'=>[
+            'start'=> 'Fecha Inicio Préstamos',
+            'end'=> 'Fecha Final Préstamos',
+            'from_to'=> 'Desde - Hasta',
+            'to'=> 'Hasta',
+        ]
     ]
 ];
