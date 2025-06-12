@@ -90,6 +90,8 @@ export interface SelectFilterConfig extends BaseFilterConfig {
 export interface DateFilterConfig extends BaseFilterConfig {
   type: "date";
   defaultValue?: Date;
+  min?: Date;
+  max?: Date;
 }
 
 /**
@@ -98,6 +100,8 @@ export interface DateFilterConfig extends BaseFilterConfig {
 export interface DateRangeFilterConfig extends BaseFilterConfig {
   type: "dateRange";
   defaultValue?: { from: Date; to: Date };
+  min?: Date;
+  max?: Date;
 }
 
 /**
@@ -309,6 +313,7 @@ export function FiltersTable({
                             {renderFilterInput(
                               filter,
                               field,
+                              lang,
                               (value) => handleFilterChange(filter.id, value)
                             )}
                           </FormControl>
@@ -422,6 +427,39 @@ function renderFilterInput(
           </PopoverContent>
         </Popover>
       );
+      case "dateRange":
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            "w-full justify-start text-left font-normal",
+            !field.value?.from && !field.value?.to && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {field.value?.from && field.value?.to
+            ? `${dayjs(field.value.from).format("LL")} - ${dayjs(field.value.to).format("LL")}`
+            : filter.placeholder || "Seleccionar rango de fechas"}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <Calendar
+          timeZone="Europe/Madrid"
+          mode="range"
+          locale={langMap[lang]}
+          selected={field.value}
+          onSelect={(range: { from?: Date; to?: Date } | undefined) => {
+            field.onChange(range);
+            onChange(range);
+          }}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  );
+
     case "number":
       return (
         <Input

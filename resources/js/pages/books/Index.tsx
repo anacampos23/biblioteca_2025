@@ -118,6 +118,7 @@ export default function BooksIndex({ genresList, zonesArray, booksWithImages, fl
 
     //Filters
     const handleFilterChange = (newFilters: Record<string, any>) => {
+
         const filtersChanged = newFilters !== filters;
 
         if (filtersChanged) {

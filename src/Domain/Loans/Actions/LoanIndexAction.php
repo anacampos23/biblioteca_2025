@@ -42,14 +42,14 @@ class LoanIndexAction
             ->when($due_date !== "null", fn($q) => $q->whereDate('due_date', $due_date))
             ->when($active !== "null", fn($q) => $q->where('active', 'like', $active))
             ->latest()
-            ->get(); // usamos get() para poder hacer el filtro en PHP
+            ->get();
 
-        // 👉 Aplicamos el filtro de days_overdue después de la consulta
+
         if ($days_overdue !== "null") {
             $loans = $loans->filter(fn($loan) => $loan->days_overdue == (int)$days_overdue);
         }
 
-        // 🔄 Paginar manualmente los resultados filtrados
+
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $currentItems = $loans->slice(($currentPage - 1) * $perPage, $perPage)->values();
         $paginated = new LengthAwarePaginator(

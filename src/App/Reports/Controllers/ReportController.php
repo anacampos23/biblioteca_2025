@@ -3,55 +3,35 @@
 namespace App\Reports\Controllers;
 
 use App\Core\Controllers\Controller;
-use App\Notifications\Disponible;
-use App\Notifications\Préstamo;
+use App\Exports\LoanDurationsExport;
 use Carbon\Carbon;
-use Domain\Loans\Actions\LoanDestroyAction;
-use Domain\Loans\Actions\LoanIndexAction;
-use Domain\Loans\Actions\LoanStoreAction;
-use Domain\Loans\Actions\LoanUpdateAction;
 use Domain\Loans\Models\Loan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Inertia\Inertia;
-use Inertia\Response;
-use Domain\Users\Models\User;
-use Domain\Books\Models\Book;
-use Domain\Reserves\Models\Reserve;
-use Domain\Zones\Models\Zone;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use App\Enums\ZoneEnum;
 
-use function Laravel\Prompts\alert;
 
 class ReportController extends Controller
 {
-    // Método para mostrar estadísticas de libros
     public function index()
     {
-        $books = DB::table('books')
-            ->leftJoin('loans', 'books.id', '=', 'loans.book_id')
-            ->select('books.ISBN', 'books.title', DB::raw('COUNT(loans.id) as loans_count'))
-            ->groupBy('books.ISBN', 'books.title')
-            ->orderByDesc('loans_count')
-            ->take(10)
-            ->get();
-
-            $loans = Loan::withTrashed()
-            ->with(['book:id,title,author,ISBN'])
-            ->select(['id', 'start_loan', 'end_loan', 'due_date', 'active', 'user_id', 'book_id'])
-            ->orderBy('start_loan', 'desc')
-            ->get()
-            ->toArray();
-
+        $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
 
         return Inertia::render('reports/Index', [
-            'books' => $books,
-            'loans' => $loans,
+            'lang' => $lang,
         ]);
     }
 
+    public function DurationExport(Request $request)
+    {
+        $filters = [
+            'start_loan_from'=> $request->input('start_loan_from', null),
+            'start_loan_to'=> $request->input('start_loan_to', null),
+            'end_loan'=> $request->input('end_loan', null),
+        ];
 
+
+        return Excel::download(new LoanDurationsExport($filters), 'loansDuration.xlsx');
+    }
 }

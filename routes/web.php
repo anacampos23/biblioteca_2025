@@ -29,7 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('books/export', [\App\Books\Controllers\BookController::class, 'exportBooks'])->name('books.export');
         Route::get('loans/export', [\App\Loans\Controllers\LoanController::class, 'exportLoans'])->name('loans.export');
         Route::get('reserves/export', [\App\Reserves\Controllers\ReserveController::class, 'exportReserves'])->name('reserves.export');
-        Route::get('reports/loanDuration/export', [\App\Loans\Controllers\LoanController::class, 'DurationExport'])->name('loans.duration.export');
+        Route::get('reports/loanDuration/export', [\App\Reports\Controllers\ReportController::class, 'DurationExport']);
         Route::post('books/import', [\App\Books\Controllers\BookController::class, 'importBooks'])->name('books.import');
         Route::resource('users', \App\Users\Controllers\UserController::class);
         Route::resource('floors', \App\Floors\Controllers\FloorController::class);
