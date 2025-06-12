@@ -3,6 +3,8 @@
 namespace App\Reports\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Exports\ActivityUsersExport;
+use App\Exports\BookLoanedExport;
 use App\Exports\LoanDurationsExport;
 use Carbon\Carbon;
 use Domain\Loans\Models\Loan;
@@ -35,5 +37,29 @@ class ReportController extends Controller
         // dd($filters);
 
         return Excel::download(new LoanDurationsExport($filters), 'loansDuration.xlsx');
+    }
+
+    public function BookLoanedExport(Request $request)
+    {
+        $filters = [
+            'start_loan_from'=> $request->input('start_loan_from', null),
+            'start_loan_to'=> $request->input('start_loan_to', null),
+            'end_loan_from'=> $request->input('end_loan_from', null),
+            'end_loan_to'=> $request->input('end_loan_to', null),
+        ];
+
+        return Excel::download(new BookLoanedExport($filters), 'bookLoaned.xlsx');
+    }
+
+    public function ActivityUserExport(Request $request)
+    {
+        $filters = [
+            'start_loan_from'=> $request->input('start_loan_from', null),
+            'start_loan_to'=> $request->input('start_loan_to', null),
+            'end_loan_from'=> $request->input('end_loan_from', null),
+            'end_loan_to'=> $request->input('end_loan_to', null),
+        ];
+
+        return Excel::download(new ActivityUsersExport($filters), 'activityUsers.xlsx');
     }
 }

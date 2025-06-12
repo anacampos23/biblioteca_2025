@@ -30,7 +30,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('loans/export', [\App\Loans\Controllers\LoanController::class, 'exportLoans'])->name('loans.export');
         Route::get('reserves/export', [\App\Reserves\Controllers\ReserveController::class, 'exportReserves'])->name('reserves.export');
         Route::get('reports/loanDuration/export', [\App\Reports\Controllers\ReportController::class, 'DurationExport']);
+        Route::get('reports/bookLoaned/export', [\App\Reports\Controllers\ReportController::class, 'BookLoanedExport']);
+        Route::get('reports/activityUsers/export', [\App\Reports\Controllers\ReportController::class, 'ActivityUserExport']);
+
         Route::post('books/import', [\App\Books\Controllers\BookController::class, 'importBooks'])->name('books.import');
+
+
         Route::resource('users', \App\Users\Controllers\UserController::class);
         Route::resource('floors', \App\Floors\Controllers\FloorController::class);
         Route::resource('zones', \App\Zones\Controllers\ZoneController::class);

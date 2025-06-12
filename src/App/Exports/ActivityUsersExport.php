@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use Domain\Books\Actions\BookIndexAction;
+use Domain\Books\Models\Book;
 use Domain\Loans\Actions\LoanIndexAction;
 use Domain\Loans\Models\Loan;
 use Domain\Reports\Actions\ReportIndexAction;
@@ -20,7 +21,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithStrictNullComparison
+class ActivityUsersExport implements FromQuery, WithMapping, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithStrictNullComparison
 {
 
     protected $filters;
@@ -36,8 +37,7 @@ class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithS
     {
         $action = new ReportIndexAction();
 
-        return $action->filteredQuery($this->filters)
-            ->where('active', false);
+        return $action->filteredQuery($this->filters)->with('user');
     }
 
     public function map($loan): array
@@ -47,11 +47,17 @@ class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithS
 
         $duration = round($start->diffInDays($end));
 
+        $userName = $loan->user ? (string) $loan->user->name : 'Nombre no encontrado';
+        $userEmail = $loan->user ? (string) $loan->user->email : 'email no encontrado';
+
         return [
             $loan->id,
             $start->format('d-m-Y'),
             $end->format('d-m-Y'),
             $duration,
+            $loan->user_id,
+            $userName,
+            $userEmail,
         ];
     }
 
@@ -63,12 +69,15 @@ class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithS
             'Inicio Préstamo',
             'Finalización Préstamo',
             'Duración Préstamo (días)',
+            'ID Usuario',
+            'Nombre',
+            'Email',
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:D1')->getFill()
+        $sheet->getStyle('A1:G1')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('FFD3D3D3');
 
@@ -85,19 +94,15 @@ class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithS
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
 
-                $sheet->setCellValue('G9', 'Duración media de los préstamos:');
+                $sheet->setCellValue('K9', 'Total de usuarios activos:');
 
-                $average = $this->query()->get()->avg(function ($loan) {
-                    $start = Carbon::parse($loan->start_loan);
-                    $end = Carbon::parse($loan->end_loan);
-                    return $start->diffInDays($end);
-                });
+                $activeUsers = Loan::distinct('user_id')->count('user_id');
 
 
-                $sheet->setCellValue('G10', round($average, 2) . ' días');
-                $sheet->getColumnDimension('G')->setWidth(32);
+                $sheet->setCellValue('K10', $activeUsers);
+                $sheet->getColumnDimension('K')->setWidth(32);
 
-                $sheet->getStyle('G9')->applyFromArray([
+                $sheet->getStyle('K9')->applyFromArray([
                     'font' => [
                         'bold' => true,
                     ],
@@ -106,7 +111,7 @@ class LoanDurationsExport implements FromQuery, WithMapping, WithHeadings, WithS
                         'startColor' => ['rgb' => 'FFD3D3D3']
                     ]
                 ]);
-                $sheet->getStyle('G9:G10')->applyFromArray([
+                $sheet->getStyle('K9:K10')->applyFromArray([
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
                     ],

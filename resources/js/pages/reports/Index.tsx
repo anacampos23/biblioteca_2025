@@ -50,8 +50,8 @@ export default function ReportsIndex({ lang }: indexprops) {
     // Datos fijos de informes
     const reportData: Report[] = [
         { id: 1, name: t('ui.reports.name.loanDuration'), downloadUrl: '/reports/loanDuration/export' },
-        { id: 2, name: t('ui.reports.name.loanedBooks'), downloadUrl: '/reports/activeUsers/export' },
-        { id: 3, name: t('ui.reports.name.activeUsers'), downloadUrl: '/reports/topBooks/export' },
+        { id: 2, name: t('ui.reports.name.loanedBooks'), downloadUrl: 'reports/bookLoaned/export' },
+        { id: 3, name: t('ui.reports.name.activeUsers'), downloadUrl: 'reports/activityUsers/export' },
     ];
 
     // Paginación simulada (todo en una página)
@@ -109,7 +109,7 @@ export default function ReportsIndex({ lang }: indexprops) {
             <div className="p-6">
                 <div className="space-y-6">
                     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                        <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
+                        <h1 className="text-3xl font-bold">{t('ui.reports.title')}</h1>
                     </div>
                 </div>
                 <div className="mt-6 space-y-4">
@@ -126,7 +126,7 @@ export default function ReportsIndex({ lang }: indexprops) {
                             id: 'end_loan',
                             label: t('ui.reports.filters.end'),
                             type: 'dateRange',
-                            placeholder: 'Fecha fin',
+                            placeholder: t('ui.reports.filters.from_to'),
                         },
                     ]}
                     onFilterChange={handleFilterChange}
