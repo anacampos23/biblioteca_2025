@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\reports\loans;
 
 use Carbon\Carbon;
 use Domain\Books\Actions\BookIndexAction;

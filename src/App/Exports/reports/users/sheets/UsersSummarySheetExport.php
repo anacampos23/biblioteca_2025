@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\reports\users\sheets;
 
 use Carbon\Carbon;
 use Domain\Books\Actions\BookIndexAction;
@@ -17,11 +17,12 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class BookLoanedExport implements FromQuery, WithMapping, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithStrictNullComparison
+class UsersSummarySheetExport implements WithStyles, WithEvents, ShouldAutoSize, WithStrictNullComparison, WithTitle
 {
 
     protected $filters;
@@ -31,56 +32,15 @@ class BookLoanedExport implements FromQuery, WithMapping, WithHeadings, WithStyl
         $this->filters = $filters;
     }
 
-
-    //Todos los préstamos terminados
-    public function query()
+    public function title(): string
     {
-        $action = new ReportIndexAction();
-
-        return $action->filteredQuery($this->filters)->with('book');
+        return 'Resumen';
     }
 
-    public function map($loan): array
-    {
-        $start = Carbon::parse($loan->start_loan)->startOfDay();
-        $end = Carbon::parse($loan->end_loan)->startOfDay();
-
-        $duration = round($start->diffInDays($end));
-
-        $bookTitle = $loan->book ? (string) $loan->book->title : 'Título no encontrado';
-        $bookAuthor = $loan->book ? (string) $loan->book->author : 'Autor no encontrado';
-        $bookISBN =  $loan->book ? (string) $loan->book->ISBN : 'ISBN no encontrado';
-
-        return [
-            $loan->id,
-            $start->format('d-m-Y'),
-            $end->format('d-m-Y'),
-            $duration,
-            $loan->book_id,
-            $bookTitle,
-            $bookAuthor,
-            $bookISBN,
-        ];
-    }
-
-    public function headings(): array
-    {
-
-        return [
-            'ID Préstamo',
-            'Inicio Préstamo',
-            'Finalización Préstamo',
-            'Duración Préstamo (días)',
-            'ID Libro',
-            'Título',
-            'Autor',
-            'ISBN',
-        ];
-    }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:H1')->getFill()
+        $sheet->getStyle('A1:G1')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('FFD3D3D3');
 
@@ -97,12 +57,12 @@ class BookLoanedExport implements FromQuery, WithMapping, WithHeadings, WithStyl
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
 
-                $sheet->setCellValue('K9', 'Total de libros prestados:');
+                $sheet->setCellValue('K9', 'Total de usuarios activos:');
 
-                $loanedTotal = Loan::count();
+                $activeUsers = Loan::distinct('user_id')->count('user_id');
 
 
-                $sheet->setCellValue('K10', $loanedTotal);
+                $sheet->setCellValue('K10', $activeUsers);
                 $sheet->getColumnDimension('K')->setWidth(32);
 
                 $sheet->getStyle('K9')->applyFromArray([

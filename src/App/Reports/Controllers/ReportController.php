@@ -3,9 +3,9 @@
 namespace App\Reports\Controllers;
 
 use App\Core\Controllers\Controller;
-use App\Exports\ActivityUsersExport;
-use App\Exports\BookLoanedExport;
-use App\Exports\LoanDurationsExport;
+use App\Exports\reports\users\ActivityUsersExport;
+use App\Exports\reports\loans\LoanDurationsExport;
+use App\Exports\reports\books\BookLoanedExport;
 use Carbon\Carbon;
 use Domain\Loans\Models\Loan;
 use Illuminate\Http\Request;
@@ -33,8 +33,6 @@ class ReportController extends Controller
             'end_loan_from'=> $request->input('end_loan_from', null),
             'end_loan_to'=> $request->input('end_loan_to', null),
         ];
-
-        // dd($filters);
 
         return Excel::download(new LoanDurationsExport($filters), 'loansDuration.xlsx');
     }

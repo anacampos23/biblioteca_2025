@@ -17,16 +17,17 @@ class ReportIndexAction
     $query = Loan::query();
 
     if (!empty($filters['start_loan_from'])) {
-        $query->where('start_loan', '>=', $filters['start_loan_from']);
+        $query->whereDate('start_loan', '>=', $filters['start_loan_from']);
     }
     if (!empty($filters['start_loan_to'])) {
-        $query->where('start_loan', '<=', $filters['start_loan_to']);
+        $query->whereDate('start_loan', '<=', $filters['start_loan_to']);
     }
     if (!empty($filters['end_loan_from'])) {
-        $query->where('end_loan', '>=', $filters['end_loan_from']);
+        $query->whereDate('end_loan', '>=', $filters['end_loan_from']);
     }
     if (!empty($filters['end_loan_to'])) {
-        $query->where('end_loan', '<=', $filters['end_loan_to']);
+        $endTo = Carbon::parse($filters['end_loan_to'])->endOfDay();
+        $query->where('end_loan', '<=', $endTo);
     }
 
     return $query;

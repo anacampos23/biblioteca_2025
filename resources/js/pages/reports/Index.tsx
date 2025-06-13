@@ -81,7 +81,7 @@ export default function ReportsIndex({ lang }: indexprops) {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => window.open(getValue() as string, '_blank')}
+                         onClick={() => exportExcel(getValue() as string)}
                         className="cursor-pointer bg-stone-300 text-stone-900 hover:bg-stone-200"
                     >
                         <FileUp className="mr-2 h-4 w-4" />
@@ -90,19 +90,20 @@ export default function ReportsIndex({ lang }: indexprops) {
                 ),
             },
         ],
-        [],
+        [t],
     );
 
     // Función exportExcel, por si quieres usarla para exportar según filtros (no usada en la tabla actual)
-    const exportExcel = () => {
-        const query = new URLSearchParams();
-        Object.entries(filters).forEach(([key, value]) => {
-            if (value !== undefined && value !== null && value !== '') {
-                query.append(key, value.toString());
-            }
-        });
-        window.open(`reports/loanDuration/export?${query.toString()}`, '_blank');
-    };
+   const exportExcel = (baseUrl: string) => {
+    const query = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+            query.append(key, value.toString());
+        }
+    });
+    window.open(`${baseUrl}?${query.toString()}`, '_blank');
+};
+
 
     return (
         <ReportLayout title={t('ui.reports.title')}>
